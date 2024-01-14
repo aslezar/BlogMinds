@@ -1,0 +1,38 @@
+/* Variables */
+@import 'variables';
+
+// $room-bg-color: #d1d0d0;
+// $room-bg-color-other: #1323ad;
+// $room-color-other: #ccc;
+// $room-bg-hover: #1322adc9;
+// $room-bg-color-even: #bdbbbb;
+// $room-color-hover: #000;
+// $room-color-even: #fff;
+
+/* Styles */
+.room {
+	display: flex;
+	flex-direction: column;
+	list-style-type: none;
+
+	li {
+		@include info;
+		padding: calc($border-padding / 2);
+		flex-wrap: wrap;
+		p {
+			color: $white !important;
+		}
+		:nth-child(2) {
+			flex-grow: 1;
+			text-align: right;
+		}
+	}
+}
+.icon {
+	font-size: $fontSize3;
+	color: $white;
+	transition: var(--transition);
+	&:hover {
+		font-size: $fontSize2;
+	}
+}

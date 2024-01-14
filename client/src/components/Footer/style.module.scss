@@ -1,0 +1,19 @@
+/* Variables */
+@import 'variables';
+
+/* Styles */
+.footer {
+	@include flex-center;
+	justify-content: space-between;
+
+	font-size: $fontSize2;
+	max-width: 100%;
+	max-height: 8vh;
+	min-height: 6vh;
+
+	// box-shadow: $footerBorderShadow;
+	border-radius: $footerBorderRadius;
+	// border:2px solid black;
+	padding: 0px $border-padding;
+	color: $textColor2;
+}

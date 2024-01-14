@@ -1,0 +1,12 @@
+/* Variables */
+@import 'variables';
+
+/* Styles */
+.socialIcons {
+	@include flex-center;
+	transition: $transition;
+}
+
+.icon {
+	@include icon;
+}

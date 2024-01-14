@@ -1,0 +1,36 @@
+@import 'variables';
+
+/* Styles */
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	flex-grow: 1; /* This makes .wrapper take up the available vertical space */
+}
+
+.heading {
+	text-align: center;
+	font-size: $fontSize1;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.inputContainer {
+	margin: calc($border-padding / 2);
+
+	input {
+		@include input;
+	}
+}
+
+.actionContainer {
+	text-align: right;
+
+	a {
+		color: black;
+	}
+}
