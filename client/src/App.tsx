@@ -21,13 +21,20 @@ import MyBlogs from "./Pages/MyBlogsPage";
 import AddBlog from "./Pages/AddBlogPage";
 import EditBlog from "./Pages/EditBlogPage";
 
+import Blog from "./Pages/BlogPage";
 import About from "./Pages/AboutPage";
 import ContactUs from "./Pages/ContactUsPage";
 
 import ErrorPage from "./Pages/ErrorPage";
 
+import { useAppDispatch } from "./hooks";
+import { loadUser } from "./features/userSlice";
+
 function App() {
+	const dispatch = useAppDispatch();
 	React.useEffect(() => {
+		//check token exist in localstorage
+		dispatch(loadUser());
 		toast.success("Welcome to BlogMinds!");
 	}, []);
 
@@ -46,6 +53,7 @@ function App() {
 				<Route path="/addBlog" element={<AddBlog />} />
 				<Route path="/editBlog/:id" element={<EditBlog />} />
 
+				<Route path="/blog/:id" element={<Blog />} />
 				<Route path="/about" element={<About />} />
 				<Route path="/contactus" element={<ContactUs />} />
 

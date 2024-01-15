@@ -37,6 +37,7 @@ function ResponsiveAppBar() {
 		null
 	);
 	const userState = useAppSelector(selectUserState);
+	console.log(userState);
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -147,9 +148,9 @@ function ResponsiveAppBar() {
 
 					{userState.loading === false && userState.isAuthenticated === true ? (
 						<Box sx={{ flexGrow: 0 }}>
-							<Tooltip title="Open settings">
+							<Tooltip title={userState.user.name}>
 								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-									<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+									<Avatar alt="Remy Sharp" src={userState.user.img} />
 								</IconButton>
 							</Tooltip>
 							<Menu

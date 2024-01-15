@@ -1,6 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import toast from "react-hot-toast";
 // import { User } from "../definitions";
+
+import {
+	handler,
+	signIn,
+	signUp,
+	signinToken,
+	signOut,
+	updateName,
+	updateBio,
+	updateImage,
+} from "../api";
+import toast from "react-hot-toast";
 
 interface CounterState {
 	loading: boolean;
@@ -10,7 +23,7 @@ interface CounterState {
 
 const initialState: CounterState = {
 	loading: false,
-	isAuthenticated: true,
+	isAuthenticated: false,
 	user: null,
 };
 
@@ -19,9 +32,11 @@ export const userSlice = createSlice({
 	initialState,
 	reducers: {
 		SETUSER: (state, action) => {
+			console.log(action.payload);
+
 			state.isAuthenticated = true;
 			state.loading = false;
-			state.user = action.payload;
+			state.user = { ...state.user, ...action.payload };
 		},
 		SETLOADINGUSER: (state) => {
 			state.loading = true;
@@ -32,6 +47,73 @@ export const userSlice = createSlice({
 		},
 	},
 });
+
+export const logout = () => async (dispatch: any) => {
+	dispatch(userSlice.actions.SETLOADINGUSER());
+	handler(
+		signOut,
+		undefined,
+		() => {
+			dispatch(userSlice.actions.LOGOUTUSER());
+			toast.success("Logged out");
+		},
+		(msg: string) => {
+			toast.error(msg);
+		}
+	);
+};
+export const login =
+	(email: string, password: string) => async (dispatch: any) => {
+		dispatch(userSlice.actions.SETLOADINGUSER());
+		handler(
+			signIn,
+			{ email, password },
+			(user: any) => {
+				dispatch(userSlice.actions.SETUSER(user));
+				localStorage.setItem("token", user.token);
+				toast.success("Logged in");
+			},
+			(msg: string) => {
+				toast.error(msg);
+			}
+		);
+	};
+export const register =
+	(name: string, email: string, password: string) => async (dispatch: any) => {
+		dispatch(userSlice.actions.SETLOADINGUSER());
+		console.log(name, email, password);
+
+		handler(
+			signUp,
+			{ name, email, password },
+			(user: any) => {
+				dispatch(userSlice.actions.SETUSER(user));
+				localStorage.setItem("token", user.token);
+				toast.success("Registered");
+			},
+			(msg: string) => {
+				toast.error(msg);
+			}
+		);
+	};
+
+export const loadUser = () => async (dispatch: any) => {
+	const token = localStorage.getItem("token") || null;
+
+	if (token) {
+		dispatch(userSlice.actions.SETLOADINGUSER());
+		handler(
+			signinToken,
+			token,
+			(user: any) => {
+				dispatch(userSlice.actions.SETUSER(user));
+			},
+			(msg: string) => {
+				toast.error(msg);
+			}
+		);
+	}
+};
 
 export const { SETUSER, SETLOADINGUSER, LOGOUTUSER } = userSlice.actions;
 export const selectUserState = (state: RootState) => state.user;

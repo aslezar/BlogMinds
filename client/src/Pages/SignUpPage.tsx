@@ -8,15 +8,21 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../hooks";
+import { register } from "../features/userSlice";
 
 export default function SignUp() {
+	const dispatch = useAppDispatch();
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		console.log({
-			email: data.get("email"),
-			password: data.get("password"),
-		});
+		dispatch(
+			register(
+				event.currentTarget.firstName.value +
+					event.currentTarget.lastName.value,
+				event.currentTarget.email.value,
+				event.currentTarget.password.value
+			)
+		);
 	};
 
 	return (

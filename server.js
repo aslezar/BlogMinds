@@ -59,12 +59,11 @@ app.use(
 );
 
 //Routes
+app.use("/api/v1", require("./routes/apiv1"));
 app.use("/", express.static("../client/dist"));
 app.use("/assests", express.static("../client/dist/assests"));
 
 //Define Routes Here
-
-app.use("/api/vi", require("./routes/apiv1"));
 
 app.get("/*", (req, res) => {
 	res.sendFile(path.join(__dirname, "../client/dist/index.html"), (err) => {

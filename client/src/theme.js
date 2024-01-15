@@ -24,11 +24,11 @@ const theme = createTheme({
 			main: "#ff4081",
 		},
 		background: {
-			default: "#000000",
+			default: "#0f0f0f",
 			paper: "#1a1a1a", // customize paper color for components like cards
 		},
 		text: {
-			primary: "#ffffff", // customize text color for primary content
+			primary: "#000000", // customize text color for primary content
 			secondary: "#a0a0a0", // customize text color for secondary content
 		},
 	},
