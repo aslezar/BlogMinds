@@ -1,12 +1,11 @@
 import axios from "axios";
-import config from "../../config";
-import { toast } from "react-toastify";
 
 const URL =
-	process.env.NODE_ENV === "production" ? "/api" : config.serverAPIURL;
+	process.env.NODE_ENV === "production"
+		? "/api/v1"
+		: "http://localhost:5000/api/v1";
+
 const API = axios.create({ baseURL: URL });
-//for mobile
-// const API = axios.create({ baseURL: '/api' });
 
 export const signIn = (data) => API.post("/auth/signin", data);
 export const signUp = (data) => API.post("/auth/signup", data);
@@ -53,7 +52,7 @@ export const handler = async (task, onSucess, data, onFailure) => {
 		const res = await task(data);
 		console.log(res.data);
 		if (res.data.success) {
-			onSucess(res.data?.data);
+			if (onSucess) onSucess(res.data?.data);
 			toast.success(res.data.msg, {
 				toastId: res.data.msg,
 			});

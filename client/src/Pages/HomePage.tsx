@@ -1,7 +1,6 @@
+import React, { useEffect } from "react";
 import Categories from "../components/Categories";
-import BlogCard from "../components/BlogCard";
-import { Grid } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import Blogs from "../components/Blogs";
 import Pagination from "../components/Pagination";
 
 const blogs = [
@@ -62,29 +61,17 @@ const blogs = [
 ];
 
 const HomePage = () => {
+	const [category, setCategory] = React.useState<string>("General");
+
+	useEffect(() => {
+		document.title = "BlogMinds | HomePage";
+		//fetch blogs
+	}, [category]);
+
 	return (
 		<div>
-			<Categories />
-			<Grid container spacing={2}>
-				{blogs.length ? (
-					blogs.map((blog) => (
-						<Grid
-							item
-							xs={12}
-							sm={6}
-							md={4}
-							key={blog._id}
-							style={{
-								maxWidth: 345,
-							}}
-						>
-							<BlogCard blog={blog} />
-						</Grid>
-					))
-				) : (
-					<Typography variant="subtitle1">No blogs available</Typography>
-				)}
-			</Grid>
+			<Categories category={category} setCategory={setCategory} />
+			<Blogs blogs={blogs} />
 			<Pagination />
 		</div>
 	);

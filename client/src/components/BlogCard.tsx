@@ -28,8 +28,8 @@ export default function MediaCard({ blog }: Props) {
 				</Typography>
 			</CardContent>
 			<CardActions>
-				<Button size="small">Share</Button>
-				<Button size="small">Read</Button>
+				<Button size="medium">Share</Button>
+				<Button size="medium">Read</Button>
 			</CardActions>
 		</Card>
 	);

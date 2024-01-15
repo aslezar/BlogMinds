@@ -13,8 +13,21 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-const pages = ["Homepage", "MyBlogs", "AboutUs"];
-const settings = ["Profile", "Dashboard", "Logout"];
+import { useAppSelector, useAppDispatch } from "../hooks";
+import { selectUserState, logout } from "../features/userSlice";
+
+import { Link } from "react-router-dom";
+
+const pages = [
+	{ name: "Homepage", link: "/" },
+	{ name: "MyBlogs", link: "/myblogs" },
+	{ name: "AboutUs", link: "/about" },
+];
+const settings = [
+	{ name: "Profile", link: "/profile" },
+	{ name: "Dashboard", link: "/dashboard" },
+];
+// const settings = ["Profile", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -23,6 +36,7 @@ function ResponsiveAppBar() {
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
 		null
 	);
+	const userState = useAppSelector(selectUserState);
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -38,6 +52,7 @@ function ResponsiveAppBar() {
 	const handleCloseUserMenu = () => {
 		setAnchorElUser(null);
 	};
+	const dispatch = useAppDispatch();
 
 	return (
 		<AppBar position="static">
@@ -91,8 +106,10 @@ function ResponsiveAppBar() {
 							}}
 						>
 							{pages.map((page) => (
-								<MenuItem key={page} onClick={handleCloseNavMenu}>
-									<Typography textAlign="center">{page}</Typography>
+								<MenuItem key={page.name} onClick={handleCloseNavMenu}>
+									<Typography textAlign="center">
+										<Link to={page.link}>{page.name}</Link>
+									</Typography>
 								</MenuItem>
 							))}
 						</Menu>
@@ -119,44 +136,55 @@ function ResponsiveAppBar() {
 					<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 						{pages.map((page) => (
 							<Button
-								key={page}
+								key={page.name}
 								onClick={handleCloseNavMenu}
 								sx={{ my: 2, color: "white", display: "block" }}
 							>
-								{page}
+								<Link to={page.link}>{page.name}</Link>
 							</Button>
 						))}
 					</Box>
 
-					<Box sx={{ flexGrow: 0 }}>
-						<Tooltip title="Open settings">
-							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-								<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-							</IconButton>
-						</Tooltip>
-						<Menu
-							sx={{ mt: "45px" }}
-							id="menu-appbar"
-							anchorEl={anchorElUser}
-							anchorOrigin={{
-								vertical: "top",
-								horizontal: "right",
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: "top",
-								horizontal: "right",
-							}}
-							open={Boolean(anchorElUser)}
-							onClose={handleCloseUserMenu}
-						>
-							{settings.map((setting) => (
-								<MenuItem key={setting} onClick={handleCloseUserMenu}>
-									<Typography textAlign="center">{setting}</Typography>
+					{userState.loading === false && userState.isAuthenticated === true ? (
+						<Box sx={{ flexGrow: 0 }}>
+							<Tooltip title="Open settings">
+								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+									<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+								</IconButton>
+							</Tooltip>
+							<Menu
+								sx={{ mt: "45px" }}
+								id="menu-appbar"
+								anchorEl={anchorElUser}
+								anchorOrigin={{
+									vertical: "top",
+									horizontal: "right",
+								}}
+								keepMounted
+								transformOrigin={{
+									vertical: "top",
+									horizontal: "right",
+								}}
+								open={Boolean(anchorElUser)}
+								onClose={handleCloseUserMenu}
+							>
+								{settings.map((setting) => (
+									<MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+										<Typography textAlign="center">
+											<Link to={setting.link}>{setting.name}</Link>
+										</Typography>
+									</MenuItem>
+								))}
+								<MenuItem onClick={() => dispatch(logout())}>
+									<Typography textAlign="center">Logout</Typography>
 								</MenuItem>
-							))}
-						</Menu>
-					</Box>
+							</Menu>
+						</Box>
+					) : (
+						<Button variant="contained">
+							<Link to="/signin">Get Started</Link>
+						</Button>
+					)}
 				</Toolbar>
 			</Container>
 		</AppBar>

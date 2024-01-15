@@ -13,15 +13,17 @@ const categories = [
 	"Health",
 	"Finance",
 ];
-
-const Categories = () => {
-	const [value, setValue] = React.useState(0);
+interface TabPanelProps {
+	children?: React.ReactNode;
+	category: string;
+	setCategory: React.Dispatch<React.SetStateAction<string>>;
+}
+const Categories = ({ category, setCategory }: TabPanelProps) => {
 	const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-		setValue(newValue);
+		setCategory(categories[newValue]);
 	};
-
 	return (
-		<Tabs value={value} onChange={handleChange} centered>
+		<Tabs value={categories.indexOf(category)} onChange={handleChange} centered>
 			{categories.map((category, index) => (
 				<Tab label={category} key={index} />
 			))}
