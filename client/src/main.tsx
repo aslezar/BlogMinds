@@ -5,7 +5,7 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
+import theme from "./theme.jsx";
 
 import { Provider } from "react-redux";
 import store from "./store";

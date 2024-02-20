@@ -21,6 +21,7 @@ const BlogSchema = new mongoose.Schema(
 				ref: "Comment",
 			},
 		],
+		tags: [String],
 	},
 	{ timestamps: true }
 );

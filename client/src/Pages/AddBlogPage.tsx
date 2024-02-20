@@ -6,6 +6,7 @@ const blog = {
 	description: "This is a description",
 	img: "https://source.unsplash.com/random",
 	content: "This is a content",
+	tags: ["Technology"],
 };
 
 const AddBlogPage = () => {

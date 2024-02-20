@@ -26,6 +26,9 @@ export default function MediaCard({ blog }: Props) {
 				<Typography variant="body2" color="text.secondary">
 					{blog.description}
 				</Typography>
+				<Typography variant="body2" color="text.secondary">
+					Author: {blog.author}
+				</Typography>
 			</CardContent>
 			<CardActions>
 				<Button size="medium">Share</Button>
