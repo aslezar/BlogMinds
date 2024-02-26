@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { BlogFullType } from "../definitions";
 
 const BlogPage = () => {
+	const [isError, setError] = React.useState<boolean>(false);
 	const [isLoading, setLoading] = React.useState<boolean>(true);
 	const [blog, setBlog] = React.useState<BlogFullType | null>(null);
 	const { id } = useParams<{ id: string }>();
@@ -19,11 +20,16 @@ const BlogPage = () => {
 				setBlog(data);
 				setLoading(false);
 			},
-			(msg: string) => toast.error(msg)
+			(msg: string) => {
+				setError(true);
+				setLoading(false);
+				toast.error(msg);
+			}
 		);
 	}, []);
 
 	if (isLoading === true) return <Loader />;
+	if (isError === true) return <div>Error</div>;
 
 	return <div>{JSON.stringify(blog)}</div>;
 };
