@@ -16,6 +16,22 @@ const getUserId = async (req) => {
 	return checkId(req.user.userId);
 };
 
+const getBlogByCategoty = async (req, res) => {
+	const category = req.params.category;
+	// tag is array of category field, and category is a string
+	const blogs = await Blog.find({ tags: { $in: [category] } }).select(
+		"title description img author"
+	);
+	if (!blogs) {
+		throw new BadRequestError("No blogs found");
+	}
+	res.status(StatusCodes.OK).json({
+		data: { blogs },
+		success: true,
+		msg: "Data Fetched Successfully",
+	});
+};
+
 const getBlog = async (req, res) => {
 	const blogId = getBlogId(req);
 
@@ -77,7 +93,7 @@ const commentOnComment = async (req, res) => {
 	});
 };
 
-const getBlogs = async (req, res) => {
+const getUserBlogs = async (req, res) => {
 	//populate title description content img author
 	const userId = getUserId(req);
 	const userBlogs = await User.findById(userId).select("blogs").populate({
@@ -181,10 +197,11 @@ const updateBlog = async (req, res) => {
 };
 
 module.exports = {
+	getBlogByCategoty,
 	getBlog,
 	commentBlog,
 	commentOnComment,
-	getBlogs,
+	getUserBlogs,
 	createBlog,
 	deleteBlog,
 	updateBlog,
