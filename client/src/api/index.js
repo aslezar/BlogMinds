@@ -68,7 +68,7 @@ export const handler = async (task, data, onSucess, onFailure) => {
 	} catch (error) {
 		console.log(error);
 		if (error.response) {
-			toast.error(error.response.data?.msg);
+			// toast.error(error.response.data?.msg);
 			if (onFailure) onFailure(error.response.data?.msg);
 		} else {
 			toast.error("Server offline: Network Error");
