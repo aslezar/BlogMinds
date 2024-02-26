@@ -4,17 +4,19 @@ import { handler, getBlog } from "../api";
 import Loader from "../components/Loader";
 import toast from "react-hot-toast";
 
+import { BlogFullType } from "../definitions";
+
 const BlogPage = () => {
 	const [isLoading, setLoading] = React.useState<boolean>(true);
-	const [blog, setBlog] = React.useState();
+	const [blog, setBlog] = React.useState<BlogFullType | null>(null);
 	const { id } = useParams<{ id: string }>();
 
 	useEffect(() => {
 		handler(
 			getBlog,
 			id,
-			(blog: any) => {
-				setBlog(blog);
+			(data: BlogFullType) => {
+				setBlog(data);
 				setLoading(false);
 			},
 			(msg: string) => toast.error(msg)

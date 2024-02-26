@@ -5,15 +5,16 @@ const Comment = require("../models/comment");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
 
-const checkId = (id) => {
-	if (!mongoose.isValidObjectId(id)) throw new BadRequestError("Invalid ID");
+const checkId = async (id) => {
+	if (mongoose.isValidObjectId(id) === false)
+		throw new BadRequestError("Invalid ID");
 	return id;
 };
 const getBlogId = async (req) => {
-	return checkId(req.body.blogId);
+	return await checkId(req.params.blogId);
 };
 const getUserId = async (req) => {
-	return checkId(req.user.userId);
+	return await checkId(req.user.userId);
 };
 
 const getBlogByCategoty = async (req, res) => {
@@ -33,9 +34,10 @@ const getBlogByCategoty = async (req, res) => {
 };
 
 const getBlog = async (req, res) => {
-	const blogId = getBlogId(req);
+	const blogId = await getBlogId(req);
 
-	const blog = await Blog.findById(blogId);
+	const blog = null;
+	// const blog = await Blog.findById(blogId);
 	if (!blog) {
 		throw new BadRequestError("Blog not found");
 	}
@@ -46,8 +48,8 @@ const getBlog = async (req, res) => {
 	});
 };
 const commentBlog = async (req, res) => {
-	const userId = getUserId(req);
-	const blogId = getBlogId(req);
+	const userId = await getUserId(req);
+	const blogId = await getBlogId(req);
 
 	const { message } = req.body;
 	if (!message) {
@@ -69,8 +71,8 @@ const commentBlog = async (req, res) => {
 	});
 };
 const commentOnComment = async (req, res) => {
-	const userId = getUserId(req);
-	const commentId = checkId(req.body.commentId);
+	const userId = await getUserId(req);
+	const commentId = await checkId(req.body.commentId);
 	const { message } = req.body;
 
 	if (!message) {
@@ -95,7 +97,7 @@ const commentOnComment = async (req, res) => {
 
 const getUserBlogs = async (req, res) => {
 	//populate title description content img author
-	const userId = getUserId(req);
+	const userId = await getUserId(req);
 	const userBlogs = await User.findById(userId).select("blogs").populate({
 		path: "blogs",
 		select: "title description img",
@@ -139,8 +141,8 @@ const createBlog = async (req, res) => {
 };
 
 const deleteBlog = async (req, res) => {
-	const userId = getUserId(req);
-	const blogId = getBlogId(req);
+	const userId = await getUserId(req);
+	const blogId = await getBlogId(req);
 
 	const userBlogs = await User.findById(userId).select("blogs");
 	if (!userBlogs) {
@@ -169,7 +171,7 @@ const deleteBlog = async (req, res) => {
 };
 const updateBlog = async (req, res) => {
 	const { userId } = req.user;
-	const blogId = getBlogId(req);
+	const blogId = await getBlogId(req);
 	const { title, description, content, img } = req.body;
 
 	const userBlogs = await User.findOne({ _id: userId, blogs: blogId });

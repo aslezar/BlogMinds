@@ -1,24 +1,29 @@
-const { CustomAPIError } = require('../errors');
-const { StatusCodes } = require('http-status-codes');
+const { CustomAPIError } = require("../errors");
+const { StatusCodes } = require("http-status-codes");
 
 const errorHandlerMiddleware = (err, req, res, next) => {
+	if (process.env.NODE_ENV === "development") {
+		console.log(
+			"**************************There is an error caught by MIDDLEWARE**************************"
+		);
+	}
 	let customError = {
 		statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
-		msg: err.message || 'Something went wrong try again later.',
+		msg: err.message || "Something went wrong try again later.",
 	};
 
 	//Custom Error
 	if (err instanceof CustomAPIError) {
 		return res
 			.status(customError.statusCode)
-			.json({ success: false, msg: customError.msg, code: '001' });
+			.json({ success: false, msg: customError.msg, code: "001" });
 	}
 
 	//Mongoose Validation Error
-	if (err.name === 'ValidationError') {
+	if (err.name === "ValidationError") {
 		customError.msg = Object.values(err.errors)
 			.map((item) => item.message)
-			.join(',');
+			.join(",");
 		customError.statusCode = StatusCodes.BAD_REQUEST;
 	}
 
@@ -31,14 +36,14 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 	}
 
 	//Mongoose Cast Error
-	if (err.name === 'CastError') {
+	if (err.name === "CastError") {
 		customError.msg = `No item found with id : ${err.value}`;
 		customError.statusCode = StatusCodes.NOT_FOUND;
 	}
 	console.log(err);
 	return res
 		.status(customError.statusCode)
-		.json({ success: false, msg: customError.msg, code: '000' });
+		.json({ success: false, msg: customError.msg, code: "000" });
 };
 
 module.exports = errorHandlerMiddleware;

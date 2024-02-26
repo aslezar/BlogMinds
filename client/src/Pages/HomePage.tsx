@@ -3,14 +3,9 @@ import Categories from "../components/Categories";
 import Pagination from "../components/Pagination";
 import Blogs from "../components/Blogs";
 
-type Blogss = {
-	_id: number;
-	title: string;
-	description: string;
-	img: string;
-}[];
+import { BlogShortType } from "../definitions";
 
-const blogs = [
+const blogs: BlogShortType[] = [
 	{
 		_id: 1,
 		title: "This is a title",

@@ -1,4 +1,12 @@
-interface Blog {
+export interface BlogShortType {
+	_id: number;
+	title: string;
+	description: string;
+	author: string;
+	img: string;
+}
+
+export interface BlogFullType {
 	_id: string;
 	// Add other fields from the "Blog" schema as needed
 }
@@ -14,13 +22,11 @@ interface User {
 	password: string;
 	bio?: string;
 	profileImage?: ProfileImage;
-	blogs?: Blog[];
 }
 
-// Assuming you have a separate file for the interfaces
-export interface UserDocument extends User {
+export interface UserDocumentType extends User {
 	_id: string;
 	createdAt: string;
 	updatedAt: string;
-	blogs?: Blog[];
+	blogs?: BlogFullType[];
 }
