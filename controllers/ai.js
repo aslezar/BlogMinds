@@ -4,6 +4,8 @@ const Blog = require("../models/blog");
 const Comment = require("../models/comment");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
+const axios = require("axios");
+const fs = require("fs");
 
 //UTITLIY FUNCTIONS
 
@@ -62,14 +64,33 @@ const getParaSuggestion = async (req, res) => {
 };
 const getImageSuggestionPrompt = async (req, res) => {
 	const prompt = req.body.prompt;
-	const userId = getUserId(req);
+	// const userId = getUserId(req);
 
-	res.status(StatusCodes.OK).json({
-		data: { prompt: prompt },
-		success: true,
-		// msg: "Data Fetched Successfully",
-		msg: "This route is not implemented yet.",
+	const response = await axios({
+		url: "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+		method: "post",
+		headers: {
+			Authorization: "Bearer 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",
+		},
+		data: JSON.stringify({
+			inputs: prompt,
+		}),
+		responseType: "stream",
 	});
+
+	if (response.statusText !== "OK")
+		throw new Error(`API Error: ${response.statusText}`);
+
+	//set headers
+	res.set(response.headers);
+	response.data.pipe(res);
+
+	// res.status(StatusCodes.OK).json({
+	// 	data: { prompt: prompt },
+	// 	success: true,
+	// 	// msg: "Data Fetched Successfully",
+	// 	msg: "This route is not implemented yet.",
+	// });
 };
 const getCoverImageSuggestion = async (req, res) => {
 	const titlePrompt = req.body.titlePrompt;
