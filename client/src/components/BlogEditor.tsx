@@ -10,7 +10,7 @@ function BlogEditor({ blogContent, handleSave }) {
 		setBlog({ ...blog, content: newContent });
 	};
 
-	const handleSubmit = (event) => {
+	const handleSubmit = (event: React.SyntheticEvent) => {
 		event.preventDefault();
 		handleSave(blog);
 	};
@@ -60,7 +60,7 @@ function BlogEditor({ blogContent, handleSave }) {
 					<JoditEditor
 						ref={editor}
 						value={blog.content}
-						tabIndex={1}
+						// tabIndex={1}
 						onBlur={(newContent) => setContent(newContent)}
 						onChange={(newContent) => setContent(newContent)}
 					/>

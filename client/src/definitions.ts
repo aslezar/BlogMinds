@@ -1,14 +1,16 @@
 export interface BlogShortType {
-	_id: number;
+	_id: string;
 	title: string;
 	description: string;
 	author: string;
 	img: string;
 }
 
-export interface BlogFullType {
-	_id: string;
-	// Add other fields from the "Blog" schema as needed
+export interface BlogFullType extends BlogShortType {
+	content: string;
+	tags: string[];
+	createdAt: string;
+	updatedAt: string;
 }
 
 interface ProfileImage {

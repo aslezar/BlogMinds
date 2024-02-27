@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { handler, getBlog } from "../api";
+import { handler, getBlog } from "../api/index.ts";
 import Loader from "../components/Loader";
 import toast from "react-hot-toast";
 

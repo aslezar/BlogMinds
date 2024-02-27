@@ -12,8 +12,7 @@ import {
 	updateName,
 	updateBio,
 	updateImage,
-} from "../api";
-import toast from "react-hot-toast";
+} from "../api/index.ts";
 
 interface CounterState {
 	loading: boolean;

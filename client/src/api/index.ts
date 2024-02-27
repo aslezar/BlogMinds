@@ -1,5 +1,6 @@
 import axios from "axios";
 import toast from "react-hot-toast";
+import { BlogType, BlogFullType, UserType } from "../definitions";
 
 const URL =
 	process.env.NODE_ENV === "production"

@@ -7,7 +7,7 @@ import {
 	updateName,
 	updateBio,
 	updateImage,
-} from "../api";
+} from "../api/index.ts";
 import { SETUSER, SETLOADINGUSER, LOGOUTUSER } from "../features/userSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
 
