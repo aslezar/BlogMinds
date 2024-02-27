@@ -19,10 +19,31 @@ const getUserId = async (req) => {
 
 const getTextSuggestion = async (req, res) => {
 	const text = req.body.text;
-	const userId = getUserId(req);
+	// const userId = getUserId(req);
+
+	const response = await fetch(
+		"https://api-inference.huggingface.co/models/google/gemma-7b",
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${process.env.GEMMATOKEN_API_KEY}`,
+			},
+			body: JSON.stringify({
+				inputs: text,
+			}),
+			redirect: "follow",
+		}
+	);
+	//if statusText is not ok, throw error
+	if (response.statusText !== "OK")
+		throw new Error(`API Error: ${response.statusText}`);
+
+	const data = await response.json();
+	const generated_text = data[0].generated_text;
 
 	res.status(StatusCodes.OK).json({
-		data: { text: text },
+		data: generated_text,
 		success: true,
 		// msg: "Data Fetched Successfully",
 		msg: "This route is not implemented yet.",
