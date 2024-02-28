@@ -6,7 +6,7 @@ const {
 	updateBlog,
 } = require("../controllers/blogs");
 
-router.route("/").get(getUserBlogs).post(createBlog).delete(deleteBlog).update(updateBlog);
+router.route("/").get(getUserBlogs).post(createBlog).delete(deleteBlog).patch(updateBlog);
 // router.route("/update").patch(updateBlog);
 
 module.exports = router;
