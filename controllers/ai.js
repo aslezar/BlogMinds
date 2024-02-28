@@ -29,7 +29,7 @@ const getTextSuggestion = async (req, res) => {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.GEMMATOKEN_API_KEY}`,
+				Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
 			},
 			body: JSON.stringify({
 				inputs: text,
@@ -70,7 +70,7 @@ const getImageSuggestionPrompt = async (req, res) => {
 		url: "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
 		method: "post",
 		headers: {
-			Authorization: "Bearer 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",
+			Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
 		},
 		data: JSON.stringify({
 			inputs: prompt,
