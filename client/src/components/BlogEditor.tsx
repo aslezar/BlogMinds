@@ -33,7 +33,7 @@ function BlogEditor({ blogContent, handleSave }) {
 						onChange={(e) => setBlog({ ...blog, description: e.target.value })}
 						className="mb-4 px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
 					/>
-					<label className="mb-2 font-bold">Tags</label>
+					<label className="mb-2 font-bold">Topics</label>
 					<MultiSelect
 						options={["Technology", "Science", "Health", "Travel"]}
 						value={blog.tags}
