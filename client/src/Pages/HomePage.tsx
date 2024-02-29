@@ -9,7 +9,8 @@ const blogs: BlogShortType[] = [
 	{
 		_id: 1,
 		title: "This is a title",
-		description: "This is a description",
+		description:
+			"This is a description. lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfj",
 		img: "https://source.unsplash.com/random",
 		author: "John Doe",
 	},
