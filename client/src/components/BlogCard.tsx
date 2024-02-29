@@ -25,7 +25,11 @@ export default function MediaCard({ blog }: Props) {
 					</Typography>
 					<div className="absolute h-0 group-hover:h-1  z-10 transition-all duration-300  bottom-0 left-0 w-full  bg-indigo-200 "></div>
 				</div>
-				<Typography>{blog.description}</Typography>
+				<Typography>
+					{blog.description.length > 200
+						? `${blog.description.slice(0, 200)}...`
+						: blog.description}
+				</Typography>
 				<Typography variant="body2" className="!mt-3 text-indigo-600">
 					Author: {blog.author}
 				</Typography>
