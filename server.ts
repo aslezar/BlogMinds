@@ -17,6 +17,12 @@ dotenv.config();
 
 import connectDB from "./db/connect";
 
+//Import Routes
+// import ApiRoute from "./routes/apiv1";
+
+//Import Error Handler
+import errorHandler from "./middleware/error-handler";
+
 //Start Express App
 const app: Express = express();
 const server: http.Server = http.createServer(app);
@@ -43,13 +49,7 @@ const logDir: string = path.join(__dirname, "./log");
 if (!fs.existsSync(logDir)) {
 	fs.mkdirSync(logDir);
 }
-app.use(
-	morgan("dev", {
-		skip: function (req: Request, res: Response) {
-			return res.statusCode < 400;
-		},
-	})
-);
+app.use(morgan("dev"));
 // log all requests to access.log
 app.use(
 	morgan("common", {
@@ -60,7 +60,10 @@ app.use(
 );
 
 //Routes
-// app.use("/api/v1", require("./routes/apiv1"));
+app.use("/hello", (req: Request, res: Response) => {
+	res.status(200).json({ message: "Hello World" });
+});
+// app.use("/api/v1", ApiRoute);
 app.use("/", express.static("../client/dist"));
 app.use("/assests", express.static("../client/dist/assests"));
 
@@ -70,15 +73,13 @@ app.get("/*", (req: Request, res: Response) => {
 	res.sendFile(
 		path.join(__dirname, "../client/dist/index.html"),
 		(err: Error) => {
-			if (err) {
-				console.error("Error sending file:", err);
-			}
+			throw new Error("Error sending file: index.html");
 		}
 	);
 });
 
 //Error Handling Middleware
-// app.use(require("./middleware/error-handler"));
+app.use(errorHandler);
 
 //Function Start
 async function start() {
