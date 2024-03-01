@@ -1,15 +1,17 @@
-const router = require("express").Router();
-const authMiddleware = require("../middleware/auth");
-const {
+import { Router } from "express";
+import authMiddleware from "../middleware/auth";
+import {
 	getTextSuggestion,
 	getParaSuggestion,
 	getImageSuggestionPrompt,
 	getCoverImageSuggestion,
-} = require("../controllers/ai");
+} from "../controllers/ai";
+
+const router = Router();
 
 router.route("/suggest/text").post(getTextSuggestion);
 router.route("/suggest/para").post(getParaSuggestion);
 router.route("/suggest/image").post(getImageSuggestionPrompt);
 router.route("/suggest/cover-image").post(getCoverImageSuggestion);
 
-module.exports = router;
+export default router;
