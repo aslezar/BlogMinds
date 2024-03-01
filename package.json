@@ -4,8 +4,9 @@
 	"description": "a simple bloggin website",
 	"main": "server.js",
 	"scripts": {
-		"dev": "nodemon server.js",
-		"build": "node server.js"
+		"build": "npx tsc",
+		"start": "node dist/server.js",
+		"dev": "nodemon server.ts"
 	},
 	"repository": {
 		"type": "git",
@@ -38,6 +39,13 @@
 		"xss-clean": "^0.1.4"
 	},
 	"devDependencies": {
-		"nodemon": "^3.0.1"
+		"@types/cors": "^2.8.17",
+		"@types/express": "^4.17.21",
+		"@types/express-rate-limit": "^6.0.0",
+		"@types/helmet": "^4.0.0",
+		"@types/morgan": "^1.9.9",
+		"@types/node": "^20.11.24",
+		"nodemon": "^3.1.0",
+		"ts-node": "^10.9.2"
 	}
 }
