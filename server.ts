@@ -18,7 +18,7 @@ dotenv.config();
 import connectDB from "./db/connect";
 
 //Import Routes
-// import ApiRoute from "./routes/apiv1";
+import ApiRoute from "./routes/apiv1";
 
 //Import Error Handler
 import errorHandler from "./middleware/error-handler";
@@ -63,7 +63,7 @@ app.use(
 app.use("/hello", (req: Request, res: Response) => {
 	res.status(200).json({ message: "Hello World" });
 });
-// app.use("/api/v1", ApiRoute);
+app.use("/api/v1", ApiRoute);
 app.use("/", express.static("../client/dist"));
 app.use("/assests", express.static("../client/dist/assests"));
 

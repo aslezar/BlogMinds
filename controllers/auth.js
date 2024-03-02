@@ -96,7 +96,7 @@ const signOut = async (req, res) => {
 	});
 };
 
-module.exports = {
+export default {
 	register,
 	login,
 	tokenLogin,
