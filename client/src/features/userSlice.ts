@@ -44,6 +44,12 @@ export const userSlice = createSlice({
 			console.log("logout");
 			state = initialState;
 		},
+		UPDATENAME: (state, action) => {
+			state.user.name = action.payload;
+		},
+		UPDATEBIO: (state, action) => {
+			state.user.bio = action.payload;
+		},
 	},
 });
 
@@ -108,6 +114,8 @@ export const loadUser = () => async (dispatch: any) => {
 				dispatch(userSlice.actions.SETUSER(user));
 			},
 			(msg: string) => {
+				dispatch(userSlice.actions.LOGOUTUSER());
+				localStorage.removeItem("token");
 				toast.error(msg);
 			}
 		);
