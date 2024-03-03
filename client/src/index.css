@@ -9,3 +9,9 @@
 	padding: 0;
 	box-sizing: border-box;
 }
+
+
+.MuiButtonBase-root {
+	padding :0.75rem !important;
+	min-width : 0 !important;
+}

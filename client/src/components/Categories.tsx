@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 
 //genrate some categories for blog writing
 const categories = [
-	"General",
+	"For You",
 	"Technology",
 	"Food",
 	"Politics",
@@ -23,9 +23,11 @@ const Categories = ({ category, setCategory }: TabPanelProps) => {
 		setCategory(categories[newValue]);
 	};
 	return (
-		<Tabs value={categories.indexOf(category)} onChange={handleChange} centered>
+		<Tabs TabIndicatorProps={{
+			style: {display: 'none'}
+		}} value={categories.indexOf(category)} onChange={handleChange} indicatorColor="secondary" textColor="secondary" variant="scrollable" scrollButtons="auto" className="w-[90%]">
 			{categories.map((category, index) => (
-				<Tab label={category} key={index} />
+				<Tab label={category} key={index} disableRipple className="!text-[0.9rem] !capitalize"/>
 			))}
 		</Tabs>
 	);
