@@ -72,7 +72,7 @@ export const handler = async (task, data, onSucess, onFailure) => {
 			// toast.error(error.response.data?.msg);
 			if (onFailure) onFailure(error.response.data?.msg);
 		} else {
-			toast.error("Server offline: Network Error");
+			toast.error("Server Unreachable: Network Error");
 		}
 	}
 };
