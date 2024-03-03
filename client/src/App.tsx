@@ -27,13 +27,13 @@ import ContactUs from "./Pages/ContactUsPage";
 import ErrorPage from "./Pages/ErrorPage";
 import { useAppDispatch } from "./hooks";
 import { loadUser } from "./features/userSlice";
+import AllBlogs from "./Pages/AllBlogs";
 
 const Layout = () => {
   return (
     <div>
-      <Navbar />
       <ScrollRestoration />
-      <div className="min-h-[90vh]">
+      <div className="min-h-screen">
         <Outlet />
       </div>
       <Footer />
@@ -48,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path : "blogs/all",
+        element : <AllBlogs/>
       },
       {
         path: "signin",
