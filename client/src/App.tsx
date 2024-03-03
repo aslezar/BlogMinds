@@ -108,7 +108,6 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    //check token exist in localstorage
     dispatch(loadUser());
     toast.success("Welcome to BlogMinds!");
   }, []);

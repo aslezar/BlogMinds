@@ -2,10 +2,10 @@ import React from "react";
 
 type Props = {};
 
-const Hero: React.FC<Props> = (props) => {
+const Hero: React.FC<Props> = () => {
   return (
     <section className="bg-white">
-      <div className="py-6 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
+      <div className="pt-6 px-4 mx-auto max-w-screen-xl text-center pb-3 lg:pb-7 lg:pt-[6%] lg:px-12">
         <a
           href="#"
           className="inline-flex justify-between items-center py-1.5 px-4  mb-6 text-sm text-white bg-highlight rounded-full"
@@ -27,12 +27,12 @@ const Hero: React.FC<Props> = (props) => {
         <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl">
           Unlock Your Creativity with Creativerse Blogs
         </h1>
-        <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48">
+        <p className="mb-4 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48">
           Explore a world where AI enhances your creativity! Creativerse AI
           empowers you to write blogs effortlessly by providing AI-driven text
           suggestions and images.
         </p>
-        <div className="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col mb-4 lg:mb-7 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
           <a
             href="#"
             className="inline-flex justify-center items-center py-3.5 px-7 text-lg font-medium text-center bg-dark text-white rounded-full bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"

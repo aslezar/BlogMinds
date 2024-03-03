@@ -22,8 +22,8 @@ const Navbar = () => {
             </span>
           </NavLink>
           <div className="flex md:order-2 space-x-3 md:space-x-0">
-            <button
-              type="button"
+            <NavLink
+              to="/signin"
               className="text-white bg-dark  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full  px-5 py-2.5 text-center "
             >
               <span>Sign In</span>
@@ -41,7 +41,7 @@ const Navbar = () => {
                   d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
                 />
               </svg>
-            </button>
+            </NavLink>
             <button
               data-collapse-toggle="navbar-sticky"
               type="button"
