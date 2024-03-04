@@ -5,7 +5,8 @@
 	"main": "server.js",
 	"scripts": {
 		"dev": "nodemon server.js",
-		"build": "node server.js"
+		"build": "node server.js",
+		"seeder": "node ./DBseeder/seeder.js"
 	},
 	"repository": {
 		"type": "git",
