@@ -1,17 +1,6 @@
 // const mongoose = require("mongoose");
 import { Schema, model, Types } from "mongoose";
-
-interface IBlog {
-	title: string;
-	description?: string;
-	content?: string;
-	img?: string;
-	author: Types.ObjectId;
-	comments: Types.Array<Schema.Types.ObjectId>;
-	tags: Types.Array<string>;
-	createdAt: Date;
-	updatedAt: Date;
-}
+import { IBlog } from "../types/models";
 
 const BlogSchema = new Schema<IBlog>(
 	{

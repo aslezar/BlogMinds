@@ -2,20 +2,7 @@ import Express from "express";
 import { Schema, model, Types } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-interface IUser {
-	name: string;
-	email: string;
-	password: string;
-	bio?: string;
-	profileImage?: {
-		data: Buffer;
-		contentType: string;
-	};
-	blogs: Types.Array<Schema.Types.ObjectId>;
-	createdAt: Date;
-	updatedAt: Date;
-}
+import { IUser } from "../types/models";
 
 const UserSchema = new Schema<IUser>(
 	{
