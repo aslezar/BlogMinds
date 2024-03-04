@@ -21,6 +21,7 @@ export interface IComment {
 }
 
 export interface IUser {
+	_id?: Types.ObjectId;
 	name: string;
 	email: string;
 	password: string;
@@ -32,4 +33,7 @@ export interface IUser {
 	blogs: Types.Array<Schema.Types.ObjectId>;
 	createdAt: Date;
 	updatedAt: Date;
+	isModified: (field: string) => boolean;
+	generateToken: () => string;
+	comparePassword: (pswrd: string) => boolean;
 }
