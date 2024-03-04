@@ -6,7 +6,6 @@ import fs from "fs";
 
 import helmet from "helmet";
 import cors from "cors";
-// import xss from "xss-clean";
 import rateLimiter from "express-rate-limit";
 
 import morgan from "morgan";
@@ -41,7 +40,6 @@ app.use(
 app.use(express.json());
 app.use(helmet()); //set security HTTP headers
 app.use(cors()); //enable CORS
-// app.use(xss()); //prevent XSS attacks
 
 //Logger
 //create dir if not exist
