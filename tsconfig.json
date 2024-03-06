@@ -8,7 +8,9 @@
 		"forceConsistentCasingInFileNames": true,
 
 		"strict": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+
+		"types": ["./types/express/index.d.ts"]
 	},
 	"exclude": ["node_modules", "client"]
 }

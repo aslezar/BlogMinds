@@ -1,12 +1,11 @@
 import User from "../models/user";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, UnauthenticatedError } from "../errors";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { AuthenticatedRequest } from "../types/express";
+import jwt from "jsonwebtoken";
 import { IUser } from "../types/models";
-import { Response } from "express";
+import { Request, Response } from "express";
 
-const sendUserData = (user:IUser, res:Response, msg:String) => {
+const sendUserData = (user: IUser, res: Response, msg: String) => {
 	const token = user.generateToken();
 
 	//check if profile image is set or not
@@ -32,7 +31,7 @@ const sendUserData = (user:IUser, res:Response, msg:String) => {
 	});
 };
 
-const register = async (req:AuthenticatedRequest, res:Response) => {
+const register = async (req: Request, res: Response) => {
 	const { name, email, password } = req.body;
 	if (!name || !email || !password) {
 		throw new BadRequestError("Please provide all details");
@@ -49,7 +48,7 @@ const register = async (req:AuthenticatedRequest, res:Response) => {
 	sendUserData(user, res, "User Registered Successfully");
 };
 
-const login = async (req:AuthenticatedRequest, res:Response) => {
+const login = async (req: Request, res: Response) => {
 	const { email, password } = req.body;
 	if (!email && !password) {
 		throw new BadRequestError("Please provide email and password");
@@ -72,38 +71,32 @@ const login = async (req:AuthenticatedRequest, res:Response) => {
 
 	sendUserData(user, res, "User Login Successfully");
 };
-const tokenLogin = async (req:AuthenticatedRequest, res:Response) => {
+const tokenLogin = async (req: Request, res: Response) => {
 	const { token } = req.body;
 	if (!token) {
 		throw new BadRequestError("Please provide token");
 	}
 	try {
 		// declare a variable to store the process.env.JWT_SECRET
-		let decoded = jwt.verify(token, process.env.JWT_SECRET??"");
-		if (typeof decoded === 'object' && 'userId' in decoded) {
+		let decoded = jwt.verify(token, process.env.JWT_SECRET ?? "");
+		if (typeof decoded === "object" && "userId" in decoded) {
 			const user = await User.findById(decoded.userId);
 			if (!user) {
 				throw new UnauthenticatedError("Invalid Token");
 			}
 			sendUserData(user, res, "User Login Successfully");
-		}
-		else {
+		} else {
 			throw new UnauthenticatedError("Invalid Token");
 		}
 	} catch (error) {
 		throw new UnauthenticatedError("Invalid Token");
 	}
 };
-const signOut = async (req:AuthenticatedRequest, res:Response) => {
+const signOut = async (req: Request, res: Response) => {
 	res.status(StatusCodes.OK).json({
 		success: true,
 		msg: "User Logout Successfully",
 	});
 };
 
-export default {
-	register,
-	login,
-	tokenLogin,
-	signOut,
-};
+export { register, login, tokenLogin, signOut };

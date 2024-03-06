@@ -1,15 +1,49 @@
 const User = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
+import { Request, Response } from "express";
+import mongoose from "mongoose";
 
-const updateUser = async (userId, key, value) => {
+//UTITLIY FUNCTIONS
+
+//Remember: You can not throw error in non-async function
+//why? because it will not be caught by the error handling middleware
+
+const getId = (id: string) => {
+	try {
+		// const mongoId = new mongoose.Types.ObjectId(id);
+		const mongoId = new mongoose.Schema.Types.ObjectId(id);
+		return mongoId;
+	} catch (e) {
+		throw new BadRequestError("Invalid Blog Id");
+	}
+};
+
+const getBlogId = (req: Request) => {
+	return getId(req.params.blogId);
+};
+const getCommentId = (req: Request) => {
+	return getId(req.params.commentId);
+};
+
+const getUserId = (req: Request) => {
+	return req.user.userId;
+};
+
+//UTILITY FUNCTIONS END
+
+const updateUser = async (
+	userId: mongoose.Schema.Types.ObjectId,
+	key: string,
+	value: any
+) => {
 	const user = await User.findById(userId);
 	if (!user) {
 		throw new UnauthenticatedError("User Not Found");
 	}
 	if (key === "name") {
 		for (let i = 0; i < user.rooms.length; i++) {
-			const room = await Room.findById(user.rooms[i].roomId);
+			const room = await User.findById(user.rooms[i].roomId);
 			if (!room) {
 				continue;
 			}
@@ -26,8 +60,8 @@ const updateUser = async (userId, key, value) => {
 	await user.save();
 };
 
-const updateName = async (req, res) => {
-	const { userId } = req.user;
+const updateName = async (req: Request, res: Response) => {
+	const userId = getUserId(req);
 	const { name } = req.body;
 	if (!name) {
 		throw new BadRequestError("Name is required");
@@ -40,8 +74,8 @@ const updateName = async (req, res) => {
 		msg: "Name Updated Successfully",
 	});
 };
-const updateBio = async (req, res) => {
-	const { userId } = req.user;
+const updateBio = async (req: Request, res: Response) => {
+	const userId = getUserId(req);
 	const { bio } = req.body;
 	if (!bio) {
 		throw new BadRequestError("Bio is required");
@@ -56,8 +90,8 @@ const updateBio = async (req, res) => {
 		msg: "Bio Updated Successfully",
 	});
 };
-const updateImage = async (req, res) => {
-	const { userId } = req.user;
+const updateImage = async (req: Request, res: Response) => {
+	const userId = getUserId(req);
 	if (!req.file) {
 		throw new BadRequestError("Image is required");
 	}
@@ -75,8 +109,4 @@ const updateImage = async (req, res) => {
 	});
 };
 
-module.exports = {
-	updateName,
-	updateBio,
-	updateImage,
-};
+export { updateName, updateBio, updateImage };

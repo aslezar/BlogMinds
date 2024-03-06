@@ -22,4 +22,4 @@ const upload = multer({
 	},
 });
 
-module.exports = upload;
+export default upload;
