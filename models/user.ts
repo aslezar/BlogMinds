@@ -44,19 +44,19 @@ const UserSchema = new Schema<IUser>(
 	{ timestamps: true }
 );
 
-UserSchema.pre("save", async function (next: Express.NextFunction) {
-	if (!this.isModified("password")) {
-		return next(); // If password field is not modified, move to the next middleware
-	}
+// UserSchema.pre("save", async function (next: Express.NextFunction) {
+// 	if (!this.isModified("password")) {
+// 		return next(); // If password field is not modified, move to the next middleware
+// 	}
 
-	try {
-		const salt = await bcrypt.genSalt(10);
-		this.password = await bcrypt.hash(this.password, salt);
-		next();
-	} catch (error) {
-		return next(error);
-	}
-});
+// 	try {
+// 		const salt = await bcrypt.genSalt(10);
+// 		this.password = await bcrypt.hash(this.password, salt);
+// 		next();
+// 	} catch (error) {
+// 		return next(error);
+// 	}
+// });
 
 UserSchema.methods.generateToken = function () {
 	return jwt.sign({ userId: this._id }, process.env.JWT_SECRET as jwt.Secret, {
