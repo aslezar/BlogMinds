@@ -44,19 +44,23 @@ const UserSchema = new Schema<IUser>(
 	{ timestamps: true }
 );
 
-// UserSchema.pre("save", async function (next: Express.NextFunction) {
-// 	if (!this.isModified("password")) {
-// 		return next(); // If password field is not modified, move to the next middleware
-// 	}
+let save: RegExp = /save/;
 
-// 	try {
-// 		const salt = await bcrypt.genSalt(10);
-// 		this.password = await bcrypt.hash(this.password, salt);
-// 		next();
-// 	} catch (error) {
-// 		return next(error);
-// 	}
-// });
+const preSave = async function (this: any, next: (err?: Error) => void) {
+    if (!this.isModified("password")) {
+        return next(); // If password field is not modified, move to the next middleware
+    }
+
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (error: any) {
+        return next(error);
+    }
+}
+
+UserSchema.pre("save", preSave);
 
 UserSchema.methods.generateToken = function () {
 	return jwt.sign({ userId: this._id }, process.env.JWT_SECRET as jwt.Secret, {
