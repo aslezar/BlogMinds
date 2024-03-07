@@ -8,7 +8,7 @@ router.route("/signup").post(register);
 router.route("/signin").post(login);
 
 router.use(authMiddleware);
-router.route("/me").post(tokenLogin);
+router.route("/me").get(tokenLogin);
 router.route("/signout").post(signOut);
 
 export default router;
