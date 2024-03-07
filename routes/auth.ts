@@ -6,7 +6,7 @@ const router = Router();
 
 router.route("/signup").post(register);
 router.route("/signin").post(login);
-router.route("/signin/token").post(tokenLogin);
+router.route("/me").post(tokenLogin);
 router.route("/signout").post(authMiddleware, signOut);
 
 export default router;

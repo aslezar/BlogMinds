@@ -68,12 +68,15 @@ app.use("/assests", express.static("../client/dist/assests"));
 //Define Routes Here
 
 app.get("/*", (req: Request, res: Response) => {
-	res.sendFile(
-		path.join(__dirname, "../client/dist/index.html"),
-		(err: Error) => {
-			throw new Error("Error sending file: index.html");
-		}
-	);
+	if (fs.existsSync(path.join(__dirname, "../client/dist/index.html"))) {
+		res.sendFile(
+			path.join(__dirname, "../client/dist/index.html"),
+			(err: Error) => {
+				throw new Error("Error sending file: index.html");
+			}
+		);
+	}
+	return res.status(404).json({ message: "Page Not Found" });
 });
 
 //Error Handling Middleware
