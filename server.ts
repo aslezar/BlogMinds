@@ -42,13 +42,13 @@ app.use(helmet()); //set security HTTP headers
 app.use(cors()); //enable CORS
 
 //Logger
-//create dir if not exist
+if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
+
 const logDir: string = path.join(__dirname, "./log");
+//create dir if not exist
 if (!fs.existsSync(logDir)) {
 	fs.mkdirSync(logDir);
 }
-app.use(morgan("dev"));
-// log all requests to access.log
 app.use(
 	morgan("common", {
 		stream: fs.createWriteStream(path.join(__dirname, "./log/httpReqs.log"), {
@@ -58,15 +58,14 @@ app.use(
 );
 
 //Routes
+app.use("/", express.static("../client/dist"));
+app.use("/assests", express.static("../client/dist/assests"));
 app.use("/hello", (req: Request, res: Response) => {
 	res.status(200).json({ message: "Hello World" });
 });
 app.use("/api/v1", ApiRoute);
-app.use("/", express.static("../client/dist"));
-app.use("/assests", express.static("../client/dist/assests"));
 
 //Define Routes Here
-
 app.get("/*", (req: Request, res: Response) => {
 	if (fs.existsSync(path.join(__dirname, "../client/dist/index.html"))) {
 		res.sendFile(

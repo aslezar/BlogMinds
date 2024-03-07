@@ -44,21 +44,19 @@ const UserSchema = new Schema<IUser>(
 	{ timestamps: true }
 );
 
-let save: RegExp = /save/;
-
 const preSave = async function (this: any, next: (err?: Error) => void) {
-    if (!this.isModified("password")) {
-        return next(); // If password field is not modified, move to the next middleware
-    }
+	if (!this.isModified("password")) {
+		return next();
+	}
 
-    try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (error: any) {
-        return next(error);
-    }
-}
+	try {
+		const salt = await bcrypt.genSalt(10);
+		this.password = await bcrypt.hash(this.password, salt);
+		next();
+	} catch (error: any) {
+		return next(error);
+	}
+};
 
 UserSchema.pre("save", preSave);
 
