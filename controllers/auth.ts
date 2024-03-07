@@ -72,25 +72,11 @@ const login = async (req: Request, res: Response) => {
 	sendUserData(user, res, "User Login Successfully");
 };
 const tokenLogin = async (req: Request, res: Response) => {
-	const { token } = req.body;
-	if (!token) {
-		throw new BadRequestError("Please provide token");
+	const user = await User.findById(req.user.userId);
+	if (!user) {
+		throw new UnauthenticatedError("User Not Found");
 	}
-	try {
-		// declare a variable to store the process.env.JWT_SECRET
-		let decoded = jwt.verify(token, process.env.JWT_SECRET ?? "");
-		if (typeof decoded === "object" && "userId" in decoded) {
-			const user = await User.findById(decoded.userId);
-			if (!user) {
-				throw new UnauthenticatedError("Invalid Token");
-			}
-			sendUserData(user, res, "User Login Successfully");
-		} else {
-			throw new UnauthenticatedError("Invalid Token");
-		}
-	} catch (error) {
-		throw new UnauthenticatedError("Invalid Token");
-	}
+	sendUserData(user, res, "User Login Successfully");
 };
 const signOut = async (req: Request, res: Response) => {
 	res.status(StatusCodes.OK).json({
