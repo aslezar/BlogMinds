@@ -1,90 +1,24 @@
-import React, { useEffect } from "react";
-import Categories from "../components/Categories";
-import Pagination from "../components/Pagination";
-import Blogs from "../components/Blogs";
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
+import PricingTable from "../components/PricingTable";
+import ContactUs from "../components/ContactUs";
+import left from "../assets/img/LandingPage/left.avif";
+import right from "../assets/img/LandingPage/right.avif";
+import middle from "../assets/img/LandingPage/middle.avif";
 
-import { BlogShortType } from "../definitions";
-
-const blogs: BlogShortType[] = [
-	{
-		_id: 1,
-		title: "This is a title",
-		description:
-			"This is a description. lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfjt amet, consectetur adipiscing elit. Nulla convallis, justo nec tincidunt luctus, nunc nisl lorem100 sfnjjfj",
-		img: "https://source.unsplash.com/random",
-		author: "John Doe",
-	},
-	{
-		_id: 2,
-		title: "This is a title",
-		description: "This is a description",
-		img: "https://source.unsplash.com/random",
-		author: "John Doe",
-	},
-	{
-		_id: 3,
-		title: "This is a title",
-		description: "This is a description",
-		img: "https://source.unsplash.com/random",
-		author: "John Doe",
-	},
-	{
-		_id: 4,
-		title: "This is a title",
-		description: "This is a description",
-		img: "https://source.unsplash.com/random",
-		author: "John Doe",
-	},
-	{
-		_id: 5,
-		title: "This is a title",
-		description: "This is a description",
-		img: "https://source.unsplash.com/random",
-		author: "John Doe",
-	},
-	{
-		_id: 6,
-		title: "This is a title",
-		description: "This is a description",
-		img: "https://source.unsplash.com/random",
-		author: "John Doe",
-	},
-	{
-		_id: 7,
-		title: "This is a title",
-		description: "This is a description",
-		img: "https://source.unsplash.com/random",
-		author: "John Doe",
-	},
-	{
-		_id: 8,
-		title: "This is a title",
-		description: "This is a description",
-		img: "https://source.unsplash.com/random",
-		author: "John Doe",
-	},
-	{
-		_id: 9,
-		title: "This is a title",
-		description: "This is a description",
-		img: "https://source.unsplash.com/random",
-		author: "John Doe",
-	},
-];
 
 const HomePage = () => {
-	const [category, setCategory] = React.useState<string>("General");
-
-	useEffect(() => {
-		document.title = "BlogMinds | HomePage";
-		//fetch blogs
-	}, [category]);
-
 	return (
-		<div>
-			<Categories category={category} setCategory={setCategory} />
-			<Blogs blogs={blogs} />
-			<Pagination />
+		<div className="pt-12">
+			<Navbar/>
+			<Hero/>
+			<div className="relative h-screen mb-7">
+					<img src={middle} alt="" className=" absolute w-1/2 m-auto inset-0 top-0"/>
+					<img src={left} alt="" className="absolute  w-[37.5%] m-auto left-0 top-[15%]"/>
+					<img src={right} alt="" className="absolute  w-[37.5%] m-auto right-0 top-[15%]"/>
+			</div>
+			<PricingTable/>
+			<ContactUs/>
 		</div>
 	);
 };
