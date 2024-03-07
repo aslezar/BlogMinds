@@ -1,6 +1,8 @@
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
+import { Schema, model, Types } from "mongoose";
+import { IBlog } from "../types/models";
 
-const BlogSchema = new mongoose.Schema(
+const BlogSchema = new Schema<IBlog>(
 	{
 		title: {
 			type: String,
@@ -11,13 +13,13 @@ const BlogSchema = new mongoose.Schema(
 		content: String,
 		img: String,
 		author: {
-			type: mongoose.Schema.Types.ObjectId,
+			type: Schema.Types.ObjectId,
 			ref: "User",
 			required: [true, "Please provide author."],
 		},
 		comments: [
 			{
-				type: mongoose.Schema.Types.ObjectId,
+				type: Schema.Types.ObjectId,
 				ref: "Comment",
 			},
 		],
@@ -26,4 +28,6 @@ const BlogSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-module.exports = new mongoose.model("Blog", BlogSchema);
+const Blog = model<IBlog>("Blog", BlogSchema);
+
+export default Blog;

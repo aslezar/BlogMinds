@@ -1,11 +1,13 @@
-const router = require("express").Router();
-const authMiddleware = require("../middleware/auth");
-const {
+import { Router } from "express";
+import authMiddleware from "../middleware/auth";
+import {
 	getBlogByCategoty,
 	getBlog,
 	commentBlog,
 	commentOnComment,
-} = require("../controllers/blogs");
+} from "../controllers/blogs";
+
+const router = Router();
 
 router.route("/category/:category").get(getBlogByCategoty);
 router.route("/:blogId").get(getBlog);
@@ -14,4 +16,4 @@ router
 	.route("/:blogId/comment/:commentId")
 	.post(authMiddleware, commentOnComment);
 
-module.exports = router;
+export default router;

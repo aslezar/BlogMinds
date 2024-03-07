@@ -1,11 +1,11 @@
-const User = require("../models/user");
-const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, UnauthenticatedError } = require("../errors");
-const bcrypt = require("bcryptjs");
+import User from "../models/user";
+import { StatusCodes } from "http-status-codes";
+import { BadRequestError, UnauthenticatedError } from "../errors";
+import jwt from "jsonwebtoken";
+import { IUser } from "../types/models";
+import { Request, Response } from "express";
 
-const jwt = require("jsonwebtoken");
-
-const sendUserData = (user, res, msg) => {
+const sendUserData = (user: IUser, res: Response, msg: String) => {
 	const token = user.generateToken();
 
 	//check if profile image is set or not
@@ -31,7 +31,7 @@ const sendUserData = (user, res, msg) => {
 	});
 };
 
-const register = async (req, res) => {
+const register = async (req: Request, res: Response) => {
 	const { name, email, password } = req.body;
 	if (!name || !email || !password) {
 		throw new BadRequestError("Please provide all details");
@@ -48,7 +48,7 @@ const register = async (req, res) => {
 	sendUserData(user, res, "User Registered Successfully");
 };
 
-const login = async (req, res) => {
+const login = async (req: Request, res: Response) => {
 	const { email, password } = req.body;
 	if (!email && !password) {
 		throw new BadRequestError("Please provide email and password");
@@ -71,34 +71,32 @@ const login = async (req, res) => {
 
 	sendUserData(user, res, "User Login Successfully");
 };
-const tokenLogin = async (req, res) => {
+const tokenLogin = async (req: Request, res: Response) => {
 	const { token } = req.body;
 	if (!token) {
 		throw new BadRequestError("Please provide token");
 	}
 	try {
-		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		// console.log(decoded);
-
-		const user = await User.findById(decoded.userId);
-		if (!user) {
+		// declare a variable to store the process.env.JWT_SECRET
+		let decoded = jwt.verify(token, process.env.JWT_SECRET ?? "");
+		if (typeof decoded === "object" && "userId" in decoded) {
+			const user = await User.findById(decoded.userId);
+			if (!user) {
+				throw new UnauthenticatedError("Invalid Token");
+			}
+			sendUserData(user, res, "User Login Successfully");
+		} else {
 			throw new UnauthenticatedError("Invalid Token");
 		}
-		sendUserData(user, res, "User Login Successfully");
 	} catch (error) {
 		throw new UnauthenticatedError("Invalid Token");
 	}
 };
-const signOut = async (req, res) => {
+const signOut = async (req: Request, res: Response) => {
 	res.status(StatusCodes.OK).json({
 		success: true,
 		msg: "User Logout Successfully",
 	});
 };
 
-module.exports = {
-	register,
-	login,
-	tokenLogin,
-	signOut,
-};
+export { register, login, tokenLogin, signOut };

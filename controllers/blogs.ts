@@ -1,23 +1,41 @@
-const mongoose = require("mongoose");
-const User = require("../models/user");
-const Blog = require("../models/blog");
-const Comment = require("../models/comment");
-const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, UnauthenticatedError } = require("../errors");
+import mongoose, { Types, Schema } from "mongoose";
+import User from "../models/user";
+import Blog from "../models/blog";
+import Comment from "../models/comment";
+import { StatusCodes } from "http-status-codes";
+import { BadRequestError, UnauthenticatedError } from "../errors";
+import { Request, Response } from "express";
+import { IBlog } from "../types/models";
 
-const checkId = async (id) => {
-	if (mongoose.isValidObjectId(id) === false)
-		throw new BadRequestError("Invalid ID");
-	return id;
-};
-const getBlogId = async (req) => {
-	return await checkId(req.params.blogId);
-};
-const getUserId = async (req) => {
-	return await checkId(req.user.userId);
+//UTITLIY FUNCTIONS
+
+//Remember: You can not throw error in non-async function
+//why? because it will not be caught by the error handling middleware
+
+const getId = (id: string) => {
+	try {
+		// const mongoId = new mongoose.Types.ObjectId(id);
+		const mongoId = new mongoose.Schema.Types.ObjectId(id);
+		return mongoId;
+	} catch (e) {
+		throw new BadRequestError("Invalid Blog Id");
+	}
 };
 
-const getBlogByCategoty = async (req, res) => {
+const getBlogId = (req: Request) => {
+	return getId(req.params.blogId);
+};
+const getCommentId = (req: Request) => {
+	return getId(req.params.commentId);
+};
+
+const getUserId = (req: Request) => {
+	return req.user.userId;
+};
+
+//UTILITY FUNCTIONS END
+
+const getBlogByCategoty = async (req: Request, res: Response) => {
 	const category = req.params.category;
 	// tag is array of category field, and category is a string
 	const blogs = await Blog.find({ tags: { $in: [category] } }).select(
@@ -33,11 +51,10 @@ const getBlogByCategoty = async (req, res) => {
 	});
 };
 
-const getBlog = async (req, res) => {
-	const blogId = await getBlogId(req);
+const getBlog = async (req: Request, res: Response) => {
+	const blogId = getBlogId(req);
 
-	const blog = null;
-	// const blog = await Blog.findById(blogId);
+	const blog: IBlog | null = await Blog.findById(blogId);
 	if (!blog) {
 		throw new BadRequestError("Blog not found");
 	}
@@ -47,9 +64,10 @@ const getBlog = async (req, res) => {
 		msg: "Blog Fetched Successfully",
 	});
 };
-const commentBlog = async (req, res) => {
-	const userId = await getUserId(req);
-	const blogId = await getBlogId(req);
+
+const commentBlog = async (req: Request, res: Response) => {
+	const userId = getUserId(req);
+	const blogId = getBlogId(req);
 
 	const { message } = req.body;
 	if (!message) {
@@ -70,9 +88,11 @@ const commentBlog = async (req, res) => {
 		msg: "Commented Successfully",
 	});
 };
-const commentOnComment = async (req, res) => {
-	const userId = await getUserId(req);
-	const commentId = await checkId(req.body.commentId);
+
+const commentOnComment = async (req: Request, res: Response) => {
+	const userId = getUserId(req);
+	// const commentId: Types.ObjectId = await checkId(req.body.commentId);
+	const commentId = getCommentId(req);
 	const { message } = req.body;
 
 	if (!message) {
@@ -82,11 +102,11 @@ const commentOnComment = async (req, res) => {
 		message,
 		author: userId,
 	});
-	const updatedcomment = await findByIdAndUpdate(commentId, {
+	const updatedcomment = await Comment.findByIdAndUpdate(commentId, {
 		$push: { comments: comment },
 	});
 	if (!updatedcomment) {
-		await comment.remove();
+		await comment.deleteOne();
 		throw new BadRequestError("Error commenting on comment");
 	}
 	res.status(StatusCodes.OK).json({
@@ -95,9 +115,9 @@ const commentOnComment = async (req, res) => {
 	});
 };
 
-const getUserBlogs = async (req, res) => {
+const getUserBlogs = async (req: Request, res: Response) => {
 	//populate title description content img author
-	const userId = await getUserId(req);
+	const userId = getUserId(req);
 	const userBlogs = await User.findById(userId).select("blogs").populate({
 		path: "blogs",
 		select: "title description img",
@@ -113,8 +133,8 @@ const getUserBlogs = async (req, res) => {
 	});
 };
 
-const createBlog = async (req, res) => {
-	const { userId } = req.user;
+const createBlog = async (req: Request, res: Response) => {
+	const userId = getUserId(req);
 	const { title, description, content, img } = req.body;
 	if (!title || !description || !content) {
 		throw new BadRequestError("Please provide all details");
@@ -140,9 +160,9 @@ const createBlog = async (req, res) => {
 	});
 };
 
-const deleteBlog = async (req, res) => {
-	const userId = await getUserId(req);
-	const blogId = await getBlogId(req);
+const deleteBlog = async (req: Request, res: Response) => {
+	const userId = getUserId(req);
+	const blogId = getBlogId(req);
 
 	const userBlogs = await User.findById(userId).select("blogs");
 	if (!userBlogs) {
@@ -155,8 +175,8 @@ const deleteBlog = async (req, res) => {
 	}
 
 	//delete blog
-	const Blog = await Blog.findByIdAndDelete(blogId);
-	if (!Blog) {
+	let blog: IBlog | null = await Blog.findByIdAndDelete(blogId);
+	if (!blog) {
 		throw new BadRequestError("Error deleting blog");
 	}
 
@@ -169,9 +189,10 @@ const deleteBlog = async (req, res) => {
 		msg: `Successfully deleted blog.`,
 	});
 };
-const updateBlog = async (req, res) => {
-	const { userId } = req.user;
-	const blogId = await getBlogId(req);
+
+const updateBlog = async (req: Request, res: Response) => {
+	const userId = getUserId(req);
+	const blogId = getBlogId(req);
 	const { title, description, content, img } = req.body;
 
 	const userBlogs = await User.findOne({ _id: userId, blogs: blogId });
@@ -197,8 +218,7 @@ const updateBlog = async (req, res) => {
 		msg: `Successfully updated blog.`,
 	});
 };
-
-module.exports = {
+export {
 	getBlogByCategoty,
 	getBlog,
 	commentBlog,

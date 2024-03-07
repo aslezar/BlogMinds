@@ -1,15 +1,19 @@
 const User = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
+import { Request, Response } from "express";
+import mongoose from "mongoose";
 
-const updateUser = async (userId, key, value) => {
+const updateUser = async (
+	userId: mongoose.Schema.Types.ObjectId,
+	key: string,
+	value: any
+) => {
 	const user = await User.findById(userId);
-	if (!user) {
-		throw new UnauthenticatedError("User Not Found");
-	}
+	if (!user) throw new UnauthenticatedError("User Not Found");
 	if (key === "name") {
 		for (let i = 0; i < user.rooms.length; i++) {
-			const room = await Room.findById(user.rooms[i].roomId);
+			const room = await User.findById(user.rooms[i].roomId);
 			if (!room) {
 				continue;
 			}
@@ -26,12 +30,10 @@ const updateUser = async (userId, key, value) => {
 	await user.save();
 };
 
-const updateName = async (req, res) => {
-	const { userId } = req.user;
+const updateName = async (req: Request, res: Response) => {
+	const userId = req.user.userId;
 	const { name } = req.body;
-	if (!name) {
-		throw new BadRequestError("Name is required");
-	}
+	if (!name) throw new BadRequestError("Name is required");
 
 	await updateUser(userId, "name", name);
 	res.status(StatusCodes.OK).json({
@@ -40,15 +42,14 @@ const updateName = async (req, res) => {
 		msg: "Name Updated Successfully",
 	});
 };
-const updateBio = async (req, res) => {
-	const { userId } = req.user;
+const updateBio = async (req: Request, res: Response) => {
+	const userId = req.user.userId;
 	const { bio } = req.body;
-	if (!bio) {
-		throw new BadRequestError("Bio is required");
-	}
-	if (bio.length > 150) {
+	if (!bio) throw new BadRequestError("Bio is required");
+
+	if (bio.length > 150)
 		throw new BadRequestError("Bio should be less than 150 characters");
-	}
+
 	await updateUser(userId, "bio", bio);
 	res.status(StatusCodes.OK).json({
 		data: { bio },
@@ -56,11 +57,9 @@ const updateBio = async (req, res) => {
 		msg: "Bio Updated Successfully",
 	});
 };
-const updateImage = async (req, res) => {
-	const { userId } = req.user;
-	if (!req.file) {
-		throw new BadRequestError("Image is required");
-	}
+const updateImage = async (req: Request, res: Response) => {
+	const userId = req.user.userId;
+	if (!req.file) throw new BadRequestError("Image is required");
 
 	const profileImage = {
 		data: req.file.buffer,
@@ -75,8 +74,4 @@ const updateImage = async (req, res) => {
 	});
 };
 
-module.exports = {
-	updateName,
-	updateBio,
-	updateImage,
-};
+export { updateName, updateBio, updateImage };

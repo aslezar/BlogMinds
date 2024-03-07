@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+import Express from "express";
+import { Schema, model, Types } from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { IUser } from "../types/models";
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema<IUser>(
 	{
 		name: {
 			type: String,
@@ -34,7 +36,7 @@ const UserSchema = new mongoose.Schema(
 		},
 		blogs: [
 			{
-				type: mongoose.Schema.Types.ObjectId,
+				type: Schema.Types.ObjectId,
 				ref: "Blog",
 			},
 		],
@@ -42,29 +44,29 @@ const UserSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-UserSchema.pre("save", async function (next) {
-	if (!this.isModified("password")) {
-		return next(); // If password field is not modified, move to the next middleware
-	}
+// UserSchema.pre("save", async function (next: Express.NextFunction) {
+// 	if (!this.isModified("password")) {
+// 		return next(); // If password field is not modified, move to the next middleware
+// 	}
 
-	try {
-		const salt = await bcrypt.genSalt(10);
-		this.password = await bcrypt.hash(this.password, salt);
-		next();
-	} catch (error) {
-		return next(error);
-	}
-});
+// 	try {
+// 		const salt = await bcrypt.genSalt(10);
+// 		this.password = await bcrypt.hash(this.password, salt);
+// 		next();
+// 	} catch (error) {
+// 		return next(error);
+// 	}
+// });
 
 UserSchema.methods.generateToken = function () {
-	return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
+	return jwt.sign({ userId: this._id }, process.env.JWT_SECRET as jwt.Secret, {
 		expiresIn: process.env.JWT_LIFETIME,
 	});
 };
 
-UserSchema.methods.comparePassword = async function (pswrd) {
+UserSchema.methods.comparePassword = async function (pswrd: IUser["password"]) {
 	const isMatch = await bcrypt.compare(pswrd, this.password);
 	return isMatch;
 };
-
-module.exports = new mongoose.model("User", UserSchema);
+const User = model<IUser>("User", UserSchema);
+export default User;

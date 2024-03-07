@@ -1,25 +1,17 @@
-const mongoose = require("mongoose");
-const User = require("../models/user");
-const Blog = require("../models/blog");
-const Comment = require("../models/comment");
-const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, UnauthenticatedError } = require("../errors");
-const axios = require("axios");
-const fs = require("fs");
+import axios from "axios";
+import { StatusCodes } from "http-status-codes";
+import { BadRequestError } from "../errors";
+
+//types
+import { Request, Response } from "express";
 
 //UTITLIY FUNCTIONS
-
-const checkId = (id) => {
-	if (!mongoose.isValidObjectId(id)) throw new BadRequestError("Invalid ID");
-	return id;
+const getUserId = (req: Request) => {
+	return req.user.userId;
 };
-const getUserId = async (req) => {
-	return checkId(req.user.userId);
-};
-
 //UTILITY FUNCTIONS END
 
-const getTextSuggestion = async (req, res) => {
+const getTextSuggestion = async (req: Request, res: Response) => {
 	const text = req.body.text;
 	// const userId = getUserId(req);
 
@@ -47,11 +39,11 @@ const getTextSuggestion = async (req, res) => {
 	res.status(StatusCodes.OK).json({
 		data: generated_text,
 		success: true,
-		// msg: "Data Fetched Successfully",
-		msg: "This route is not implemented yet.",
+		msg: "Data Fetched Successfully",
+		// msg: "This route is not implemented yet.",
 	});
 };
-const getParaSuggestion = async (req, res) => {
+const getParaSuggestion = async (req: Request, res: Response) => {
 	const para = req.body.paragraph;
 	const userId = getUserId(req);
 
@@ -62,7 +54,7 @@ const getParaSuggestion = async (req, res) => {
 		msg: "This route is not implemented yet.",
 	});
 };
-const getImageSuggestionPrompt = async (req, res) => {
+const getImageSuggestionPrompt = async (req: Request, res: Response) => {
 	const prompt = req.body.prompt;
 	// const userId = getUserId(req);
 
@@ -92,7 +84,7 @@ const getImageSuggestionPrompt = async (req, res) => {
 	// 	msg: "This route is not implemented yet.",
 	// });
 };
-const getCoverImageSuggestion = async (req, res) => {
+const getCoverImageSuggestion = async (req: Request, res: Response) => {
 	const titlePrompt = req.body.titlePrompt;
 	const userId = getUserId(req);
 
@@ -104,7 +96,7 @@ const getCoverImageSuggestion = async (req, res) => {
 	});
 };
 
-module.exports = {
+export {
 	getTextSuggestion,
 	getParaSuggestion,
 	getImageSuggestionPrompt,
