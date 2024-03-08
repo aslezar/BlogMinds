@@ -1,6 +1,6 @@
-const User = require("../models/user");
-const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, UnauthenticatedError } = require("../errors");
+import User from "../models/user";
+import { StatusCodes } from "http-status-codes";
+import { BadRequestError, UnauthenticatedError } from "../errors";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 
@@ -11,22 +11,7 @@ const updateUser = async (
 ) => {
 	const user = await User.findById(userId);
 	if (!user) throw new UnauthenticatedError("User Not Found");
-	if (key === "name") {
-		for (let i = 0; i < user.rooms.length; i++) {
-			const room = await User.findById(user.rooms[i].roomId);
-			if (!room) {
-				continue;
-			}
-			for (let j = 0; j < room.users.length; j++) {
-				if (room.users[j].userId.toString() === userId.toString()) {
-					room.users[j].name = value;
-					break;
-				}
-			}
-			await room.save();
-		}
-	}
-	user[key] = value;
+	user.set({ [key]: value });
 	await user.save();
 };
 

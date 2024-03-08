@@ -11,9 +11,10 @@ const router = Router();
 
 router.route("/category/:category").get(getBlogByCategoty);
 router.route("/:blogId").get(getBlog);
-router.route("/:blogId/comment").post(authMiddleware, commentBlog);
-router
-	.route("/:blogId/comment/:commentId")
-	.post(authMiddleware, commentOnComment);
+
+router.use(authMiddleware);
+
+router.route("/:blogId/comment").post(commentBlog);
+router.route("/:blogId/comment/:commentId").post(commentOnComment);
 
 export default router;

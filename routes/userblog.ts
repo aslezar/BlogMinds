@@ -11,7 +11,7 @@ import express from "express";
 const router = Router();
 
 router
-	.use(authMiddleware as express.RequestHandler)
+	.use(authMiddleware)
 	.route("/")
 	.get(getUserBlogs)
 	.post(createBlog)

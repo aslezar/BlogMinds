@@ -6,8 +6,8 @@ import userblogRouter from "./userblog";
 const router = Router();
 
 router.use("/blog", userblogRouter);
-router.patch("/updatename", updateName);
-router.patch("/updatebio", updateBio);
-router.patch("/updateimage", upload.single("profileImage"), updateImage);
+router.patch("/name", updateName);
+router.patch("/bio", updateBio);
+router.patch("/image", upload.single("profileImage"), updateImage);
 
 export default router;
