@@ -1,9 +1,9 @@
 const BlogCard = () => {
   return (
     <div className="container p-5    bg-white w-full border my-4 rounded-lg ">
-      <div className=" lg:flex lg:items-center  gap-3">
+      <div className=" lg:flex flex-row-reverse lg:items-center  gap-3">
         <img
-          className="object-cover w-4/5 mx-auto lg:mx-0 lg:w-52 aspect-square rounded-xl"
+          className="object-cover w-full mx-auto lg:mx-0 lg:w-52 aspect-video rounded-xl"
           src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
           alt=""
         />
