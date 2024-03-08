@@ -3,20 +3,21 @@ import { BlogFullType } from "../definitions";
 
 const blog: BlogFullType = {
 	_id: "1",
-	title: "This is a title",
-	description: "This is a description",
+	title: "",
+	description: "",
 	img: "https://source.unsplash.com/random",
 	content: "This is a content",
-	tags: ["Technology"],
+	tags: [],
 	createdAt: "2021-09-01",
 	updatedAt: "2021-09-01",
 	author: "John Doe",
 };
-
+;
 const AddBlogPage = () => {
 	const handleSave = (newBlog: BlogFullType) => {
 		console.log(newBlog);
 	};
+
 	return (
 		<div>
 			<BlogEditor blogContent={blog} handleSave={handleSave} />

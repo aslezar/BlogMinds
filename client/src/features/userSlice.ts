@@ -116,7 +116,7 @@ export const loadUser = () => async (dispatch: any) => {
 			(msg: string) => {
 				dispatch(userSlice.actions.LOGOUTUSER());
 				localStorage.removeItem("token");
-				toast.error(msg);
+				console.log(msg);
 			}
 		);
 	}
