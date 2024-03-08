@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -33,8 +34,8 @@ const Hero: React.FC<Props> = () => {
           suggestions and images.
         </p>
         <div className="flex flex-col mb-4 lg:mb-7 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-          <a
-            href="#"
+          <Link
+            to="/signup"
             className="inline-flex justify-center items-center py-3.5 px-7 text-lg font-medium text-center bg-dark text-white rounded-full bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
           >
             <svg
@@ -49,7 +50,7 @@ const Hero: React.FC<Props> = () => {
             </svg>
             Join the Community
             
-          </a>
+          </Link>
         </div>
       </div>
     </section>

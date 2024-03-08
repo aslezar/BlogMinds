@@ -31,12 +31,12 @@ import AllBlogs from "./Pages/AllBlogs";
 
 const Layout = () => {
   return (
-    <div>
+    <div> 
       <ScrollRestoration />
       <div className="min-h-screen">
         <Outlet />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
@@ -78,7 +78,7 @@ const router = createBrowserRouter([
         element: <MyBlogs />,
       },
       {
-        path: "addBlog",
+        path: "write",
         element: <AddBlog />,
       },
       {
@@ -109,7 +109,6 @@ function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(loadUser());
-    toast.success("Welcome to BlogMinds!");
   }, []);
 
   return <RouterProvider router={router} />;
