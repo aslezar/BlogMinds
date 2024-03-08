@@ -9,8 +9,16 @@ const BlogSchema = new Schema<IBlog>(
 			required: [true, "Please provide title."],
 			minlength: 3,
 		},
-		description: String,
-		content: String,
+		description: {
+			type: String,
+			required: [true, "Please provide description "],
+			minlength: [10, "Description should be at least 10 characters."],
+		},
+		content: {
+			type: String,
+			required: [true, "Please provide content."],
+			minlength: [50, "Content should be at least 50 characters."],
+		},
 		img: String,
 		author: {
 			type: Schema.Types.ObjectId,

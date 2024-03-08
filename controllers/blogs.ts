@@ -6,6 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError, UnauthenticatedError } from "../errors";
 import { Request, Response } from "express";
 import { IBlog } from "../types/models";
+import { get } from "http";
 
 //UTITLIY FUNCTIONS
 
@@ -14,9 +15,7 @@ import { IBlog } from "../types/models";
 
 const getId = (id: string) => {
 	try {
-		// const mongoId = new mongoose.Types.ObjectId(id);
-		const mongoId = new mongoose.Schema.Types.ObjectId(id);
-		return mongoId;
+		return new mongoose.Types.ObjectId(id);
 	} catch (e) {
 		throw new BadRequestError("Invalid Blog Id");
 	}
@@ -120,7 +119,7 @@ const getUserBlogs = async (req: Request, res: Response) => {
 	const userId = getUserId(req);
 	const userBlogs = await User.findById(userId).select("blogs").populate({
 		path: "blogs",
-		select: "title description img",
+		select: "title description img tags",
 	});
 
 	if (!userBlogs) {
@@ -135,21 +134,19 @@ const getUserBlogs = async (req: Request, res: Response) => {
 
 const createBlog = async (req: Request, res: Response) => {
 	const userId = getUserId(req);
-	const { title, description, content, img } = req.body;
-	if (!title || !description || !content) {
-		throw new BadRequestError("Please provide all details");
-	}
+	const { title, description, content, img, tags } = req.body;
+
+	if (!Array.isArray(tags))
+		throw new BadRequestError("Tags should be an array of valid strings");
 
 	const blog = await Blog.create({
 		title,
 		description,
 		content,
 		img,
+		tags,
 		author: userId,
 	});
-	if (!blog) {
-		throw new BadRequestError("Error creating blog");
-	}
 	const user = await User.findByIdAndUpdate(userId, {
 		$push: { blogs: blog._id },
 	});
@@ -164,21 +161,19 @@ const deleteBlog = async (req: Request, res: Response) => {
 	const userId = getUserId(req);
 	const blogId = getBlogId(req);
 
-	const userBlogs = await User.findById(userId).select("blogs");
-	if (!userBlogs) {
-		throw new UnauthenticatedError("User Not Found");
-	}
-	const blogIndex = userBlogs.blogs.indexOf(blogId);
+	//check if blogId is valid
 
-	if (blogIndex === -1) {
+	const userBlogs = await User.findById(userId).select("blogs");
+	if (!userBlogs) throw new UnauthenticatedError("User Not Found");
+
+	const blogIndex = userBlogs.blogs.indexOf(blogId as any);
+
+	if (blogIndex === -1)
 		return res.status(404).json({ error: "Blog not found in user blogs." });
-	}
 
 	//delete blog
 	let blog: IBlog | null = await Blog.findByIdAndDelete(blogId);
-	if (!blog) {
-		throw new BadRequestError("Error deleting blog");
-	}
+	if (!blog) throw new BadRequestError("Error deleting blog");
 
 	//delete blog from user blogs
 	userBlogs.blogs.splice(blogIndex, 1);
@@ -193,29 +188,30 @@ const deleteBlog = async (req: Request, res: Response) => {
 const updateBlog = async (req: Request, res: Response) => {
 	const userId = getUserId(req);
 	const blogId = getBlogId(req);
-	const { title, description, content, img } = req.body;
+	const { title, description, content, img, tags } = req.body;
 
-	const userBlogs = await User.findOne({ _id: userId, blogs: blogId });
-	if (!userBlogs) {
-		throw new UnauthenticatedError(
-			"You are not authorized to update this blog"
-		);
-	}
+	if (tags && !Array.isArray(tags))
+		throw new BadRequestError("Tags should be an array of valid strings");
 
 	//update blog
-	const blog = await Blog.findByIdAndUpdate(
-		blogId,
-		{ title, description, content, img },
+	const blog = await Blog.findOneAndUpdate(
+		{
+			_id: blogId,
+			author: userId,
+		},
+		{ title, description, content, img, tags },
 		{ new: true }
 	);
-	if (!blog) {
-		throw new BadRequestError("Error updating blog");
-	}
+
+	if (!blog)
+		throw new BadRequestError(
+			"You are not authorized to update this blog or the blog does not exist"
+		);
 
 	res.status(StatusCodes.OK).json({
-		data: { blog },
+		data: { blog: blog },
 		success: true,
-		msg: `Successfully updated blog.`,
+		msg: "Successfully updated blog.",
 	});
 };
 export {

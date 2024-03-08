@@ -2,8 +2,8 @@ import { Schema, Types, Model } from "mongoose";
 
 export interface IBlog {
 	title: string;
-	description?: string;
-	content?: string;
+	description: string;
+	content: string;
 	img?: string;
 	author: Schema.Types.ObjectId;
 	comments: Types.Array<Schema.Types.ObjectId>;
