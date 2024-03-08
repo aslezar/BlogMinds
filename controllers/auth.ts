@@ -1,7 +1,6 @@
 import User from "../models/user"
 import { StatusCodes } from "http-status-codes"
 import { BadRequestError, UnauthenticatedError } from "../errors"
-import jwt from "jsonwebtoken"
 import { IUser } from "../types/models"
 import { Request, Response } from "express"
 
