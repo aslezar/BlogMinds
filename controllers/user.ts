@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes"
 import { BadRequestError, UnauthenticatedError } from "../errors"
 import { Request, Response } from "express"
 import mongoose from "mongoose"
-import uploadImage from "../cloudinary"
+import uploadImage from "../imageHandlers/cloudinary"
 
 const updateUser = async (
     userId: mongoose.Schema.Types.ObjectId,
