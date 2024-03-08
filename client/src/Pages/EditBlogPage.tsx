@@ -1,7 +1,7 @@
-import React from "react";
+import React from "react"
 
 const EditBlogPage = () => {
-	return <div>EditBlogPage</div>;
-};
+    return <div>EditBlogPage</div>
+}
 
-export default EditBlogPage;
+export default EditBlogPage

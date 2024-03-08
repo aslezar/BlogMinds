@@ -6,7 +6,8 @@
 	"scripts": {
 		"build": "npx tsc",
 		"start": "node dist/server.js",
-		"dev": "nodemon server.ts"
+		"dev": "nodemon server.ts",
+		"format": "prettier --write ."
 	},
 	"repository": {
 		"type": "git",
@@ -50,5 +51,12 @@
 		"nodemon": "^3.1.0",
 		"prettier": "^3.2.5",
 		"ts-node": "^10.9.2"
+	},
+	"prettier": {
+		"semi": false,
+		"singleQuote": false,
+		"trailingComma": "all",
+		"jsxSingleQuote": false,
+		"tabWidth": 4
 	}
 }

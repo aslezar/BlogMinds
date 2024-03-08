@@ -1,14 +1,14 @@
-import { Router } from "express";
+import { Router } from "express"
 import {
-	getUserBlogs,
-	createBlog,
-	deleteBlog,
-	updateBlog,
-} from "../controllers/blogs";
+    getUserBlogs,
+    createBlog,
+    deleteBlog,
+    updateBlog,
+} from "../controllers/blogs"
 
-const router = Router();
+const router = Router()
 
-router.route("/").get(getUserBlogs).post(createBlog);
-router.route("/:blogId").delete(deleteBlog).patch(updateBlog);
+router.route("/").get(getUserBlogs).post(createBlog)
+router.route("/:blogId").delete(deleteBlog).patch(updateBlog)
 
-export default router;
+export default router

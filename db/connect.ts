@@ -1,6 +1,6 @@
-import mongoose, { ConnectOptions } from "mongoose";
+import mongoose, { ConnectOptions } from "mongoose"
 
 const connectDB = (connectionString: string): Promise<typeof mongoose> =>
-	mongoose.connect(connectionString);
+    mongoose.connect(connectionString)
 
-export default connectDB;
+export default connectDB

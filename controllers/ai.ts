@@ -1,104 +1,104 @@
-import axios from "axios";
-import { StatusCodes } from "http-status-codes";
-import { BadRequestError } from "../errors";
+import axios from "axios"
+import { StatusCodes } from "http-status-codes"
+import { BadRequestError } from "../errors"
 
 //types
-import { Request, Response } from "express";
+import { Request, Response } from "express"
 
 //UTITLIY FUNCTIONS
 const getUserId = (req: Request) => {
-	return req.user.userId;
-};
+    return req.user.userId
+}
 //UTILITY FUNCTIONS END
 
 const getTextSuggestion = async (req: Request, res: Response) => {
-	const text = req.body.text;
-	// const userId = getUserId(req);
+    const text = req.body.text
+    // const userId = getUserId(req);
 
-	const response = await fetch(
-		"https://api-inference.huggingface.co/models/google/gemma-7b",
-		{
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
-			},
-			body: JSON.stringify({
-				inputs: text,
-			}),
-			redirect: "follow",
-		}
-	);
-	//if statusText is not ok, throw error
-	if (response.statusText !== "OK")
-		throw new Error(`API Error: ${response.statusText}`);
+    const response = await fetch(
+        "https://api-inference.huggingface.co/models/google/gemma-7b",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+            },
+            body: JSON.stringify({
+                inputs: text,
+            }),
+            redirect: "follow",
+        },
+    )
+    //if statusText is not ok, throw error
+    if (response.statusText !== "OK")
+        throw new Error(`API Error: ${response.statusText}`)
 
-	const data = await response.json();
-	const generated_text = data[0].generated_text;
+    const data = await response.json()
+    const generated_text = data[0].generated_text
 
-	res.status(StatusCodes.OK).json({
-		data: generated_text,
-		success: true,
-		msg: "Data Fetched Successfully",
-		// msg: "This route is not implemented yet.",
-	});
-};
+    res.status(StatusCodes.OK).json({
+        data: generated_text,
+        success: true,
+        msg: "Data Fetched Successfully",
+        // msg: "This route is not implemented yet.",
+    })
+}
 const getParaSuggestion = async (req: Request, res: Response) => {
-	const para = req.body.paragraph;
-	const userId = getUserId(req);
+    const para = req.body.paragraph
+    const userId = getUserId(req)
 
-	res.status(StatusCodes.OK).json({
-		data: { paragraph: para },
-		success: true,
-		// msg: "Data Fetched Successfully",
-		msg: "This route is not implemented yet.",
-	});
-};
+    res.status(StatusCodes.OK).json({
+        data: { paragraph: para },
+        success: true,
+        // msg: "Data Fetched Successfully",
+        msg: "This route is not implemented yet.",
+    })
+}
 const getImageSuggestionPrompt = async (req: Request, res: Response) => {
-	const prompt = req.body.prompt;
-	// const userId = getUserId(req);
+    const prompt = req.body.prompt
+    // const userId = getUserId(req);
 
-	const response = await axios({
-		url: "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
-		method: "post",
-		headers: {
-			Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
-		},
-		data: JSON.stringify({
-			inputs: prompt,
-		}),
-		responseType: "stream",
-	});
+    const response = await axios({
+        url: "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+        method: "post",
+        headers: {
+            Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+        },
+        data: JSON.stringify({
+            inputs: prompt,
+        }),
+        responseType: "stream",
+    })
 
-	if (response.statusText !== "OK")
-		throw new Error(`API Error: ${response.statusText}`);
+    if (response.statusText !== "OK")
+        throw new Error(`API Error: ${response.statusText}`)
 
-	//set headers
-	res.set(response.headers);
-	response.data.pipe(res);
+    //set headers
+    res.set(response.headers)
+    response.data.pipe(res)
 
-	// res.status(StatusCodes.OK).json({
-	// 	data: { prompt: prompt },
-	// 	success: true,
-	// 	// msg: "Data Fetched Successfully",
-	// 	msg: "This route is not implemented yet.",
-	// });
-};
+    // res.status(StatusCodes.OK).json({
+    // 	data: { prompt: prompt },
+    // 	success: true,
+    // 	// msg: "Data Fetched Successfully",
+    // 	msg: "This route is not implemented yet.",
+    // });
+}
 const getCoverImageSuggestion = async (req: Request, res: Response) => {
-	const titlePrompt = req.body.titlePrompt;
-	const userId = getUserId(req);
+    const titlePrompt = req.body.titlePrompt
+    const userId = getUserId(req)
 
-	res.status(StatusCodes.OK).json({
-		data: { titlePrompt: titlePrompt },
-		success: true,
-		// msg: "Data Fetched Successfully",
-		msg: "This route is not implemented yet.",
-	});
-};
+    res.status(StatusCodes.OK).json({
+        data: { titlePrompt: titlePrompt },
+        success: true,
+        // msg: "Data Fetched Successfully",
+        msg: "This route is not implemented yet.",
+    })
+}
 
 export {
-	getTextSuggestion,
-	getParaSuggestion,
-	getImageSuggestionPrompt,
-	getCoverImageSuggestion,
-};
+    getTextSuggestion,
+    getParaSuggestion,
+    getImageSuggestionPrompt,
+    getCoverImageSuggestion,
+}
