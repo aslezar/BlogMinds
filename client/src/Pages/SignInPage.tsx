@@ -1,11 +1,13 @@
 import * as React from "react";
-import img from "../assets/img/Auth/auth.gif";
+import img from "../assets/img/Auth/auth.webm";
+// import img from "../assets/img/Auth/auth.mp4";
+// import img from "../assets/img/Auth/auth.gif";
 import { useAppDispatch } from "../hooks";
 import { login } from "../features/userSlice";
 import { Link } from "react-router-dom";
 
 export default function SignIn() {
-	const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const [values, setValues] = React.useState({
     email: "",
@@ -22,18 +24,17 @@ export default function SignIn() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(
-      login(
-        values.email,
-        values.password
-      )
-    );
+    dispatch(login(values.email, values.password));
   };
 
-	return (
+  return (
     <div className="flex h-screen">
       <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
-        <img src={img} alt="" className="hidden lg:block w-3/5 aspect-square" />
+        {/* <img src={img} alt="" className="hidden lg:block w-3/5 aspect-square" /> */}
+        <video autoPlay loop muted playsInline className="hidden lg:block w-3/5 aspect-square">
+          {/* <source src={img} type="video/mp4" /> */}
+          <source src={img} type="video/webm" />
+        </video>
       </div>
 
       <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
@@ -46,7 +47,6 @@ export default function SignIn() {
           </h1>
           <form onSubmit={handleSubmit} className="space-y-4 ">
             <div className=" gap-3 mt-4">
-              
               <label
                 htmlFor="email"
                 className="ml-3 block text-sm font-medium text-gray-700"
@@ -119,9 +119,7 @@ export default function SignIn() {
           <div className="mt-4 text-sm text-gray-600 text-center">
             <Link to="/signup" className="hover:underline cursor-pointer">
               Don't have an account?
-              <span className="text-black hover:underline">
-                Login here
-              </span>
+              <span className="text-black hover:underline">Login here</span>
             </Link>
           </div>
         </div>

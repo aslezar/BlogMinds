@@ -2,7 +2,9 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
 import { register } from "../features/userSlice";
-import img from "../assets/img/Auth/auth.gif";
+import img from "../assets/img/Auth/auth.webm";
+// import img from "../assets/img/Auth/auth.mp4";
+// import img from "../assets/img/Auth/auth.gif";
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
@@ -36,7 +38,11 @@ export default function SignUp() {
   return (
     <div className="flex h-screen">
       <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
-        <img src={img} alt="" className="hidden lg:block w-3/5 aspect-square" />
+        {/* <img src={img} alt="" className="hidden lg:block w-3/5 aspect-square" /> */}
+        <video autoPlay loop muted playsInline className="hidden lg:block w-3/5 aspect-square">
+          {/* <source src={img} type="video/mp4" /> */}
+          <source src={img} type="video/webm" />
+        </video>
       </div>
 
       <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
@@ -157,9 +163,7 @@ export default function SignUp() {
           <div className="mt-4 text-sm text-gray-600 text-center">
             <Link to="/signin" className="hover:underline">
               Already have an account?{" "}
-              <span className="text-black hover:underline">
-                Login here
-              </span>
+              <span className="text-black hover:underline">Login here</span>
             </Link>
           </div>
         </div>
