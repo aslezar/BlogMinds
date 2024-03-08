@@ -8,23 +8,14 @@ import { Request, Response } from "express"
 const sendUserData = (user: IUser, res: Response, msg: String) => {
     const token = user.generateToken()
 
-    //check if profile image is set or not
-    const profileImage =
-        user.profileImage &&
-        user.profileImage.data &&
-        user.profileImage.contentType
-            ? {
-                  base64Image: user.profileImage.data.toString("base64"),
-                  contentType: user.profileImage.contentType,
-              }
-            : null
+    const { _id: userId, name, email, bio, profileImage } = user
 
     res.status(StatusCodes.CREATED).json({
         data: {
-            userId: user._id,
-            name: user.name,
-            email: user.email,
-            bio: user.bio,
+            userId,
+            name,
+            email,
+            bio,
             profileImage,
             token,
         },

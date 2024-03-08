@@ -3,16 +3,7 @@ import { StatusCodes } from "http-status-codes"
 import { BadRequestError, UnauthenticatedError } from "../errors"
 import { Request, Response } from "express"
 import mongoose from "mongoose"
-
-import cloudinary from "../utils/cloudinary"
-import sharp from "sharp"
-
-const cloudinary = require("cloudinary").v2
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-})
+import uploadImage from "../cloudinary"
 
 const updateUser = async (
     userId: mongoose.Schema.Types.ObjectId,
@@ -55,15 +46,9 @@ const updateBio = async (req: Request, res: Response) => {
 const updateImage = async (req: Request, res: Response) => {
     const userId = req.user.userId
     if (!req.file) throw new BadRequestError("Image is required")
-    // convert image to webp format
-    // install sharp and cloudinary using npm install sharp cloudinary
-    const webp = await sharp(req.file.buffer).webp().toBuffer()
-    // save image to cloudinary
-    const result = await cloudinary.uploader.upload(webp, {
-        upload_preset: "social-media",
-    })
-    // save image url to database
-    await updateUser(userId, "profileImage", result.secure_url)
+
+    const cloudinary_img_url = await uploadImage(req)
+    await updateUser(userId, "profileImage", cloudinary_img_url)
 
     res.status(StatusCodes.OK).json({
         success: true,

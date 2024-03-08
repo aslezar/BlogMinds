@@ -31,8 +31,8 @@ const UserSchema = new Schema<IUser>(
             maxlength: 150,
         },
         profileImage: {
-            data: Buffer,
-            contentType: String,
+            type: String,
+            default: "https://placeholder.com/150",
         },
         blogs: [
             {

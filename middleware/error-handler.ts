@@ -57,12 +57,10 @@ const errorHandlerMiddleware = (
         } else {
             console.log(err)
             //Unknown error occured
-            return res
-                .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json({
-                    success: false,
-                    msg: "Mongoose error: Something went wrong",
-                })
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                success: false,
+                msg: "Mongoose error: Something went wrong",
+            })
         }
     }
 

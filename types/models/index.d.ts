@@ -26,10 +26,7 @@ export interface IUser {
     email: string
     password: string
     bio?: string
-    profileImage?: {
-        data: Buffer
-        contentType: string
-    }
+    profileImage: string
     blogs: Types.Array<Schema.Types.ObjectId>
     createdAt: Date
     updatedAt: Date
