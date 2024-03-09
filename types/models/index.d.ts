@@ -23,6 +23,11 @@ export interface IComment {
     updatedAt?: Date
 }
 
+export interface OTP {
+    value: String
+    expires: Date
+}
+
 export interface IUser {
     _id?: Types.ObjectId
     name: string
@@ -38,10 +43,7 @@ export interface IUser {
     createdAt: Date
     updatedAt: Date
     status: string
-    otp: {
-        value: string
-        expires: Date
-    }
+    otp: OTP
     isModified: (field: string) => boolean
     generateToken: () => string
     comparePassword: (pswrd: string) => boolean

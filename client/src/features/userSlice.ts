@@ -42,6 +42,7 @@ export const userSlice = createSlice({
         },
         LOGOUTUSER: (state) => {
             console.log("logout")
+            localStorage.removeItem("token")
             state = initialState
         },
         UPDATENAME: (state, action) => {
@@ -116,7 +117,6 @@ export const loadUser = () => async (dispatch: any) => {
             },
             (msg: string) => {
                 dispatch(userSlice.actions.LOGOUTUSER())
-                localStorage.removeItem("token")
                 console.log(msg)
             },
         )
