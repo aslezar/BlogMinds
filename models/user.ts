@@ -40,6 +40,29 @@ const UserSchema = new Schema<IUser>(
                 ref: "Blog",
             },
         ],
+        myInterests: [
+            {
+                type: String,
+            },
+        ],
+        readArticles: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Blog",
+            },
+        ],
+        following: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        followers: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
     },
     { timestamps: true },
 )

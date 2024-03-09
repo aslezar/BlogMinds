@@ -28,6 +28,10 @@ export interface IUser {
     bio?: string
     profileImage: string
     blogs: Types.Array<Schema.Types.ObjectId>
+    myInterests: Types.Array<string>
+    readArticles: Types.Array<Schema.Types.ObjectId>
+    following: Types.Array<Schema.Types.ObjectId>
+    followers: Types.Array<Schema.Types.ObjectId>
     createdAt: Date
     updatedAt: Date
     isModified: (field: string) => boolean
