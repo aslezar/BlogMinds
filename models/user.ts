@@ -63,6 +63,19 @@ const UserSchema = new Schema<IUser>(
                 ref: "User",
             },
         ],
+        status: {
+            type: String,
+            enum: ["active", "inactive"],
+            default: "inactive",
+        },
+        otp: {
+            value: {
+                type: String,
+            },
+            expires: {
+                type: Date,
+            },
+        },
     },
     { timestamps: true },
 )

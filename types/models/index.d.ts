@@ -37,6 +37,11 @@ export interface IUser {
     followers: Types.Array<Schema.Types.ObjectId>
     createdAt: Date
     updatedAt: Date
+    status: string
+    otp: {
+        value: string
+        expires: Date
+    }
     isModified: (field: string) => boolean
     generateToken: () => string
     comparePassword: (pswrd: string) => boolean
