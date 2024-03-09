@@ -18,7 +18,7 @@ const uploadImage = async (req: Request) => {
     const result = await cloudinary.uploader.upload(
         `data:${req.file.mimetype};base64,${webpImg.toString("base64")}`,
         {
-            folder: "social-app",
+            folder: "blogmind",
             public_id: `${req.user.userId}/profile`,
         },
     )

@@ -32,7 +32,8 @@ const UserSchema = new Schema<IUser>(
         },
         profileImage: {
             type: String,
-            default: "https://placeholder.com/150",
+            default:
+                "https://res.cloudinary.com/dario3ey7/image/upload/v1709974103/blogmind/m7ndwlipeesy1jmab7la.png",
         },
         blogs: [
             {

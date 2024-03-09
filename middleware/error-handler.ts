@@ -64,6 +64,22 @@ const errorHandlerMiddleware = (
         }
     }
 
+    // Multer Error
+    if (err.name === "MulterError") {
+        // console.log(err.code)
+
+        if (err.message === "File too large") {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                success: false,
+                msg: "File size is too large. Max limit is 4MB",
+            })
+        }
+        console.log(err)
+        return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ success: false, msg: "Multer error: " + err.message })
+    }
+
     console.log(err)
     //Internal Server Error
     return res
