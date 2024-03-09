@@ -1,5 +1,5 @@
 import { Router } from "express"
-import upload from "../imageHandlers/multer"
+import upload from "../utils/imageHandlers/multer"
 import { updateName, updateBio, updateImage } from "../controllers/user"
 import userblogRouter from "./userblog"
 

@@ -1,4 +1,3 @@
-import Express from "express"
 import { Schema, model, Types } from "mongoose"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
