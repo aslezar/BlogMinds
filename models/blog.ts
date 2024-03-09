@@ -32,6 +32,20 @@ const BlogSchema = new Schema<IBlog>(
             },
         ],
         tags: [String],
+        views: {
+            type: Number,
+            default: 0,
+        },
+        likes: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        likesCount: {
+            type: Number,
+            default: 0,
+        },
     },
     { timestamps: true },
 )

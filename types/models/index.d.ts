@@ -8,6 +8,9 @@ export interface IBlog {
     author: Schema.Types.ObjectId
     comments: Types.Array<Schema.Types.ObjectId>
     tags: Types.Array<string>
+    views: number
+    likes: Types.Array<Schema.Types.ObjectId>
+    likesCount: number
     createdAt: Date
     updatedAt: Date
 }
