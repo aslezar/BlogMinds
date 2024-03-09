@@ -49,7 +49,7 @@ async function blogSeeder() {
         let blogs = []
         for (let i = 0; i < 200; i++) {
             for (const blog of blogData) {
-                let newBlog = {...blog};
+                let newBlog = { ...blog }
                 const randomLine =
                     lines[Math.floor(Math.random() * lines.length)]
                 newBlog.content = randomLine
