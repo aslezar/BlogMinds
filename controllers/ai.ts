@@ -1,6 +1,5 @@
 import axios from "axios"
 import { StatusCodes } from "http-status-codes"
-import { BadRequestError } from "../errors"
 
 //types
 import { Request, Response } from "express"

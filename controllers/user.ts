@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes"
 import { BadRequestError, UnauthenticatedError } from "../errors"
 import { Request, Response } from "express"
 import mongoose from "mongoose"
+import uploadImage from "../imageHandlers/cloudinary"
 
 const updateUser = async (
     userId: mongoose.Schema.Types.ObjectId,
@@ -46,12 +47,8 @@ const updateImage = async (req: Request, res: Response) => {
     const userId = req.user.userId
     if (!req.file) throw new BadRequestError("Image is required")
 
-    const profileImage = {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-    }
-
-    await updateUser(userId, "profileImage", profileImage)
+    const cloudinary_img_url = await uploadImage(req)
+    await updateUser(userId, "profileImage", cloudinary_img_url)
 
     res.status(StatusCodes.OK).json({
         success: true,

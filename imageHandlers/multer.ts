@@ -9,7 +9,8 @@ const fileFilter = function (req: Request, file: FileTypes, cb: cbType) {
     if (
         file.mimetype === "image/jpeg" ||
         file.mimetype === "image/png" ||
-        file.mimetype === "image/jpg"
+        file.mimetype === "image/jpg" ||
+        file.mimetype === "image/webp"
     )
         cb(null, true) // Accept the file
     else cb(new Error("Unsupported file type")) // Reject the file with an error

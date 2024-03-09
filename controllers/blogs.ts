@@ -6,7 +6,6 @@ import { StatusCodes } from "http-status-codes"
 import { BadRequestError, UnauthenticatedError } from "../errors"
 import { Request, Response } from "express"
 import { IBlog } from "../types/models"
-import { get } from "http"
 
 //UTITLIY FUNCTIONS
 
