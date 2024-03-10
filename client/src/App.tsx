@@ -32,8 +32,9 @@ import AllBlogs from "./Pages/AllBlogs"
 const Layout = () => {
     return (
         <div>
+            <Navbar />
             <ScrollRestoration />
-            <div className="min-h-screen">
+            <div className="min-h-screen py-20">
                 <Outlet />
             </div>
             {/* <Footer /> */}
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
             {
-                path: "blogs/all",
+                path: "feed",
                 element: <AllBlogs />,
             },
             {

@@ -1,4 +1,3 @@
-import BlogPageNav from "../components/BlogPageNav"
 import BlogCard from "../components/BlogCard"
 import Categories from "../components/Categories"
 import { useState } from "react"
@@ -6,8 +5,7 @@ const AllBlogs = () => {
     const [category, setCategory] = useState<string>("For You")
     return (
         <div>
-            <BlogPageNav />
-            <div className="flex gap-3 py-24 mx-auto w-5/6">
+            <div className="flex gap-3  mx-auto w-5/6">
                 <div className=" w-3/4  ">
                     <Categories category={category} setCategory={setCategory} />
                     <BlogCard />
