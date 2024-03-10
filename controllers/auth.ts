@@ -88,6 +88,24 @@ const register = async (req: Request, res: Response) => {
     })
 }
 
+// only for development environment
+const registerWithoutOtp = async (req: Request, res: Response) => {
+    const { name, email, password } = req.body
+    if (!name || !email || !password) {
+        throw new BadRequestError("Please provide all details")
+    }
+    const userExist = await User.findOne({ email }) // Using findOne
+
+    if (userExist) {
+        return res.status(StatusCodes.CONFLICT).json({
+            success: false,
+            msg: "User with this email already exists",
+        }) // Conflict status
+    }
+    const user = await User.create({ name, email, password, status: "active"})
+    sendUserData(user, res, "User Registered Successfully")
+}
+
 const verifyEmail = async (req: Request, res: Response) => {
     const { otp, userId } = req.body
     if (!otp) throw new BadRequestError("Please provide OTP")
@@ -144,4 +162,4 @@ const signOut = async (req: Request, res: Response) => {
     })
 }
 
-export { register, login, verifyEmail, tokenLogin, signOut }
+export { register, registerWithoutOtp, login, verifyEmail, tokenLogin, signOut }
