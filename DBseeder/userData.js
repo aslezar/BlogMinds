@@ -15,5 +15,13 @@ const userData = [
         blogs: [],
         myInterests: ["technology", "web development"],
     },
+    {
+        name: "Hello",
+        email: "hello@hello.com",
+        password: "hello@hello.com",
+        bio: "I am a another blogger.",
+        blogs: [],
+        myInterests: ["creative writing", "dance", "music"],
+    },
 ]
 module.exports = userData

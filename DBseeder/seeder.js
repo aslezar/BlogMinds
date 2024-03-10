@@ -33,7 +33,6 @@ mongoose
             await user.save()
         }
         mongoose.connection.close()
-        process.exit()
     })
     .catch((err) => console.error("Error connecting to MongoDB:", err))
 
