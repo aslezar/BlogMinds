@@ -45,6 +45,6 @@
         "singleQuote": false,
         "trailingComma": "all",
         "jsxSingleQuote": false,
-        "tabWidth": 4
+        "tabWidth": 2
     }
 }

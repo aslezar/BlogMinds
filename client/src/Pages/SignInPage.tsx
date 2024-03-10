@@ -1,14 +1,15 @@
 import * as React from "react"
-import img from "../assets/img/Auth/auth.webm"
+import img from "../assets/img/Auth/signup.webp"
 // import img from "../assets/img/Auth/auth.mp4";
 // import img from "../assets/img/Auth/auth.gif";
-import { useAppDispatch } from "../hooks"
+import { useAppDispatch, useAppSelector } from "../hooks"
 import { login } from "../features/userSlice"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function SignIn() {
     const dispatch = useAppDispatch()
-
+    const navigate = useNavigate()
+    const { isAuthenticated, loading } = useAppSelector((state) => state.user)
     const [values, setValues] = React.useState({
         email: "",
         password: "",
@@ -26,21 +27,19 @@ export default function SignIn() {
         event.preventDefault()
         dispatch(login(values.email, values.password))
     }
-
+    React.useEffect(() => {
+        if (!loading && isAuthenticated) {
+            navigate("/")
+        }
+    }, [])
     return (
         <div className="flex h-screen">
             <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
-                {/* <img src={img} alt="" className="hidden lg:block w-3/5 aspect-square" /> */}
-                <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="hidden lg:block w-3/5 aspect-square"
-                >
-                    {/* <source src={img} type="video/mp4" /> */}
-                    <source src={img} type="video/webm" />
-                </video>
+                <img
+                    src={img}
+                    alt=""
+                    className="hidden lg:block w-full object-cover h-full"
+                />
             </div>
 
             <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
