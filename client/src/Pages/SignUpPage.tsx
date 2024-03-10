@@ -1,14 +1,16 @@
 import * as React from "react"
-import { Link } from "react-router-dom"
-import { useAppDispatch } from "../hooks"
+import { Link, useNavigate } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "../hooks"
 import { register } from "../features/userSlice"
-import img from "../assets/img/Auth/auth.webm"
+import img from "../assets/img/Auth/signup.webp"
 // import img from "../assets/img/Auth/auth.mp4";
 // import img from "../assets/img/Auth/auth.gif";
 
 export default function SignUp() {
     const dispatch = useAppDispatch()
-
+    const navigate = useNavigate()
+    const { isAuthenticated, loading } = useAppSelector((state) => state.user)
+    console.log(isAuthenticated, loading)
     const [values, setValues] = React.useState({
         firstName: "",
         lastName: "",
@@ -35,20 +37,29 @@ export default function SignUp() {
         )
     }
 
+    React.useEffect(() => {
+        if (!loading && isAuthenticated) {
+            navigate("/")
+        }
+    }, [])
     return (
         <div className="flex h-screen">
             <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
-                {/* <img src={img} alt="" className="hidden lg:block w-3/5 aspect-square" /> */}
-                <video
+                <img
+                    src={img}
+                    alt=""
+                    className="hidden lg:block w-full h-full object-cover"
+                />
+                {/* <video
                     autoPlay
                     loop
                     muted
                     playsInline
                     className="hidden lg:block w-3/5 aspect-square"
                 >
-                    {/* <source src={img} type="video/mp4" /> */}
+                    <source src={img} type="video/mp4" />
                     <source src={img} type="video/webm" />
-                </video>
+                </video> */}
             </div>
 
             <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
