@@ -9,7 +9,7 @@ const lines = require("./random-para")
 const UserModel = require("./user")
 const userData = require("./userData")
 
-dotenv.config()
+dotenv.config("../.env")
 
 // Connect to MongoDB
 mongoose
@@ -32,6 +32,7 @@ mongoose
             }
             await user.save()
         }
+        mongoose.connection.close()
         process.exit()
     })
     .catch((err) => console.error("Error connecting to MongoDB:", err))
