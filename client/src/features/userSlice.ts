@@ -42,8 +42,10 @@ export const userSlice = createSlice({
         },
         LOGOUTUSER: (state) => {
             console.log("logout")
+            state.isAuthenticated = false
+            state.loading = false
+            state.user = null
             localStorage.removeItem("token")
-            state = initialState
         },
         UPDATENAME: (state, action) => {
             state.user.name = action.payload
@@ -55,10 +57,11 @@ export const userSlice = createSlice({
 })
 
 export const logout = () => async (dispatch: any) => {
+    const token = localStorage.getItem("token") || null
     dispatch(userSlice.actions.SETLOADINGUSER())
     handler(
         signOut,
-        undefined,
+        token,
         () => {
             dispatch(userSlice.actions.LOGOUTUSER())
             toast.success("Logged out")
