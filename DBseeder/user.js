@@ -29,7 +29,8 @@ var UserSchema = new mongoose.Schema(
         },
         profileImage: {
             type: String,
-            default: "https://placeholder.com/150",
+            default:
+                "https://res.cloudinary.com/dario3ey7/image/upload/v1709974103/blogmind/m7ndwlipeesy1jmab7la.png",
         },
         blogs: [
             {
@@ -37,6 +38,42 @@ var UserSchema = new mongoose.Schema(
                 ref: "Blog",
             },
         ],
+        myInterests: [
+            {
+                type: String,
+            },
+        ],
+        readArticles: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Blog",
+            },
+        ],
+        following: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        followers: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        status: {
+            type: String,
+            enum: ["active", "inactive", "blocked"],
+            default: "active",
+        },
+        otp: {
+            value: {
+                type: String,
+            },
+            expires: {
+                type: Date,
+            },
+        },
     },
     { timestamps: true },
 )
