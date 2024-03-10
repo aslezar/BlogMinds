@@ -5,6 +5,7 @@ const userData = [
         password: "password",
         bio: "I am a blogger.",
         blogs: [],
+        myInterests: ["technology", "programming", "web development"],
     },
     {
         name: "another user",
@@ -12,6 +13,7 @@ const userData = [
         password: "password",
         bio: "I am a another blogger.",
         blogs: [],
+        myInterests: ["technology", "web development"],
     },
 ]
 module.exports = userData
