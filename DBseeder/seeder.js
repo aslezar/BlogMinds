@@ -61,7 +61,7 @@ async function seeder() {
     // make random users follow each other
     for (const user of users) {
         for (let i = 0; i < 5; i++) {
-            const randomUser = users[Math.floor(Math.random() * users.length)]
+            const randomUser = users[randomInt(0,users.length-1)]
             if (randomUser._id.toString() !== user._id.toString()) {
                 user.following.push(randomUser)
                 randomUser.followers.push(user)
@@ -94,10 +94,10 @@ async function blogSeeder() {
             for (const blog of blogData) {
                 let newBlog = { ...blog }
                 const randomLine =
-                    lines[Math.floor(Math.random() * lines.length)]
+                    lines[randomInt(0, lines.length - 1)]
                 newBlog.content = randomLine
                 newBlog.description =
-                    randDesc[Math.floor(Math.random() * randDesc.length)]
+                    randDesc[randomInt(0, randDesc.length - 1)]
                 blogs.push(newBlog)
             }
         }
