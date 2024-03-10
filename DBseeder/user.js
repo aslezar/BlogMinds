@@ -1,6 +1,9 @@
 const mongoose = require("mongoose")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+dotenv = require("dotenv")
+dotenv.config()
+
 var UserSchema = new mongoose.Schema(
     {
         name: {
@@ -79,10 +82,6 @@ var UserSchema = new mongoose.Schema(
 )
 
 UserSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
-        return next() // If password field is not modified, move to the next middleware
-    }
-
     try {
         const salt = await bcrypt.genSalt(10)
         this.password = await bcrypt.hash(this.password, salt)
