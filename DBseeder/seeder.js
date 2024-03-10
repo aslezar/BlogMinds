@@ -11,31 +11,73 @@ const userData = require("./userData")
 
 dotenv.config("../.env")
 
+const serverSelectionTimeoutMS =
+    Number(process.env.SERVER_SELECTION_TIMEOUT_MS) || 5000
 // Connect to MongoDB
 mongoose
-    .connect(process.env.MONGO_URL)
-    .then(async () => {
-        console.log("Connected to MongoDB")
-        await userSeeder()
-        await blogSeeder()
-        // get all users and assign some blogs to them
-        const users = await UserModel.find({})
-        const blogs = await BlogModel.find({})
-        for (const user of users) {
-            for (let i = 0; i < 5; i++) {
-                const randomBlog =
-                    blogs[Math.floor(Math.random() * blogs.length)]
-                user.blogs.push(randomBlog)
-                // change the author of the blog
-                randomBlog.author = user._id
-                await randomBlog.save()
-            }
-            await user.save()
-        }
-        mongoose.connection.close()
-        process.exit()
+    .connect(process.env.MONGO_URL, {
+        serverSelectionTimeoutMS
     })
+    .then(seeder)
     .catch((err) => console.error("Error connecting to MongoDB:", err))
+console.log(new Date().toLocaleString())
+
+// function to return a random number between a and b
+function randomInt(a, b) {
+    return Math.floor(Math.random() * (b - a + 1)) + a
+}
+
+async function seeder() {
+    console.log("Connected to MongoDB")
+    await userSeeder()
+    await blogSeeder()
+    // get all users and assign some blogs to them
+    const users = await UserModel.find({})
+    const blogs = await BlogModel.find({})
+
+    // assign 5 random blogs to each user
+    // store already assigned blogs to avoid duplicate assignment
+    let assignedBlogs = {}
+    for (const user of users) {
+        for (let i = 0; i < randomInt(5,10); i++) {
+            let randomBlogInd= randomInt(0,blogs.length-1)
+            while(assignedBlogs[randomBlogInd]){
+                randomBlogInd= randomInt(0,blogs.length-1)
+            }
+            const randomBlog = blogs[randomBlogInd]
+            assignedBlogs[randomBlogInd] = true
+            user.blogs.push(randomBlog)
+            // change the author of the blog
+            randomBlog.author = user._id
+        }
+        // add some random blogs to readArticles of each user
+        for (let i = 0; i < randomInt(40,160); i++) {
+            const randomBlog = blogs[randomInt(0,blogs.length-1)]
+            randomBlog.views += 1
+            user.readArticles.push(randomBlog)
+        }
+    }
+
+    // make random users follow each other
+    for (const user of users) {
+        for (let i = 0; i < 5; i++) {
+            const randomUser = users[Math.floor(Math.random() * users.length)]
+            if (randomUser._id.toString() !== user._id.toString()) {
+                user.following.push(randomUser)
+                randomUser.followers.push(user)
+            }
+        }
+    }
+
+    // save all users
+    await Promise.all(users.map((user) => user.save()))
+    console.log("All users updated successfully.")
+    // save all blogs
+    await Promise.all(blogs.map((blog) => blog.save()))
+
+    mongoose.connection.close()
+    process.exit()
+}
 
 async function blogSeeder() {
     //delete old data

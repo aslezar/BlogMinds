@@ -95,13 +95,14 @@ const verifyEmail = async (req: Request, res: Response) => {
     const user = await User.findById(userId)
     if (!user) throw new UnauthenticatedError("Invalid OTP")
 
-    if (user.otp.expires < new Date())
+    if (user.otp && user.otp.expires < new Date()) {
+        user.otp = undefined
         throw new UnauthenticatedError(
             "OTP Expired.Please request register again.",
         )
-
+    }
     user.status = "active"
-    user.otp = { value: "", expires: new Date() }
+    user.otp = undefined
     await user.save()
     sendUserData(user, res, "User Registered Successfully")
 }

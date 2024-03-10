@@ -43,7 +43,7 @@ export interface IUser {
     createdAt: Date
     updatedAt: Date
     status: string
-    otp: OTP
+    otp: OTP | undefined
     isModified: (field: string) => boolean
     generateToken: () => string
     comparePassword: (pswrd: string) => boolean
