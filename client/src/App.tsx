@@ -1,9 +1,9 @@
 import { useEffect } from "react"
 import {
-    Outlet,
-    RouterProvider,
-    ScrollRestoration,
-    createBrowserRouter,
+  Outlet,
+  RouterProvider,
+  ScrollRestoration,
+  createBrowserRouter,
 } from "react-router-dom"
 import toast from "react-hot-toast"
 
@@ -30,89 +30,89 @@ import { loadUser } from "./features/userSlice"
 import AllBlogs from "./Pages/AllBlogs"
 
 const Layout = () => {
-    return (
-        <div>
-            <Navbar />
-            <ScrollRestoration />
-            <div className="min-h-screen py-20">
-                <Outlet />
-            </div>
-            {/* <Footer /> */}
-        </div>
-    )
+  return (
+    <div>
+      <Navbar />
+      <ScrollRestoration />
+      <div className="min-h-screen py-20">
+        <Outlet />
+      </div>
+      {/* <Footer /> */}
+    </div>
+  )
 }
 const router = createBrowserRouter([
-    {
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
         path: "/",
-        element: <Layout />,
-        children: [
-            {
-                path: "/",
-                element: <HomePage />,
-            },
-            {
-                path: "feed",
-                element: <AllBlogs />,
-            },
-            {
-                path: "signin",
-                element: <SignIn />,
-            },
-            {
-                path: "signup",
-                element: <SignUp />,
-            },
-            {
-                path: "forgotpassword",
-                element: <ForgotPassword />,
-            },
-            {
-                path: "dashboard",
-                element: <DashBoard />,
-            },
-            {
-                path: "profile",
-                element: <Profile />,
-            },
-            {
-                path: "myblogs",
-                element: <MyBlogs />,
-            },
-            {
-                path: "write",
-                element: <AddBlog />,
-            },
-            {
-                path: "editBlog/:id",
-                element: <EditBlog />,
-            },
-            {
-                path: "blog/:id",
-                element: <Blog />,
-            },
-            {
-                path: "about",
-                element: <About />,
-            },
-            {
-                path: "contactus",
-                element: <ContactUs />,
-            },
-            {
-                path: "/*",
-                element: <ErrorPage />,
-            },
-        ],
-    },
+        element: <HomePage />,
+      },
+      {
+        path: "feed",
+        element: <AllBlogs />,
+      },
+      {
+        path: "signin",
+        element: <SignIn />,
+      },
+      {
+        path: "signup",
+        element: <SignUp />,
+      },
+      {
+        path: "forgotpassword",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "dashboard",
+        element: <DashBoard />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: "myblogs",
+        element: <MyBlogs />,
+      },
+      {
+        path: "write",
+        element: <AddBlog />,
+      },
+      {
+        path: "editBlog/:id",
+        element: <EditBlog />,
+      },
+      {
+        path: "blog/:id",
+        element: <Blog />,
+      },
+      {
+        path: "about",
+        element: <About />,
+      },
+      {
+        path: "contactus",
+        element: <ContactUs />,
+      },
+      {
+        path: "/*",
+        element: <ErrorPage />,
+      },
+    ],
+  },
 ])
 
 function App() {
-    const dispatch = useAppDispatch()
-    useEffect(() => {
-        dispatch(loadUser())
-    }, [])
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(loadUser())
+  }, [])
 
-    return <RouterProvider router={router} />
+  return <RouterProvider router={router} />
 }
 
 export default App
