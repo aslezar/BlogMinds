@@ -33,12 +33,13 @@ const getUserId = (req: Request) => {
 
 //UTILITY FUNCTIONS END
 
-const getBlogByCategoty = async (req: Request, res: Response) => {
+const getBlogByCategory = async (req: Request, res: Response) => {
     const category = req.params.category
     // tag is array of category field, and category is a string
-    const blogs = await Blog.find({ tags: { $in: [category] } }).select(
-        "title description img author",
-    )
+    const blogs = await Blog.find({ tags: { $in: [category] } })
+        .skip(req.pagination.skip)
+        .limit(req.pagination.limit)
+        .select("title description img author")
     if (!blogs) {
         throw new BadRequestError("No blogs found")
     }
@@ -214,7 +215,7 @@ const updateBlog = async (req: Request, res: Response) => {
     })
 }
 export {
-    getBlogByCategoty,
+    getBlogByCategory,
     getBlog,
     commentBlog,
     commentOnComment,

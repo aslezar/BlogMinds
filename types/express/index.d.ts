@@ -10,6 +10,10 @@ declare global {
         export interface Request {
             user: UserPayload
             file: any
+            pagination: {
+                skip: number
+                limit: number
+            }
         }
     }
 }
