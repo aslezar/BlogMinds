@@ -13,9 +13,9 @@ const router = Router()
 router.route("/signup").post(register)
 router.route("/signin").post(login)
 router.route("/verify").post(verifyEmail)
+router.route("/signout").post(signOut)
 
 router.use(authMiddleware)
 router.route("/me").get(tokenLogin)
-router.route("/signout").post(signOut)
 
 export default router
