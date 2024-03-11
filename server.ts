@@ -19,6 +19,9 @@ import connectDB from "./db/connect"
 //Import Routes
 import ApiRoute from "./routes/apiv1"
 
+//Import Middleware
+import paginateMW from "./middleware/paginator"
+
 //Import Error Handler
 import errorHandler from "./middleware/error-handler"
 
@@ -59,6 +62,9 @@ app.use(
         ),
     }),
 )
+
+//Functionlity Middleware
+app.use(paginateMW)
 
 //Routes
 app.use("/", express.static("../client/dist"))

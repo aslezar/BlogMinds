@@ -1,6 +1,5 @@
 import { Router } from "express"
 import authMiddleware from "../middleware/auth"
-import paginateMiddleware from "../middleware/paginator"
 import {
     getBlogByCategory,
     getBlog,
@@ -10,7 +9,7 @@ import {
 
 const router = Router()
 
-router.route("/category/:category").get(paginateMiddleware, getBlogByCategory)
+router.route("/category/:category").get(getBlogByCategory)
 router.route("/:blogId").get(getBlog)
 
 router.use(authMiddleware)

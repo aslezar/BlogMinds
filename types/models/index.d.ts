@@ -24,7 +24,7 @@ export interface IComment {
 }
 
 export interface OTP {
-    value: String
+    value: string
     expires: Date
 }
 
@@ -47,4 +47,5 @@ export interface IUser {
     isModified: (field: string) => boolean
     generateToken: () => string
     comparePassword: (pswrd: string) => boolean
+    compareOtp: (otp: OTP) => boolean
 }
