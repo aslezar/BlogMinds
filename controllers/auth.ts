@@ -4,7 +4,6 @@ import { BadRequestError, UnauthenticatedError } from "../errors"
 import { IUser } from "../types/models"
 import { Request, Response } from "express"
 import SendMail from "../utils/sendMail"
-import sendMail from "../utils/sendMail"
 import { OTP } from "../types/models"
 
 const sendUserData = (user: IUser, res: Response, msg: String) => {
@@ -72,7 +71,7 @@ const register = async (req: Request, res: Response) => {
         })
     }
 
-    await sendMail({
+    await SendMail({
         from: process.env.SMTP_EMAIL_USER,
         to: email,
         subject: "Blogmind: Email Verification",
@@ -102,7 +101,7 @@ const registerWithoutOtp = async (req: Request, res: Response) => {
             msg: "User with this email already exists",
         }) // Conflict status
     }
-    const user = await User.create({ name, email, password, status: "active"})
+    const user = await User.create({ name, email, password, status: "active" })
     sendUserData(user, res, "User Registered Successfully")
 }
 
@@ -112,6 +111,9 @@ const verifyEmail = async (req: Request, res: Response) => {
 
     const user = await User.findById(userId)
     if (!user) throw new UnauthenticatedError("Invalid OTP")
+
+    if (!user.otp) throw new UnauthenticatedError("Invalid OTP")
+    if (user.otp.value !== otp) throw new UnauthenticatedError("Invalid OTP")
 
     if (user.otp && user.otp.expires < new Date()) {
         user.otp = undefined
