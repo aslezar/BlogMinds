@@ -1,6 +1,12 @@
 import axios from "axios"
 import toast from "react-hot-toast"
-import { BlogType, BlogFullType, UserType } from "../definitions"
+import {
+  LoginType,
+  SignUpType,
+  BlogShortType,
+  BlogFullType,
+  UserType,
+} from "../definitions"
 
 const URL =
   process.env.NODE_ENV === "production"
@@ -9,75 +15,69 @@ const URL =
 
 const API = axios.create({ baseURL: URL })
 
-export const signIn = (data) => API.post("/auth/signin", data)
-export const signUp = (data) => API.post("/auth/signup", data)
-export const signinToken = (token) =>
-  API.get("/auth/me", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+// Add a request interceptor
+API.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+    const token = localStorage.getItem("token")
+    if (token) config.headers.Authorization = `Bearer ${JSON.parse(token)}`
+    return config
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error)
+  },
+)
+API.interceptors.response.use(
+  function (response) {
+    console.log(response.data)
+    if (response.data.success) {
+      return response.data
+    } else {
+      toast.error(response.data.msg)
+      return Promise.reject(response.data)
+    }
+  },
+  function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+
+    console.log(error)
+
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      toast.error(error.response.data?.msg)
+    } else {
+      toast.error("Network Error: Please try again later.")
+    }
+    return Promise.reject(error)
+  },
+)
+
+/*Sign In and Sign Up*/
+export const signIn = (login: LoginType) => API.post("/auth/signin", login)
+export const signUp = (signup: SignUpType) => API.post("/auth/signup", signup)
+export const signinToken = () => API.get("/auth/me")
 export const signOut = () => API.post("/auth/signout")
 
-export const updateName = (name) => {
-  const token = JSON.parse(localStorage.getItem("token")) || null
-  return API.patch(
-    "/user/updatename",
-    { name },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  )
-}
-export const updateBio = (bio) => {
-  const token = JSON.parse(localStorage.getItem("token")) || null
-  return API.patch(
-    "/user/updatebio",
-    { bio },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  )
-}
-export const updateImage = (profileImage) => {
-  const token = JSON.parse(localStorage.getItem("token")) || null
-  const formData = new FormData()
-  formData.append("profileImage", profileImage)
-  return API.patch("/user/updateimage", formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    },
-  })
+/*Update User*/
+export const updateName = (name: UserType["name"]) =>
+  API.patch("/user/updatename", { name })
+
+export const updateBio = (bio: UserType["bio"]) => {
+  if (!bio) return Promise.reject("Bio is required")
+  if (bio.length > 150) {
+    toast.error("Bio should be less than 150 characters")
+    return Promise.reject("Bio should be less than 150 characters")
+  }
+  return API.patch("/user/updatebio", { bio })
 }
 
-export const getBlog = (id) => {
-  return API.get(`/blog/${id}`)
-}
-export const handler = async (task, data, onSucess, onFailure) => {
-  try {
-    const res = await task(data)
-    console.log(res.data)
-    if (res.data.success) {
-      if (onSucess) onSucess(res.data?.data)
-      // toast.success(res.data.msg, {
-      // 	toastId: res.data.msg,
-      // });
-    } else {
-      // toast.error(res.data.msg);
-      if (onFailure) onFailure(res.data?.msg)
-    }
-  } catch (error) {
-    console.log(error)
-    if (error.response) {
-      // toast.error(error.response.data?.msg);
-      if (onFailure) onFailure(error.response.data?.msg)
-    } else {
-      toast.error("Server Unreachable: Network Error")
-    }
-  }
-}
+// export const updateImage = (profileImage: UserType["profileImage"]) => {
+//   const formData = new FormData()
+//   formData.append("profileImage", profileImage)
+//   return API.patch("/user/updateimage", formData)
+// }
+
+/*Blogs Requests*/
+export const getBlog = (id: BlogShortType["_id"]) => API.get(`/blog/${id}`)
