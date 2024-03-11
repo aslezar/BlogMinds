@@ -8,9 +8,9 @@ import {
   signinToken,
   signOut,
   verifyOtp,
-  // updateName,
-  // updateBio,
-  // updateImage,
+  updateName as updateNameApi,
+  updateBio as updateBioApi,
+  // updateImage as updateImageApi,
 } from "../api/index.ts"
 
 interface CounterState {
@@ -69,10 +69,12 @@ export const userSlice = createSlice({
 })
 
 export const logout = () => async (dispatch: any) => {
+  toast.loading("Logging out", { id: "logout" })
   dispatch(userSlice.actions.SET_LOADING())
   signOut()
     .then((res) => {
       console.log(res)
+
       dispatch(userSlice.actions.LOGOUT_USER())
       toast.success("Logged out")
     })
@@ -81,16 +83,20 @@ export const logout = () => async (dispatch: any) => {
     })
     .finally(() => {
       dispatch(userSlice.actions.SET_LOADING_FALSE())
+      toast.dismiss("logout")
     })
 }
 export const login = (loginValues: LoginType) => async (dispatch: any) => {
   if (!loginValues.email || !loginValues.password)
     return toast.error("Email and Password are required")
+
+  toast.loading("Logging in", { id: "login" })
   dispatch(userSlice.actions.SET_LOADING())
   signIn(loginValues)
     .then((res) => {
       // res is objecy here with property token, msg and success
       console.log(res)
+
       localStorage.setItem("token", res.token)
       dispatch(loadUser())
       toast.success("Logged in")
@@ -100,15 +106,18 @@ export const login = (loginValues: LoginType) => async (dispatch: any) => {
     })
     .finally(() => {
       dispatch(userSlice.actions.SET_LOADING_FALSE())
+      toast.dismiss("login")
     })
 }
 export const register = (signupValues: SignUpType) => async (dispatch: any) => {
+  toast.loading("Registering", { id: "register" })
   dispatch(userSlice.actions.SET_LOADING())
 
   signUp(signupValues)
     .then((res) => {
+      console.log(res)
+
       const id = res.data.userId
-      console.log(res.data.userId)
       dispatch(userSlice.actions.SET_VERIFICATION_REQUIRED(id))
     })
     .catch((err) => {
@@ -116,6 +125,7 @@ export const register = (signupValues: SignUpType) => async (dispatch: any) => {
     })
     .finally(() => {
       dispatch(userSlice.actions.SET_LOADING_FALSE())
+      toast.dismiss("register")
     })
 }
 
@@ -126,10 +136,13 @@ export const verification =
 
     const userId = getState().user.verificationUserID
     if (!userId) return toast.error("User Not Found")
+
+    toast.loading("Verifying", { id: "verification" })
     dispatch(userSlice.actions.SET_LOADING())
     verifyOtp({ userId, otp })
       .then((res) => {
-        console.log(res)
+        // console.log(res)
+
         localStorage.setItem("token", res.token)
         dispatch(loadUser())
         toast.success("Registered Successfully")
@@ -139,6 +152,7 @@ export const verification =
       })
       .finally(() => {
         dispatch(userSlice.actions.SET_LOADING_FALSE())
+        toast.dismiss("verification")
       })
   }
 
@@ -146,16 +160,15 @@ export const loadUser = () => async (dispatch: any) => {
   const token = localStorage.getItem("token") || null
 
   if (token) {
+    toast.loading("Loading", { id: "loadUser" })
     dispatch(userSlice.actions.SET_LOADING())
     signinToken()
       .then((res) => {
         // res is objecy here with property data,token, msg and success
-        console.log(res)
+        // console.log(res)
 
         const user = res.data
         const token = res.token
-
-        console.log(user)
 
         localStorage.setItem("token", token)
         dispatch(userSlice.actions.SET_USER(user))
@@ -166,15 +179,46 @@ export const loadUser = () => async (dispatch: any) => {
       })
       .finally(() => {
         dispatch(userSlice.actions.SET_LOADING_FALSE())
+        toast.dismiss("loadUser")
       })
   }
 }
 
-// export const {
-//   SET_USER: SETUSER,
-//   SET_LOADING: SETLOADINGUSER,
-//   LOGOUT_USER: LOGOUTUSER,
-// } = userSlice.actions
+export const updateName = (name: UserType["name"]) => async (dispatch: any) => {
+  toast.loading("Updating Name", { id: "name" })
+  dispatch(userSlice.actions.SET_LOADING())
+  updateNameApi({ name })
+    .then((res) => {
+      // console.log(res)
+      dispatch(userSlice.actions.UPDATE_NAME(name))
+      toast.success("Name Updated")
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .finally(() => {
+      dispatch(userSlice.actions.SET_LOADING_FALSE())
+      toast.dismiss("name")
+    })
+}
+
+export const updateBio = (bio: UserType["bio"]) => async (dispatch: any) => {
+  toast.loading("Updating Bio", { id: "bio" })
+  dispatch(userSlice.actions.SET_LOADING())
+  updateBioApi(bio)
+    .then((res) => {
+      // console.log(res)
+      dispatch(userSlice.actions.UPDATE_BIO(bio))
+      toast.success("Bio Updated")
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .finally(() => {
+      dispatch(userSlice.actions.SET_LOADING_FALSE())
+      toast.dismiss("bio")
+    })
+}
 export const selectUserState = (state: RootState) => state.user
 
 export default userSlice.reducer

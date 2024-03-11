@@ -76,14 +76,8 @@ export const signOut = () => API.post("/auth/signout")
 export const updateName = (name: UserType["name"]) =>
   API.patch("/user/updatename", { name })
 
-export const updateBio = (bio: UserType["bio"]) => {
-  if (!bio) return Promise.reject("Bio is required")
-  if (bio.length > 150) {
-    toast.error("Bio should be less than 150 characters")
-    return Promise.reject("Bio should be less than 150 characters")
-  }
-  return API.patch("/user/updatebio", { bio })
-}
+export const updateBio = (bio: UserType["bio"]) =>
+  API.patch("/user/updatebio", { bio })
 
 // export const updateImage = (profileImage: UserType["profileImage"]) => {
 //   const formData = new FormData()
