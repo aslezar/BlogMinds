@@ -8,6 +8,10 @@ import {
   UserType,
 } from "../definitions"
 
+/*
+ ********************** Configuring Axios **********************
+ */
+
 const URL =
   process.env.NODE_ENV === "production"
     ? "/api/v1"
@@ -19,8 +23,9 @@ const API = axios.create({ baseURL: URL })
 API.interceptors.request.use(
   function (config) {
     // Do something before request is sent
-    const token = localStorage.getItem("token")
-    if (token) config.headers.Authorization = `Bearer ${JSON.parse(token)}`
+    const token = localStorage.getItem("token") || ""
+
+    if (token) config.headers.Authorization = `Bearer ${token}`
     return config
   },
   function (error) {
@@ -30,7 +35,6 @@ API.interceptors.request.use(
 )
 API.interceptors.response.use(
   function (response) {
-    console.log(response.data)
     if (response.data.success) {
       return response.data
     } else {
@@ -40,12 +44,9 @@ API.interceptors.response.use(
   },
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-
     console.log(error)
 
     if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
       toast.error(error.response.data?.msg)
     } else {
       toast.error("Network Error: Please try again later.")
@@ -54,13 +55,24 @@ API.interceptors.response.use(
   },
 )
 
-/*Sign In and Sign Up*/
+interface VerifyOtpParams {
+  userId: UserType["_id"]
+  otp: number
+}
+
+/*
+ ********************** Sign In and Sign Up **********************
+ */
 export const signIn = (login: LoginType) => API.post("/auth/signin", login)
 export const signUp = (signup: SignUpType) => API.post("/auth/signup", signup)
+export const verifyOtp = (verifyOtpParams: VerifyOtpParams) =>
+  API.post("/auth/verify", verifyOtpParams)
 export const signinToken = () => API.get("/auth/me")
 export const signOut = () => API.post("/auth/signout")
 
-/*Update User*/
+/*
+ *********************** Update User ***********************
+ */
 export const updateName = (name: UserType["name"]) =>
   API.patch("/user/updatename", { name })
 
@@ -79,5 +91,7 @@ export const updateBio = (bio: UserType["bio"]) => {
 //   return API.patch("/user/updateimage", formData)
 // }
 
-/*Blogs Requests*/
+/*
+ ************************ Blogs Requests ************************
+ */
 export const getBlog = (id: BlogShortType["_id"]) => API.get(`/blog/${id}`)
