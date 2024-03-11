@@ -120,9 +120,6 @@ const verifyEmail = async (req: Request, res: Response) => {
             "User is blocked. Please Reach out to support.",
         )
 
-    console.log(typeof user.otp?.value)
-    console.log(typeof otp)
-
     if (!user.otp) throw new UnauthenticatedError("OTP Not Found")
     if (user.otp.value !== otp.toString())
         throw new UnauthenticatedError("Wrong OTP.")
