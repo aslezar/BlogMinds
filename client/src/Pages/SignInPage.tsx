@@ -1,23 +1,22 @@
 import * as React from "react"
 import img from "../assets/img/Auth/signup.webp"
-// import img from "../assets/img/Auth/auth.mp4";
-// import img from "../assets/img/Auth/auth.gif";
 import { useAppDispatch, useAppSelector } from "../hooks"
 import { login } from "../features/userSlice"
 import { Link, useNavigate } from "react-router-dom"
+import { LoginType } from "../definitions"
 
 export default function SignIn() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { isAuthenticated, loading } = useAppSelector((state) => state.user)
-  const [values, setValues] = React.useState({
+  const [loginValues, setLoginValues] = React.useState<LoginType>({
     email: "",
     password: "",
   })
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
-    setValues((prevValues) => ({
+    setLoginValues((prevValues) => ({
       ...prevValues,
       [name]: value,
     }))
@@ -25,13 +24,13 @@ export default function SignIn() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    dispatch(login(values.email, values.password))
+    dispatch(login(loginValues))
   }
   React.useEffect(() => {
     if (!loading && isAuthenticated) {
       navigate("/")
     }
-  }, [])
+  }, [loading, isAuthenticated])
   return (
     <div className="flex h-screen">
       <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
@@ -62,7 +61,7 @@ export default function SignIn() {
                 type="text"
                 id="email"
                 name="email"
-                value={values.email}
+                value={loginValues.email}
                 onChange={handleChange}
                 placeholder="johndoe@example.com"
                 className="mt-1 p-2.5 px-4 w-full border rounded-3xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
@@ -79,7 +78,7 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 name="password"
-                value={values.password}
+                value={loginValues.password}
                 onChange={handleChange}
                 placeholder="*********"
                 className="mt-1 p-2.5 px-4 w-full border rounded-3xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
@@ -124,9 +123,10 @@ export default function SignIn() {
           <div className="mt-4 text-sm text-gray-600 text-center">
             <Link to="/signup" className="hover:underline cursor-pointer">
               Don't have an account?
-              <span className="text-black hover:underline">Login here</span>
+              <span className="text-black hover:underline"> Signup here</span>
             </Link>
           </div>
+          {/* {loading && <Loader />} */}
         </div>
       </div>
     </div>

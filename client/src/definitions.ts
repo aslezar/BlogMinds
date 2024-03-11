@@ -1,3 +1,15 @@
+export interface LoginType {
+  email: string
+  password: string
+}
+
+export interface SignUpType {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+}
+
 export interface BlogShortType {
   _id: string
   title: string
@@ -13,20 +25,15 @@ export interface BlogFullType extends BlogShortType {
   updatedAt: string
 }
 
-interface ProfileImage {
-  data: Buffer
-  contentType: string
-}
-
 interface User {
   name: string
   email: string
   password: string
   bio?: string
-  profileImage?: ProfileImage
+  profileImage?: string
 }
 
-export interface UserDocumentType extends User {
+export interface UserType extends User {
   _id: string
   createdAt: string
   updatedAt: string

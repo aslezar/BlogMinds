@@ -34,7 +34,7 @@ const errorHandlerMiddleware = (
         if (err instanceof mongoose.Error.ValidationError) {
             const messages = Object.values(err.errors)
                 .map((item) => item.message)
-                .join(",")
+                .join("\n")
             return res
                 .status(StatusCodes.BAD_REQUEST)
                 .json({ success: false, msg: messages })

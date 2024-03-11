@@ -13,6 +13,28 @@ const BlogPage = () => {
   const [isLiked, setIsLiked] = React.useState<boolean>(false);
   const [comments, setComments] = React.useState<{ author: string; text: string }[]>([]);
   const { id } = useParams<{ id: string }>();
+    
+    useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        if (!id) {
+          setError(true)
+          return toast.error("Blog not found")
+        }
+
+        setLoading(true)
+        const response = await getBlog(id)
+        // console.log(response.data)
+        setBlog(response.data)
+        setLoading(false)
+      } catch (error) {
+        setError(true)
+        setLoading(false)
+      }
+    }
+
+    fetchBlog()
+  }, [])
 
   useEffect(() => {
     handler(

@@ -18,18 +18,18 @@ const sendUserData = (user: IUser, res: Response, msg: String) => {
             email,
             bio,
             profileImage,
-            token,
         },
+        token,
         success: true,
         msg,
     })
 }
 
 const register = async (req: Request, res: Response) => {
-    const { name, email, password } = req.body
-    if (!name || !email || !password) {
+    const { firstName, lastName, email, password } = req.body
+    const name = firstName + " " + lastName
+    if (!name || !email || !password)
         throw new BadRequestError("Please provide all details")
-    }
     const userExist: IUser | null = await User.findOne({ email }) // Using findOne
 
     if (userExist && userExist.status === "active") {
@@ -106,25 +106,37 @@ const registerWithoutOtp = async (req: Request, res: Response) => {
 }
 
 const verifyEmail = async (req: Request, res: Response) => {
-    const { otp, userId } = req.body
+    const { otp, userId } = req.body as { otp: string; userId: string }
     if (!otp) throw new BadRequestError("Please provide OTP")
 
     const user = await User.findById(userId)
-    if (!user) throw new UnauthenticatedError("Invalid OTP")
+    if (!user) throw new UnauthenticatedError("User Not Found")
 
-    if (!user.otp) throw new UnauthenticatedError("Invalid OTP")
-    if (user.otp.value !== otp) throw new UnauthenticatedError("Invalid OTP")
+    if (user.status === "active")
+        throw new UnauthenticatedError("User is already active.")
+
+    if (user.status === "blocked")
+        throw new UnauthenticatedError(
+            "User is blocked. Please Reach out to support.",
+        )
+
+    if (!user.otp) throw new UnauthenticatedError("OTP Not Found")
+    if (user.otp.value !== otp.toString())
+        throw new UnauthenticatedError("Wrong OTP.")
 
     if (user.otp && user.otp.expires < new Date()) {
         user.otp = undefined
-        throw new UnauthenticatedError(
-            "OTP Expired.Please request register again.",
-        )
+        throw new UnauthenticatedError("OTP Expired.Please register again.")
     }
     user.status = "active"
     user.otp = undefined
     await user.save()
-    sendUserData(user, res, "User Registered Successfully")
+    res.status(StatusCodes.CREATED).json({
+        token: user.generateToken(),
+        success: true,
+        msg: "User Registered Successfully",
+    })
+    // sendUserData(user, res, "User Registered Successfully")
 }
 
 const login = async (req: Request, res: Response) => {
@@ -145,7 +157,12 @@ const login = async (req: Request, res: Response) => {
     const isPasswordCorrect = await user.comparePassword(password)
     if (!isPasswordCorrect) throw new UnauthenticatedError("Invalid Password.")
 
-    sendUserData(user, res, "User Login Successfully")
+    // sendUserData(user, res, "User Login Successfully")
+    res.status(StatusCodes.CREATED).json({
+        token: user.generateToken(),
+        success: true,
+        msg: "User Login Successfully",
+    })
 }
 const tokenLogin = async (req: Request, res: Response) => {
     const user = await User.findById(req.user.userId)
