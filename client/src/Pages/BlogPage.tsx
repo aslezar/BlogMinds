@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { handler, getBlog } from "../api/index.ts"
+import { getBlog } from "../api/index.ts"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
 
@@ -10,22 +10,28 @@ const BlogPage = () => {
   const [isError, setError] = React.useState<boolean>(false)
   const [isLoading, setLoading] = React.useState<boolean>(true)
   const [blog, setBlog] = React.useState<BlogFullType | null>(null)
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams<{ id: BlogFullType["_id"] }>()
 
   useEffect(() => {
-    handler(
-      getBlog,
-      id,
-      (data: BlogFullType) => {
-        setBlog(data)
+    const fetchBlog = async () => {
+      try {
+        if (!id) {
+          setError(true)
+          return toast.error("Blog not found")
+        }
+
+        setLoading(true)
+        const response = await getBlog(id)
+        // console.log(response.data)
+        setBlog(response.data)
         setLoading(false)
-      },
-      (msg: string) => {
+      } catch (error) {
         setError(true)
         setLoading(false)
-        toast.error(msg)
-      },
-    )
+      }
+    }
+
+    fetchBlog()
   }, [])
 
   if (isLoading === true) return <Loader />

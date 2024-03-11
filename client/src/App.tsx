@@ -5,16 +5,16 @@ import {
   ScrollRestoration,
   createBrowserRouter,
 } from "react-router-dom"
-import toast from "react-hot-toast"
 
 //Components
 import Navbar from "./components/Navbar"
-import Footer from "./components/Footer"
+// import Footer from "./components/Footer"
 
 //Pages
 import HomePage from "./Pages/HomePage"
 import SignIn from "./Pages/SignInPage"
 import SignUp from "./Pages/SignUpPage"
+import VerifyOTP from "./Pages/VerifyOTP"
 import ForgotPassword from "./Pages/ForgotPasswordPage"
 import DashBoard from "./Pages/DashBoardPage"
 import Profile from "./Pages/ProfilePage"
@@ -61,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUp />,
+      },
+      {
+        path: "verify",
+        element: <VerifyOTP />,
       },
       {
         path: "forgotpassword",
