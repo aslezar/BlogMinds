@@ -1,20 +1,22 @@
-import React, { useEffect } from "react";
-import { handler, getBlog } from "../api/index.ts";
-import Loader from "../components/Loader";
-import toast from "react-hot-toast";
-import { Link, useParams } from "react-router-dom";
-import { BlogFullType } from "../definitions";
+import React, { useEffect } from "react"
+import { getBlog } from "../api/index.ts"
+import Loader from "../components/Loader"
+import toast from "react-hot-toast"
+import { Link, useParams } from "react-router-dom"
+import { BlogFullType } from "../definitions"
 
 const BlogPage = () => {
-  const [isError, setError] = React.useState<boolean>(false);
-  const [isLoading, setLoading] = React.useState<boolean>(true);
-  const [blog, setBlog] = React.useState<BlogFullType | null>(null);
-  const [likeCount, setLikeCount] = React.useState<number>(0);
-  const [isLiked, setIsLiked] = React.useState<boolean>(false);
-  const [comments, setComments] = React.useState<{ author: string; text: string }[]>([]);
-  const { id } = useParams<{ id: string }>();
-    
-    useEffect(() => {
+  const [isError, setError] = React.useState<boolean>(false)
+  const [isLoading, setLoading] = React.useState<boolean>(true)
+  const [blog, setBlog] = React.useState<BlogFullType | null>(null)
+  const [likeCount, setLikeCount] = React.useState<number>(0)
+  const [isLiked, setIsLiked] = React.useState<boolean>(false)
+  const [comments, setComments] = React.useState<
+    { author: string; text: string }[]
+  >([])
+  const { id } = useParams<{ id: string }>()
+
+  useEffect(() => {
     const fetchBlog = async () => {
       try {
         if (!id) {
@@ -23,9 +25,10 @@ const BlogPage = () => {
         }
 
         setLoading(true)
-        const response = await getBlog(id)
-        // console.log(response.data)
-        setBlog(response.data)
+        const { data } = await getBlog(id)
+        setBlog(data.blog)
+        setComments(data.blog.comments)
+        setLikeCount(data.blog.likes)
         setLoading(false)
       } catch (error) {
         setError(true)
@@ -36,37 +39,18 @@ const BlogPage = () => {
     fetchBlog()
   }, [])
 
-  useEffect(() => {
-    handler(
-      getBlog,
-      id,
-      (data: { blog: BlogFullType; comments: { author: string; text: string }[] }) => {
-        setBlog(data.blog);
-        setComments(data.blog.comments);
-        setLikeCount(data.blog.likes);
-        setLoading(false);
-      },
-      (msg: string) => {
-        setError(true);
-        setLoading(false);
-        toast.error(msg);
-      }
-    );
-  }, []);
-
   const handleLike = () => {
-    setIsLiked(true);
-    setLikeCount(likeCount + 1);
-  };
+    setIsLiked(true)
+    setLikeCount(likeCount + 1)
+  }
 
-  
   const handleUnlike = () => {
-    setIsLiked(false);
-    setLikeCount(likeCount - 1);
-  };
+    setIsLiked(false)
+    setLikeCount(likeCount - 1)
+  }
 
-  if (isLoading === true || !blog) return <Loader />;
-  if (isError === true) return <div>Error</div>;
+  if (isLoading === true || !blog) return <Loader />
+  if (isError === true) return <div>Error</div>
 
   return (
     <div className="mx-auto pt-20 pb-5 lg:pt-0 min-h-[75vh] bg-white flex flex-col justify-between">
@@ -98,19 +82,21 @@ const BlogPage = () => {
           />
         </figure>
         <div className="text-gray-500 mt-2">
-  {blog?.content && (
-    <>
-      <p>{blog.content}</p> 
-      Character Length: {blog.content.length}
-      <br />
-      Estimated Read Time: {Math.ceil(blog.content.split(' ').length / 200)} minutes
-    </>
-  )}
-</div>
+          {blog?.content && (
+            <>
+              <p>{blog.content}</p>
+              Character Length: {blog.content.length}
+              <br />
+              Estimated Read Time:{" "}
+              {Math.ceil(blog.content.split(" ").length / 200)} minutes
+            </>
+          )}
+        </div>
         <div className="flex items-center mt-4">
           <button
-            className={`mr-2 px-4 py-2 rounded-md bg-teal-500 text-white focus:outline-none ${isLiked && "bg-teal-700"
-              }`}
+            className={`mr-2 px-4 py-2 rounded-md bg-teal-500 text-white focus:outline-none ${
+              isLiked && "bg-teal-700"
+            }`}
             onClick={handleLike}
             disabled={isLiked}
           >
@@ -142,7 +128,7 @@ const BlogPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BlogPage;
+export default BlogPage
