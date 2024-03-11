@@ -6,7 +6,6 @@ import { SignUpType } from "../definitions"
 import { signUp } from "../api/index.ts"
 import toast from "react-hot-toast"
 import { register } from "../features/userSlice"
-import Loader from "../components/Loader"
 
 export default function SignUp() {
   const dispatch = useAppDispatch()
@@ -182,7 +181,6 @@ export default function SignUp() {
               <span className="text-black hover:underline">Login here</span>
             </Link>
           </div>
-          {loading && <Loader />}
         </div>
       </div>
     </div>

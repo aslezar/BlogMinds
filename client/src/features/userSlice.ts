@@ -187,8 +187,8 @@ export const loadUser = () => async (dispatch: any) => {
 export const updateName = (name: UserType["name"]) => async (dispatch: any) => {
   toast.loading("Updating Name", { id: "name" })
   dispatch(userSlice.actions.SET_LOADING())
-  updateNameApi({ name })
-    .then((res) => {
+  updateNameApi(name)
+    .then((_res) => {
       // console.log(res)
       dispatch(userSlice.actions.UPDATE_NAME(name))
       toast.success("Name Updated")
@@ -203,10 +203,13 @@ export const updateName = (name: UserType["name"]) => async (dispatch: any) => {
 }
 
 export const updateBio = (bio: UserType["bio"]) => async (dispatch: any) => {
+  if (!bio) return toast.error("Bio is required")
+  if (bio.length > 150)
+    return toast.error("Bio should be less than 150 characters")
   toast.loading("Updating Bio", { id: "bio" })
   dispatch(userSlice.actions.SET_LOADING())
   updateBioApi(bio)
-    .then((res) => {
+    .then((_res) => {
       // console.log(res)
       dispatch(userSlice.actions.UPDATE_BIO(bio))
       toast.success("Bio Updated")
