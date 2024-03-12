@@ -31,4 +31,7 @@ export default {
 
 # BlogMinds
 
-# BlogMinds
+a blog website where user can write blog using AI, as user type AI will suggest content to user, cover image is generated using ai, other images are also generated based on the content user can embed them into their article if they wish
+
+other features include user can embed their blog from our website into their own website
+for future, we are thinking of a chatbot also that chat with user to give information about our website
