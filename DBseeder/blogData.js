@@ -15,7 +15,7 @@ const blogData = [
         img: "https://source.unsplash.com/random",
         author: "aaaaaaaaaaaaaaaaaaaaaaa2",
         comments: [],
-        tags: ["technology", "Programming", "lifestyle"],
+        tags: ["technology", "programming", "lifestyle"],
     },
 ]
 module.exports = blogData

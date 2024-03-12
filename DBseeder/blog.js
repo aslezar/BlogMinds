@@ -15,12 +15,6 @@ const BlogSchema = new mongoose.Schema(
             ref: "User",
             required: [true, "Please provide author."],
         },
-        comments: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Comment",
-            },
-        ],
         tags: [String],
         views: {
             type: Number,
@@ -33,6 +27,16 @@ const BlogSchema = new mongoose.Schema(
             },
         ],
         likesCount: {
+            type: Number,
+            default: 0,
+        },
+        comments: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Comment",
+            },
+        ],
+        commentsCount: {
             type: Number,
             default: 0,
         },

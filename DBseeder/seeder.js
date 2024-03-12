@@ -108,6 +108,9 @@ async function blogSeeder() {
                     randDesc[randomInt(0, randDesc.length - 1)]
                 j++
                 newBlog._id = convertNumberToId(j)
+                newBlog.views = randomInt(0, 1000)
+                newBlog.likesCount = randomInt(0, 100)
+                newBlog.commentsCount = randomInt(0, 100)
                 blogs.push(newBlog)
             }
         }
