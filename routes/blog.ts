@@ -1,16 +1,18 @@
 import { Router } from "express"
 import authMiddleware from "../middleware/auth"
 import {
+    getBlogById,
+    getTrendingBlogs,
     getBlogByCategory,
-    getBlog,
     commentBlog,
     commentOnComment,
 } from "../controllers/blogs"
 
 const router = Router()
 
+router.route("/trending").get(getTrendingBlogs)
 router.route("/category/:category").get(getBlogByCategory)
-router.route("/:blogId").get(getBlog)
+router.route("/:blogId").get(getBlogById)
 
 router.use(authMiddleware)
 

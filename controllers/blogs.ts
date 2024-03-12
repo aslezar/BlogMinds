@@ -6,6 +6,7 @@ import { StatusCodes } from "http-status-codes"
 import { BadRequestError, UnauthenticatedError } from "../errors"
 import { Request, Response } from "express"
 import { IBlog } from "../types/models"
+import trendingCache from "../utils/cache"
 
 //UTITLIY FUNCTIONS
 
@@ -59,7 +60,7 @@ const getBlogByCategory = async (req: Request, res: Response) => {
     })
 }
 
-const getBlog = async (req: Request, res: Response) => {
+const getBlogById = async (req: Request, res: Response) => {
     const blogId = getBlogId(req)
 
     const blog: IBlog | null = await Blog.findById(blogId)
@@ -223,9 +224,67 @@ const updateBlog = async (req: Request, res: Response) => {
         msg: "Successfully updated blog.",
     })
 }
+
+const getTrendingBlogs = async (req: Request, res: Response) => {
+    const cachedData = trendingCache.get("trendingPosts")
+    if (cachedData) {
+        return res.status(StatusCodes.OK).json({
+            data: cachedData,
+            success: true,
+            msg: "Data Fetched Successfully",
+        })
+    } else {
+        const oneYearAgo = new Date()
+        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+
+        const trendingBlogs = await Blog.aggregate([
+            { $match: { createdAt: { $gte: oneYearAgo } } },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "author",
+                    foreignField: "_id",
+                    as: "authorInfo",
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    title: 1,
+                    totalScore: {
+                        $add: ["$views", "$likesCount", "$commentsCount"],
+                    },
+                    authorInfo: {
+                        $arrayElemAt: ["$authorInfo", 0],
+                    },
+                },
+            },
+            {
+                $addFields: {
+                    "author._id": "$authorInfo._id",
+                    "author.name": "$authorInfo.name",
+                    "author.profileImage": "$authorInfo.profileImage",
+                },
+            },
+            {
+                $unset: ["authorInfo"],
+            },
+            { $sort: { totalScore: -1 } },
+            { $limit: 5 },
+        ])
+
+        trendingCache.set("trendingPosts", trendingBlogs)
+        res.status(StatusCodes.OK).json({
+            data: trendingBlogs,
+            success: true,
+            msg: "Data Fetched Successfully",
+        })
+    }
+}
 export {
+    getBlogById,
+    getTrendingBlogs,
     getBlogByCategory,
-    getBlog,
     commentBlog,
     commentOnComment,
     getUserBlogs,
