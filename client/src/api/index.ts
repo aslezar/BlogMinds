@@ -38,7 +38,7 @@ API.interceptors.response.use(
     if (response.data.success) {
       return response.data
     } else {
-      toast.error(response.data.msg)
+      toast.error(response.data.msg, { id: response.data.msg })
       return Promise.reject(response.data)
     }
   },
@@ -47,9 +47,11 @@ API.interceptors.response.use(
     console.log(error)
 
     if (error.response) {
-      toast.error(error.response.data?.msg)
+      toast.error(error.response.data?.msg, { id: error.response.data?.msg })
     } else {
-      toast.error("Network Error: Please try again later.")
+      toast.error("Network Error: Please try again later.", {
+        id: "Network Error",
+      })
     }
     return Promise.reject(error)
   },
@@ -88,4 +90,10 @@ export const updateBio = (bio: UserType["bio"]) =>
 /*
  ************************ Blogs Requests ************************
  */
+export const getBlogs = (
+  category: string,
+  pageNo: number = 1,
+  limit: number = 10,
+) => API.get(`/blog/category/${category}?page=${pageNo}&limit=${limit}`)
+
 export const getBlog = (id: BlogShortType["_id"]) => API.get(`/blog/${id}`)

@@ -1,40 +1,53 @@
-import { Grid, Typography } from "@mui/material"
+import { useEffect, useState } from "react"
+import { getBlogs } from "../api/index"
+import { Category, BlogShortType } from "../definitions"
+
 import BlogCard from "./BlogCard"
+import Loader from "./Loader"
 
-import { BlogShortType } from "../definitions"
-
-type BlogsProps = {
-  blogs: BlogShortType[]
+interface BlogsProps {
+  category: Category
 }
 
-const Blogs = ({ blogs }: BlogsProps) => {
+const Blogs = ({ category }: BlogsProps) => {
+  const [blogs, setBlogs] = useState<BlogShortType[]>([])
+  const [page, setPage] = useState<number>(1)
+  const [limit, setLimit] = useState<number>(10)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string>("")
+
+  useEffect(() => {
+    const fetchBlog = () => {
+      setLoading(true)
+      getBlogs(category.toString(), page, limit)
+        .then((response) => {
+          const { data } = response
+          // console.log(data)
+          setBlogs(data)
+        })
+        .catch((error) => {
+          console.error(error.response)
+          setBlogs([])
+          setError(error.response.data?.msg)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    }
+    fetchBlog()
+  }, [category, page, limit])
   return (
-    <Grid
-      container
-      spacing={2}
-      alignItems={"center"}
-      justifyContent="center"
-      className="!my-4"
-    >
-      {blogs.length ? (
-        blogs.map((blog) => (
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            key={blog._id}
-            style={{
-              maxWidth: 345,
-            }}
-          >
-            <BlogCard blog={blog} />
-          </Grid>
-        ))
-      ) : (
-        <Typography variant="subtitle1">No blogs available</Typography>
+    <>
+      {blogs.map((blog, index) => (
+        <BlogCard key={index} blog={blog} />
+      ))}
+      {loading && (
+        <div>
+          <Loader />
+        </div>
       )}
-    </Grid>
+      {error && <div>{error}</div>}
+    </>
   )
 }
 

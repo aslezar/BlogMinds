@@ -1,54 +1,75 @@
-const BlogCard = () => {
+import { useNavigate, Link } from "react-router-dom"
+import { BlogShortType } from "../definitions"
+interface BlogCardProps {
+  blog: BlogShortType
+}
+
+const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
+  const navigate = useNavigate()
   return (
     <div className="container p-5    bg-white w-full border my-4 rounded-lg ">
       <div className=" lg:flex flex-row-reverse lg:items-center  gap-3">
         <img
           className="object-cover w-full mx-auto lg:mx-0 lg:w-52 aspect-video rounded-xl"
-          src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-          alt=""
+          src={blog.img}
+          alt={blog.title}
         />
 
         <div className="mt-6  lg:mt-0 lg:mx-6">
-          <div className="flex gap-1 items-center">
-            <p className="text-xs bg-highlight w-fit text-white py-1 px-2 rounded-full capitalize">
-              Dev
-            </p>
-            <p className="text-xs bg-highlight w-fit text-white py-1 px-2 rounded-full capitalize">
-              Finance
-            </p>
-          </div>
+          {blog.tags && (
+            <div className="flex gap-1 items-center">
+              {blog.tags.map((tag, index) => (
+                <p
+                  key={index}
+                  className="text-xs bg-highlight w-fit text-white py-1 px-2 rounded-full capitalize"
+                >
+                  {tag}
+                </p>
+              ))}
+            </div>
+          )}
 
           <a
             href="#"
             className="block mt-3 text-2xl font-semibold text-gray-800 hover:underline md:text-3xl"
           >
-            All the features you want to know
+            {blog.title}
           </a>
 
           <p className="mt-3 text-sm text-gray-500 md:text-sm">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
-            veritatis sint autem nesciunt, laudantium quia tempore delect
+            {blog.description.length > 150
+              ? blog.description.slice(0, 150) + "..."
+              : blog.description}
           </p>
 
-          <a
-            href="#"
+          <Link
+            to={`/blog/${blog._id}`}
             className="inline-block mt-2 text-blue-500 underline hover:text-blue-400"
           >
             Read more
-          </a>
+          </Link>
 
-          <div className="flex items-center mt-6">
-            <img
-              className="object-cover object-center w-10 h-10 rounded-full"
-              src="https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
-              alt=""
-            />
+          {blog.author && (
+            <div className="flex items-center mt-6">
+              <img
+                className="object-cover object-center w-10 h-10 rounded-full"
+                src={blog.author.profileImage}
+                alt=""
+              />
 
-            <div className="mx-4">
-              <h1 className="text-sm text-gray-700">Amelia. Anderson</h1>
-              <p className="text-sm text-gray-500">Lead Developer</p>
+              <div className="mx-4">
+                <h1
+                  className="text-sm text-gray-700 hover:underline hover:cursor-pointer"
+                  onClick={() => {
+                    navigate(`/user/${blog.author._id}`)
+                  }}
+                >
+                  {blog.author.name}
+                </h1>
+                {/* <p className="text-sm text-gray-500">Lead Developer</p> */}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

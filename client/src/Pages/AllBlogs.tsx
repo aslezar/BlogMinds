@@ -1,16 +1,16 @@
-import BlogCard from "../components/BlogCard"
 import Categories from "../components/Categories"
 import { useState } from "react"
+import Blogs from "../components/Blogs"
+import { Category } from "../definitions"
 const AllBlogs = () => {
-  const [category, setCategory] = useState<string>("For You")
+  const [category, setCategory] = useState<Category>(Category.All)
+
   return (
     <div>
       <div className="flex gap-3  mx-auto w-5/6">
         <div className=" w-3/4  ">
           <Categories category={category} setCategory={setCategory} />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
+          <Blogs category={category} />
         </div>
         <div className="w-[25%]  p-4 border rounded-lg mt-16 h-fit">
           <h2 className="text-lg font-medium mb-5">

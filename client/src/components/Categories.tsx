@@ -1,33 +1,24 @@
 import React from "react"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
+import { Category } from "../definitions"
 
-//genrate some categories for blog writing
-const categories = [
-  "For You",
-  "Technology",
-  "Food",
-  "Politics",
-  "Travel",
-  "Sports",
-  "Health",
-  "Finance",
-]
 interface TabPanelProps {
   children?: React.ReactNode
-  category: string
-  setCategory: React.Dispatch<React.SetStateAction<string>>
+  category: Category
+  setCategory: React.Dispatch<React.SetStateAction<Category>>
 }
+
 const Categories = ({ category, setCategory }: TabPanelProps) => {
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setCategory(categories[newValue])
+  const handleChange = (_event: React.SyntheticEvent, newValue: Category) => {
+    setCategory(newValue)
   }
   return (
     <Tabs
       TabIndicatorProps={{
         style: { display: "none" },
       }}
-      value={categories.indexOf(category)}
+      value={category}
       onChange={handleChange}
       indicatorColor="secondary"
       textColor="secondary"
@@ -35,10 +26,12 @@ const Categories = ({ category, setCategory }: TabPanelProps) => {
       scrollButtons="auto"
       className="w-[90%]"
     >
-      {categories.map((category, index) => (
+      {Object.values(Category).map((category) => (
         <Tab
-          label={category}
-          key={index}
+          // label={category}
+          value={category}
+          label={category === "all" ? "For You" : category}
+          key={category}
           disableRipple
           className="!text-[0.9rem] !capitalize"
         />

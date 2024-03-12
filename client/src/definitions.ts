@@ -14,13 +14,17 @@ export interface BlogShortType {
   _id: string
   title: string
   description: string
-  author: string
+  author: {
+    name: string
+    _id: string
+    profileImage: string
+  }
   img: string
+  tags: string[]
 }
 
 export interface BlogFullType extends BlogShortType {
   content: string
-  tags: string[]
   createdAt: string
   updatedAt: string
 }
@@ -28,7 +32,6 @@ export interface BlogFullType extends BlogShortType {
 interface User {
   name: string
   email: string
-  password: string
   bio?: string
   profileImage?: string
 }
@@ -38,4 +41,17 @@ export interface UserType extends User {
   createdAt: string
   updatedAt: string
   blogs?: BlogFullType[]
+}
+
+export enum Category {
+  All = "all",
+  Technology = "technology",
+  Science = "science",
+  Programming = "programming",
+  Health = "health",
+  Business = "business",
+  Entertainment = "entertainment",
+  Sports = "sports",
+  Education = "education",
+  Lifestyle = "lifestyle",
 }

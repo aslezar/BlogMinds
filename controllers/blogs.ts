@@ -36,15 +36,24 @@ const getUserId = (req: Request) => {
 const getBlogByCategory = async (req: Request, res: Response) => {
     const category = req.params.category
     // tag is array of category field, and category is a string
-    const blogs = await Blog.find({ tags: { $in: [category] } })
+
+    let query = {}
+    if (category !== "all") query = { tags: { $in: [category] } }
+
+    const blogs = await Blog.find(query)
+        .sort({ createdAt: -1 })
         .skip(req.pagination.skip)
         .limit(req.pagination.limit)
-        .select("title description img author")
-    if (!blogs) {
-        throw new BadRequestError("No blogs found")
-    }
+        .select("title description img author tags")
+        .populate({
+            path: "author",
+            select: "name profileImage",
+        })
+
+    if (blogs.length === 0) throw new BadRequestError("No More blogs to show")
+
     res.status(StatusCodes.OK).json({
-        data: { blogs },
+        data: blogs,
         success: true,
         msg: "Data Fetched Successfully",
     })
@@ -58,7 +67,7 @@ const getBlog = async (req: Request, res: Response) => {
         throw new BadRequestError("Blog not found")
     }
     res.status(StatusCodes.OK).json({
-        data: { blog },
+        data: blog,
         success: true,
         msg: "Blog Fetched Successfully",
     })
@@ -126,7 +135,7 @@ const getUserBlogs = async (req: Request, res: Response) => {
         throw new UnauthenticatedError("User Not Found")
     }
     res.status(StatusCodes.OK).json({
-        data: { blogs: userBlogs.blogs },
+        data: userBlogs.blogs,
         success: true,
         msg: "Data Fetched Successfully",
     })
@@ -151,7 +160,7 @@ const createBlog = async (req: Request, res: Response) => {
         $push: { blogs: blog._id },
     })
     res.status(StatusCodes.CREATED).json({
-        data: { blog },
+        data: blog,
         success: true,
         msg: "Blog Created Successfully",
     })
@@ -209,7 +218,7 @@ const updateBlog = async (req: Request, res: Response) => {
         )
 
     res.status(StatusCodes.OK).json({
-        data: { blog: blog },
+        data: blog,
         success: true,
         msg: "Successfully updated blog.",
     })
