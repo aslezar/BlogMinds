@@ -46,8 +46,8 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
 
           <img
             src="https://source.unsplash.com/random"
-            alt=""
             className="w-full aspect-video object-cover"
+            alt="Generate with AI"
           />
           <figcaption className="absolute bg-white text-dark py-1 px-2 text-xs font-medium rounded-full bottom-1 right-1">
             Cover
@@ -76,7 +76,6 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
             Categories & Topics
           </span>
           <MultiSelect
-            options={Category}
             value={blog.tags}
             onChange={(selectedOptions: Category[]) =>
               setBlog({ ...blog, tags: selectedOptions })
@@ -156,33 +155,24 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
 }
 
 type MultiSelectProps = {
-  options: string[]
-  value: string[]
-  onChange: (selectedOptions: string[]) => void
+  value: Category[]
+  onChange: (selectedOptions: Category[]) => void
   placeholder: string
 }
-function MultiSelect({
-  options,
-  value,
-  onChange,
-  placeholder,
-}: MultiSelectProps) {
+function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const toggleOption = (option: string) => {
+  const toggleOption = (option: Category) => {
     const isSelected = value.includes(option)
-    if (isSelected) {
-      onChange(value.filter((item) => item !== option))
-    } else {
-      onChange([...value, option])
-    }
+    if (isSelected) onChange(value.filter((item) => item !== option))
+    else onChange([...value, option])
   }
 
   return (
     <div className="relative my-1 text-gray-700 text-[15px]">
       <button
         type="button"
-        className="border border-gray-300 rounded-md px-4 py-2 flex items-center justify-between w-full"
+        className="border border-gray-300 rounded-md px-4 py-2 flex items-center justify-between w-full capitalize"
         onClick={() => setIsOpen(!isOpen)}
       >
         {value.length === 0 ? placeholder : value.join(", ")}
@@ -207,18 +197,21 @@ function MultiSelect({
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute z-10 top-full left-0 mt-1 w-full bg-white rounded-md border border-gray-300 shadow-lg">
-          {options.map((option) => (
-            <div
-              key={option}
-              className={`px-4 py-2 cursor-pointer hover:bg-highlight hover:text-white ${
-                value.includes(option) ? "bg-gray-100" : ""
-              }`}
-              onClick={() => toggleOption(option)}
-            >
-              {option}
-            </div>
-          ))}
+        <div className="absolute z-10 top-full left-0 mt-1 w-full bg-white rounded-md border border-gray-300 shadow-lg overflow-y-scroll">
+          {Object.values(Category).map(
+            (option) =>
+              option !== Category.All && (
+                <div
+                  key={option}
+                  className={`px-4 py-2 cursor-pointer capitalize hover:bg-highlight hover:text-white  ${
+                    value.includes(option) ? "bg-gray-100" : ""
+                  }`}
+                  onClick={() => toggleOption(option)}
+                >
+                  {option}
+                </div>
+              ),
+          )}
         </div>
       )}
     </div>

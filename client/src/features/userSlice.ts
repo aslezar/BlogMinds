@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, Dispatch } from "@reduxjs/toolkit"
 import { RootState } from "../store"
 import toast from "react-hot-toast"
 import { LoginType, SignUpType, UserType } from "../definitions"
@@ -16,7 +16,7 @@ import {
 interface CounterState {
   loading: boolean
   isAuthenticated: boolean
-  user: any
+  user: UserType | null
   verificationRequired: boolean
   verificationUserID: UserType["_id"] | string
 }
@@ -68,7 +68,7 @@ export const userSlice = createSlice({
   },
 })
 
-export const logout = () => async (dispatch: any) => {
+export const logout = () => async (dispatch: Dispatch) => {
   toast.loading("Logging out", { id: "logout" })
   dispatch(userSlice.actions.SET_LOADING())
   signOut()
@@ -86,7 +86,7 @@ export const logout = () => async (dispatch: any) => {
       toast.dismiss("logout")
     })
 }
-export const login = (loginValues: LoginType) => async (dispatch: any) => {
+export const login = (loginValues: LoginType) => async (dispatch: Dispatch) => {
   if (!loginValues.email || !loginValues.password)
     return toast.error("Email and Password are required")
 
@@ -107,28 +107,29 @@ export const login = (loginValues: LoginType) => async (dispatch: any) => {
       dispatch(userSlice.actions.SET_LOADING_FALSE())
     })
 }
-export const register = (signupValues: SignUpType) => async (dispatch: any) => {
-  toast.loading("Registering", { id: "register" })
-  dispatch(userSlice.actions.SET_LOADING())
+export const register =
+  (signupValues: SignUpType) => async (dispatch: Dispatch) => {
+    toast.loading("Registering", { id: "register" })
+    dispatch(userSlice.actions.SET_LOADING())
 
-  signUp(signupValues)
-    .then((res) => {
-      console.log(res)
+    signUp(signupValues)
+      .then((res) => {
+        console.log(res)
 
-      const id = res.data.userId
-      dispatch(userSlice.actions.SET_VERIFICATION_REQUIRED(id))
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-    .finally(() => {
-      dispatch(userSlice.actions.SET_LOADING_FALSE())
-      toast.dismiss("register")
-    })
-}
+        const id = res.data.userId
+        dispatch(userSlice.actions.SET_VERIFICATION_REQUIRED(id))
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        dispatch(userSlice.actions.SET_LOADING_FALSE())
+        toast.dismiss("register")
+      })
+  }
 
 export const verification =
-  (otp: number) => async (dispatch: any, getState: any) => {
+  (otp: number) => async (dispatch: Dispatch, getState: RootState) => {
     const verificationRequired = getState().user.verificationRequired
     if (!verificationRequired) return toast.error("Something went wrong.")
 
@@ -154,7 +155,7 @@ export const verification =
       })
   }
 
-export const loadUser = () => async (dispatch: any) => {
+export const loadUser = () => async (dispatch: Dispatch) => {
   const token = localStorage.getItem("token") || null
 
   if (token) {
@@ -182,44 +183,46 @@ export const loadUser = () => async (dispatch: any) => {
   }
 }
 
-export const updateName = (name: UserType["name"]) => async (dispatch: any) => {
-  toast.loading("Updating Name", { id: "name" })
-  dispatch(userSlice.actions.SET_LOADING())
-  updateNameApi(name)
-    .then((_res) => {
-      // console.log(res)
-      dispatch(userSlice.actions.UPDATE_NAME(name))
-      toast.success("Name Updated")
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-    .finally(() => {
-      dispatch(userSlice.actions.SET_LOADING_FALSE())
-      toast.dismiss("name")
-    })
-}
+export const updateName =
+  (name: UserType["name"]) => async (dispatch: Dispatch) => {
+    toast.loading("Updating Name", { id: "name" })
+    dispatch(userSlice.actions.SET_LOADING())
+    updateNameApi(name)
+      .then((_res) => {
+        // console.log(res)
+        dispatch(userSlice.actions.UPDATE_NAME(name))
+        toast.success("Name Updated")
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        dispatch(userSlice.actions.SET_LOADING_FALSE())
+        toast.dismiss("name")
+      })
+  }
 
-export const updateBio = (bio: UserType["bio"]) => async (dispatch: any) => {
-  if (!bio) return toast.error("Bio is required")
-  if (bio.length > 150)
-    return toast.error("Bio should be less than 150 characters")
-  toast.loading("Updating Bio", { id: "bio" })
-  dispatch(userSlice.actions.SET_LOADING())
-  updateBioApi(bio)
-    .then((_res) => {
-      // console.log(res)
-      dispatch(userSlice.actions.UPDATE_BIO(bio))
-      toast.success("Bio Updated")
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-    .finally(() => {
-      dispatch(userSlice.actions.SET_LOADING_FALSE())
-      toast.dismiss("bio")
-    })
-}
+export const updateBio =
+  (bio: UserType["bio"]) => async (dispatch: Dispatch) => {
+    if (!bio) return toast.error("Bio is required")
+    if (bio.length > 150)
+      return toast.error("Bio should be less than 150 characters")
+    toast.loading("Updating Bio", { id: "bio" })
+    dispatch(userSlice.actions.SET_LOADING())
+    updateBioApi(bio)
+      .then((_res) => {
+        // console.log(res)
+        dispatch(userSlice.actions.UPDATE_BIO(bio))
+        toast.success("Bio Updated")
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        dispatch(userSlice.actions.SET_LOADING_FALSE())
+        toast.dismiss("bio")
+      })
+  }
 export const selectUserState = (state: RootState) => state.user
 
 export default userSlice.reducer
