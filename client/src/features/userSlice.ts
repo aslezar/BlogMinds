@@ -90,7 +90,6 @@ export const login = (loginValues: LoginType) => async (dispatch: any) => {
   if (!loginValues.email || !loginValues.password)
     return toast.error("Email and Password are required")
 
-  toast.loading("Logging in", { id: "login" })
   dispatch(userSlice.actions.SET_LOADING())
   signIn(loginValues)
     .then((res) => {
@@ -106,7 +105,6 @@ export const login = (loginValues: LoginType) => async (dispatch: any) => {
     })
     .finally(() => {
       dispatch(userSlice.actions.SET_LOADING_FALSE())
-      toast.dismiss("login")
     })
 }
 export const register = (signupValues: SignUpType) => async (dispatch: any) => {

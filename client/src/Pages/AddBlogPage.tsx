@@ -10,7 +10,11 @@ const blog: BlogFullType = {
   tags: [],
   createdAt: "2021-09-01",
   updatedAt: "2021-09-01",
-  author: "John Doe",
+  author: {
+    _id: "1",
+    name: "John Doe",
+    profileImage: "https://source.unsplash.com/random",
+  },
 }
 const AddBlogPage = () => {
   const handleSave = (newBlog: BlogFullType) => {

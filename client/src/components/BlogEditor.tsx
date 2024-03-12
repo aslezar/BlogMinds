@@ -1,22 +1,11 @@
 import React, { useState, useRef } from "react"
 import JoditEditor from "jodit-react"
 import { NavLink } from "react-router-dom"
+import { BlogFullType, Category } from "../definitions"
 
 type BlogEditorProps = {
-  blogContent: {
-    title: string
-    content: string
-    description: string
-    imageUrl: string
-    tags: string[]
-  }
-  handleSave: (blog: {
-    title: string
-    content: string
-    description: string
-    imageUrl: string
-    tags: string[]
-  }) => void
+  blogContent: BlogFullType
+  handleSave: (blog: BlogFullType) => void
 }
 
 function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
@@ -65,8 +54,8 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
           </figcaption>
         </figure>
         <ImageInput
-          value={blog.imageUrl}
-          onChange={(imageUrl: string) => setBlog({ ...blog, imageUrl })}
+          value={blog.img}
+          onChange={(img: string) => setBlog({ ...blog, img })}
         />
         <input
           type="text"
@@ -87,9 +76,9 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
             Categories & Topics
           </span>
           <MultiSelect
-            options={["Technology", "Science", "Health", "Travel"]}
+            options={Category}
             value={blog.tags}
-            onChange={(selectedOptions: string[]) =>
+            onChange={(selectedOptions: Category[]) =>
               setBlog({ ...blog, tags: selectedOptions })
             }
             placeholder="Select categories"
@@ -165,10 +154,22 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
     </div>
   )
 }
-function MultiSelect({ options, value, onChange, placeholder }) {
+
+type MultiSelectProps = {
+  options: string[]
+  value: string[]
+  onChange: (selectedOptions: string[]) => void
+  placeholder: string
+}
+function MultiSelect({
+  options,
+  value,
+  onChange,
+  placeholder,
+}: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const toggleOption = (option) => {
+  const toggleOption = (option: string) => {
     const isSelected = value.includes(option)
     if (isSelected) {
       onChange(value.filter((item) => item !== option))
@@ -223,10 +224,15 @@ function MultiSelect({ options, value, onChange, placeholder }) {
     </div>
   )
 }
-function ImageInput({ value, onChange }) {
+
+type ImageInputProps = {
+  value: string
+  onChange: (img: string) => void
+}
+function ImageInput({ value, onChange }: ImageInputProps) {
   const [imageUrl, setImageUrl] = useState(value)
 
-  const handleImageUrlChange = (e) => {
+  const handleImageUrlChange = (e: React.SyntheticEvent) => {
     const url = e.target.value
     setImageUrl(url)
     onChange(url)

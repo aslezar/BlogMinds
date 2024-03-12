@@ -4,7 +4,6 @@ import {
   LoginType,
   SignUpType,
   BlogShortType,
-  BlogFullType,
   UserType,
 } from "../definitions"
 

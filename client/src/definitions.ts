@@ -11,9 +11,9 @@ export interface SignUpType {
 }
 
 interface Author {
-  name: string
   _id: string
-  profileImage: string
+  name: string
+  profileImage?: string
 }
 
 export interface BlogShortType {
@@ -22,7 +22,7 @@ export interface BlogShortType {
   description: string
   author: Author
   img: string
-  tags: string[]
+  tags: Category[]
 }
 
 export interface BlogFullType extends BlogShortType {
