@@ -97,3 +97,4 @@ export const getBlogs = (
 ) => API.get(`/blog/category/${category}?page=${pageNo}&limit=${limit}`)
 
 export const getBlog = (id: BlogShortType["_id"]) => API.get(`/blog/${id}`)
+export const getTrendingBlog = () => API.get("/blog/trending")

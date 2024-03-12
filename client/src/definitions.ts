@@ -10,15 +10,17 @@ export interface SignUpType {
   password: string
 }
 
+interface Author {
+  name: string
+  _id: string
+  profileImage: string
+}
+
 export interface BlogShortType {
   _id: string
   title: string
   description: string
-  author: {
-    name: string
-    _id: string
-    profileImage: string
-  }
+  author: Author
   img: string
   tags: string[]
 }
@@ -54,4 +56,10 @@ export enum Category {
   Sports = "sports",
   Education = "education",
   Lifestyle = "lifestyle",
+}
+export interface TrendingType {
+  _id: string
+  title: string
+  totalScore: number
+  author: Author
 }
