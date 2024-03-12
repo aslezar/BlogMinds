@@ -82,8 +82,8 @@ app.use(
 app.use(paginateMW)
 
 //Routes
-app.use("/", express.static("../client/dist"))
-app.use("/assests", express.static("../client/dist/assests"))
+app.use("/", express.static("./client/dist"))
+app.use("/assests", express.static("./client/dist/assests"))
 app.use("/hello", (req: Request, res: Response) => {
     res.status(200).json({ message: "Hello World" })
 })
@@ -91,9 +91,9 @@ app.use("/api/v1", ApiRoute)
 
 //Define Routes Here
 app.get("/*", (req: Request, res: Response) => {
-    if (fs.existsSync(path.join(__dirname, "../client/dist/index.html"))) {
+    if (fs.existsSync(path.join(__dirname, "./client/dist/index.html"))) {
         res.sendFile(
-            path.join(__dirname, "../client/dist/index.html"),
+            path.join(__dirname, "./client/dist/index.html"),
             (err: Error) => {
                 throw new Error("Error sending file: index.html")
             },
