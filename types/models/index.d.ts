@@ -6,11 +6,12 @@ export interface IBlog {
     content: string
     img?: string
     author: Schema.Types.ObjectId
-    comments: Types.Array<Schema.Types.ObjectId>
     tags: Types.Array<string>
     views: number
     likes: Types.Array<Schema.Types.ObjectId>
     likesCount: number
+    comments: Types.Array<Schema.Types.ObjectId>
+    commentsCount: number
     createdAt: Date
     updatedAt: Date
 }

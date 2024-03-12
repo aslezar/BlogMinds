@@ -25,12 +25,7 @@ const BlogSchema = new Schema<IBlog>(
             ref: "User",
             required: [true, "Please provide author."],
         },
-        comments: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Comment",
-            },
-        ],
+
         tags: {
             type: [String],
             required: [true, "Please provide tags."],
@@ -57,6 +52,16 @@ const BlogSchema = new Schema<IBlog>(
             },
         ],
         likesCount: {
+            type: Number,
+            default: 0,
+        },
+        comments: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Comment",
+            },
+        ],
+        commentsCount: {
             type: Number,
             default: 0,
         },
