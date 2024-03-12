@@ -92,7 +92,7 @@ export const login = (loginValues: LoginType) => async (dispatch: any) => {
 
   dispatch(userSlice.actions.SET_LOADING())
   signIn(loginValues)
-    .then((res) => {
+    .then((res: any) => {
       // res is objecy here with property token, msg and success
       console.log(res)
 
@@ -138,7 +138,7 @@ export const verification =
     toast.loading("Verifying", { id: "verification" })
     dispatch(userSlice.actions.SET_LOADING())
     verifyOtp({ userId, otp })
-      .then((res) => {
+      .then((res: any) => {
         // console.log(res)
 
         localStorage.setItem("token", res.token)
@@ -161,7 +161,7 @@ export const loadUser = () => async (dispatch: any) => {
     toast.loading("Loading", { id: "loadUser" })
     dispatch(userSlice.actions.SET_LOADING())
     signinToken()
-      .then((res) => {
+      .then((res: any) => {
         // res is objecy here with property data,token, msg and success
         // console.log(res)
 

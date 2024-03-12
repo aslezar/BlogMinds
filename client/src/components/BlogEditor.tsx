@@ -232,7 +232,7 @@ type ImageInputProps = {
 function ImageInput({ value, onChange }: ImageInputProps) {
   const [imageUrl, setImageUrl] = useState(value)
 
-  const handleImageUrlChange = (e: React.SyntheticEvent) => {
+  const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value
     setImageUrl(url)
     onChange(url)

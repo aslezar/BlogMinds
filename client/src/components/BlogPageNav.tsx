@@ -1,10 +1,7 @@
-import React from "react"
 import { NavLink } from "react-router-dom"
 import SearchBar from "./SearchBar"
 
-type Props = {}
-
-const BlogPageNav = (props: Props) => {
+const BlogPageNav = () => {
   return (
     <div className="border fixed top-0 bg-white z-20 w-full px-36 left-1/2 -translate-x-1/2 py-4 flex items-center justify-between">
       <NavLink to="/" className="flex items-center space-x-2">

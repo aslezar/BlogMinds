@@ -3,8 +3,6 @@ import { Link, useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../hooks"
 import img from "../assets/img/Auth/signup.webp"
 import { SignUpType } from "../definitions"
-import { signUp } from "../api/index.ts"
-import toast from "react-hot-toast"
 import { register } from "../features/userSlice"
 
 export default function SignUp() {

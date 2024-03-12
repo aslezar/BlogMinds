@@ -11,10 +11,12 @@ interface BlogsProps {
 
 const Blogs = ({ category }: BlogsProps) => {
   const [blogs, setBlogs] = useState<BlogShortType[]>([])
-  const [page, setPage] = useState<number>(1)
-  const [limit, setLimit] = useState<number>(10)
+  // const [page, setPage] = useState<number>(1)
+  const page = 1
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>("")
+
+  const limit = 10
 
   useEffect(() => {
     const fetchBlog = () => {
@@ -41,11 +43,7 @@ const Blogs = ({ category }: BlogsProps) => {
       {blogs.map((blog, index) => (
         <BlogCard key={index} blog={blog} />
       ))}
-      {loading && (
-        <div>
-          <Loader />
-        </div>
-      )}
+      {loading && <Loader />}
       {error && <div>{error}</div>}
     </>
   )

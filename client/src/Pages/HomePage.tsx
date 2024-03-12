@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar"
 import Hero from "../components/Hero"
 import PricingTable from "../components/PricingTable"
 import ContactUs from "../components/ContactUs"

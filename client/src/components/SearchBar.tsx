@@ -20,7 +20,7 @@ const SearchBar = () => {
     setInputValue(e.target.value)
   }
 
-  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleTabChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setCategory(categories[newValue])
   }
 
