@@ -56,10 +56,10 @@ export const userSlice = createSlice({
       localStorage.removeItem("token")
     },
     UPDATE_NAME: (state, action) => {
-      state.user.name = action.payload
+      if (state.user) state.user.name = action.payload
     },
     UPDATE_BIO: (state, action) => {
-      state.user.bio = action.payload
+      if (state.user) state.user.bio = action.payload
     },
     SET_VERIFICATION_REQUIRED: (state, action) => {
       state.verificationUserID = action.payload
@@ -86,7 +86,7 @@ export const logout = () => async (dispatch: Dispatch) => {
       toast.dismiss("logout")
     })
 }
-export const login = (loginValues: LoginType) => async (dispatch: Dispatch) => {
+export const login = (loginValues: LoginType) => async (dispatch: any) => {
   if (!loginValues.email || !loginValues.password)
     return toast.error("Email and Password are required")
 
@@ -129,7 +129,7 @@ export const register =
   }
 
 export const verification =
-  (otp: number) => async (dispatch: Dispatch, getState: RootState) => {
+  (otp: number) => async (dispatch: any, getState: any) => {
     const verificationRequired = getState().user.verificationRequired
     if (!verificationRequired) return toast.error("Something went wrong.")
 
