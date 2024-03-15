@@ -10,14 +10,11 @@ import trendingCache from "../utils/cache"
 
 //UTITLIY FUNCTIONS
 
-//Remember: You can not throw error in non-async function
-//why? because it will not be caught by the error handling middleware
-
 const getId = (id: string) => {
     try {
         return new mongoose.Types.ObjectId(id)
     } catch (e) {
-        throw new BadRequestError("Invalid Blog Id")
+        throw new BadRequestError("Id is not a valid Object")
     }
 }
 

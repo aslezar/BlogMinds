@@ -12,15 +12,14 @@ const errorHandlerMiddleware = (
     next: NextFunction,
 ) => {
     if (process.env.NODE_ENV === "development") {
-        console.log(
-            "**************************There is an error caught by MIDDLEWARE**************************",
-        )
+        console.error("ERROR: " + err.message)
     }
 
+    //These all are known error that why there is no need to log them
+    
     // Custom Error
     if (err instanceof CustomAPIError) {
-        console.log(err)
-
+        // console.log(err)
         return res
             .status(err.statusCode)
             .json({ success: false, msg: err.message })
@@ -28,8 +27,6 @@ const errorHandlerMiddleware = (
 
     //JWT error
     if (err instanceof jwt.JsonWebTokenError) {
-        console.log(err)
-
         if (err instanceof jwt.TokenExpiredError) {
             return res.status(StatusCodes.UNAUTHORIZED).json({
                 success: false,
@@ -104,7 +101,9 @@ const errorHandlerMiddleware = (
             .json({ success: false, msg: "Multer error: " + err.message })
     }
 
+    //Unknown error occured, log it
     console.log(err)
+
     //Internal Server Error
     return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
