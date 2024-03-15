@@ -129,7 +129,7 @@ export const register =
   }
 
 export const verification =
-  (otp: number) => async (dispatch: any, getState: any) => {
+  (otp: string) => async (dispatch: any, getState: any) => {
     const verificationRequired = getState().user.verificationRequired
     if (!verificationRequired) return toast.error("Something went wrong.")
 

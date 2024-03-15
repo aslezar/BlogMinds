@@ -58,7 +58,7 @@ API.interceptors.response.use(
 
 interface VerifyOtpParams {
   userId: UserType["_id"]
-  otp: number
+  otp: string
 }
 
 /*
