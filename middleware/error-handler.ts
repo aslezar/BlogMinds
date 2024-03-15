@@ -11,12 +11,11 @@ const errorHandlerMiddleware = (
     res: Response,
     next: NextFunction,
 ) => {
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === "development")
         console.error("ERROR: " + err.message)
-    }
 
     //These all are known error that why there is no need to log them
-    
+
     // Custom Error
     if (err instanceof CustomAPIError) {
         // console.log(err)

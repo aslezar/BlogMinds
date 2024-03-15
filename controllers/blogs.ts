@@ -60,7 +60,7 @@ const getBlogByCategory = async (req: Request, res: Response) => {
 const getBlogById = async (req: Request, res: Response) => {
     const blogId = getBlogId(req)
 
-    const blog: IBlog | null = await Blog.findById(blogId)
+    const blog = await Blog.findById(blogId).select("-likes")
     if (!blog) {
         throw new BadRequestError("Blog not found")
     }
@@ -71,20 +71,41 @@ const getBlogById = async (req: Request, res: Response) => {
     })
 }
 
+const likeBlog = async (req: Request, res: Response) => {
+    const userId = getUserId(req)
+    const blogId = getBlogId(req)
+
+    const blog = await Blog.findById(blogId)
+    if (!blog) throw new BadRequestError("Blog not found")
+    const isLiked = blog.likes.includes(userId)
+    if (isLiked) {
+        blog.likes.remove(userId)
+        blog.likesCount = blog.likesCount - 1
+    } else {
+        blog.likes.push(userId)
+        blog.likesCount = blog.likesCount + 1
+    }
+    await blog.save()
+    res.status(StatusCodes.OK).json({
+        success: true,
+        msg: isLiked ? "Unliked Successfully" : "Liked Successfully",
+    })
+}
+
 const commentBlog = async (req: Request, res: Response) => {
     const userId = getUserId(req)
     const blogId = getBlogId(req)
 
     const { message } = req.body
-    if (!message) {
-        throw new BadRequestError("Message is required")
-    }
+    if (!message) throw new BadRequestError("Message is required")
+
     const comment = await Comment.create({
         message,
         author: userId,
     })
     const updatedBlog = await Blog.findByIdAndUpdate(blogId, {
         $push: { comments: comment },
+        $inc: { commentsCount: 1 },
     })
     if (!updatedBlog) {
         throw new BadRequestError("Error commenting on blog")
@@ -282,6 +303,7 @@ export {
     getBlogById,
     getTrendingBlogs,
     getBlogByCategory,
+    likeBlog,
     commentBlog,
     commentOnComment,
     getUserBlogs,
