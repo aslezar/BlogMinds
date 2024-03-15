@@ -108,6 +108,7 @@ const commentBlog = async (req: Request, res: Response) => {
         $inc: { commentsCount: 1 },
     })
     if (!updatedBlog) {
+        await comment.deleteOne()
         throw new BadRequestError("Error commenting on blog")
     }
     res.status(StatusCodes.OK).json({
@@ -122,9 +123,8 @@ const commentOnComment = async (req: Request, res: Response) => {
     const commentId = getCommentId(req)
     const { message } = req.body
 
-    if (!message) {
-        throw new BadRequestError("Message is required")
-    }
+    if (!message) throw new BadRequestError("Message is required")
+
     const comment = await Comment.create({
         message,
         author: userId,
@@ -150,9 +150,7 @@ const getUserBlogs = async (req: Request, res: Response) => {
         select: "title description img tags",
     })
 
-    if (!userBlogs) {
-        throw new UnauthenticatedError("User Not Found")
-    }
+    if (!userBlogs) throw new UnauthenticatedError("User Not Found")
     res.status(StatusCodes.OK).json({
         data: userBlogs.blogs,
         success: true,
