@@ -60,6 +60,9 @@ export default function SignUp() {
 
       <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
         <div className="max-w-md w-full p-6 scale-105">
+        <Link to="/" className="text-gray-500 text-lg">
+          <span className="mr-1">&#8592;</span>
+        </Link>
           <h1 className="text-3xl font-semibold mb-6 text-black text-center">
             Register with us!
           </h1>
