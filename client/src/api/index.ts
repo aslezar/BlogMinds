@@ -6,10 +6,7 @@ import { LoginType, SignUpType, BlogShortType, UserType } from "../definitions"
  ********************** Configuring Axios **********************
  */
 
-const URL =
-  process.env.NODE_ENV === "production"
-    ? "/api/v1"
-    : "http://localhost:5000/api/v1"
+const URL = import.meta.env.PROD ? "/api/v1" : "http://localhost:5000/api/v1"
 
 const API = axios.create({ baseURL: URL })
 
