@@ -20,13 +20,15 @@ const AllBlogs = () => {
 
   return (
     <div>
-      <div className="flex gap-3  mx-auto w-5/6">
-        <div className=" w-3/4  ">
+      <div className="flex gap-3  xl:mx-auto xl:w-5/6 mx-3">
+        <div className="w-3/4">
+          <div className="sticky top-[4.7rem] bg-white">
           <Categories category={category} setCategory={setCategory} />
-          <Blogs category={category} />
+          </div>
+            <Blogs category={category} />
         </div>
         {trending && (
-          <div className="w-[25%]  p-4 border rounded-lg mt-16 h-fit">
+          <div className="w-[25%]  p-4 border rounded-lg mt-16 h-fit sticky top-20">
             <h2 className="text-lg font-medium mb-5">
               Trending{" "}
               <svg

@@ -24,7 +24,7 @@ const Categories = ({ category, setCategory }: TabPanelProps) => {
       textColor="secondary"
       variant="scrollable"
       scrollButtons="auto"
-      className="w-[90%]"
+      className="w-[90%] bg-white"
     >
       {Object.values(Category).map((category) => (
         <Tab
@@ -34,6 +34,12 @@ const Categories = ({ category, setCategory }: TabPanelProps) => {
           key={category}
           disableRipple
           className="!text-[0.9rem] !capitalize"
+          // scroll to top onClick
+          onClick={() => {
+            setTimeout(() => {
+              window.scrollTo({ top: 0 })
+            }, 500)
+          }}
         />
       ))}
     </Tabs>
