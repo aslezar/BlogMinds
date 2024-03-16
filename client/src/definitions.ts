@@ -23,6 +23,11 @@ export interface BlogShortType {
   author: Author
   img: string
   tags: Category[]
+  likesCount: number
+  commentsCount: number
+  views: number
+  createdAt: string
+  updatedAt: string
 }
 
 export interface BlogFullType extends BlogShortType {

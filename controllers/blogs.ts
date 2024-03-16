@@ -42,13 +42,13 @@ const getBlogByCategory = async (req: Request, res: Response) => {
         .sort({ createdAt: -1 })
         .skip(req.pagination.skip)
         .limit(req.pagination.limit)
-        .select("title description img author tags")
+        .select("title description img author tags views likesCount commentsCount createdAt updatedAt")
         .populate({
             path: "author",
             select: "name profileImage",
         })
 
-    if (blogs.length === 0) throw new BadRequestError("No More blogs to show")
+    if (blogs.length === 0) throw new BadRequestError("No more blogs found")
 
     res.status(StatusCodes.OK).json({
         data: blogs,

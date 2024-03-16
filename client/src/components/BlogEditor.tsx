@@ -22,7 +22,7 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
   }
 
   return (
-    <div className="flex min-h-screen fixed top-0 z-40  mx-auto ">
+    <div className="flex min-h-screen fixed top-0 z-40  mx-auto w-screen">
       <div className="flex flex-col  px-3 pt-4 md:w-1/5 bg-white mx-auto  gap-3 min-h-screen">
         <NavLink to="/" className="flex items-center space-x-2  mb-2 px-2 ">
           <svg
@@ -241,13 +241,6 @@ function ImageInput({ value, onChange }: ImageInputProps) {
         onChange={handleImageUrlChange}
         className="border px-3 py-2 rounded-lg focus:outline-none focus:ring  flex-grow"
       />
-      {imageUrl && (
-        <img
-          src={imageUrl}
-          alt="Image Preview"
-          className="w-20 h-20 ml-4 object-cover"
-        />
-      )}
       <style>
         {`
 					.jodit-status-bar{
