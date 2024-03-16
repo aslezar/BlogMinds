@@ -33,7 +33,7 @@ var UserSchema = new mongoose.Schema(
         profileImage: {
             type: String,
             default:
-                "https://res.cloudinary.com/dario3ey7/image/upload/v1709974103/blogmind/m7ndwlipeesy1jmab7la.png",
+                "https://res.cloudinary.com/blogmind/image/upload/v1709974103/blogmind/m7ndwlipeesy1jmab7la.png",
         },
         blogs: [
             {
