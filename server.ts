@@ -91,15 +91,11 @@ app.use("/api/v1", ApiRoute)
 
 //Define Routes Here
 app.get("/*", (req: Request, res: Response) => {
-    if (fs.existsSync(path.join(__dirname, "./client/dist/index.html"))) {
-        res.sendFile(
-            path.join(__dirname, "./client/dist/index.html"),
-            (err: Error) => {
-                throw new Error("Error sending file: index.html")
-            },
-        )
-    }
-    return res.status(404).json({ message: "Page Not Found" })
+    console.log(fs.existsSync(path.join(__dirname, "./client/dist/index.html")))
+
+    if (fs.existsSync(path.join(__dirname, "./client/dist/index.html")))
+        res.sendFile(path.join(__dirname, "./client/dist/index.html"))
+    else return res.status(404).json({ message: "Page Not Found" })
 })
 
 //Error Handling Middleware
