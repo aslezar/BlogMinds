@@ -3,10 +3,11 @@ import { StatusCodes } from "http-status-codes"
 import { Request, Response, NextFunction } from "express"
 import mongoose from "mongoose"
 import jwt from "jsonwebtoken"
+import multer from "multer"
 
 const errorHandlerMiddleware = (
     // err can be instance of Error or CustomAPIError or mongoose error
-    err: Error | CustomAPIError | mongoose.Error,
+    err: Error | CustomAPIError | mongoose.Error | multer.MulterError,
     req: Request,
     res: Response,
     next: NextFunction,
@@ -85,19 +86,25 @@ const errorHandlerMiddleware = (
     }
 
     // Multer Error
-    if (err.name === "MulterError") {
-        // console.log(err.code)
+    const multerErrorMessages = {
+        LIMIT_PART_COUNT: "Too many parts",
+        LIMIT_FILE_SIZE: "File size is too large. Max limit is 4MB",
+        LIMIT_FILE_COUNT: "Too many files",
+        LIMIT_FIELD_KEY: "Field name is too long",
+        LIMIT_FIELD_VALUE: "Field value is too long",
+        LIMIT_FIELD_COUNT: "Too many fields",
+        LIMIT_UNEXPECTED_FILE:
+            "Unexpected file: Acceptes files are jpg, jpeg, png, webp",
+    }
+    if (err instanceof multer.MulterError) {
+        const errorCode = err.code
+        const errorMessage =
+            multerErrorMessages[errorCode] || "Unknown Multer error"
 
-        if (err.message === "File too large") {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                success: false,
-                msg: "File size is too large. Max limit is 4MB",
-            })
-        }
-        console.log(err)
-        return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ success: false, msg: "Multer error: " + err.message })
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            success: false,
+            msg: errorMessage,
+        })
     }
 
     //Unknown error occured, log it

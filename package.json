@@ -25,6 +25,7 @@
     "homepage": "https://github.com/aslezar/BlogMinds#readme",
     "dependencies": {
         "@types/jsonwebtoken": "^9.0.6",
+        "@types/multer": "^1.4.11",
         "axios": "^1.6.7",
         "bcryptjs": "^2.4.3",
         "cloudinary": "^2.0.3",

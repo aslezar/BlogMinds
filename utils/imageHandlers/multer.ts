@@ -1,19 +1,15 @@
-const multer = require("multer")
+import multer, { MulterError } from "multer"
 import { Request } from "express"
 
-type FileTypes = any
-type cbType = any
-
+const allowedFileTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"]
 // Define a function to control which files are accepted
-const fileFilter = function (req: Request, file: FileTypes, cb: cbType) {
-    if (
-        file.mimetype === "image/jpeg" ||
-        file.mimetype === "image/png" ||
-        file.mimetype === "image/jpg" ||
-        file.mimetype === "image/webp"
-    )
-        cb(null, true) // Accept the file
-    else cb(new Error("Unsupported file type")) // Reject the file with an error
+const fileFilter = function (
+    req: Request,
+    file: Express.Multer.File,
+    cb: multer.FileFilterCallback,
+) {
+    if (allowedFileTypes.includes(file.mimetype)) cb(null, true)
+    else cb(new MulterError("LIMIT_UNEXPECTED_FILE"))
 }
 
 const storage = multer.memoryStorage()
