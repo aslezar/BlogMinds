@@ -35,7 +35,7 @@ app.set("trust proxy", 1)
 const allowedOrigins = [
     "http://localhost:5173",
     "http://localhost:5000",
-    "https://blogminds.onrender.com/",
+    "https://blogminds.onrender.com",
 ]
 const corsOptions = {
     origin: function (origin: string | undefined, callback: any) {
@@ -94,11 +94,7 @@ app.use("/hello", (req: Request, res: Response) => {
 app.use("/api/v1", ApiRoute)
 
 //Define Routes Here
-app.get("/*", (req: Request, res: Response) => {
-    if (fs.existsSync(path.join(__dirname, "./client/dist/index.html")))
-        res.sendFile(path.join(__dirname, "./client/dist/index.html"))
-    else return res.status(404).json({ message: "Page Not Found" })
-})
+app.use("/*", express.static("./client/dist/index.html"))
 
 //Error Handling Middleware
 app.use(errorHandler)
