@@ -60,7 +60,7 @@ app.use(
     }),
 )
 app.use(express.json())
-app.use(helmet()) //set security HTTP headers
+// app.use(helmet()) //set security HTTP headers
 app.use(cors(corsOptions)) //enable CORS
 
 //Logger
