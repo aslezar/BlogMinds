@@ -30,7 +30,7 @@ To run BlogMind locally, follow these steps:
     npm install
     ```
 
-4. Seed the Database using
+4. Seed the Database with sample data using:
 
     ```bash
     npm run seeder
