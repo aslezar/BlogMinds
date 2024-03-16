@@ -32,7 +32,11 @@ const server: http.Server = http.createServer(app)
 //Setting Environment
 const PORT: string | number = process.env.PORT || 5000
 app.set("trust proxy", 1)
-const allowedOrigins = ["http://localhost:5173", "http://localhost:5000"]
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:5000",
+    "https://blogminds.onrender.com/",
+]
 const corsOptions = {
     origin: function (origin: string | undefined, callback: any) {
         if (!origin) return callback(null, true)
