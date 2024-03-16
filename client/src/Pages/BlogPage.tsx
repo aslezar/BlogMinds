@@ -48,7 +48,7 @@ const BlogPage = () => {
     setLikeCount(likeCount - 1)
   }
 
-  if (isLoading === true || !blog) return <Loader />
+  if (isLoading === true) return <Loader />
   if (isError === true) return <div>Error</div>
 
   return (

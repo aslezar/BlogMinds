@@ -2,6 +2,7 @@ import { CustomAPIError } from "../errors"
 import { StatusCodes } from "http-status-codes"
 import { Request, Response, NextFunction } from "express"
 import mongoose from "mongoose"
+import jwt from "jsonwebtoken"
 
 const errorHandlerMiddleware = (
     // err can be instance of Error or CustomAPIError or mongoose error
@@ -10,17 +11,36 @@ const errorHandlerMiddleware = (
     res: Response,
     next: NextFunction,
 ) => {
-    if (process.env.NODE_ENV === "development") {
-        console.log(
-            "**************************There is an error caught by MIDDLEWARE**************************",
-        )
-    }
+    if (process.env.NODE_ENV === "development")
+        console.error("ERROR: " + err.message)
+
+    //These all are known error that why there is no need to log them
 
     // Custom Error
     if (err instanceof CustomAPIError) {
+        // console.log(err)
         return res
             .status(err.statusCode)
             .json({ success: false, msg: err.message })
+    }
+
+    //JWT error
+    if (err instanceof jwt.JsonWebTokenError) {
+        if (err instanceof jwt.TokenExpiredError) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                success: false,
+                msg: "Session Expired. Please login again.",
+            })
+        }
+        if (err instanceof jwt.NotBeforeError) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                success: false,
+                msg: "Login Expired. Please login again.",
+            })
+        }
+        return res
+            .status(StatusCodes.UNAUTHORIZED)
+            .json({ success: false, msg: "Not authorized" })
     }
 
     // Handle CastError, ValidationError, ValidatorError separately
@@ -80,7 +100,9 @@ const errorHandlerMiddleware = (
             .json({ success: false, msg: "Multer error: " + err.message })
     }
 
+    //Unknown error occured, log it
     console.log(err)
+
     //Internal Server Error
     return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)

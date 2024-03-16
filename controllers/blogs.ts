@@ -10,14 +10,11 @@ import trendingCache from "../utils/cache"
 
 //UTITLIY FUNCTIONS
 
-//Remember: You can not throw error in non-async function
-//why? because it will not be caught by the error handling middleware
-
 const getId = (id: string) => {
     try {
         return new mongoose.Types.ObjectId(id)
     } catch (e) {
-        throw new BadRequestError("Invalid Blog Id")
+        throw new BadRequestError("Id is not a valid Object")
     }
 }
 
@@ -63,7 +60,7 @@ const getBlogByCategory = async (req: Request, res: Response) => {
 const getBlogById = async (req: Request, res: Response) => {
     const blogId = getBlogId(req)
 
-    const blog: IBlog | null = await Blog.findById(blogId)
+    const blog = await Blog.findById(blogId).select("-likes")
     if (!blog) {
         throw new BadRequestError("Blog not found")
     }
@@ -74,22 +71,44 @@ const getBlogById = async (req: Request, res: Response) => {
     })
 }
 
+const likeBlog = async (req: Request, res: Response) => {
+    const userId = getUserId(req)
+    const blogId = getBlogId(req)
+
+    const blog = await Blog.findById(blogId)
+    if (!blog) throw new BadRequestError("Blog not found")
+    const isLiked = blog.likes.includes(userId)
+    if (isLiked) {
+        blog.likes.remove(userId)
+        blog.likesCount = blog.likesCount - 1
+    } else {
+        blog.likes.push(userId)
+        blog.likesCount = blog.likesCount + 1
+    }
+    await blog.save()
+    res.status(StatusCodes.OK).json({
+        success: true,
+        msg: isLiked ? "Unliked Successfully" : "Liked Successfully",
+    })
+}
+
 const commentBlog = async (req: Request, res: Response) => {
     const userId = getUserId(req)
     const blogId = getBlogId(req)
 
     const { message } = req.body
-    if (!message) {
-        throw new BadRequestError("Message is required")
-    }
+    if (!message) throw new BadRequestError("Message is required")
+
     const comment = await Comment.create({
         message,
         author: userId,
     })
     const updatedBlog = await Blog.findByIdAndUpdate(blogId, {
         $push: { comments: comment },
+        $inc: { commentsCount: 1 },
     })
     if (!updatedBlog) {
+        await comment.deleteOne()
         throw new BadRequestError("Error commenting on blog")
     }
     res.status(StatusCodes.OK).json({
@@ -104,9 +123,8 @@ const commentOnComment = async (req: Request, res: Response) => {
     const commentId = getCommentId(req)
     const { message } = req.body
 
-    if (!message) {
-        throw new BadRequestError("Message is required")
-    }
+    if (!message) throw new BadRequestError("Message is required")
+
     const comment = await Comment.create({
         message,
         author: userId,
@@ -132,9 +150,7 @@ const getUserBlogs = async (req: Request, res: Response) => {
         select: "title description img tags",
     })
 
-    if (!userBlogs) {
-        throw new UnauthenticatedError("User Not Found")
-    }
+    if (!userBlogs) throw new UnauthenticatedError("User Not Found")
     res.status(StatusCodes.OK).json({
         data: userBlogs.blogs,
         success: true,
@@ -285,6 +301,7 @@ export {
     getBlogById,
     getTrendingBlogs,
     getBlogByCategory,
+    likeBlog,
     commentBlog,
     commentOnComment,
     getUserBlogs,
