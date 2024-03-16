@@ -3,7 +3,6 @@ import { getBlogs } from "../api/index"
 import { Category, BlogShortType } from "../definitions"
 
 import BlogCard from "./BlogCard"
-import Loader from "./Loader"
 
 interface BlogsProps {
   category: Category
@@ -14,7 +13,6 @@ const Blogs = ({ category }: BlogsProps) => {
   // const [page, setPage] = useState<number>(1)
   const page = 1
   const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string>("")
 
   const limit = 10
 
@@ -30,7 +28,6 @@ const Blogs = ({ category }: BlogsProps) => {
         .catch((error) => {
           console.error(error.response)
           setBlogs([])
-          setError(error.response.data?.msg)
         })
         .finally(() => {
           setLoading(false)

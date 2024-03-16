@@ -23,9 +23,9 @@ const AllBlogs = () => {
       <div className="flex gap-3  xl:mx-auto xl:w-5/6 mx-3">
         <div className="w-3/4">
           <div className="sticky top-[4.7rem] bg-white">
-          <Categories category={category} setCategory={setCategory} />
+            <Categories category={category} setCategory={setCategory} />
           </div>
-            <Blogs category={category} />
+          <Blogs category={category} />
         </div>
         {trending && (
           <div className="w-[25%]  p-4 border rounded-lg mt-16 h-fit sticky top-20">

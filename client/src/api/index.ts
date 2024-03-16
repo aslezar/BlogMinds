@@ -1,11 +1,6 @@
 import axios from "axios"
 import toast from "react-hot-toast"
-import {
-  LoginType,
-  SignUpType,
-  BlogShortType,
-  UserType,
-} from "../definitions"
+import { LoginType, SignUpType, BlogShortType, UserType } from "../definitions"
 
 /*
  ********************** Configuring Axios **********************

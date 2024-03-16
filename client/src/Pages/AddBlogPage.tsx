@@ -8,6 +8,9 @@ const blog: BlogFullType = {
   img: "https://source.unsplash.com/random",
   content: "This is a content",
   tags: [],
+  likesCount: 0,
+  commentsCount: 0,
+  views: 0,
   createdAt: "2021-09-01",
   updatedAt: "2021-09-01",
   author: {

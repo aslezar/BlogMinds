@@ -32,8 +32,6 @@ export interface BlogShortType {
 
 export interface BlogFullType extends BlogShortType {
   content: string
-  createdAt: string
-  updatedAt: string
 }
 
 interface User {

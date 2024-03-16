@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React from "react"
 import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../hooks"
 import { verification } from "../features/userSlice"
@@ -46,17 +46,22 @@ export default function SignUp(): JSX.Element {
               className="text-gray-500 text-sm"
             >
               <span className="mr-1">&#8592;</span>
-               Back
+              Back
             </button>
           </div>
 
-        <img src={img} alt="" className="h-40 aspect-square mx-auto" />
-        <div className="my-5">
-          <h1 className="text-3xl font-bold text-gray-700 mb-2">OTP Verification</h1>
-          <p className="text-highlight italic">An OTP has been sent to your email address, please check your email.</p>
-        </div>
+          <img src={img} alt="" className="h-40 aspect-square mx-auto" />
+          <div className="my-5">
+            <h1 className="text-3xl font-bold text-gray-700 mb-2">
+              OTP Verification
+            </h1>
+            <p className="text-highlight italic">
+              An OTP has been sent to your email address, please check your
+              email.
+            </p>
+          </div>
           <MuiOtpInput
-          TextFieldsProps={{ color:"secondary" }}
+            TextFieldsProps={{ color: "secondary" }}
             value={otp}
             onChange={handleChange}
             length={6}

@@ -42,7 +42,9 @@ const getBlogByCategory = async (req: Request, res: Response) => {
         .sort({ createdAt: -1 })
         .skip(req.pagination.skip)
         .limit(req.pagination.limit)
-        .select("title description img author tags views likesCount commentsCount createdAt updatedAt")
+        .select(
+            "title description img author tags views likesCount commentsCount createdAt updatedAt",
+        )
         .populate({
             path: "author",
             select: "name profileImage",

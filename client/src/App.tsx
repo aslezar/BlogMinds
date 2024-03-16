@@ -4,7 +4,7 @@ import {
   RouterProvider,
   ScrollRestoration,
   createBrowserRouter,
-  useLocation
+  useLocation,
 } from "react-router-dom"
 
 //Components
@@ -31,9 +31,9 @@ import { loadUser } from "./features/userSlice"
 import AllBlogs from "./Pages/AllBlogs"
 
 const Layout = () => {
-  const location = useLocation();
-  const hideNavbarRoutes = ["/signin", "/signup", "/verify", ];
-  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
+  const location = useLocation()
+  const hideNavbarRoutes = ["/signin", "/signup", "/verify"]
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname)
 
   return (
     <div>
@@ -44,8 +44,8 @@ const Layout = () => {
       </div>
       {/* <Footer /> */}
     </div>
-  );
-};
+  )
+}
 const router = createBrowserRouter([
   {
     path: "/",
