@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getBlogs } from "../api/index"
 import { Category, BlogShortType } from "../definitions"
 
@@ -10,33 +10,54 @@ interface BlogsProps {
 
 const Blogs = ({ category }: BlogsProps) => {
   const [blogs, setBlogs] = useState<BlogShortType[]>([])
-  // const [page, setPage] = useState<number>(1)
-  const page = 1
   const [loading, setLoading] = useState<boolean>(true)
-
+  const [page, setPage] = useState<number>(1)
   const limit = 10
+  const containerRef = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    const fetchBlog = () => {
-      setLoading(true)
-      getBlogs(category.toString(), page, limit)
-        .then((response) => {
-          const { data } = response
-          // console.log(data)
-          setBlogs(data)
-        })
-        .catch((error) => {
-          console.error(error.response)
-          setBlogs([])
-        })
-        .finally(() => {
-          setLoading(false)
-        })
+  const fetchBlogs = async () => {
+    setLoading(true)
+    try {
+      const response = await getBlogs(category.toString(), page, limit)
+      const newBlogs = response.data
+      setBlogs((prevBlogs) => [...prevBlogs, ...newBlogs])
+      setPage((prevPage) => prevPage + 1)
+    } catch (error: any) {
+      console.error(error.response)
+      // Handle error
+    } finally {
+      setLoading(false)
     }
-    fetchBlog()
-  }, [category, page, limit])
+  }
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const handleScroll = () => {
+      if (
+        containerRef.current &&
+        containerRef.current.scrollHeight - containerRef.current.scrollTop ===
+          containerRef.current.clientHeight
+      ) {
+        fetchBlogs()
+      }
+    }
+
+    containerRef.current.addEventListener("scroll", handleScroll)
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.removeEventListener("scroll", handleScroll)
+      }
+    }
+  }, [fetchBlogs])
+  useEffect(() => {
+    fetchBlogs()
+    setBlogs([])
+    setPage(1)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category])
+
   return (
-    <>
+    <div ref={containerRef} style={{ overflowY: "auto", height: "80vh" }} className="contain">
       {blogs.map((blog, index) => (
         <BlogCard key={index} blog={blog} />
       ))}
@@ -67,7 +88,17 @@ const Blogs = ({ category }: BlogsProps) => {
           <span className="sr-only">Loading...</span>
         </div>
       )}
-    </>
+      <style>
+        {`
+        .contain {
+          -ms-overflow-style: none;  /* Internet Explorer 10+ */
+          scrollbar-width: none;  /* Firefox */
+        }
+        .contain::-webkit-scrollbar { 
+          display: none;  /* Safari and Chrome */
+        }`}
+      </style>
+    </div>
   )
 }
 
