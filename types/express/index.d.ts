@@ -13,6 +13,7 @@ declare global {
             pagination: {
                 skip: number
                 limit: number
+                page: number
             }
         }
     }

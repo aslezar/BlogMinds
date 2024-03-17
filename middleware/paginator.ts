@@ -7,7 +7,7 @@ function paginate(req: Request, res: Response, next: NextFunction) {
     limit = Math.max(limit, 1)
     const skip = (page - 1) * limit
 
-    req.pagination = { skip, limit }
+    req.pagination = { skip, limit, page }
 
     next()
 }

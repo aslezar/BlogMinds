@@ -28,16 +28,16 @@ const getUserId = (req: Request) => {
 //UTILITY FUNCTIONS END
 
 const getBlogByCategory = async (req: Request, res: Response) => {
-    const category = req.params.category
+    const tags = req.params.tags
     // tag is array of category field, and category is a string
 
     let query = {}
-    if (category !== "all") query = { tags: { $in: [category] } }
+    if (tags !== "all") query = { tags: { $in: [tags] } }
 
     const blogs = await Blog.find(query)
-        .sort({ createdAt: -1 })
         .skip(req.pagination.skip)
         .limit(req.pagination.limit)
+        .sort({ createdAt: -1 })
         .select(
             "title description img author tags views likesCount commentsCount createdAt updatedAt",
         )
@@ -50,6 +50,8 @@ const getBlogByCategory = async (req: Request, res: Response) => {
 
     res.status(StatusCodes.OK).json({
         data: blogs,
+        page: req.pagination.page,
+        limit: req.pagination.limit,
         success: true,
         msg: "Data Fetched Successfully",
     })
@@ -118,14 +120,23 @@ const commentBlog = async (req: Request, res: Response) => {
 const getUserBlogs = async (req: Request, res: Response) => {
     //populate title description content img author
     const userId = getUserId(req)
-    const userBlogs = await User.findById(userId).select("blogs").populate({
-        path: "blogs",
-        select: "title description img tags",
-    })
+    const userBlogs = await User.findById(userId)
+        .select("blogs")
+        .slice("blogs", [
+            req.pagination.skip,
+            req.pagination.skip + req.pagination.limit,
+        ])
+        .sort({ createdAt: -1 })
+        .populate({
+            path: "blogs",
+            select: "title description img tags",
+        })
 
     if (!userBlogs) throw new UnauthenticatedError("User Not Found")
     res.status(StatusCodes.OK).json({
         data: userBlogs.blogs,
+        page: req.pagination.page,
+        limit: req.pagination.limit,
         success: true,
         msg: "Data Fetched Successfully",
     })
