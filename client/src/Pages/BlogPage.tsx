@@ -49,7 +49,7 @@ const BlogPage = () => {
   }
 
   if (isLoading === true) return <Loader />
-  if (isError === true) return <div>Error</div>
+  if (isError === true || !blog) return <div>Error</div>
 
   return (
     <div className="mx-auto pt-20 pb-5 lg:pt-0 min-h-[75vh] bg-white flex flex-col justify-between">
@@ -108,7 +108,7 @@ const BlogPage = () => {
           >
             Unlike
           </button>
-          <span className="ml-2">{likeCount} Likes</span>
+          <span className="ml-2">{blog.likesCount} Likes</span>
         </div>
         <div className="mt-8">
           <h3 className="text-xl font-semibold mb-4">Comments</h3>

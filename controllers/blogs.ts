@@ -1,4 +1,4 @@
-import mongoose, { Types, Schema } from "mongoose"
+import mongoose from "mongoose"
 import User from "../models/user"
 import Blog from "../models/blog"
 import Comment from "../models/comment"
@@ -21,10 +21,6 @@ const getId = (id: string) => {
 const getBlogId = (req: Request) => {
     return getId(req.params.blogId)
 }
-const getCommentId = (req: Request) => {
-    return getId(req.params.commentId)
-}
-
 const getUserId = (req: Request) => {
     return req.user.userId
 }
@@ -112,31 +108,6 @@ const commentBlog = async (req: Request, res: Response) => {
     if (!updatedBlog) {
         await comment.deleteOne()
         throw new BadRequestError("Error commenting on blog")
-    }
-    res.status(StatusCodes.OK).json({
-        success: true,
-        msg: "Commented Successfully",
-    })
-}
-
-const commentOnComment = async (req: Request, res: Response) => {
-    const userId = getUserId(req)
-    // const commentId: Types.ObjectId = await checkId(req.body.commentId);
-    const commentId = getCommentId(req)
-    const { message } = req.body
-
-    if (!message) throw new BadRequestError("Message is required")
-
-    const comment = await Comment.create({
-        message,
-        author: userId,
-    })
-    const updatedcomment = await Comment.findByIdAndUpdate(commentId, {
-        $push: { comments: comment },
-    })
-    if (!updatedcomment) {
-        await comment.deleteOne()
-        throw new BadRequestError("Error commenting on comment")
     }
     res.status(StatusCodes.OK).json({
         success: true,
@@ -252,11 +223,12 @@ const getTrendingBlogs = async (req: Request, res: Response) => {
             msg: "Data Fetched Successfully",
         })
     } else {
-        const oneYearAgo = new Date()
-        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+        //use one week ago date
+        const oneWeekAgo = new Date()
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
 
         const trendingBlogs = await Blog.aggregate([
-            { $match: { createdAt: { $gte: oneYearAgo } } },
+            { $match: { createdAt: { $gte: oneWeekAgo } } },
             {
                 $lookup: {
                     from: "users",
@@ -305,7 +277,6 @@ export {
     getBlogByCategory,
     likeBlog,
     commentBlog,
-    commentOnComment,
     getUserBlogs,
     createBlog,
     deleteBlog,
