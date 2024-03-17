@@ -53,6 +53,7 @@ const ProtectedRoute = () => {
   if (!isAuthenticated) return <Navigate to="/signin" />
   return <Outlet />
 }
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -66,10 +67,6 @@ const router = createBrowserRouter([
         path: "/",
         element: <ProtectedRoute />,
         children: [
-          {
-            path: "verify",
-            element: <VerifyOTP />,
-          },
           {
             path: "forgotpassword",
             element: <ForgotPassword />,
@@ -100,6 +97,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUp />,
+      },
+      {
+        path: "verify",
+        element: <VerifyOTP />,
       },
       {
         path: "feed",

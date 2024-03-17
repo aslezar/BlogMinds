@@ -39,14 +39,10 @@ export default function SignUp() {
   }
 
   React.useEffect(() => {
-    if (!loading) {
-      if (verificationRequired) {
-        navigate("/verify")
-      } else if (isAuthenticated) {
-        navigate("/")
-      }
+    if (!loading && verificationRequired) {
+      navigate("/verify")
     }
-  }, [loading, verificationRequired, isAuthenticated])
+  }, [loading, verificationRequired])
 
   return (
     <div className="flex h-screen">

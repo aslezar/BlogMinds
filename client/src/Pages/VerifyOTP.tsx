@@ -4,12 +4,13 @@ import { useAppDispatch, useAppSelector } from "../hooks"
 import { verification } from "../features/userSlice"
 import { MuiOtpInput } from "mui-one-time-password-input"
 import img from "../assets/img/Auth/otp.png"
+import Loader from "../components/Loader"
 
 export default function SignUp(): JSX.Element {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const { verificationRequired, loading, isAuthenticated } = useAppSelector(
+  const { verificationRequired, loading } = useAppSelector(
     (state) => state.user,
   )
 
@@ -20,12 +21,10 @@ export default function SignUp(): JSX.Element {
   }
 
   React.useEffect(() => {
-    if (!loading) {
-      if (verificationRequired === false || isAuthenticated) {
-        navigate("/")
-      }
+    if (!loading && verificationRequired === false) {
+      navigate("/")
     }
-  }, [loading, verificationRequired, isAuthenticated])
+  }, [loading, verificationRequired])
 
   React.useEffect(() => {
     if (otp.length === 6) {
@@ -34,12 +33,12 @@ export default function SignUp(): JSX.Element {
     }
   }, [otp])
 
+  if (loading || !verificationRequired) return <Loader />
+
   return (
     <div className="flex h-screen">
       <div className=" w-screen  top-0 z-50 bg-white flex flex-col justify-center  items-center h-4/5 ">
         <div className="w-4/5 md:w-2/5">
-          {/* Back button */}
-
           <div className="mb-5">
             <button
               onClick={() => navigate("/")}
