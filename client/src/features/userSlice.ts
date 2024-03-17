@@ -22,7 +22,7 @@ interface CounterState {
 }
 
 const initialState: CounterState = {
-  loading: false,
+  loading: true,
   isAuthenticated: false,
   user: null,
   verificationRequired: false,
@@ -34,7 +34,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     SET_USER: (state, action) => {
-      console.log(action.payload)
+      // console.log(action.payload)
       state.isAuthenticated = true
       state.verificationRequired = false
       state.verificationUserID = ""
@@ -182,7 +182,7 @@ export const loadUser = () => async (dispatch: Dispatch) => {
       .finally(() => {
         dispatch(userSlice.actions.SET_LOADING_FALSE())
       })
-  }
+  } else dispatch(userSlice.actions.SET_LOADING_FALSE())
 }
 
 export const updateName =

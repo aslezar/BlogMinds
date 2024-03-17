@@ -27,9 +27,10 @@ import Blog from "./Pages/BlogPage"
 import About from "./Pages/AboutPage"
 import ContactUs from "./Pages/ContactUsPage"
 import ErrorPage from "./Pages/ErrorPage"
-import { useAppDispatch } from "./hooks"
+import { useAppDispatch, useAppSelector } from "./hooks"
 import { loadUser } from "./features/userSlice"
 import AllBlogs from "./Pages/AllBlogs"
+import Loader from "./components/Loader"
 
 const Layout = () => {
   const location = useLocation()
@@ -46,8 +47,11 @@ const Layout = () => {
   )
 }
 const ProtectedRoute = () => {
-  const token = localStorage.getItem("token")
-  return token ? <Outlet /> : <Navigate to="/signin" />
+  const { loading, isAuthenticated } = useAppSelector((state) => state.user)
+
+  if (loading) return <Loader />
+  if (!isAuthenticated) return <Navigate to="/signin" />
+  return <Outlet />
 }
 const router = createBrowserRouter([
   {
