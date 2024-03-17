@@ -5,6 +5,7 @@ import {
   ScrollRestoration,
   createBrowserRouter,
   useLocation,
+  Navigate,
 } from "react-router-dom"
 
 //Components
@@ -34,7 +35,6 @@ const Layout = () => {
   const location = useLocation()
   const hideNavbarRoutes = ["/signin", "/signup", "/verify"]
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname)
-
   return (
     <div>
       {!shouldHideNavbar && <Navbar />}
@@ -42,9 +42,12 @@ const Layout = () => {
       <div className={`min-h-screen ${!shouldHideNavbar && "py-20"}`}>
         <Outlet />
       </div>
-      {/* <Footer /> */}
     </div>
   )
+}
+const ProtectedRoute = () => {
+  const token = localStorage.getItem("token")
+  return token ? <Outlet /> : <Navigate to="/signin" />
 }
 const router = createBrowserRouter([
   {
@@ -56,45 +59,49 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "feed",
-        element: <AllBlogs />,
+        path: "/",
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "verify",
+            element: <VerifyOTP />,
+          },
+          {
+            path: "forgotpassword",
+            element: <ForgotPassword />,
+          },
+          {
+            path: "dashboard",
+            element: <DashBoard />,
+          },
+          {
+            path: "profile",
+            element: <Profile />,
+          },
+          {
+            path: "myblogs",
+            element: <MyBlogs />,
+          },
+          {
+            path: "write",
+            element: <AddBlog />,
+          },
+          {
+            path: "editBlog/:id",
+            element: <EditBlog />,
+          },
+        ],
       },
-      {
-        path: "signin",
-        element: <SignIn />,
-      },
+      { path: "signin", element: <SignIn /> },
       {
         path: "signup",
         element: <SignUp />,
       },
       {
-        path: "verify",
-        element: <VerifyOTP />,
+        path: "feed",
+        element: <AllBlogs />,
       },
-      {
-        path: "forgotpassword",
-        element: <ForgotPassword />,
-      },
-      {
-        path: "dashboard",
-        element: <DashBoard />,
-      },
-      {
-        path: "profile",
-        element: <Profile />,
-      },
-      {
-        path: "myblogs",
-        element: <MyBlogs />,
-      },
-      {
-        path: "write",
-        element: <AddBlog />,
-      },
-      {
-        path: "editBlog/:id",
-        element: <EditBlog />,
-      },
+
       {
         path: "blog/:id",
         element: <Blog />,
@@ -120,7 +127,6 @@ function App() {
   useEffect(() => {
     dispatch(loadUser())
   }, [])
-
   return <RouterProvider router={router} />
 }
 
