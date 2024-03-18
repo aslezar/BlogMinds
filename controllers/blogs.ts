@@ -49,9 +49,7 @@ const getBlogByCategory = async (req: Request, res: Response) => {
     if (blogs.length === 0) throw new BadRequestError("No more blogs found")
 
     res.status(StatusCodes.OK).json({
-        data: blogs,
-        page: req.pagination.page,
-        limit: req.pagination.limit,
+        data: { blogs, page: req.pagination.page, limit: req.pagination.limit },
         success: true,
         msg: "Data Fetched Successfully",
     })
@@ -60,12 +58,18 @@ const getBlogByCategory = async (req: Request, res: Response) => {
 const getBlogById = async (req: Request, res: Response) => {
     const blogId = getBlogId(req)
 
-    const blog = await Blog.findById(blogId).select("-likes")
-    if (!blog) {
-        throw new BadRequestError("Blog not found")
+    const blog = await Blog.findById(blogId).lean()
+    if (!blog) throw new BadRequestError("Blog not found")
+    let isLiked = false
+    let isOwner = false
+    if (req.query.userId) {
+        const userId = req.query.userId
+
+        isLiked = blog.likes.some((id) => id.toString() === userId)
+        isOwner = blog.author.toString() === userId
     }
     res.status(StatusCodes.OK).json({
-        data: blog,
+        data: { blog: { ...blog, likes: undefined }, isLiked, isOwner },
         success: true,
         msg: "Blog Fetched Successfully",
     })
@@ -75,7 +79,7 @@ const likeBlog = async (req: Request, res: Response) => {
     const userId = getUserId(req)
     const blogId = getBlogId(req)
 
-    const blog = await Blog.findById(blogId)
+    const blog = await Blog.findById(blogId).select("title likes likesCount")
     if (!blog) throw new BadRequestError("Blog not found")
     const isLiked = blog.likes.includes(userId)
     if (isLiked) {
@@ -88,7 +92,7 @@ const likeBlog = async (req: Request, res: Response) => {
     await blog.save()
     res.status(StatusCodes.OK).json({
         success: true,
-        msg: isLiked ? "Unliked Successfully" : "Liked Successfully",
+        msg: isLiked ? `${blog.title} Unliked` : `${blog.title} Liked`,
     })
 }
 
@@ -134,9 +138,11 @@ const getUserBlogs = async (req: Request, res: Response) => {
 
     if (!userBlogs) throw new UnauthenticatedError("User Not Found")
     res.status(StatusCodes.OK).json({
-        data: userBlogs.blogs,
-        page: req.pagination.page,
-        limit: req.pagination.limit,
+        data: {
+            blogs: userBlogs.blogs,
+            page: req.pagination.page,
+            limit: req.pagination.limit,
+        },
         success: true,
         msg: "Data Fetched Successfully",
     })
@@ -161,7 +167,6 @@ const createBlog = async (req: Request, res: Response) => {
         $push: { blogs: blog._id },
     })
     res.status(StatusCodes.CREATED).json({
-        data: blog,
         success: true,
         msg: "Blog Created Successfully",
     })
@@ -219,7 +224,6 @@ const updateBlog = async (req: Request, res: Response) => {
         )
 
     res.status(StatusCodes.OK).json({
-        data: blog,
         success: true,
         msg: "Successfully updated blog.",
     })
@@ -276,7 +280,7 @@ const getTrendingBlogs = async (req: Request, res: Response) => {
 
         trendingCache.set("trendingPosts", trendingBlogs)
         res.status(StatusCodes.OK).json({
-            data: trendingBlogs,
+            data: { blogs: trendingBlogs },
             success: true,
             msg: "Data Fetched Successfully",
         })

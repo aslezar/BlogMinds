@@ -1,51 +1,64 @@
 import React, { useEffect } from "react"
-import { getBlog } from "../api/index.ts"
+import { getBlog, likeBlog } from "../api/index.ts"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
 import { Link, useParams } from "react-router-dom"
 import { BlogFullType } from "../definitions"
+import { useAppSelector } from "../hooks.tsx"
 
 const BlogPage = () => {
   const [isError, setError] = React.useState<boolean>(false)
   const [isLoading, setLoading] = React.useState<boolean>(true)
   const [blog, setBlog] = React.useState<BlogFullType | null>(null)
-  const [likeCount, setLikeCount] = React.useState<number>(0)
   const [isLiked, setIsLiked] = React.useState<boolean>(false)
-  const [comments, setComments] = React.useState<
-    { author: string; text: string }[]
-  >([])
+  const [likeLoading, setLikeLoading] = React.useState<boolean>(false)
+
   const { id } = useParams<{ id: string }>()
+  const { loading, isAuthenticated, user } = useAppSelector(
+    (state) => state.user,
+  )
 
   useEffect(() => {
-    const fetchBlog = async () => {
+    const fetchBlog = async (userId: BlogFullType["_id"] | null) => {
       if (!id) {
         setError(true)
         return toast.error("No such blog")
       }
       try {
-        setLoading(true)
-        const { data } = await getBlog(id)
-        console.log(data)
-        setBlog(data)
-        setComments(data.comments)
-        setLikeCount(data.likes)
+        const { data } = await getBlog(id, userId)
+        const { blog, isLiked: liked } = data
+
+        setBlog(blog)
+        setIsLiked(liked)
       } catch (error) {
         setError(true)
       }
       setLoading(false)
     }
 
-    fetchBlog()
-  }, [])
+    const userId = user && user.userId
+    if (!loading) fetchBlog(userId)
+  }, [loading, isAuthenticated, user])
 
-  const handleLike = () => {
-    setIsLiked(true)
-    setLikeCount(likeCount + 1)
-  }
-
-  const handleUnlike = () => {
-    setIsLiked(false)
-    setLikeCount(likeCount - 1)
+  const handleLikeButton = () => {
+    if (!isAuthenticated)
+      return toast.error("Please login to like the blog", {
+        id: "Please login to like the blog",
+      })
+    if (!id) return toast.error("No such blog")
+    setLikeLoading(true)
+    likeBlog(id)
+      .then(() => {
+        setIsLiked((prev) => !prev)
+        setBlog((prev) => {
+          return prev
+            ? { ...prev, likesCount: prev.likesCount + (isLiked ? -1 : 1) }
+            : prev
+        })
+      })
+      .finally(() => {
+        setLikeLoading(false)
+      })
   }
 
   if (isLoading === true) return <Loader />
@@ -77,6 +90,8 @@ const BlogPage = () => {
           <img
             src={blog?.img}
             alt="img"
+            width={500}
+            height={300}
             className=" object-cover w-full max-h-96"
           />
         </figure>
@@ -93,33 +108,29 @@ const BlogPage = () => {
         </div>
         <div className="flex items-center mt-4">
           <button
-            className={`mr-2 px-4 py-2 rounded-md bg-teal-500 text-white focus:outline-none ${
-              isLiked && "bg-teal-700"
-            }`}
-            onClick={handleLike}
-            disabled={isLiked}
+            className={`mr-2 px-4 py-2 rounded-md ${isLiked ? "bg-red-500" : "bg-teal-500"} text-white focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed`}
+            onClick={handleLikeButton}
+            disabled={likeLoading}
           >
-            Like
-          </button>
-          <button
-            className="px-4 py-2 rounded-md bg-red-500 text-white focus:outline-none"
-            onClick={handleUnlike}
-            disabled={!isLiked}
-          >
-            Unlike
+            {likeLoading ? <Loader /> : isLiked === true ? "Liked" : "Like"}
           </button>
           <span className="ml-2">{blog.likesCount} Likes</span>
         </div>
         <div className="mt-8">
           <h3 className="text-xl font-semibold mb-4">Comments</h3>
-          {comments && comments.length === 0 ? (
+          {blog.comments && blog.comments.length === 0 ? (
             <p>No comments yet.</p>
           ) : (
             <ul>
-              {comments.map((comment, index) => (
+              {blog.comments.map((comment, index) => (
                 <li key={index} className="mb-4">
-                  <p className="font-semibold">{comment.author}</p>
-                  <p>{comment.text}</p>
+                  <img
+                    className="object-cover w-full mx-auto lg:mx-0 lg:w-52 aspect-video rounded-xl mb-2"
+                    src={comment.author.profileImage}
+                    alt={"img"}
+                  />
+                  <p className="font-semibold">{comment.author.name}</p>
+                  <p>{comment.message}</p>
                 </li>
               ))}
             </ul>

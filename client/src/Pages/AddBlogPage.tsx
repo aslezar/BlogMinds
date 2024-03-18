@@ -10,6 +10,7 @@ const blog: BlogFullType = {
   tags: [],
   likesCount: 0,
   commentsCount: 0,
+  comments: [],
   views: 0,
   createdAt: "2021-09-01",
   updatedAt: "2021-09-01",
