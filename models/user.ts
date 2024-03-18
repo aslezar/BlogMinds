@@ -80,6 +80,8 @@ const UserSchema = new Schema<IUser>(
     { timestamps: true },
 )
 
+UserSchema.index({ name: 1 })
+
 const preSave = async function (this: any, next: (err?: Error) => void) {
     if (!this.isModified("password")) {
         return next()
