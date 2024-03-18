@@ -26,13 +26,16 @@ const search = async (req: Request, res: Response) => {
                 msg: "Users Fetched Successfully",
             })
         case "blog":
-            const { tags } = req.query
-
+            
             const queryObject: any = {
                 title: { $regex: query, $options: "i" },
             }
-
-            if (tags) queryObject.tags = { $in: [tags] }
+            
+            const { tags } = req.query
+            if (tags) {
+                if (typeof tags === "string") queryObject.tags = { $in: [tags] }
+                else queryObject.tags = { $in: tags }
+            }
 
             const blogs = await Blogs.find(queryObject)
                 .select(
