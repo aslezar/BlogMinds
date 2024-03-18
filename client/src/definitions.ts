@@ -16,6 +16,13 @@ interface Author {
   profileImage?: string
 }
 
+export interface CommentType {
+  _id: string
+  message: string
+  author: Author
+  createdAt: string
+}
+
 export interface BlogShortType {
   _id: string
   title: string
@@ -32,6 +39,7 @@ export interface BlogShortType {
 
 export interface BlogFullType extends BlogShortType {
   content: string
+  comments: CommentType[]
 }
 
 interface User {
@@ -42,7 +50,7 @@ interface User {
 }
 
 export interface UserType extends User {
-  _id: string
+  userId: string
   createdAt: string
   updatedAt: string
   blogs?: BlogFullType[]
