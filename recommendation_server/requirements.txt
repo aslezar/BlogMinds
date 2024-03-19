@@ -1,0 +1,5 @@
+surprise
+flask
+pymongo
+pandas
+dotenv
