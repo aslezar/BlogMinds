@@ -56,6 +56,10 @@ const ProtectedRoute = () => {
 
 const router = createBrowserRouter([
   {
+    path: "embed/blog/:id",
+    element: <Blog isEmbed={true}/>,
+  },
+  {
     path: "/",
     element: <Layout />,
     children: [
