@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react"
 import { Modal, Tab, Tabs } from "@mui/material"
 import SearchSvg from "./SearchSvg"
 import axios from "axios"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const categories: string[] = ["blog", "user"]
 
@@ -11,7 +11,10 @@ const SearchBar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState<{}[]>([])
-  const [inputValue, setInputValue] = useState("")
+  const [inputValue, setInputValue] = useState<string>("")
+  const navigate = useNavigate()
+  // navigate type
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +32,11 @@ const SearchBar = () => {
           },
         )
         console.log(response.data.data)
-        setData(response.data.data)
+        if(response.data.data.blogs){
+          setData(response.data.data.blogs)}
+        else{
+          setData(response.data.data.users)
+        }
       } catch (error: any) {
         console.error(error.response)
         // Handle error
@@ -93,9 +100,9 @@ const SearchBar = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 if (category === "blog") {
-                  window.location.href = `/blog/`
+                  navigate('/blog')
                 } else {
-                  window.location.href = `/user/`
+                  navigate('/user')
                 }
               }
             }}
@@ -147,7 +154,7 @@ const SearchBar = () => {
               <div>
                 {category === "blog" && (
                   <div>
-                    {data.map((item: any, index: number) => (
+                    {data?.map((item: any, index: number) => (
                       <Link
                         to={`/blog/${item._id}`}
                         onClick={handleModalClose}
@@ -155,12 +162,12 @@ const SearchBar = () => {
                         className="flex gap-4 items-center border-b border-gray-200 py-4 group"
                       >
                         <img
-                          src={item.img}
+                          src={item?.img}
                           className="aspect-video object-cover h-20 bg-gray-300 rounded-md"
                         />
                         <div className="flex flex-col gap-1">
                           <h3 className="text-lg font-semibold text-dark  group-hover:underline">
-                            {item.title}
+                            {item?.title}
                           </h3>
                           <p className="text-gray-600 text-sm">
                             {item.description}
@@ -170,11 +177,11 @@ const SearchBar = () => {
                           </p>
                           <div className="flex items-center gap-2">
                             <img
-                              src={item.author}
+                              src={item.author?.profileImage}
                               className="w-6 h-6 rounded-full"
                             />
                             <p className="text-gray-600 text-sm">
-                              {item.author}
+                              {item.author?.name}
                             </p>
                           </div>
                         </div>
@@ -185,7 +192,7 @@ const SearchBar = () => {
 
                 {category === "user" && (
                   <div>
-                    {data.map((item: any, index: number) => (
+                    {data?.map((item: any, index: number) => (
                       <Link
                         to={`/user/${item._id}`}
                         onClick={handleModalClose}
@@ -230,7 +237,7 @@ const SearchBar = () => {
                 </div>
               </div>
             )}
-            {inputValue.length >= 3 && !isLoading && data.length === 0 && (
+            {inputValue.length >= 3 && !isLoading && data.length==0 && (
               <p className="text-gray-500 text-base mt-4">
                 No {category}s found for "{inputValue}"
               </p>
