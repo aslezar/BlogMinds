@@ -19,9 +19,11 @@ const search = async (req: Request, res: Response) => {
                 .sort({ createdAt: -1 })
 
             return res.status(StatusCodes.OK).json({
-                data: users,
-                page: req.pagination.page,
-                limit: req.pagination.limit,
+                data: {
+                    users,
+                    page: req.pagination.page,
+                    limit: req.pagination.limit,
+                },
                 success: true,
                 msg: "Users Fetched Successfully",
             })
@@ -44,9 +46,11 @@ const search = async (req: Request, res: Response) => {
                 .limit(req.pagination.limit)
                 .sort({ createdAt: -1 })
             return res.status(StatusCodes.OK).json({
-                data: blogs,
-                page: req.pagination.page,
-                limit: req.pagination.limit,
+                data: {
+                    blogs,
+                    page: req.pagination.page,
+                    limit: req.pagination.limit,
+                },
                 success: true,
                 msg: "Blogs Fetched Successfully",
             })
