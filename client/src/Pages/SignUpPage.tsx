@@ -42,9 +42,8 @@ export default function SignUp() {
   React.useEffect(() => {
     if (!loading && verificationRequired) {
       navigate("/verify")
-    }
-    else if (!loading && isAuthenticated) {
-      navigate(-1)// although this is not the best way to redirect, it is used here for simplicity
+    } else if (!loading && isAuthenticated) {
+      navigate(-1) // although this is not the best way to redirect, it is used here for simplicity
     }
   }, [loading, verificationRequired])
 

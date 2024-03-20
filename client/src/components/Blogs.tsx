@@ -57,7 +57,11 @@ const Blogs = ({ category }: BlogsProps) => {
   }, [category])
 
   return (
-    <div ref={containerRef} style={{ overflowY: "auto", height: "80vh" }} className="contain">
+    <div
+      ref={containerRef}
+      style={{ overflowY: "auto", height: "80vh" }}
+      className="contain"
+    >
       {blogs.map((blog, index) => (
         <BlogCard key={index} blog={blog} />
       ))}

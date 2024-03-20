@@ -4,7 +4,6 @@ import { StatusCodes } from "http-status-codes"
 import { BadRequestError } from "../errors"
 import mongoose from "mongoose"
 
-
 const getId = (id: string) => {
     try {
         return new mongoose.Types.ObjectId(id)
@@ -15,7 +14,7 @@ const getId = (id: string) => {
 
 const getUserProfile = async (req: Request, res: Response) => {
     const { userId } = req.params
-    
+
     const matchedUsers = await User.aggregate([
         { $match: { _id: getId(userId) } },
         {
@@ -33,7 +32,7 @@ const getUserProfile = async (req: Request, res: Response) => {
     if (matchedUsers.length == 0) {
         throw new BadRequestError("User not found")
     }
-    const user=matchedUsers[0]
+    const user = matchedUsers[0]
     return res.status(StatusCodes.OK).json({ ...user })
 }
 
