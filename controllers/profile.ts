@@ -1,6 +1,5 @@
 import User from "../models/user"
 import { Request, Response } from "express"
-import { IUser } from "../types/models"
 import { StatusCodes } from "http-status-codes"
 import { BadRequestError } from "../errors"
 import mongoose from "mongoose"
