@@ -1,12 +1,44 @@
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { Modal, Tab, Tabs } from "@mui/material"
+import SearchSvg from "./SearchSvg"
+import axios from "axios"
+import { Link } from "react-router-dom"
 
-const categories: string[] = ["Blogs", "People"]
+const categories: string[] = ["blog", "user"]
 
 const SearchBar = () => {
-  const [category, setCategory] = useState<string>("Blogs") // Set the default category
+  const [category, setCategory] = useState<string>("blog")
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState<{}[]>([])
   const [inputValue, setInputValue] = useState("")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true)
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/v1/search",
+          {
+            params: {
+              query: inputValue,
+              type: category,
+              page: 1,
+              limit: 3,
+            },
+          },
+        )
+        console.log(response.data.data)
+        setData(response.data.data)
+      } catch (error: any) {
+        console.error(error.response)
+        // Handle error
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    if (inputValue.length >= 3) fetchData()
+  }, [inputValue, category])
 
   const handleButtonClick = () => {
     setIsModalOpen(true)
@@ -17,7 +49,7 @@ const SearchBar = () => {
   }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value)
+    setInputValue(e.target.value.toLowerCase())
   }
 
   const handleTabChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
@@ -58,8 +90,17 @@ const SearchBar = () => {
             onChange={handleInputChange}
             className="w-full p-3 px-6 text-lg outline-none text-dark border border-dark rounded-full"
             placeholder="Start typing to search"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (category === "blog") {
+                  window.location.href = `/blog/`
+                } else {
+                  window.location.href = `/user/`
+                }
+              }
+            }}
           />
-          <div className="px-5">
+          <div className="px-5 overflow-y-scroll h-[90%]">
             {inputValue.length >= 1 && (
               <p className="absolute top-12 right-12 text-gray-600 text-sm flex items-center gap-2 italic">
                 <span>Press</span>
@@ -77,24 +118,11 @@ const SearchBar = () => {
             )}
             {inputValue.length === 0 && (
               <p className="flex items-center gap-1 justify-center py-2 text-gray-600 text-sm">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5 inline"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                  />
-                </svg>
+                <SearchSvg />
                 Search for topics, articles, peoples and more
               </p>
             )}
-            {inputValue.length >= 1 && (
+            {inputValue.length >= 3 && (
               <Tabs
                 value={categories.indexOf(category)}
                 onChange={handleTabChange}
@@ -107,7 +135,7 @@ const SearchBar = () => {
               >
                 {categories.map((category, index) => (
                   <Tab
-                    label={category}
+                    label={category + "s"}
                     key={index}
                     disableRipple
                     className="!text-[0.9rem] !capitalize"
@@ -115,7 +143,72 @@ const SearchBar = () => {
                 ))}
               </Tabs>
             )}
-            {inputValue.length >= 1 && (
+            {!isLoading && !!data && inputValue.length >= 3 && (
+              <div>
+                {category === "blog" && (
+                  <div>
+                    {data.map((item: any, index: number) => (
+                      <Link
+                        to={`/blog/${item._id}`}
+                        onClick={handleModalClose}
+                        key={index}
+                        className="flex gap-4 items-center border-b border-gray-200 py-4 group"
+                      >
+                        <img
+                          src={item.img}
+                          className="aspect-video object-cover h-20 bg-gray-300 rounded-md"
+                        />
+                        <div className="flex flex-col gap-1">
+                          <h3 className="text-lg font-semibold text-dark  group-hover:underline">
+                            {item.title}
+                          </h3>
+                          <p className="text-gray-600 text-sm">
+                            {item.description}
+                          </p>
+                          <p className="text-gray-600 text-xs">
+                            {new Date(item.createdAt).toDateString().slice(3)}
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={item.author}
+                              className="w-6 h-6 rounded-full"
+                            />
+                            <p className="text-gray-600 text-sm">
+                              {item.author}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+                {category === "user" && (
+                  <div>
+                    {data.map((item: any, index: number) => (
+                      <Link
+                        to={`/user/${item._id}`}
+                        onClick={handleModalClose}
+                        key={index}
+                        className="flex gap-4 items-center border-b border-gray-200 py-4 group"
+                      >
+                        <img
+                          src={item.profileImage}
+                          className="w-20 h-20 bg-gray-300 rounded-full"
+                        />
+                        <div className="flex flex-col gap-1">
+                          <h3 className="text-lg font-semibold text-dark  group-hover:underline">
+                            {item.name}
+                          </h3>
+                          <p className="text-gray-600 text-sm">{item.email}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            {isLoading && (
               <div className="flex flex-col gap-7 ">
                 <div role="status" className="max-w-sm animate-pulse ">
                   <div className="h-3 bg-gray-300 rounded-full  w-48 mb-4"></div>
@@ -136,6 +229,11 @@ const SearchBar = () => {
                   <span className="sr-only">Loading...</span>
                 </div>
               </div>
+            )}
+            {inputValue.length >= 3 && !isLoading && data.length === 0 && (
+              <p className="text-gray-500 text-base mt-4">
+                No {category}s found for "{inputValue}"
+              </p>
             )}
           </div>
         </div>
