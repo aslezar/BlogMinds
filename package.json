@@ -14,6 +14,10 @@
         "type": "git",
         "url": "git+https://github.com/aslezar/BlogMinds.git"
     },
+    "workspaces": [
+        "client",
+        "/"
+    ],
     "keywords": [
         "blog"
     ],
@@ -26,30 +30,30 @@
     "dependencies": {
         "@types/jsonwebtoken": "^9.0.6",
         "@types/multer": "^1.4.11",
-        "axios": "^1.6.7",
+        "axios": "^1.6.8",
         "bcryptjs": "^2.4.3",
         "cloudinary": "^2.0.3",
         "cors": "^2.8.5",
         "crypto": "^1.0.1",
-        "express": "^4.18.2",
+        "express": "^4.18.3",
         "express-async-errors": "^3.1.1",
-        "express-rate-limit": "^6.9.0",
-        "helmet": "^7.0.0",
-        "http-status-codes": "^2.2.0",
-        "jsonwebtoken": "^9.0.1",
-        "mongoose": "^8.2.0",
+        "express-rate-limit": "^6.11.2",
+        "helmet": "^7.1.0",
+        "http-status-codes": "^2.3.0",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.2.2",
         "morgan": "^1.10.0",
-        "multer": "^1.4.5-lts.1",
+        "multer": "1.4.5-lts.1",
         "nodemailer": "^6.9.12",
         "sharp": "^0.33.2",
-        "uuid": "^9.0.0"
+        "uuid": "^9.0.1"
     },
     "devDependencies": {
         "@types/bcryptjs": "^2.4.6",
         "@types/cors": "^2.8.17",
         "@types/express": "^4.17.21",
         "@types/morgan": "^1.9.9",
-        "@types/node": "^20.11.24",
+        "@types/node": "^20.11",
         "@types/nodemailer": "^6.4.14",
         "dotenv": "^16.4.5",
         "node-cache": "^5.1.2",
