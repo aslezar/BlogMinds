@@ -5,11 +5,20 @@ import { StatusCodes } from "http-status-codes"
 import { BadRequestError } from "../errors"
 import mongoose from "mongoose"
 
+
+const getId = (id: string) => {
+    try {
+        return new mongoose.Types.ObjectId(id)
+    } catch (e) {
+        throw new BadRequestError("Id is not a valid Object")
+    }
+}
+
 const getUserProfile = async (req: Request, res: Response) => {
     const { userId } = req.params
-    console.log(userId)
+    
     const matchedUsers = await User.aggregate([
-        { $match: { _id: new mongoose.Types.ObjectId(userId) } },
+        { $match: { _id: getId(userId) } },
         {
             $project: {
                 name: 1,
