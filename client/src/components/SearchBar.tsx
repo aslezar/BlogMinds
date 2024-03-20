@@ -12,9 +12,9 @@ const SearchBar = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState<{}[]>([])
   const [inputValue, setInputValue] = useState<string>("")
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
   const navigate = useNavigate()
   // navigate type
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,9 +32,9 @@ const SearchBar = () => {
           },
         )
         console.log(response.data.data)
-        if(response.data.data.blogs){
-          setData(response.data.data.blogs)}
-        else{
+        if (response.data.data.blogs) {
+          setData(response.data.data.blogs)
+        } else {
           setData(response.data.data.users)
         }
       } catch (error: any) {
@@ -44,7 +44,13 @@ const SearchBar = () => {
         setIsLoading(false)
       }
     }
-    if (inputValue.length >= 3) fetchData()
+    if (inputValue.length >= 3) {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+      const id = setTimeout(fetchData, 500)
+      setTimeoutId(id)
+    }
   }, [inputValue, category])
 
   const handleButtonClick = () => {
@@ -100,9 +106,9 @@ const SearchBar = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 if (category === "blog") {
-                  navigate('/blog')
+                  navigate("/blog")
                 } else {
-                  navigate('/user')
+                  navigate("/user")
                 }
               }
             }}
@@ -237,7 +243,7 @@ const SearchBar = () => {
                 </div>
               </div>
             )}
-            {inputValue.length >= 3 && !isLoading && data.length==0 && (
+            {inputValue.length >= 3 && !isLoading && data.length == 0 && (
               <p className="text-gray-500 text-base mt-4">
                 No {category}s found for "{inputValue}"
               </p>
