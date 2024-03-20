@@ -15,7 +15,7 @@ const AllBlogs = () => {
   useEffect(() => {
     setLoading(true)
     getTrendingBlog()
-      .then((res) => setTrending(res.data))
+      .then((res) => setTrending(res.data.blogs))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false))
   }, [])

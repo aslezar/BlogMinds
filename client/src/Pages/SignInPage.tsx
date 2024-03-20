@@ -29,7 +29,7 @@ export default function SignIn() {
   }
   React.useEffect(() => {
     if (!loading && isAuthenticated) {
-      navigate(-1)
+      navigate("/feed")
     }
   }, [loading, isAuthenticated])
   return (

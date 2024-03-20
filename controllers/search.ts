@@ -19,20 +19,24 @@ const search = async (req: Request, res: Response) => {
                 .sort({ createdAt: -1 })
 
             return res.status(StatusCodes.OK).json({
-                data: users,
-                page: req.pagination.page,
-                limit: req.pagination.limit,
+                data: {
+                    users,
+                    page: req.pagination.page,
+                    limit: req.pagination.limit,
+                },
                 success: true,
                 msg: "Users Fetched Successfully",
             })
         case "blog":
-            const { tags } = req.query
-
             const queryObject: any = {
                 title: { $regex: query, $options: "i" },
             }
 
-            if (tags) queryObject.tags = { $in: [tags] }
+            const { tags } = req.query
+            if (tags) {
+                if (typeof tags === "string") queryObject.tags = { $in: [tags] }
+                else queryObject.tags = { $in: tags }
+            }
 
             const blogs = await Blogs.find(queryObject)
                 .select(
@@ -42,9 +46,11 @@ const search = async (req: Request, res: Response) => {
                 .limit(req.pagination.limit)
                 .sort({ createdAt: -1 })
             return res.status(StatusCodes.OK).json({
-                data: blogs,
-                page: req.pagination.page,
-                limit: req.pagination.limit,
+                data: {
+                    blogs,
+                    page: req.pagination.page,
+                    limit: req.pagination.limit,
+                },
                 success: true,
                 msg: "Blogs Fetched Successfully",
             })

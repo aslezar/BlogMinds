@@ -18,7 +18,7 @@ interface CounterState {
   isAuthenticated: boolean
   user: UserType | null
   verificationRequired: boolean
-  verificationUserID: UserType["_id"] | string
+  verificationUserID: UserType["userId"] | string
 }
 
 const initialState: CounterState = {

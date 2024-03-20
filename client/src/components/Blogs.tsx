@@ -19,7 +19,7 @@ const Blogs = ({ category }: BlogsProps) => {
     setLoading(true)
     try {
       const response = await getBlogs(category.toString(), page, limit)
-      const newBlogs = response.data
+      const newBlogs = response.data.blogs
       setBlogs((prevBlogs) => [...prevBlogs, ...newBlogs])
       setPage((prevPage) => prevPage + 1)
     } catch (error: any) {
