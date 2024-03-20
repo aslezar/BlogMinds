@@ -233,7 +233,7 @@ const getTrendingBlogs = async (req: Request, res: Response) => {
     const cachedData = trendingCache.get("trendingPosts")
     if (cachedData) {
         return res.status(StatusCodes.OK).json({
-            data: cachedData,
+            data: { blogs: cachedData },
             success: true,
             msg: "Data Fetched Successfully",
         })
