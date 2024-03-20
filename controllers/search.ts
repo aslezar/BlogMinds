@@ -42,6 +42,10 @@ const search = async (req: Request, res: Response) => {
                 .select(
                     "title description img author tags views likesCount commentsCount createdAt updatedAt",
                 )
+                .populate({
+                    path: "author",
+                    select: "name profileImage",
+                })
                 .skip(req.pagination.skip)
                 .limit(req.pagination.limit)
                 .sort({ createdAt: -1 })
