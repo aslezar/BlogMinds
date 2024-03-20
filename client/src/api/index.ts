@@ -49,7 +49,7 @@ API.interceptors.response.use(
 )
 
 interface VerifyOtpParams {
-  userId: UserType["_id"]
+  userId: UserType["userId"]
   otp: string
 }
 
@@ -87,5 +87,16 @@ export const getBlogs = (
   limit: number = 10,
 ) => API.get(`/blog/category/${category}?page=${pageNo}&limit=${limit}`)
 
-export const getBlog = (id: BlogShortType["_id"]) => API.get(`/blog/${id}`)
+export const getBlog = (
+  id: BlogShortType["_id"],
+  userId: BlogShortType["_id"] | null,
+) =>
+  API.get(`/blog/${id}`, {
+    params: {
+      userId: userId,
+    },
+  })
+
+export const likeBlog = (id: BlogShortType["_id"]) =>
+  API.patch(`/blog/${id}/like`)
 export const getTrendingBlog = () => API.get("/blog/trending")
