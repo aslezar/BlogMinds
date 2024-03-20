@@ -120,21 +120,15 @@ const commentBlog = async (req: Request, res: Response) => {
 const getUserBlogs = async (req: Request, res: Response) => {
     //populate title description content img author
     const userId = getUserId(req)
-    const userBlogs = await User.findById(userId)
-        .select("blogs")
-        .slice("blogs", [
-            req.pagination.skip,
-            req.pagination.skip + req.pagination.limit,
-        ])
+    const userBlogs = await Blog.find({ author: userId })
+        .skip(req.pagination.skip)
+        .limit(req.pagination.limit)
         .sort({ createdAt: -1 })
-        .populate({
-            path: "blogs",
-            select: "title description img tags",
-        })
+        .select("title description img tags")
 
     if (!userBlogs) throw new UnauthenticatedError("User Not Found")
     res.status(StatusCodes.OK).json({
-        data: userBlogs.blogs,
+        data: userBlogs,
         page: req.pagination.page,
         limit: req.pagination.limit,
         success: true,

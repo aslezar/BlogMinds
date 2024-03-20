@@ -1,5 +1,5 @@
 // const mongoose = require("mongoose");
-import { Schema, model, Types } from "mongoose"
+import { Schema, model } from "mongoose"
 import { IBlog } from "../types/models"
 
 const BlogSchema = new Schema<IBlog>(

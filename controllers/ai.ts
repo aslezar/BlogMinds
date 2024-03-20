@@ -4,15 +4,8 @@ import { StatusCodes } from "http-status-codes"
 //types
 import { Request, Response } from "express"
 
-//UTITLIY FUNCTIONS
-const getUserId = (req: Request) => {
-    return req.user.userId
-}
-//UTILITY FUNCTIONS END
-
 const getTextSuggestion = async (req: Request, res: Response) => {
     const text = req.body.text
-    // const userId = getUserId(req);
 
     const response = await fetch(
         "https://api-inference.huggingface.co/models/google/gemma-7b",
@@ -44,7 +37,6 @@ const getTextSuggestion = async (req: Request, res: Response) => {
 }
 const getParaSuggestion = async (req: Request, res: Response) => {
     const para = req.body.paragraph
-    const userId = getUserId(req)
 
     res.status(StatusCodes.OK).json({
         data: { paragraph: para },
@@ -55,7 +47,6 @@ const getParaSuggestion = async (req: Request, res: Response) => {
 }
 const getImageSuggestionPrompt = async (req: Request, res: Response) => {
     const prompt = req.body.prompt
-    // const userId = getUserId(req);
 
     const response = await axios({
         url: "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
@@ -85,7 +76,6 @@ const getImageSuggestionPrompt = async (req: Request, res: Response) => {
 }
 const getCoverImageSuggestion = async (req: Request, res: Response) => {
     const titlePrompt = req.body.titlePrompt
-    const userId = getUserId(req)
 
     res.status(StatusCodes.OK).json({
         data: { titlePrompt: titlePrompt },
