@@ -31,6 +31,7 @@ import { useAppDispatch, useAppSelector } from "./hooks"
 import { loadUser } from "./features/userSlice"
 import AllBlogs from "./Pages/AllBlogs"
 import Loader from "./components/Loader"
+import SearchResults from "./Pages/SearchResults"
 
 const Layout = () => {
   const location = useLocation()
@@ -93,6 +94,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+      { path: "search", element: <SearchResults /> },
       { path: "signin", element: <SignIn /> },
       {
         path: "signup",
