@@ -79,8 +79,14 @@ async function seeder() {
     process.exit()
 }
 
-function convertNumberToId(number) {
-    const startHex = "aaaaaaaaaaaaaaaaaaaaaaaa"
+function convertNumberToId(number, userOrBlog = "blog") {
+    let startHex = "aaaaaaaaaaaaaaaaaaaaaaaa"
+    if(userOrBlog === "user") {
+        startHex = "uuuuuuuuuuuuuuuuuuuuuuuu"
+    }
+    else if(userOrBlog === "blog") {
+        startHex = "bbbbbbbbbbbbbbbbbbbbbbbb"
+    }
     return new mongoose.Types.ObjectId(
         startHex.slice(0, 24 - number.toString().length) + number.toString(),
     )
