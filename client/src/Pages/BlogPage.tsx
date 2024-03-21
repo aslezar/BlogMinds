@@ -98,7 +98,9 @@ const BlogPage = () => {
         <div className="text-gray-500 mt-2">
           {blog?.content && (
             <>
-              <p>{blog.content}</p>
+              <pre className="w-[100%] whitespace-pre-line  ">
+                {blog.content}
+              </pre>
               Character Length: {blog.content.length}
               <br />
               Estimated Read Time:{" "}

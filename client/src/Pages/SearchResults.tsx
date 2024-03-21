@@ -6,13 +6,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
 
 import BlogCard from "../components/BlogCard"
-import Footer from "../components/Footer"
 
 const categories: string[] = ["blog", "user"]
 const SearchResults: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [data, setData] = useState<{}[]>([])
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(1)
   const [params] = useSearchParams()
   const navigate = useNavigate()
   const type = params.get("type")
@@ -83,7 +82,7 @@ const SearchResults: React.FC = () => {
           count={10}
           shape="rounded"
           color="secondary"
-          onChange={(_e,value:number) => setPage(value)}
+          onChange={(_e, value: number) => setPage(value)}
           renderItem={(item) => (
             <PaginationItem
               slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }}
@@ -93,20 +92,24 @@ const SearchResults: React.FC = () => {
         />
       </div>
       {query && query.length >= 3 && !isLoading && data.length == 0 && (
-          <p className="text-gray-500 text-base mt-4 px-5 italic">
-            No {category}s found for the term "{query}"
-          </p>
-        )}
+        <p className="text-gray-500 text-base mt-4 px-5 italic">
+          No {category}s found for the term "{query}"
+        </p>
+      )}
       {query && query.length >= 3 && !isLoading && data.length != 0 && (
-          <p className="text-gray-500 text-base mt-2 px-5 italic">
-            Showing results for "{query}"
-          </p>
-        )}
+        <p className="text-gray-500 text-base mt-2 px-5 italic">
+          Showing results for "{query}"
+        </p>
+      )}
       <div className=" h-[90%]">
         {!isLoading && !!data && query && query.length >= 3 && (
           <div>
             {category === "blog" && (
-              <div>{data?.map((item: any, index : number) => <BlogCard blog={item} key={index}/>)}</div>
+              <div>
+                {data?.map((item: any, index: number) => (
+                  <BlogCard blog={item} key={index} />
+                ))}
+              </div>
             )}
 
             {category === "user" && (
@@ -155,7 +158,6 @@ const SearchResults: React.FC = () => {
             </div>
           </div>
         )}
-        
       </div>
     </div>
   )

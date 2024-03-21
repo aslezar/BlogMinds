@@ -1,68 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recommendations</title>
-</head>
-<body>
-    <h1>Top Recommendations</h1>
-    <div id="recommendations"></div>
-    <div id="pagination">
-        <button id="prevPage">Previous Page</button>
-        <button id="nextPage">Next Page</button>
-    </div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Recommendations</title>
+    </head>
+    <body>
+        <h1>Top Recommendations</h1>
+        <div id="recommendations"></div>
+        <div id="pagination">
+            <button id="prevPage">Previous Page</button>
+            <button id="nextPage">Next Page</button>
+        </div>
 
-    <script>
-        var currentPage = 1;
-        var pageSize = 5; // Adjust the page size as needed
+        <script>
+            var currentPage = 1
+            var pageSize = 5 // Adjust the page size as needed
 
-        // Function to send request to Flask server
-        function getRecommendations(page) {
-            var userId = "65edf0a75c3dc4f29e99ac0c"; // Replace with actual user ID
-            var url = "http://127.0.0.1:5000/get_blog_ids?user_id=" + userId + "&page=" + page + "&page_size=" + pageSize;
-            
-            fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                var recommendationsDiv = document.getElementById("recommendations");
-                var recommendationsList = data.top_recommendations;
-                
-                recommendationsDiv.innerHTML = ""; // Clear previous recommendations
+            // Function to send request to Flask server
+            function getRecommendations(page) {
+                var userId = "65edf0a75c3dc4f29e99ac0c" // Replace with actual user ID
+                var url =
+                    "http://127.0.0.1:5000/get_blog_ids?user_id=" +
+                    userId +
+                    "&page=" +
+                    page +
+                    "&page_size=" +
+                    pageSize
 
-                recommendationsList.forEach(function(item) {
-                    var itemDiv = document.createElement("div");
-                    itemDiv.innerHTML = "<p>Item ID: " + item.item_id + ", Rating: " + item.rating + "</p>";
-                    recommendationsDiv.appendChild(itemDiv);
-                });
+                fetch(url)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        var recommendationsDiv =
+                            document.getElementById("recommendations")
+                        var recommendationsList = data.top_recommendations
 
-                // Update current page number
-                currentPage = page;
+                        recommendationsDiv.innerHTML = "" // Clear previous recommendations
 
-                // Disable/enable pagination buttons based on current page
-                var prevButton = document.getElementById("prevPage");
-                var nextButton = document.getElementById("nextPage");
+                        recommendationsList.forEach(function (item) {
+                            var itemDiv = document.createElement("div")
+                            itemDiv.innerHTML =
+                                "<p>Item ID: " +
+                                item.item_id +
+                                ", Rating: " +
+                                item.rating +
+                                "</p>"
+                            recommendationsDiv.appendChild(itemDiv)
+                        })
 
-                prevButton.disabled = currentPage === 1;
-                nextButton.disabled = recommendationsList.length === 0; // Disable next button if no more recommendations
-            })
-            .catch(error => console.error('Error:', error));
-        }
+                        // Update current page number
+                        currentPage = page
 
-        // Event listener for previous page button
-        document.getElementById("prevPage").addEventListener("click", function() {
-            if (currentPage > 1) {
-                getRecommendations(currentPage - 1);
+                        // Disable/enable pagination buttons based on current page
+                        var prevButton = document.getElementById("prevPage")
+                        var nextButton = document.getElementById("nextPage")
+
+                        prevButton.disabled = currentPage === 1
+                        nextButton.disabled = recommendationsList.length === 0 // Disable next button if no more recommendations
+                    })
+                    .catch((error) => console.error("Error:", error))
             }
-        });
 
-        // Event listener for next page button
-        document.getElementById("nextPage").addEventListener("click", function() {
-            getRecommendations(currentPage + 1);
-        });
+            // Event listener for previous page button
+            document
+                .getElementById("prevPage")
+                .addEventListener("click", function () {
+                    if (currentPage > 1) {
+                        getRecommendations(currentPage - 1)
+                    }
+                })
 
-        // Initial call to get recommendations for the first page
-        getRecommendations(currentPage);
-    </script>
-</body>
+            // Event listener for next page button
+            document
+                .getElementById("nextPage")
+                .addEventListener("click", function () {
+                    getRecommendations(currentPage + 1)
+                })
+
+            // Initial call to get recommendations for the first page
+            getRecommendations(currentPage)
+        </script>
+    </body>
 </html>
