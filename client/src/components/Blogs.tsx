@@ -59,7 +59,7 @@ const Blogs = ({ category }: BlogsProps) => {
   return (
     <div
       ref={containerRef}
-      style={{ overflowY: "auto", height: "80vh" }}
+      style={{ overflowY: "auto", height: "calc(100vh-120px)" }}
       className="contain"
     >
       {blogs.map((blog, index) => (
