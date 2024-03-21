@@ -10,8 +10,15 @@ function replaceSingleQuotesWithDoubleQuotes(inputString) {
 function generateRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
-function convertNumberToId(number) {
-    const startHex = "aaaaaaaaaaaaaaaaaaaaaaaa"
+
+function convertNumberToId(number, userOrBlog = "user") {
+    let startHex = "aaaaaaaaaaaaaaaaaaaaaaaa"
+    if(userOrBlog === "user") {
+        startHex = "uuuuuuuuuuuuuuuuuuuuuuuu"
+    }
+    else if(userOrBlog === "blog") {
+        startHex = "bbbbbbbbbbbbbbbbbbbbbbbb"
+    }
     return new mongoose.Types.ObjectId(
         startHex.slice(0, 24 - number.toString().length) + number.toString(),
     )
@@ -101,4 +108,5 @@ console.log("Data generated")
 module.exports = {
     blogData: filteredBlogs,
     userData,
+    convertNumberToId,
 }

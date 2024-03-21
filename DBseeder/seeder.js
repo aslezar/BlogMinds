@@ -5,7 +5,7 @@ const dotenv = require("dotenv")
 const BlogModel = require("./blog")
 const UserModel = require("./user")
 
-const { blogData, userData } = require("./dataGenerator")
+const { blogData, userData, convertNumberToId } = require("./dataGenerator")
 
 dotenv.config("../.env")
 
@@ -79,19 +79,6 @@ async function seeder() {
     process.exit()
 }
 
-function convertNumberToId(number, userOrBlog = "blog") {
-    let startHex = "aaaaaaaaaaaaaaaaaaaaaaaa"
-    if(userOrBlog === "user") {
-        startHex = "uuuuuuuuuuuuuuuuuuuuuuuu"
-    }
-    else if(userOrBlog === "blog") {
-        startHex = "bbbbbbbbbbbbbbbbbbbbbbbb"
-    }
-    return new mongoose.Types.ObjectId(
-        startHex.slice(0, 24 - number.toString().length) + number.toString(),
-    )
-}
-
 async function blogSeeder() {
     //delete old data
     try {
@@ -108,10 +95,10 @@ async function blogSeeder() {
         for (const blog of blogData) {
             let newBlog = { ...blog }
             j++
-            newBlog._id = convertNumberToId(j)
+            newBlog._id = convertNumberToId(j, "blog")
             blogs.push(newBlog)
         }
-        const newBlogs = await BlogModel.insertMany(blogs)
+        await BlogModel.insertMany(blogs)
         console.log("All blog data inserted successfully.")
         return
     } catch (error) {
