@@ -105,11 +105,10 @@ const SearchBar = () => {
             placeholder="Start typing to search"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                if (category === "blog") {
-                  navigate("/blog")
-                } else {
-                  navigate("/user")
-                }
+                e.preventDefault()
+                navigate(`/search?type=${category}&query=${inputValue.replace(/\s/g, '%20')}`)
+                setIsModalOpen(!isModalOpen)
+                console.log(isModalOpen)
               }
             }}
           />
