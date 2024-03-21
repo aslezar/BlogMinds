@@ -6,7 +6,11 @@ import { Link, useParams } from "react-router-dom"
 import { BlogFullType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 
-const BlogPage = () => {
+type BlogPageProps = {
+  isEmbed?: boolean
+}
+
+const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const [isError, setError] = React.useState<boolean>(false)
   const [isLoading, setLoading] = React.useState<boolean>(true)
   const [blog, setBlog] = React.useState<BlogFullType | null>(null)
@@ -65,7 +69,9 @@ const BlogPage = () => {
   if (isError === true || !blog) return <div>Error</div>
 
   return (
-    <div className="mx-auto pt-20 pb-5 lg:pt-0 min-h-[75vh] bg-white flex flex-col justify-between">
+    <div
+      className={`mx-auto ${isEmbed ? "" : "pt-20"} pb-5 lg:pt-0 min-h-[75vh] bg-white flex flex-col justify-between`}
+    >
       <div className="flex flex-col gap-4 max-w-3xl mx-auto shadow-sm px-5">
         <Link
           to={"/feed"}
