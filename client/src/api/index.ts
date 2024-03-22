@@ -100,3 +100,6 @@ export const getBlog = (
 export const likeBlog = (id: BlogShortType["_id"]) =>
   API.patch(`/blog/${id}/like`)
 export const getTrendingBlog = () => API.get("/blog/trending")
+
+export const getUserProfile = (id: UserType["userId"]) =>
+  API.get(`/public/profile/${id}`)
