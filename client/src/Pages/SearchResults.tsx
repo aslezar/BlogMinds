@@ -29,7 +29,7 @@ const SearchResults: React.FC = () => {
               query,
               type,
               page: page,
-              limit: 10,
+              limit: 20,
             },
           },
         )
@@ -79,7 +79,8 @@ const SearchResults: React.FC = () => {
           </Tabs>
         )}
         <Pagination
-          count={10}
+          // calculate count by the length of response and limit
+          count={Math.ceil(data.length / 20)}
           shape="rounded"
           color="secondary"
           onChange={(_e, value: number) => setPage(value)}
