@@ -13,7 +13,7 @@ router.use("/auth", AuthRouter)
 router.use("/blog", BlogRouter)
 router.use("/search", SearchRouter)
 router.use("/user", AuthMiddleware, UserRouter)
-router.use("/public/profile", AuthMiddleware, ProfileRouter)
+router.use("/public/profile", ProfileRouter)
 router.use("/ai", AuthMiddleware, AIRouter)
 //localhost:5000/api/v1/ai
 
