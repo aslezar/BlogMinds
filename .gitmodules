@@ -1,0 +1,3 @@
+[submodule "Recommendation-Server"]
+	path = Recommendation-Server
+	url = https://github.com/K-1303/Recommendation-Server.git
