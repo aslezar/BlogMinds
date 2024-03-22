@@ -1,11 +1,13 @@
+import axios from "axios"
 import mongoose from "mongoose"
+import { StatusCodes } from "http-status-codes"
+
 import User from "../models/user"
 import Blog from "../models/blog"
 import Comment from "../models/comment"
-import { StatusCodes } from "http-status-codes"
-import { BadRequestError, UnauthenticatedError } from "../errors"
+
 import { Request, Response } from "express"
-import { IBlog } from "../types/models"
+import { BadRequestError, UnauthenticatedError } from "../errors"
 import trendingCache from "../utils/cache"
 
 //UTITLIY FUNCTIONS
@@ -26,6 +28,45 @@ const getUserId = (req: Request) => {
 }
 
 //UTILITY FUNCTIONS END
+
+const getRecommendedBlogs = async (req: Request, res: Response) => {
+    const userId = req.query.userId
+
+    if (!userId) {
+        console.log("No user id found")
+        req.params.tags = "all"
+        await getBlogByCategory(req, res)
+        return
+    }
+
+    axios
+        .get(`${process.env.PYTHON_SERVER}/get_blogs`, {
+            params: {
+                user_id: userId,
+                page: req.pagination.page,
+                page_size: req.pagination.limit,
+            },
+        })
+        .then((response) => {
+            const blogs = response.data.top_recommendations
+
+            res.status(StatusCodes.OK).json({
+                data: {
+                    blogs: blogs,
+                    page: req.pagination.page,
+                    limit: req.pagination.limit,
+                },
+                success: true,
+                msg: "Data Fetched Successfully",
+            })
+        })
+        .catch((error) => {
+            console.log("Error fetching data from python server")
+            req.params.tags = "all"
+            getBlogByCategory(req, res)
+            return
+        })
+}
 
 const getBlogByCategory = async (req: Request, res: Response) => {
     const tags = req.params.tags
@@ -181,7 +222,7 @@ const deleteBlog = async (req: Request, res: Response) => {
         return res.status(404).json({ error: "Blog not found in user blogs." })
 
     //delete blog
-    let blog: IBlog | null = await Blog.findByIdAndDelete(blogId)
+    let blog = await Blog.findByIdAndDelete(blogId)
     if (!blog) throw new BadRequestError("Error deleting blog")
 
     //delete blog from user blogs
@@ -283,6 +324,7 @@ const getTrendingBlogs = async (req: Request, res: Response) => {
 export {
     getBlogById,
     getTrendingBlogs,
+    getRecommendedBlogs,
     getBlogByCategory,
     likeBlog,
     commentBlog,
