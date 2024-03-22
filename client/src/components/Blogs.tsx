@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
-import { getBlogs } from "../api/index"
-import { Category, BlogShortType } from "../definitions"
+import { getBlogs, getRecommendedBlogs } from "../api/index"
+import { Category, BlogShortType, UserType } from "../definitions"
+import { useAppSelector } from "../hooks.tsx"
 
 import BlogCard from "./BlogCard"
 
@@ -15,10 +16,20 @@ const Blogs = ({ category }: BlogsProps) => {
   const limit = 10
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const fetchBlogs = async () => {
+  const {
+    loading: userLoading,
+    isAuthenticated,
+    user,
+  } = useAppSelector((state) => state.user)
+
+  const fetchBlogs = async (userId: UserType["userId"] | undefined) => {
     setLoading(true)
     try {
-      const response = await getBlogs(category.toString(), page, limit)
+      const response =
+        category === Category.All && userId
+          ? await getRecommendedBlogs(userId, page, limit)
+          : await getBlogs(category.toString(), page, limit)
+
       const newBlogs = response.data.blogs
       setBlogs((prevBlogs) => [...prevBlogs, ...newBlogs])
       setPage((prevPage) => prevPage + 1)
@@ -38,7 +49,7 @@ const Blogs = ({ category }: BlogsProps) => {
         containerRef.current.scrollHeight - containerRef.current.scrollTop ===
           containerRef.current.clientHeight
       ) {
-        fetchBlogs()
+        fetchBlogs(user?.userId)
       }
     }
 
@@ -49,12 +60,14 @@ const Blogs = ({ category }: BlogsProps) => {
       }
     }
   }, [fetchBlogs])
+
   useEffect(() => {
-    fetchBlogs()
+    if (userLoading) return
+    fetchBlogs(user?.userId)
     setBlogs([])
     setPage(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category])
+  }, [category, , userLoading, isAuthenticated])
 
   return (
     <div

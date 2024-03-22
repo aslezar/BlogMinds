@@ -85,7 +85,27 @@ export const getBlogs = (
   category: string,
   pageNo: number = 1,
   limit: number = 10,
-) => API.get(`/blog/category/${category}?page=${pageNo}&limit=${limit}`)
+) =>
+  API.get("/blog/category", {
+    params: {
+      tags: category,
+      page: pageNo,
+      limit: limit,
+    },
+  })
+
+export const getRecommendedBlogs = (
+  userId: BlogShortType["_id"],
+  pageNo: number = 1,
+  limit: number = 10,
+) =>
+  API.get("/blog/recommended", {
+    params: {
+      userId: userId,
+      page: pageNo,
+      limit: limit,
+    },
+  })
 
 export const getBlog = (
   id: BlogShortType["_id"],

@@ -13,7 +13,7 @@ const router = Router()
 
 router.route("/trending").get(getTrendingBlogs)
 router.route("/recommended").get(getRecommendedBlogs)
-router.route("/category/:tags").get(getBlogByCategory)
+router.route("/category").get(getBlogByCategory)
 router.route("/:blogId").get(getBlogById)
 
 router.use(authMiddleware)

@@ -48,8 +48,9 @@ const getRecommendedBlogs = async (req: Request, res: Response) => {
             },
         })
         .then((response) => {
-            const blogs = response.data.top_recommendations
+            console.log("Data fetched from python server")
 
+            const blogs = response.data.top_recommendations
             res.status(StatusCodes.OK).json({
                 data: {
                     blogs: blogs,
@@ -62,14 +63,14 @@ const getRecommendedBlogs = async (req: Request, res: Response) => {
         })
         .catch((error) => {
             console.log("Error fetching data from python server")
-            req.params.tags = "all"
+            req.query.tags = "all"
             getBlogByCategory(req, res)
             return
         })
 }
 
 const getBlogByCategory = async (req: Request, res: Response) => {
-    const tags = req.params.tags
+    const tags = req.query.tags
     // tag is array of category field, and category is a string
 
     let query = {}
