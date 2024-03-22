@@ -11,7 +11,7 @@ const search = async (req: Request, res: Response) => {
     switch (type) {
         case "user":
             const users = await User.find({
-                name: { $regex: query, $options: "i" },
+                name: { $regex: query, $options: "i" } as any,
             })
                 .select("name email profileImage")
                 .skip(req.pagination.skip)

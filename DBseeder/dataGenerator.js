@@ -13,11 +13,11 @@ function generateRandomNumber(min, max) {
 
 function convertNumberToId(number, userOrBlog = "user") {
     let startHex = "aaaaaaaaaaaaaaaaaaaaaaaa"
-    if(userOrBlog === "blog") {
+    if (userOrBlog === "blog") {
         startHex = "bbbbbbbbbbbbbbbbbbbbbbbb"
     }
     return new mongoose.Types.ObjectId(
-        startHex.slice(0, 24 - number.toString().length) + number.toString()
+        startHex.slice(0, 24 - number.toString().length) + number.toString(),
     )
 }
 
@@ -56,7 +56,7 @@ const filteredBlogs = blogs
     .filter((blog) => {
         if (blog.author !== null) {
             if (!userIdName.has(blog.author)) {
-                const id = convertNumberToId(userIdName.size + 1,"user")
+                const id = convertNumberToId(userIdName.size + 1, "user")
                 userIdName.set(blog.author, id)
             }
             blog.author = userIdName.get(blog.author)
@@ -92,7 +92,7 @@ for (let [name, id] of userIdName) {
 }
 
 userData.push({
-    _id: convertNumberToId(999,"user"),
+    _id: convertNumberToId(999, "user"),
     name: "Helo",
     email: "hello@hello.com",
     password: "hello@hello.com",
