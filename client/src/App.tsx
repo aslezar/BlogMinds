@@ -127,7 +127,7 @@ const router = createBrowserRouter([
         element: <ContactUs />,
       },
       {
-        path: "public/user",
+        path: "user/:id",
         element: <PublicProfile />,
       },
       {
