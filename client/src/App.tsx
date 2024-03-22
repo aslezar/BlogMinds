@@ -32,6 +32,7 @@ import { loadUser } from "./features/userSlice"
 import AllBlogs from "./Pages/AllBlogs"
 import Loader from "./components/Loader"
 import SearchResults from "./Pages/SearchResults"
+import PublicProfile from "./Pages/PublicProfile"
 
 const Layout = () => {
   const location = useLocation()
@@ -124,6 +125,10 @@ const router = createBrowserRouter([
       {
         path: "contactus",
         element: <ContactUs />,
+      },
+      {
+        path: "public/user",
+        element: <PublicProfile />,
       },
       {
         path: "/*",
