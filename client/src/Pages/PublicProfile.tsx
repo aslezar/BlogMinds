@@ -142,7 +142,7 @@ const PublicProfile = () => {
                     </div>
 
                     <div className="flex items-center py-4">
-                      <div className="flex-1 flex items-center text-gray-600 text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out">
+                      <div className="flex-1 flex items-center text-gray-600 text-xs  hover:text-blue-400 transition duration-350 ease-in-out">
                         <svg
                           viewBox="0 0 24 24"
                           fill="currentColor"
@@ -154,7 +154,7 @@ const PublicProfile = () => {
                         </svg>
                         12.3 k
                       </div>
-                      <div className="flex-1 flex items-center text-gray-600 text-xs text-gray-400 hover:text-green-400 transition duration-350 ease-in-out">
+                      <div className="flex-1 flex items-center text-gray-600 text-xs  hover:text-green-400 transition duration-350 ease-in-out">
                         <svg
                           viewBox="0 0 24 24"
                           fill="currentColor"
@@ -166,7 +166,7 @@ const PublicProfile = () => {
                         </svg>
                         14 k
                       </div>
-                      <div className="flex-1 flex items-center text-gray-600 text-xs text-gray-400 hover:text-red-600 transition duration-350 ease-in-out">
+                      <div className="flex-1 flex items-center text-gray-600 text-xs  hover:text-red-600 transition duration-350 ease-in-out">
                         <svg
                           viewBox="0 0 24 24"
                           fill="currentColor"
@@ -178,7 +178,7 @@ const PublicProfile = () => {
                         </svg>
                         14 k
                       </div>
-                      <div className="flex-1 flex items-center text-gray-600 text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out">
+                      <div className="flex-1 flex items-center text-gray-600 text-xs  hover:text-blue-400 transition duration-350 ease-in-out">
                         <svg
                           viewBox="0 0 24 24"
                           fill="currentColor"
@@ -235,7 +235,7 @@ const PublicProfile = () => {
                     </div>
 
                     <div className="flex items-center py-4">
-                      <div className="flex-1 flex items-center text-gray-600 text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out">
+                      <div className="flex-1 flex items-center text-gray-600 text-xs  hover:text-blue-400 transition duration-350 ease-in-out">
                         <svg
                           viewBox="0 0 24 24"
                           fill="currentColor"
@@ -247,7 +247,7 @@ const PublicProfile = () => {
                         </svg>
                         12.3 k
                       </div>
-                      <div className="flex-1 flex items-center text-gray-600 text-xs text-gray-400 hover:text-green-400 transition duration-350 ease-in-out">
+                      <div className="flex-1 flex items-center text-gray-600 text-xs  hover:text-green-400 transition duration-350 ease-in-out">
                         <svg
                           viewBox="0 0 24 24"
                           fill="currentColor"
@@ -259,7 +259,7 @@ const PublicProfile = () => {
                         </svg>
                         14 k
                       </div>
-                      <div className="flex-1 flex items-center text-gray-600 text-xs text-gray-400 hover:text-red-600 transition duration-350 ease-in-out">
+                      <div className="flex-1 flex items-center text-gray-600 text-xs  hover:text-red-600 transition duration-350 ease-in-out">
                         <svg
                           viewBox="0 0 24 24"
                           fill="currentColor"
@@ -271,7 +271,7 @@ const PublicProfile = () => {
                         </svg>
                         14 k
                       </div>
-                      <div className="flex-1 flex items-center text-gray-600 text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out">
+                      <div className="flex-1 flex items-center text-gray-600 text-xs  hover:text-blue-400 transition duration-350 ease-in-out">
                         <svg
                           viewBox="0 0 24 24"
                           fill="currentColor"
