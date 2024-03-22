@@ -74,3 +74,28 @@ export interface TrendingType {
   totalScore: number
   author: Author
 }
+
+type ProfileBlogs = {
+  _id: string
+  title: string
+  author: string
+  img: string
+  tags: string[]
+  likesCount: number
+  commentsCount: number
+  views: number
+  createdAt: string
+  description: string
+}
+
+export type Profile = {
+  _id: string
+  name: string
+  blogs: ProfileBlogs[]
+  followersCount: number
+  followingCount: number
+  myInterests: string[]
+  profileImage: string
+  bio: string | undefined
+  createdAt: string
+}
