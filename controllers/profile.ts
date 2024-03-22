@@ -33,7 +33,13 @@ const getUserProfile = async (req: Request, res: Response) => {
         throw new BadRequestError("User not found")
     }
     const user = matchedUsers[0]
-    return res.status(StatusCodes.OK).json({ ...user })
+    return res.status(StatusCodes.OK).json({
+        data: {
+            user,
+        },
+        success: true,
+        msg: "User Fetched Successfully",
+    })
 }
 
 export { getUserProfile }
