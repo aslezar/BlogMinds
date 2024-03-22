@@ -48,7 +48,7 @@ const getUserProfile = async (req: Request, res: Response) => {
                             commentsCount: "$$blog.commentsCount",
                             views: "$$blog.views",
                             createdAt: "$$blog.createdAt",
-                            description : "$$blog.description"
+                            description: "$$blog.description",
                         },
                     },
                 },
@@ -70,6 +70,5 @@ const getUserProfile = async (req: Request, res: Response) => {
         msg: "User Fetched Successfully",
     })
 }
-
 
 export { getUserProfile }
