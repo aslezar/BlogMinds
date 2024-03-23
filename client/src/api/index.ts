@@ -123,3 +123,21 @@ export const getTrendingBlog = () => API.get("/blog/trending")
 
 export const getUserProfile = (id: UserType["userId"]) =>
   API.get(`/public/profile/${id}`)
+
+/*
+ ************************ Search Requests ************************
+ */
+export const search = (
+  query: string,
+  type: string,
+  page: number,
+  limit: number,
+) =>
+  API.get("/search", {
+    params: {
+      query,
+      type,
+      page,
+      limit,
+    },
+  })
