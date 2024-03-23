@@ -10,6 +10,12 @@ export interface SignUpType {
   password: string
 }
 
+export interface ForgotPasswordType {
+  email: string,
+  otp: string,
+  password: string
+}
+
 interface Author {
   _id: string
   name: string

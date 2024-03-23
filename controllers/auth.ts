@@ -87,6 +87,53 @@ const register = async (req: Request, res: Response) => {
     })
 }
 
+const forgotPasswordSendOtp = async (req: Request, res: Response) => {
+    const { email } = req.body
+    if (!email) throw new BadRequestError("Please provide email")
+    const user = await User.findOne({ email })
+    if (!user) throw new UnauthenticatedError("Email Not Registered.")
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString()
+    const otp: OTP = {
+        value: otpCode,
+        expires: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+    }
+    user.otp = otp
+    await user.save()
+    await SendMail({
+        from: process.env.SMTP_EMAIL_USER,
+        to: email,
+        subject: "Blogmind: Reset Password",
+        text: `Your OTP is ${otpCode}`,
+    })
+    res.status(StatusCodes.CREATED).json({
+        success: true,
+        msg: "OTP sent to your email. Please verify your email.",
+    })
+}
+
+const forgotPasswordVerifyOtp = async (req: Request, res: Response) => {
+    const { otp, email, password } = req.body as {
+        otp: string
+        email: string
+        password: string
+    }
+    if (!otp) throw new BadRequestError("Please provide OTP")
+    const user = await User.findOne({ email, "otp.value": otp })
+    if (!user) throw new UnauthenticatedError("Invalid OTP.")
+    if (user.otp && user.otp.expires < new Date()) {
+        user.otp = undefined
+        throw new UnauthenticatedError("OTP Expired.Please try again.")
+    }
+    user.otp = undefined
+    user.password = password
+    await user.save()
+    res.status(StatusCodes.CREATED).json({
+        token: user.generateToken(),
+        success: true,
+        msg: "OTP verified successfully",
+    })
+}
+
 // only for development environment
 const registerWithoutOtp = async (req: Request, res: Response) => {
     const { name, email, password } = req.body
@@ -182,4 +229,13 @@ const signOut = async (req: Request, res: Response) => {
     })
 }
 
-export { register, registerWithoutOtp, login, verifyEmail, tokenLogin, signOut }
+export {
+    register,
+    registerWithoutOtp,
+    login,
+    verifyEmail,
+    tokenLogin,
+    signOut,
+    forgotPasswordSendOtp,
+    forgotPasswordVerifyOtp,
+}

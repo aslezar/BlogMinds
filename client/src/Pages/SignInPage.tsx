@@ -89,6 +89,13 @@ export default function SignIn() {
               />
             </div>
             <div>
+              <div className="my-4 ml-2 text-sm text-gray-600">
+                <Link to="/forgot-password" className="hover:underline cursor-pointer">
+                  <span className="text-black hover:underline">
+                    Forgot password?
+                  </span>
+                </Link>
+              </div>
               <button
                 type="submit"
                 className="w-full bg-dark text-white p-2.5 px-4 font-medium rounded-3xl hover:bg-highlight  focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
