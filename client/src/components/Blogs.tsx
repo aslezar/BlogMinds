@@ -4,18 +4,17 @@ import { Category, BlogShortType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 import InfiniteScroll from "react-infinite-scroll-component"
 
+import { useSearchParams } from "react-router-dom"
 import BlogCard from "./BlogCard"
 import ImagePlaceholder from "../assets/img/Feed/ImagePlaceholder.tsx"
 
-interface BlogsProps {
-  category: Category
-}
-
-const Blogs = ({ category }: BlogsProps) => {
+const Blogs = () => {
   const [blogs, setBlogs] = useState<BlogShortType[]>([])
   const [page, setPage] = useState<number>(1)
   const [hasMore, setHasMore] = useState(true)
   const limit = 10
+  const [searchParams] = useSearchParams()
+  const category = searchParams.get("category") || "all"
 
   const {
     loading: userLoading,

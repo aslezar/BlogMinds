@@ -15,8 +15,9 @@ const PublicProfile = () => {
   useEffect(() => {
     setLoading(true)
     const fetchUserProfile = async () => {
+      if (!userId) return
       try {
-        const response = await getUserProfile(userId as string)
+        const response = await getUserProfile(userId)
         setUser(response.data.user)
       } catch (error) {
         console.log("Error fetching user profile", error)

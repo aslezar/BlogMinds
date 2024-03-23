@@ -1,14 +1,13 @@
 import Blogs from "../components/Blogs"
 import Categories from "../components/Categories"
 import { useEffect, useState } from "react"
-import { Category, TrendingType } from "../definitions"
+import { TrendingType } from "../definitions"
 import { getTrendingBlog } from "../api"
 import { Link } from "react-router-dom"
 import Loader from "../components/Loader"
 import TrendingSvg from "../assets/img/Feed/TrendingSvg"
 
 const AllBlogs = () => {
-  const [category, setCategory] = useState<Category>(Category.All)
   const [trending, setTrending] = useState<TrendingType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -25,9 +24,9 @@ const AllBlogs = () => {
       <div className="flex gap-3  xl:mx-auto xl:w-5/6 mx-3">
         <div className="w-3/4">
           <div className="sticky top-[4.7rem] bg-white">
-            <Categories category={category} setCategory={setCategory} />
+            <Categories />
           </div>
-          <Blogs category={category} />
+          <Blogs />
         </div>
         {trending && (
           <div className="w-[25%]  p-4 border rounded-lg mt-16 h-fit sticky top-20">
