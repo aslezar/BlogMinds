@@ -3,11 +3,9 @@ const mongoose = require("mongoose")
 const dotenv = require("dotenv")
 
 const BlogModel = require("./blog")
-const blogData = require("./blogData")
-const randDesc = require("./random-strings")
-const lines = require("./random-para")
 const UserModel = require("./user")
-const userData = require("./userData")
+
+const { blogData, userData, convertNumberToId } = require("./dataGenerator")
 
 dotenv.config("../.env")
 
@@ -20,6 +18,7 @@ mongoose
     })
     .then(seeder)
     .catch((err) => console.error("Error connecting to MongoDB:", err))
+
 console.log(new Date().toLocaleString())
 
 // function to return a random number between a and b
@@ -29,6 +28,7 @@ function randomInt(a, b) {
 
 async function seeder() {
     console.log("Connected to MongoDB")
+
     await userSeeder()
     await blogSeeder()
     // get all users and assign some blogs to them
@@ -79,13 +79,6 @@ async function seeder() {
     process.exit()
 }
 
-function convertNumberToId(number) {
-    const startHex = "aaaaaaaaaaaaaaaaaaaaaaaa"
-    return new mongoose.Types.ObjectId(
-        startHex.slice(0, 24 - number.toString().length) + number.toString(),
-    )
-}
-
 async function blogSeeder() {
     //delete old data
     try {
@@ -99,22 +92,13 @@ async function blogSeeder() {
         // const exampleHex = "5f5d5f5d5f5d5f5d5f5d5f5d"
         let blogs = []
         let j = 0
-        for (let i = 0; i < 200; i++) {
-            for (const blog of blogData) {
-                let newBlog = { ...blog }
-                const randomLine = lines[randomInt(0, lines.length - 1)]
-                newBlog.content = randomLine
-                newBlog.description =
-                    randDesc[randomInt(0, randDesc.length - 1)]
-                j++
-                newBlog._id = convertNumberToId(j)
-                newBlog.views = randomInt(0, 1000)
-                newBlog.likesCount = randomInt(0, 100)
-                newBlog.commentsCount = randomInt(0, 100)
-                blogs.push(newBlog)
-            }
+        for (const blog of blogData) {
+            let newBlog = { ...blog }
+            j++
+            newBlog._id = convertNumberToId(j, "blog")
+            blogs.push(newBlog)
         }
-        const newBlogs = await BlogModel.insertMany(blogs)
+        await BlogModel.insertMany(blogs)
         console.log("All blog data inserted successfully.")
         return
     } catch (error) {
@@ -128,11 +112,6 @@ async function userSeeder() {
         console.log("Old user data deleted successfully.")
     } catch (error) {
         console.error("Error deleting old user data:", error)
-    }
-    let i = 0
-    for (user of userData) {
-        i++
-        user._id = convertNumberToId(i)
     }
     try {
         await UserModel.insertMany(userData)

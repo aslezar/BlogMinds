@@ -1,11 +1,13 @@
-import mongoose, { Types, Schema } from "mongoose"
+import axios from "axios"
+import mongoose from "mongoose"
+import { StatusCodes } from "http-status-codes"
+
 import User from "../models/user"
 import Blog from "../models/blog"
 import Comment from "../models/comment"
-import { StatusCodes } from "http-status-codes"
-import { BadRequestError, UnauthenticatedError } from "../errors"
+
 import { Request, Response } from "express"
-import { IBlog } from "../types/models"
+import { BadRequestError, UnauthenticatedError } from "../errors"
 import trendingCache from "../utils/cache"
 
 //UTITLIY FUNCTIONS
@@ -21,27 +23,63 @@ const getId = (id: string) => {
 const getBlogId = (req: Request) => {
     return getId(req.params.blogId)
 }
-const getCommentId = (req: Request) => {
-    return getId(req.params.commentId)
-}
-
 const getUserId = (req: Request) => {
     return req.user.userId
 }
 
 //UTILITY FUNCTIONS END
 
+const getRecommendedBlogs = async (req: Request, res: Response) => {
+    const userId = req.query.userId
+
+    if (!userId) {
+        console.log("No user id found")
+        req.params.tags = "all"
+        await getBlogByCategory(req, res)
+        return
+    }
+
+    axios
+        .get(`${process.env.PYTHON_SERVER}/get_blogs`, {
+            params: {
+                user_id: userId,
+                page: req.pagination.page,
+                page_size: req.pagination.limit,
+            },
+        })
+        .then((response) => {
+            console.log("Data fetched from python server")
+
+            const blogs = response.data.top_recommendations
+            res.status(StatusCodes.OK).json({
+                data: {
+                    blogs: blogs,
+                    page: req.pagination.page,
+                    limit: req.pagination.limit,
+                },
+                success: true,
+                msg: "Data Fetched Successfully",
+            })
+        })
+        .catch((error) => {
+            console.log("Error fetching data from python server")
+            req.query.tags = "all"
+            getBlogByCategory(req, res)
+            return
+        })
+}
+
 const getBlogByCategory = async (req: Request, res: Response) => {
-    const category = req.params.category
+    const tags = req.query.tags
     // tag is array of category field, and category is a string
 
     let query = {}
-    if (category !== "all") query = { tags: { $in: [category] } }
+    if (tags !== "all") query = { tags: { $in: [tags] } }
 
     const blogs = await Blog.find(query)
-        .sort({ createdAt: -1 })
         .skip(req.pagination.skip)
         .limit(req.pagination.limit)
+        .sort({ createdAt: -1 })
         .select(
             "title description img author tags views likesCount commentsCount createdAt updatedAt",
         )
@@ -53,7 +91,7 @@ const getBlogByCategory = async (req: Request, res: Response) => {
     if (blogs.length === 0) throw new BadRequestError("No more blogs found")
 
     res.status(StatusCodes.OK).json({
-        data: blogs,
+        data: { blogs, page: req.pagination.page, limit: req.pagination.limit },
         success: true,
         msg: "Data Fetched Successfully",
     })
@@ -62,12 +100,18 @@ const getBlogByCategory = async (req: Request, res: Response) => {
 const getBlogById = async (req: Request, res: Response) => {
     const blogId = getBlogId(req)
 
-    const blog = await Blog.findById(blogId).select("-likes")
-    if (!blog) {
-        throw new BadRequestError("Blog not found")
+    const blog = await Blog.findById(blogId).lean()
+    if (!blog) throw new BadRequestError("Blog not found")
+    let isLiked = false
+    let isOwner = false
+    if (req.query.userId) {
+        const userId = req.query.userId
+
+        isLiked = blog.likes.some((id) => id.toString() === userId)
+        isOwner = blog.author.toString() === userId
     }
     res.status(StatusCodes.OK).json({
-        data: blog,
+        data: { blog: { ...blog, likes: undefined }, isLiked, isOwner },
         success: true,
         msg: "Blog Fetched Successfully",
     })
@@ -77,7 +121,7 @@ const likeBlog = async (req: Request, res: Response) => {
     const userId = getUserId(req)
     const blogId = getBlogId(req)
 
-    const blog = await Blog.findById(blogId)
+    const blog = await Blog.findById(blogId).select("title likes likesCount")
     if (!blog) throw new BadRequestError("Blog not found")
     const isLiked = blog.likes.includes(userId)
     if (isLiked) {
@@ -90,7 +134,7 @@ const likeBlog = async (req: Request, res: Response) => {
     await blog.save()
     res.status(StatusCodes.OK).json({
         success: true,
-        msg: isLiked ? "Unliked Successfully" : "Liked Successfully",
+        msg: isLiked ? `${blog.title} Unliked` : `${blog.title} Liked`,
     })
 }
 
@@ -119,42 +163,22 @@ const commentBlog = async (req: Request, res: Response) => {
     })
 }
 
-const commentOnComment = async (req: Request, res: Response) => {
-    const userId = getUserId(req)
-    // const commentId: Types.ObjectId = await checkId(req.body.commentId);
-    const commentId = getCommentId(req)
-    const { message } = req.body
-
-    if (!message) throw new BadRequestError("Message is required")
-
-    const comment = await Comment.create({
-        message,
-        author: userId,
-    })
-    const updatedcomment = await Comment.findByIdAndUpdate(commentId, {
-        $push: { comments: comment },
-    })
-    if (!updatedcomment) {
-        await comment.deleteOne()
-        throw new BadRequestError("Error commenting on comment")
-    }
-    res.status(StatusCodes.OK).json({
-        success: true,
-        msg: "Commented Successfully",
-    })
-}
-
 const getUserBlogs = async (req: Request, res: Response) => {
     //populate title description content img author
     const userId = getUserId(req)
-    const userBlogs = await User.findById(userId).select("blogs").populate({
-        path: "blogs",
-        select: "title description img tags",
-    })
+    const userBlogs = await Blog.find({ author: userId })
+        .skip(req.pagination.skip)
+        .limit(req.pagination.limit)
+        .sort({ createdAt: -1 })
+        .select("title description img tags")
 
     if (!userBlogs) throw new UnauthenticatedError("User Not Found")
     res.status(StatusCodes.OK).json({
-        data: userBlogs.blogs,
+        data: {
+            blogs: userBlogs,
+            page: req.pagination.page,
+            limit: req.pagination.limit,
+        },
         success: true,
         msg: "Data Fetched Successfully",
     })
@@ -179,7 +203,6 @@ const createBlog = async (req: Request, res: Response) => {
         $push: { blogs: blog._id },
     })
     res.status(StatusCodes.CREATED).json({
-        data: blog,
         success: true,
         msg: "Blog Created Successfully",
     })
@@ -200,7 +223,7 @@ const deleteBlog = async (req: Request, res: Response) => {
         return res.status(404).json({ error: "Blog not found in user blogs." })
 
     //delete blog
-    let blog: IBlog | null = await Blog.findByIdAndDelete(blogId)
+    let blog = await Blog.findByIdAndDelete(blogId)
     if (!blog) throw new BadRequestError("Error deleting blog")
 
     //delete blog from user blogs
@@ -237,7 +260,6 @@ const updateBlog = async (req: Request, res: Response) => {
         )
 
     res.status(StatusCodes.OK).json({
-        data: blog,
         success: true,
         msg: "Successfully updated blog.",
     })
@@ -247,16 +269,17 @@ const getTrendingBlogs = async (req: Request, res: Response) => {
     const cachedData = trendingCache.get("trendingPosts")
     if (cachedData) {
         return res.status(StatusCodes.OK).json({
-            data: cachedData,
+            data: { blogs: cachedData },
             success: true,
             msg: "Data Fetched Successfully",
         })
     } else {
-        const oneYearAgo = new Date()
-        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+        //use one week ago date
+        const oneWeekAgo = new Date()
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
 
         const trendingBlogs = await Blog.aggregate([
-            { $match: { createdAt: { $gte: oneYearAgo } } },
+            { $match: { createdAt: { $gte: oneWeekAgo } } },
             {
                 $lookup: {
                     from: "users",
@@ -293,7 +316,7 @@ const getTrendingBlogs = async (req: Request, res: Response) => {
 
         trendingCache.set("trendingPosts", trendingBlogs)
         res.status(StatusCodes.OK).json({
-            data: trendingBlogs,
+            data: { blogs: trendingBlogs },
             success: true,
             msg: "Data Fetched Successfully",
         })
@@ -302,10 +325,10 @@ const getTrendingBlogs = async (req: Request, res: Response) => {
 export {
     getBlogById,
     getTrendingBlogs,
+    getRecommendedBlogs,
     getBlogByCategory,
     likeBlog,
     commentBlog,
-    commentOnComment,
     getUserBlogs,
     createBlog,
     deleteBlog,

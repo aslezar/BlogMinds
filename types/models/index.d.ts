@@ -19,7 +19,6 @@ export interface IBlog {
 export interface IComment {
     message: string
     author: Types.ObjectId
-    comments?: Types.Array<Schema.Types.ObjectId>
     createdAt?: Date
     updatedAt?: Date
 }
@@ -45,8 +44,6 @@ export interface IUser {
     updatedAt: Date
     status: string
     otp: OTP | undefined
-    isModified: (field: string) => boolean
     generateToken: () => string
     comparePassword: (pswrd: string) => boolean
-    compareOtp: (otp: OTP) => boolean
 }

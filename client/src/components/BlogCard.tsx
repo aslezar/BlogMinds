@@ -11,7 +11,6 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
   const formatDate = (date: string) => {
     return format(new Date(date), "dd MMMM yyyy")
   }
-  console.log(blog)
   return (
     <div className="container p-5    bg-white w-full border my-4 rounded-lg ">
       <div className=" lg:flex flex-row-reverse  justify-between lg:items-center  mr-3">

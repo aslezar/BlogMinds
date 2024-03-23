@@ -12,12 +12,6 @@ const CommentsSchema = new Schema<IComment>(
             ref: "User",
             required: [true, "Please provide author."],
         },
-        comments: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Comment",
-            },
-        ],
     },
     { timestamps: true },
 )

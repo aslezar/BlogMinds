@@ -1,5 +1,5 @@
 // const mongoose = require("mongoose");
-import { Schema, model, Types } from "mongoose"
+import { Schema, model } from "mongoose"
 import { IBlog } from "../types/models"
 
 const BlogSchema = new Schema<IBlog>(
@@ -7,12 +7,14 @@ const BlogSchema = new Schema<IBlog>(
         title: {
             type: String,
             required: [true, "Please provide title."],
-            minlength: 3,
+            minlength: [10, "Title should be at least 10 characters."],
+            maxlength: [100, "Title should be less than 100 characters."],
         },
         description: {
             type: String,
             required: [true, "Please provide description "],
             minlength: [10, "Description should be at least 10 characters."],
+            maxlength: [500, "Description should be less than 500 characters."],
         },
         content: {
             type: String,
@@ -68,6 +70,8 @@ const BlogSchema = new Schema<IBlog>(
     },
     { timestamps: true },
 )
+
+BlogSchema.index({ tags: 1 })
 
 const Blog = model<IBlog>("Blog", BlogSchema)
 

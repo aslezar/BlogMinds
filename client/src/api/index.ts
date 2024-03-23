@@ -49,7 +49,7 @@ API.interceptors.response.use(
 )
 
 interface VerifyOtpParams {
-  userId: UserType["_id"]
+  userId: UserType["userId"]
   otp: string
 }
 
@@ -85,7 +85,41 @@ export const getBlogs = (
   category: string,
   pageNo: number = 1,
   limit: number = 10,
-) => API.get(`/blog/category/${category}?page=${pageNo}&limit=${limit}`)
+) =>
+  API.get("/blog/category", {
+    params: {
+      tags: category,
+      page: pageNo,
+      limit: limit,
+    },
+  })
 
-export const getBlog = (id: BlogShortType["_id"]) => API.get(`/blog/${id}`)
+export const getRecommendedBlogs = (
+  userId: BlogShortType["_id"],
+  pageNo: number = 1,
+  limit: number = 10,
+) =>
+  API.get("/blog/recommended", {
+    params: {
+      userId: userId,
+      page: pageNo,
+      limit: limit,
+    },
+  })
+
+export const getBlog = (
+  id: BlogShortType["_id"],
+  userId: BlogShortType["_id"] | null,
+) =>
+  API.get(`/blog/${id}`, {
+    params: {
+      userId: userId,
+    },
+  })
+
+export const likeBlog = (id: BlogShortType["_id"]) =>
+  API.patch(`/blog/${id}/like`)
 export const getTrendingBlog = () => API.get("/blog/trending")
+
+export const getUserProfile = (id: UserType["userId"]) =>
+  API.get(`/public/profile/${id}`)

@@ -18,11 +18,11 @@ interface CounterState {
   isAuthenticated: boolean
   user: UserType | null
   verificationRequired: boolean
-  verificationUserID: UserType["_id"] | string
+  verificationUserID: UserType["userId"] | string
 }
 
 const initialState: CounterState = {
-  loading: false,
+  loading: true,
   isAuthenticated: false,
   user: null,
   verificationRequired: false,
@@ -34,7 +34,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     SET_USER: (state, action) => {
-      console.log(action.payload)
+      // console.log(action.payload)
       state.isAuthenticated = true
       state.verificationRequired = false
       state.verificationUserID = ""
@@ -98,7 +98,7 @@ export const login = (loginValues: LoginType) => async (dispatch: any) => {
 
       localStorage.setItem("token", res.token)
       dispatch(loadUser())
-      toast.success("Logged in")
+      // toast.success("Logged in")
     })
     .catch((err) => {
       console.log(err)
@@ -118,13 +118,14 @@ export const register =
 
         const id = res.data.userId
         dispatch(userSlice.actions.SET_VERIFICATION_REQUIRED(id))
+        toast.success("Email Sent", { id: "register" })
       })
       .catch((err) => {
         console.log(err)
+        toast.dismiss("register")
       })
       .finally(() => {
         dispatch(userSlice.actions.SET_LOADING_FALSE())
-        toast.dismiss("register")
       })
   }
 
@@ -144,14 +145,14 @@ export const verification =
 
         localStorage.setItem("token", res.token)
         dispatch(loadUser())
-        toast.success("Registered Successfully")
+        toast.success("Registered Successfully", { id: "verification" })
       })
       .catch((err) => {
         console.log(err)
+        toast.dismiss("verification")
       })
       .finally(() => {
         dispatch(userSlice.actions.SET_LOADING_FALSE())
-        toast.dismiss("verification")
       })
   }
 
@@ -169,18 +170,19 @@ export const loadUser = () => async (dispatch: Dispatch) => {
         const user = res.data
         const token = res.token
 
+        toast.success("Logged in", { id: "loadUser" })
         localStorage.setItem("token", token)
         dispatch(userSlice.actions.SET_USER(user))
       })
       .catch((err) => {
         dispatch(userSlice.actions.LOGOUT_USER())
+        toast.dismiss("loadUser")
         console.log(err)
       })
       .finally(() => {
         dispatch(userSlice.actions.SET_LOADING_FALSE())
-        toast.dismiss("loadUser")
       })
-  }
+  } else dispatch(userSlice.actions.SET_LOADING_FALSE())
 }
 
 export const updateName =

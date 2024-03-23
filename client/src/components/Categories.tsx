@@ -4,7 +4,6 @@ import Tab from "@mui/material/Tab"
 import { Category } from "../definitions"
 
 interface TabPanelProps {
-  children?: React.ReactNode
   category: Category
   setCategory: React.Dispatch<React.SetStateAction<Category>>
 }

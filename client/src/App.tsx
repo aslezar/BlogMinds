@@ -5,6 +5,7 @@ import {
   ScrollRestoration,
   createBrowserRouter,
   useLocation,
+  Navigate,
 } from "react-router-dom"
 
 //Components
@@ -26,27 +27,40 @@ import Blog from "./Pages/BlogPage"
 import About from "./Pages/AboutPage"
 import ContactUs from "./Pages/ContactUsPage"
 import ErrorPage from "./Pages/ErrorPage"
-import { useAppDispatch } from "./hooks"
+import { useAppDispatch, useAppSelector } from "./hooks"
 import { loadUser } from "./features/userSlice"
 import AllBlogs from "./Pages/AllBlogs"
+import Loader from "./components/Loader"
+import SearchResults from "./Pages/SearchResults"
+import PublicProfile from "./Pages/PublicProfile"
 
 const Layout = () => {
   const location = useLocation()
   const hideNavbarRoutes = ["/signin", "/signup", "/verify"]
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname)
-
   return (
     <div>
       {!shouldHideNavbar && <Navbar />}
       <ScrollRestoration />
-      <div className={`min-h-screen ${!shouldHideNavbar && "py-20"}`}>
+      <div className={`min-h-screen ${!shouldHideNavbar && "pt-20"}`}>
         <Outlet />
       </div>
-      {/* <Footer /> */}
     </div>
   )
 }
+const ProtectedRoute = () => {
+  const { loading, isAuthenticated } = useAppSelector((state) => state.user)
+
+  if (loading) return <Loader />
+  if (!isAuthenticated) return <Navigate to="/signin" />
+  return <Outlet />
+}
+
 const router = createBrowserRouter([
+  {
+    path: "embed/blog/:id",
+    element: <Blog isEmbed={true} />,
+  },
   {
     path: "/",
     element: <Layout />,
@@ -56,13 +70,37 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "feed",
-        element: <AllBlogs />,
+        path: "/",
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "forgotpassword",
+            element: <ForgotPassword />,
+          },
+          {
+            path: "dashboard",
+            element: <DashBoard />,
+          },
+          {
+            path: "profile",
+            element: <Profile />,
+          },
+          {
+            path: "myblogs",
+            element: <MyBlogs />,
+          },
+          {
+            path: "write",
+            element: <AddBlog />,
+          },
+          {
+            path: "editBlog/:id",
+            element: <EditBlog />,
+          },
+        ],
       },
-      {
-        path: "signin",
-        element: <SignIn />,
-      },
+      { path: "search", element: <SearchResults /> },
+      { path: "signin", element: <SignIn /> },
       {
         path: "signup",
         element: <SignUp />,
@@ -72,29 +110,10 @@ const router = createBrowserRouter([
         element: <VerifyOTP />,
       },
       {
-        path: "forgotpassword",
-        element: <ForgotPassword />,
+        path: "feed",
+        element: <AllBlogs />,
       },
-      {
-        path: "dashboard",
-        element: <DashBoard />,
-      },
-      {
-        path: "profile",
-        element: <Profile />,
-      },
-      {
-        path: "myblogs",
-        element: <MyBlogs />,
-      },
-      {
-        path: "write",
-        element: <AddBlog />,
-      },
-      {
-        path: "editBlog/:id",
-        element: <EditBlog />,
-      },
+
       {
         path: "blog/:id",
         element: <Blog />,
@@ -106,6 +125,10 @@ const router = createBrowserRouter([
       {
         path: "contactus",
         element: <ContactUs />,
+      },
+      {
+        path: "user/:id",
+        element: <PublicProfile />,
       },
       {
         path: "/*",
@@ -120,7 +143,6 @@ function App() {
   useEffect(() => {
     dispatch(loadUser())
   }, [])
-
   return <RouterProvider router={router} />
 }
 

@@ -154,7 +154,8 @@ const login = async (req: Request, res: Response) => {
     if (user.status === "blocked")
         throw new UnauthenticatedError("User is blocked.")
 
-    const isPasswordCorrect = user.comparePassword(password)
+    const isPasswordCorrect = await user.comparePassword(password)
+
     if (!isPasswordCorrect) throw new UnauthenticatedError("Invalid Password.")
 
     // sendUserData(user, res, "User Login Successfully")
