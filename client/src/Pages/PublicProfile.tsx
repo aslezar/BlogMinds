@@ -16,9 +16,8 @@ const PublicProfile = () => {
     setLoading(true)
     const fetchUserProfile = async () => {
       try {
-          const response = await getUserProfile(userId as string)
-          setUser(response.data.user)
-        
+        const response = await getUserProfile(userId as string)
+        setUser(response.data.user)
       } catch (error) {
         console.log("Error fetching user profile", error)
       } finally {
@@ -28,7 +27,7 @@ const PublicProfile = () => {
     fetchUserProfile()
   }, [userId])
 
-  if(loading) return <Loader/>
+  if (loading) return <Loader />
   return (
     <div>
       <main className=" w-4/5 mx-auto border-[1.5px] mt-3 rounded-xl p-4">
@@ -102,15 +101,18 @@ const PublicProfile = () => {
                 <div className="flex gap-2 mt-3">
                   <button className="bg-dark text-white px-4 py-1 rounded-lg mt-3 hover:bg-highlight ">
                     Follow
-                  </button>                  
-                  </div>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
           <ul className="list-none grid grid-cols-3 gap-7  p-6">
             {user?.blogs.map((blog) => (
-              <Link to={`/blog/${blog._id}`} className="max-w-sm mx-auto flex flex-col gap-2 border-b py-4">
+              <Link
+                to={`/blog/${blog._id}`}
+                className="max-w-sm mx-auto flex flex-col gap-2 border-b py-4"
+              >
                 <span className="flex gap-1 items-center text-gray-600">
                   <svg viewBox="0 0 24 24" className="h-4 w-4 paint-icon ">
                     <g>
@@ -166,7 +168,6 @@ const PublicProfile = () => {
                     </svg>
                     {blog?.likesCount}
                   </div>
-                  
                 </div>
                 {/* render blogs.myInterests.map in a flex div */}
                 <div className="flex gap-2 items-center flex-wrap">

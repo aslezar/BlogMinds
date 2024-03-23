@@ -50,9 +50,7 @@ const Blogs = ({ category }: BlogsProps) => {
 
   return (
     <>
-      <div
-        id="scrollableDiv"
-      >
+      <div id="scrollableDiv">
         <InfiniteScroll
           dataLength={blogs.length}
           next={() => fetchBlogs(user?.userId)}
