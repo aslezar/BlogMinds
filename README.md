@@ -42,7 +42,7 @@ To run BlogMind locally, follow these steps:
     npm run dev
     ```
 
-    The server will start on the default port 5000. If you change the default port, update it also in the `./client/src/api/index.ts`
+    The server will start on the default port 8000. If you change the default port, update it also in the `./client/src/api/index.ts`
 
 6. Navigate to the client directory:
 
