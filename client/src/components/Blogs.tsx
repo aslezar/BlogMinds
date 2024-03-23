@@ -58,8 +58,8 @@ const Blogs = () => {
             Array.from({ length: 3 }).map((_, index) => <BlogLoader key={index} />)
           }
         >
-          {blogs.map((blog, index) => (
-            <BlogCard key={index} blog={blog} />
+          {blogs.map((blog) => (
+            <BlogCard key={blog._id} blog={blog} />
           ))}
         </InfiniteScroll>
         <style>
