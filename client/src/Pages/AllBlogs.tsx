@@ -37,22 +37,27 @@ const AllBlogs = () => {
               <Loader />
             ) : (
               trending.map((blog) => (
-                <Link to={`/blog/${blog._id}`} key={blog._id}>
-                  <div className="flex flex-col gap-1 mb-2 py-2 pb-3 border-t">
-                    <p className="font-medium text-gray-700">{blog.title}</p>
-                    <div className="text-sm flex items-center gap-5 pr-5 text-gray-600">
-                      <span>
-                        <Link
-                          to={`/user/${blog.author._id}`}
-                          className="hover:cursor-pointer hover:underline"
-                        >
-                          {blog.author.name}
-                        </Link>
-                      </span>{" "}
-                      <span>{blog.totalScore} Interactions</span>
-                    </div>
+                <div
+                  className="flex flex-col gap-1 mb-2 py-2 pb-3 border-t"
+                  key={blog._id}
+                >
+                  <Link to={`/blog/${blog._id}`}>
+                    <p className="font-medium text-gray-700 hover:cursor-pointer hover:underline">
+                      {blog.title}
+                    </p>
+                  </Link>
+                  <div className="text-sm flex items-center gap-5 pr-5 text-gray-600">
+                    <span>
+                      <Link
+                        to={`/user/${blog.author._id}`}
+                        className="hover:cursor-pointer hover:underline"
+                      >
+                        {blog.author.name}
+                      </Link>
+                    </span>{" "}
+                    <span>{blog.totalScore} Interactions</span>
                   </div>
-                </Link>
+                </div>
               ))
             )}
           </div>
