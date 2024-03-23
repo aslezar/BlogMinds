@@ -4,7 +4,6 @@ import { Category, BlogShortType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 import { useSearchParams } from "react-router-dom"
 import BlogLoader from "./BlogLoader"
-
 import BlogCard from "./BlogCard"
 
 const Blogs = () => {
