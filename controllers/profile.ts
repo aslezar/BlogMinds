@@ -40,6 +40,7 @@ const getUserProfile = async (req: Request, res: Response) => {
                         input: "$blogs",
                         as: "blog",
                         in: {
+                            _id: "$$blog._id",
                             title: "$$blog.title",
                             author: "$$blog.author",
                             img: "$$blog.img",
