@@ -2,19 +2,21 @@ import { useEffect, useRef, useState } from "react"
 import { getBlogs, getRecommendedBlogs } from "../api/index"
 import { Category, BlogShortType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
+import { useSearchParams } from "react-router-dom"
 
 import BlogCard from "./BlogCard"
 
-interface BlogsProps {
-  category: Category
-}
-
-const Blogs = ({ category }: BlogsProps) => {
+const Blogs = () => {
   const [blogs, setBlogs] = useState<BlogShortType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [page, setPage] = useState<number>(1)
-  const limit = 10
+
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const limit = 10
+
+  const [searchParams] = useSearchParams()
+  const category = searchParams.get("category") || "all"
+  console.log(category)
 
   const {
     loading: userLoading,
