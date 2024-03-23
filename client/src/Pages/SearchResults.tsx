@@ -3,9 +3,9 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { Tabs, Tab, Pagination, PaginationItem } from "@mui/material"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
-import { search } from "../api/index"
 
 import BlogCard from "../components/BlogCard"
+import { allSearch } from "../api"
 
 const categories: string[] = ["blog", "user"]
 const SearchResults: React.FC = () => {
@@ -23,8 +23,7 @@ const SearchResults: React.FC = () => {
       if (!query || !type) return
       setIsLoading(true)
       try {
-        const response = await search(query, type, page, 20)
-
+        const response = await allSearch(query as string, type as string, page);
         console.log(response.data)
         if (response.data.blogs) {
           setData(response.data.blogs)

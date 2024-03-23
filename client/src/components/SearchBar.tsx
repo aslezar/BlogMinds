@@ -2,7 +2,8 @@ import { ChangeEvent, useEffect, useState } from "react"
 import { Modal, Tab, Tabs } from "@mui/material"
 import SearchSvg from "./SearchSvg"
 import { Link, useNavigate } from "react-router-dom"
-import { search } from "../api/index"
+import { search } from "../api"
+
 
 const categories: string[] = ["blog", "user"]
 
@@ -20,8 +21,8 @@ const SearchBar = () => {
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        const response = await search(inputValue, category, 1, 3)
-
+        const response = await search(inputValue, category)
+        console.log(response.data)
         if (response.data.blogs) {
           setData(response.data.blogs)
         } else {

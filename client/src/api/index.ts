@@ -6,7 +6,7 @@ import { LoginType, SignUpType, BlogShortType, UserType } from "../definitions"
  ********************** Configuring Axios **********************
  */
 
-const URL = import.meta.env.PROD ? "/api/v1" : "http://localhost:5000/api/v1"
+const URL = import.meta.env.PROD ? "/api/v1" : "http://localhost:8000/api/v1"
 
 const API = axios.create({ baseURL: URL })
 
@@ -124,20 +124,22 @@ export const getTrendingBlog = () => API.get("/blog/trending")
 export const getUserProfile = (id: UserType["userId"]) =>
   API.get(`/public/profile/${id}`)
 
-/*
- ************************ Search Requests ************************
- */
-export const search = (
-  query: string,
-  type: string,
-  page: number,
-  limit: number,
-) =>
+export const search = (inputValue: string, category: string) =>
   API.get("/search", {
     params: {
-      query,
-      type,
-      page,
-      limit,
+      query: inputValue,
+      type: category,
+      page: 1,
+      limit: 3,
+    },
+  })
+
+export const allSearch = (inputValue: string, category: string, page: number) =>
+  API.get("/search", {
+    params: {
+      query: inputValue,
+      type: category,
+      page: page,
+      limit: 10,
     },
   })
