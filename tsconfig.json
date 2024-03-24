@@ -10,7 +10,7 @@
         "strict": true,
         "skipLibCheck": true,
 
-        "types": ["./types/express/index.d.ts","./types/wordnet-db/index.d.ts"]
+        "types": ["./types/express/index.d.ts", "./types/wordnet-db/index.d.ts"]
     },
     "exclude": ["node_modules", "client"]
 }
