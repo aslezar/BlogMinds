@@ -2,15 +2,13 @@ import React from "react"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import { Category } from "../definitions"
+import { useSearchParams } from "react-router-dom"
 
-interface TabPanelProps {
-  category: Category
-  setCategory: React.Dispatch<React.SetStateAction<Category>>
-}
-
-const Categories = ({ category, setCategory }: TabPanelProps) => {
+const Categories = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const category = searchParams.get("category") || "all"
   const handleChange = (_event: React.SyntheticEvent, newValue: Category) => {
-    setCategory(newValue)
+    setSearchParams({ category: newValue })
   }
   return (
     <Tabs

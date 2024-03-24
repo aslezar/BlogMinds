@@ -134,3 +134,6 @@ dist
 pnpm-lock.yaml
 
 ignore/**
+
+#ingore large files
+DBseeder/data2.json

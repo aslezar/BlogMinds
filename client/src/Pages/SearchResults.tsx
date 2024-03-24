@@ -1,9 +1,9 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { Tabs, Tab, Pagination, PaginationItem } from "@mui/material"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
+import { search } from "../api/index"
 
 import BlogCard from "../components/BlogCard"
 
@@ -20,24 +20,16 @@ const SearchResults: React.FC = () => {
   useEffect(() => {
     setCategory(type as string)
     const fetchData = async () => {
+      if (!query || !type) return
       setIsLoading(true)
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/v1/search",
-          {
-            params: {
-              query,
-              type,
-              page: page,
-              limit: 20,
-            },
-          },
-        )
-        console.log(response.data.data)
-        if (response.data.data.blogs) {
-          setData(response.data.data.blogs)
+        const response = await search(query, type, page, 20)
+
+        console.log(response.data)
+        if (response.data.blogs) {
+          setData(response.data.blogs)
         } else {
-          setData(response.data.data.users)
+          setData(response.data.users)
         }
       } catch (error: any) {
         console.error(error.response)

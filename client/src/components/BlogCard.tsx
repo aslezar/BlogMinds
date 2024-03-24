@@ -18,6 +18,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
           className="object-cover w-full mx-auto lg:mx-0 lg:w-52 aspect-video rounded-xl mb-2"
           src={blog.img}
           alt={"img"}
+          loading="lazy"
         />
         <div className="mt-6  lg:mt-0 lg:mx-6">
           <div className="flex  items-end gap-3">

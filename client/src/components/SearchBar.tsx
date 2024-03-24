@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useState } from "react"
 import { Modal, Tab, Tabs } from "@mui/material"
 import SearchSvg from "./SearchSvg"
-import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
+import { search } from "../api/index"
 
 const categories: string[] = ["blog", "user"]
 
@@ -20,22 +20,12 @@ const SearchBar = () => {
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/v1/search",
-          {
-            params: {
-              query: inputValue,
-              type: category,
-              page: 1,
-              limit: 3,
-            },
-          },
-        )
-        console.log(response.data.data)
-        if (response.data.data.blogs) {
-          setData(response.data.data.blogs)
+        const response = await search(inputValue, category, 1, 3)
+
+        if (response.data.blogs) {
+          setData(response.data.blogs)
         } else {
-          setData(response.data.data.users)
+          setData(response.data.users)
         }
       } catch (error: any) {
         console.error(error.response)
