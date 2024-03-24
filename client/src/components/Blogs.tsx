@@ -10,7 +10,7 @@ import BlogLoader from "./BlogLoader"
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState<BlogShortType[]>([])
-  const page = useRef(1);
+  const page = useRef(1)
   const [hasMore, setHasMore] = useState(true)
   const limit = 10
   const [searchParams] = useSearchParams()
@@ -31,7 +31,7 @@ const Blogs = () => {
 
       const newBlogs = response.data.blogs
       setBlogs((prevBlogs) => [...prevBlogs, ...newBlogs])
-      page.current = page.current + 1;
+      page.current = page.current + 1
     } catch (error: any) {
       console.error(error.response)
       setHasMore(false)
@@ -40,8 +40,9 @@ const Blogs = () => {
   }
 
   useEffect(() => {
-    page.current = 1
     if (userLoading) return
+    page.current = 1
+    setHasMore(true)
     fetchBlogs(user?.userId)
     setBlogs([])
     // eslint-disable-next-line react-hooks/exhaustive-deps

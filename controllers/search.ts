@@ -75,7 +75,7 @@ const search = async (req: Request, res: Response) => {
                             title: {
                                 $regex: query.toString(),
                                 $options: "i",
-                            } as any,
+                            },
                         },
                         { title: { $in: synonymTokens } },
                         { tags: { $in: synonymTokens } },
