@@ -19,7 +19,7 @@ import SignUp from "./Pages/SignUpPage"
 import VerifyOTP from "./Pages/VerifyOTP"
 import ForgotPassword from "./Pages/ForgotPasswordPage"
 import DashBoard from "./Pages/DashBoardPage"
-import Profile from "./Pages/ProfilePage"
+import ProfileSidebar from "./Pages/ProfileSidebar"
 import MyBlogs from "./Pages/MyBlogsPage"
 import AddBlog from "./Pages/AddBlogPage"
 import EditBlog from "./Pages/EditBlogPage"
@@ -33,6 +33,8 @@ import AllBlogs from "./Pages/AllBlogs"
 import Loader from "./components/Loader"
 import SearchResults from "./Pages/SearchResults"
 import PublicProfile from "./Pages/PublicProfile"
+import ProfilePage from "./Pages/ProfilePage"
+
 
 const Layout = () => {
   const location = useLocation()
@@ -83,7 +85,11 @@ const router = createBrowserRouter([
           },
           {
             path: "profile",
-            element: <Profile />,
+            element: <ProfileSidebar />,
+          },
+          {
+            path:"profile2",
+            element:<ProfilePage/>
           },
           {
             path: "myblogs",
