@@ -54,9 +54,9 @@ const Blogs = () => {
           dataLength={blogs.length}
           next={() => fetchBlogs(user?.userId)}
           hasMore={hasMore}
-          loader={
-            Array.from({ length: 3 }).map((_, index) => <BlogLoader key={index} />)
-          }
+          loader={Array.from({ length: 3 }).map((_, index) => (
+            <BlogLoader key={index} />
+          ))}
         >
           {blogs.map((blog) => (
             <BlogCard key={blog._id} blog={blog} />

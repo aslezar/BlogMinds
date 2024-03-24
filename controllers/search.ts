@@ -7,6 +7,7 @@ import natural from "natural"
 import WordNet from "node-wordnet"
 
 const wordnet = new WordNet()
+const blogTokenizer = new natural.WordTokenizer()
 
 const getSynonyms = (word: string) => {
     return new Promise<string[]>((resolve, reject) => {
@@ -33,26 +34,13 @@ const search = async (req: Request, res: Response) => {
 
     switch (type) {
         case "user":
-            const userTokenizer = new natural.WordTokenizer()
-            const userQueryTokens = userTokenizer.tokenize(
-                query.toString().toLowerCase(),
-            )
-
-            let users
-
-            if (userQueryTokens) {
-                users = await User.find({
-                    name: {
-                        $in: userQueryTokens.map(
-                            (token) => new RegExp(token, "i"),
-                        ),
-                    },
-                })
-                    .select("name email profileImage")
-                    .skip(req.pagination.skip)
-                    .limit(req.pagination.limit)
-                    .sort({ createdAt: -1 })
-            }
+            const users = await User.find({
+                name: { $regex: query, $options: "i" } as any,
+            })
+                .select("name email profileImage")
+                .skip(req.pagination.skip)
+                .limit(req.pagination.limit)
+                .sort({ createdAt: -1 })
 
             return res.status(StatusCodes.OK).json({
                 data: {
@@ -65,8 +53,6 @@ const search = async (req: Request, res: Response) => {
             })
 
         case "blog":
-            const blogTokenizer = new natural.WordTokenizer()
-
             const blogQueryTokens = blogTokenizer.tokenize(
                 query.toString().toLowerCase(),
             )
@@ -78,12 +64,19 @@ const search = async (req: Request, res: Response) => {
                 const synonyms: string[][] = await Promise.all(
                     blogQueryTokens.map((token) => getSynonyms(token)),
                 )
+
                 synonymTokens = synonyms.flatMap(
                     (synonymList: string[]) => synonymList,
                 )
 
                 queryObject = {
                     $or: [
+                        {
+                            title: {
+                                $regex: query.toString(),
+                                $options: "i",
+                            } as any,
+                        },
                         { title: { $in: synonymTokens } },
                         { tags: { $in: synonymTokens } },
                     ],
@@ -100,7 +93,6 @@ const search = async (req: Request, res: Response) => {
                 })
                 .skip(req.pagination.skip)
                 .limit(req.pagination.limit)
-                .sort({ createdAt: -1 })
 
             return res.status(StatusCodes.OK).json({
                 data: {

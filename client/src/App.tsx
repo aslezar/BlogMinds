@@ -35,7 +35,6 @@ import SearchResults from "./Pages/SearchResults"
 import PublicProfile from "./Pages/PublicProfile"
 import ProfilePage from "./Pages/ProfilePage"
 
-
 const Layout = () => {
   const location = useLocation()
   const hideNavbarRoutes = ["/signin", "/signup", "/verify", "/forgot-password"]
@@ -84,8 +83,8 @@ const router = createBrowserRouter([
             element: <ProfileSidebar />,
           },
           {
-            path:"profile2",
-            element:<ProfilePage/>
+            path: "profile2",
+            element: <ProfilePage />,
           },
           {
             path: "myblogs",
