@@ -1,5 +1,4 @@
 const blogs = require("./data.json")
-const fs = require("fs")
 const mongoose = require("mongoose")
 const { faker } = require("@faker-js/faker")
 
@@ -54,6 +53,7 @@ const filteredBlogs = blogs
         }
     })
     .filter((blog) => {
+        if (!blog.title || blog.title.length < 3) return false
         if (blog.author !== null) {
             if (!userIdName.has(blog.author)) {
                 const id = convertNumberToId(userIdName.size + 1, "user")
