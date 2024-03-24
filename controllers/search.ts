@@ -3,6 +3,29 @@ import Blogs from "../models/blog"
 import { Request, Response } from "express"
 import { BadRequestError } from "../errors"
 import { StatusCodes } from "http-status-codes"
+import natural from "natural"
+import WordNet from "node-wordnet"
+
+const wordnet = new WordNet()
+
+const getSynonyms = (word: string) => {
+    return new Promise<string[]>((resolve, reject) => {
+        wordnet.lookup(word, (err: Error | null, definitions: any[]) => {
+            if (err) {
+                reject(err)
+            } else {
+                const synonyms = definitions.reduce((acc, definition) => {
+                    if (definition.synonyms) {
+                        return acc.concat(definition.synonyms)
+                    } else {
+                        return acc
+                    }
+                }, [])
+                resolve(synonyms)
+            }
+        })
+    })
+}
 
 const search = async (req: Request, res: Response) => {
     const { type, query } = req.query
@@ -10,13 +33,26 @@ const search = async (req: Request, res: Response) => {
 
     switch (type) {
         case "user":
-            const users = await User.find({
-                name: { $regex: query, $options: "i" } as any,
-            })
-                .select("name email profileImage")
-                .skip(req.pagination.skip)
-                .limit(req.pagination.limit)
-                .sort({ createdAt: -1 })
+            const userTokenizer = new natural.WordTokenizer()
+            const userQueryTokens = userTokenizer.tokenize(
+                query.toString().toLowerCase(),
+            )
+
+            let users
+
+            if (userQueryTokens) {
+                users = await User.find({
+                    name: {
+                        $in: userQueryTokens.map(
+                            (token) => new RegExp(token, "i"),
+                        ),
+                    },
+                })
+                    .select("name email profileImage")
+                    .skip(req.pagination.skip)
+                    .limit(req.pagination.limit)
+                    .sort({ createdAt: -1 })
+            }
 
             return res.status(StatusCodes.OK).json({
                 data: {
@@ -27,15 +63,31 @@ const search = async (req: Request, res: Response) => {
                 success: true,
                 msg: "Users Fetched Successfully",
             })
-        case "blog":
-            const queryObject: any = {
-                title: { $regex: query, $options: "i" },
-            }
 
-            const { tags } = req.query
-            if (tags) {
-                if (typeof tags === "string") queryObject.tags = { $in: [tags] }
-                else queryObject.tags = { $in: tags }
+        case "blog":
+            const blogTokenizer = new natural.WordTokenizer()
+
+            const blogQueryTokens = blogTokenizer.tokenize(
+                query.toString().toLowerCase(),
+            )
+
+            let synonymTokens: string[] = []
+            let queryObject: any
+
+            if (blogQueryTokens) {
+                const synonyms: string[][] = await Promise.all(
+                    blogQueryTokens.map((token) => getSynonyms(token)),
+                )
+                synonymTokens = synonyms.flatMap(
+                    (synonymList: string[]) => synonymList,
+                )
+
+                queryObject = {
+                    $or: [
+                        { title: { $in: synonymTokens } },
+                        { tags: { $in: synonymTokens } },
+                    ],
+                }
             }
 
             const blogs = await Blogs.find(queryObject)
@@ -49,6 +101,7 @@ const search = async (req: Request, res: Response) => {
                 .skip(req.pagination.skip)
                 .limit(req.pagination.limit)
                 .sort({ createdAt: -1 })
+
             return res.status(StatusCodes.OK).json({
                 data: {
                     blogs,

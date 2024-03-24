@@ -43,9 +43,12 @@
         "mongoose": "^8.2.2",
         "morgan": "^1.10.0",
         "multer": "1.4.5-lts.1",
+        "natural": "^6.12.0",
+        "node-wordnet": "^0.1.12",
         "nodemailer": "^6.9.12",
         "sharp": "^0.33.2",
-        "uuid": "^9.0.1"
+        "uuid": "^9.0.1",
+        "wndb-with-exceptions": "^3.0.2"
     },
     "devDependencies": {
         "@faker-js/faker": "^8.4.1",
