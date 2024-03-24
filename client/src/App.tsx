@@ -36,7 +36,7 @@ import PublicProfile from "./Pages/PublicProfile"
 
 const Layout = () => {
   const location = useLocation()
-  const hideNavbarRoutes = ["/signin", "/signup", "/verify"]
+  const hideNavbarRoutes = ["/signin", "/signup", "/verify", "/forgot-password"]
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname)
   return (
     <div>
@@ -74,10 +74,6 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            path: "forgotpassword",
-            element: <ForgotPassword />,
-          },
-          {
             path: "dashboard",
             element: <DashBoard />,
           },
@@ -106,6 +102,10 @@ const router = createBrowserRouter([
         element: <SignUp />,
       },
       {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
         path: "verify",
         element: <VerifyOTP />,
       },
@@ -127,7 +127,7 @@ const router = createBrowserRouter([
         element: <ContactUs />,
       },
       {
-        path: "public/user",
+        path: "user/:id",
         element: <PublicProfile />,
       },
       {

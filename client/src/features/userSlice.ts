@@ -1,7 +1,12 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit"
 import { RootState } from "../store"
 import toast from "react-hot-toast"
-import { LoginType, SignUpType, UserType } from "../definitions"
+import {
+  ForgotPasswordType,
+  LoginType,
+  SignUpType,
+  UserType,
+} from "../definitions"
 import {
   signIn,
   signUp,
@@ -10,6 +15,8 @@ import {
   verifyOtp,
   updateName as updateNameApi,
   updateBio as updateBioApi,
+  forgotPasswordSendOtpApi,
+  forgotPasswordVerifyOtpApi,
   // updateImage as updateImageApi,
 } from "../api/index.ts"
 
@@ -107,6 +114,7 @@ export const login = (loginValues: LoginType) => async (dispatch: any) => {
       dispatch(userSlice.actions.SET_LOADING_FALSE())
     })
 }
+
 export const register =
   (signupValues: SignUpType) => async (dispatch: Dispatch) => {
     toast.loading("Registering", { id: "register" })
@@ -123,6 +131,47 @@ export const register =
       .catch((err) => {
         console.log(err)
         toast.dismiss("register")
+      })
+      .finally(() => {
+        dispatch(userSlice.actions.SET_LOADING_FALSE())
+      })
+  }
+
+export const forgotPasswordSendOtp =
+  (forgotPasswordValues: ForgotPasswordType, setPage: any) =>
+  async (dispatch: any) => {
+    toast.loading("Sending OTP", { id: "forgotPassword" })
+    dispatch(userSlice.actions.SET_LOADING())
+    const { email } = forgotPasswordValues
+    forgotPasswordSendOtpApi(email)
+      .then((res) => {
+        console.log(res)
+        toast.success("OTP Sent", { id: "forgotPassword" })
+        setPage(1)
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.dismiss("forgotPassword")
+      })
+      .finally(() => {
+        dispatch(userSlice.actions.SET_LOADING_FALSE())
+      })
+  }
+
+export const forgotPasswordVerifyOtp =
+  (forgotPasswordValues: ForgotPasswordType) => async (dispatch: any) => {
+    toast.loading("Verifying OTP", { id: "forgotPassword" })
+    dispatch(userSlice.actions.SET_LOADING())
+    forgotPasswordVerifyOtpApi(forgotPasswordValues)
+      .then((res: any) => {
+        console.log(res)
+        toast.success("Password changed successfully", { id: "forgotPassword" })
+        localStorage.setItem("token", res.token)
+        dispatch(loadUser())
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.dismiss("forgotPassword")
       })
       .finally(() => {
         dispatch(userSlice.actions.SET_LOADING_FALSE())

@@ -1,12 +1,18 @@
 import axios from "axios"
 import toast from "react-hot-toast"
-import { LoginType, SignUpType, BlogShortType, UserType } from "../definitions"
+import {
+  LoginType,
+  SignUpType,
+  BlogShortType,
+  UserType,
+  ForgotPasswordType,
+} from "../definitions"
 
 /*
  ********************** Configuring Axios **********************
  */
 
-const URL = import.meta.env.PROD ? "/api/v1" : "http://localhost:5000/api/v1"
+const URL = import.meta.env.PROD ? "/api/v1" : "http://localhost:8000/api/v1"
 
 const API = axios.create({ baseURL: URL })
 
@@ -58,6 +64,11 @@ interface VerifyOtpParams {
  */
 export const signIn = (login: LoginType) => API.post("/auth/signin", login)
 export const signUp = (signup: SignUpType) => API.post("/auth/signup", signup)
+export const forgotPasswordSendOtpApi = (email: string) =>
+  API.post("/auth/forgot-password/send-otp", { email })
+export const forgotPasswordVerifyOtpApi = (
+  forgotPasswordValues: ForgotPasswordType,
+) => API.post("/auth/forgot-password/verify-otp", forgotPasswordValues)
 export const verifyOtp = (verifyOtpParams: VerifyOtpParams) =>
   API.post("/auth/verify", verifyOtpParams)
 export const signinToken = () => API.get("/auth/me")
@@ -85,7 +96,27 @@ export const getBlogs = (
   category: string,
   pageNo: number = 1,
   limit: number = 10,
-) => API.get(`/blog/category/${category}?page=${pageNo}&limit=${limit}`)
+) =>
+  API.get("/blog/category", {
+    params: {
+      tags: category,
+      page: pageNo,
+      limit: limit,
+    },
+  })
+
+export const getRecommendedBlogs = (
+  userId: BlogShortType["_id"],
+  pageNo: number = 1,
+  limit: number = 10,
+) =>
+  API.get("/blog/recommended", {
+    params: {
+      userId: userId,
+      page: pageNo,
+      limit: limit,
+    },
+  })
 
 export const getBlog = (
   id: BlogShortType["_id"],
@@ -100,3 +131,24 @@ export const getBlog = (
 export const likeBlog = (id: BlogShortType["_id"]) =>
   API.patch(`/blog/${id}/like`)
 export const getTrendingBlog = () => API.get("/blog/trending")
+
+export const getUserProfile = (id: UserType["userId"]) =>
+  API.get(`/public/profile/${id}`)
+
+/*
+ ************************ Search Requests ************************
+ */
+export const search = (
+  query: string,
+  type: string,
+  page: number,
+  limit: number,
+) =>
+  API.get("/search", {
+    params: {
+      query,
+      type,
+      page,
+      limit,
+    },
+  })
