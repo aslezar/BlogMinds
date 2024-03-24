@@ -14,18 +14,14 @@ const getSynonyms = (word: string) => {
             if (err) {
                 reject(err);
             } else {
-                console.log('Word:', word);  // Log the word
-                console.log('Definitions:', definitions);  // Log the definitions
                 const synonyms = definitions.reduce((acc, definition) => {
-                    console.log('Definition:', definition);  // Log the current definition
-                    if (definition.meta && definition.meta.words) {
-                        return acc.concat(definition.meta.words.map((wordObj: { word: string }) => wordObj.word));
+                    if (definition.synonyms) {
+                        return acc.concat(definition.synonyms);
                     } else {
                         return acc;
                     }
                 }, []);                
                 resolve(synonyms);
-                console.log('Synonyms:', synonyms);  // Log the synonyms
             }
         });
     });
@@ -37,7 +33,6 @@ const search = async (req: Request, res: Response) => {
 
     switch (type) {
         case "user":
-            // Semantic search for users
             const userTokenizer = new natural.WordTokenizer();
             const userQueryTokens = userTokenizer.tokenize(query.toString().toLowerCase());
             let users;
@@ -63,34 +58,27 @@ const search = async (req: Request, res: Response) => {
             });
 
         case "blog":
-            // Semantic search for blogs
             const blogTokenizer = new natural.WordTokenizer();
             const blogStemmer = natural.PorterStemmer;
 
-            // Tokenize and stem the query
             const blogQueryTokens = blogTokenizer.tokenize(query.toString().toLowerCase());
             const stemmedBlogQuery = blogQueryTokens ? blogQueryTokens.map(token => blogStemmer.stem(token)) : [];
 
-            // Add null check for blogQueryTokens
             let synonymTokens: string[] = [];
             let queryObject: any;
 
-            // ...
 
 if (blogQueryTokens) {
-    // Retrieve synonyms for each token in the query
     const synonyms: string[][] = await Promise.all(blogQueryTokens.map(token => getSynonyms(token)));
-    console.log('Synonyms:', synonyms);  // Log the synonyms
+    console.log('Synonyms:', synonyms);  
     synonymTokens = synonyms.flatMap((synonymList: string[]) => synonymList);
 
-    // Construct query object with semantic search
     queryObject = {
         $or: [
             { title: { $in: synonymTokens } },
             { tags: { $in: synonymTokens } }
         ]
     };
-    console.log('Query object:', queryObject);  // Log the query object
 }
 
 const blogs = await Blogs.find(queryObject)
@@ -105,9 +93,6 @@ const blogs = await Blogs.find(queryObject)
     .limit(req.pagination.limit)
     .sort({ createdAt: -1 });
 
-console.log('Blogs:', blogs);  // Log the blogs
-
-// ...
 
             return res.status(StatusCodes.OK).json({
                 data: {
