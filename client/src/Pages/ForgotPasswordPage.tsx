@@ -79,7 +79,7 @@ const ForgotPasswordPage = () => {
                   Email
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   id="email"
                   name="email"
                   value={forgotPasswordValues.email}
@@ -98,7 +98,7 @@ const ForgotPasswordPage = () => {
                     OTP
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     id="otp"
                     name="otp"
                     value={forgotPasswordValues.otp}
@@ -115,7 +115,7 @@ const ForgotPasswordPage = () => {
                     New Password
                   </label>
                   <input
-                    type="text"
+                    type="password"
                     id="password"
                     name="password"
                     value={forgotPasswordValues.password}

@@ -165,7 +165,7 @@ export const forgotPasswordVerifyOtp =
     forgotPasswordVerifyOtpApi(forgotPasswordValues)
       .then((res: any) => {
         console.log(res)
-        toast.success("OTP Verified", { id: "forgotPassword" })
+        toast.success("Password changed successfully", { id: "forgotPassword" })
         localStorage.setItem("token", res.token)
         dispatch(loadUser())
       })
