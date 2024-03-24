@@ -1,19 +1,18 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { getBlogs, getRecommendedBlogs } from "../api/index"
 import { Category, BlogShortType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
+import InfiniteScroll from "react-infinite-scroll-component"
+
 import { useSearchParams } from "react-router-dom"
-import BlogLoader from "./BlogLoader"
 import BlogCard from "./BlogCard"
+import BlogLoader from "./BlogLoader"
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState<BlogShortType[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
   const [page, setPage] = useState<number>(1)
-
-  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [hasMore, setHasMore] = useState(true)
   const limit = 10
-
   const [searchParams] = useSearchParams()
   const category = searchParams.get("category") || "all"
 
@@ -24,7 +23,6 @@ const Blogs = () => {
   } = useAppSelector((state) => state.user)
 
   const fetchBlogs = async (userId: UserType["userId"] | undefined) => {
-    setLoading(true)
     try {
       const response =
         category === Category.All && userId
@@ -36,31 +34,10 @@ const Blogs = () => {
       setPage((prevPage) => prevPage + 1)
     } catch (error: any) {
       console.error(error.response)
+      setHasMore(false)
       // Handle error
-    } finally {
-      setLoading(false)
     }
   }
-  useEffect(() => {
-    if (!containerRef.current) return
-
-    const handleScroll = () => {
-      if (
-        containerRef.current &&
-        containerRef.current.scrollHeight - containerRef.current.scrollTop ===
-          containerRef.current.clientHeight
-      ) {
-        fetchBlogs(user?.userId)
-      }
-    }
-
-    containerRef.current.addEventListener("scroll", handleScroll)
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener("scroll", handleScroll)
-      }
-    }
-  }, [fetchBlogs])
 
   useEffect(() => {
     if (userLoading) return
@@ -71,27 +48,32 @@ const Blogs = () => {
   }, [category, , userLoading, isAuthenticated])
 
   return (
-    <div
-      ref={containerRef}
-      style={{ overflowY: "auto", height: "calc(100vh-120px)" }}
-      className="contain"
-    >
-      {blogs.map((blog, index) => (
-        <BlogCard key={index} blog={blog} />
-      ))}
-      {loading &&
-        Array.from({ length: 3 }).map((_, index) => <BlogLoader key={index} />)}
-      <style>
-        {`
-        .contain {
-          -ms-overflow-style: none;  /* Internet Explorer 10+ */
-          scrollbar-width: none;  /* Firefox */
-        }
-        .contain::-webkit-scrollbar { 
-          display: none;  /* Safari and Chrome */
-        }`}
-      </style>
-    </div>
+    <>
+      <div id="scrollableDiv">
+        <InfiniteScroll
+          dataLength={blogs.length}
+          next={() => fetchBlogs(user?.userId)}
+          hasMore={hasMore}
+          loader={
+            Array.from({ length: 3 }).map((_, index) => <BlogLoader key={index} />)
+          }
+        >
+          {blogs.map((blog) => (
+            <BlogCard key={blog._id} blog={blog} />
+          ))}
+        </InfiniteScroll>
+        <style>
+          {`
+      .contain {
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        scrollbar-width: none;  /* Firefox */
+      }
+      .contain::-webkit-scrollbar { 
+        display: none;  /* Safari and Chrome */
+      }`}
+        </style>
+      </div>
+    </>
   )
 }
 
