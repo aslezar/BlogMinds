@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getBlogs, getRecommendedBlogs } from "../api/index"
 import { Category, BlogShortType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
@@ -10,7 +10,7 @@ import BlogLoader from "./BlogLoader"
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState<BlogShortType[]>([])
-  const [page, setPage] = useState<number>(1)
+  const page = useRef(1);
   const [hasMore, setHasMore] = useState(true)
   const limit = 10
   const [searchParams] = useSearchParams()
@@ -26,12 +26,12 @@ const Blogs = () => {
     try {
       const response =
         category === Category.All && userId
-          ? await getRecommendedBlogs(userId, page, limit)
-          : await getBlogs(category.toString(), page, limit)
+          ? await getRecommendedBlogs(userId, page.current, limit)
+          : await getBlogs(category.toString(), page.current, limit)
 
       const newBlogs = response.data.blogs
       setBlogs((prevBlogs) => [...prevBlogs, ...newBlogs])
-      setPage((prevPage) => prevPage + 1)
+      page.current = page.current + 1;
     } catch (error: any) {
       console.error(error.response)
       setHasMore(false)
@@ -40,12 +40,12 @@ const Blogs = () => {
   }
 
   useEffect(() => {
+    page.current = 1
     if (userLoading) return
     fetchBlogs(user?.userId)
     setBlogs([])
-    setPage(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, , userLoading, isAuthenticated])
+  }, [category, userLoading, isAuthenticated])
 
   return (
     <>
