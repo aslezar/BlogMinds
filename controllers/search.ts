@@ -3,8 +3,33 @@ import Blogs from "../models/blog";
 import { Request, Response } from "express";
 import { BadRequestError } from "../errors";
 import { StatusCodes } from "http-status-codes";
-import wordnet from "wordnet-db";
 import natural from "natural";
+import WordNet from "node-wordnet";
+
+const wordnet = new WordNet();
+
+const getSynonyms = (word: string) => {
+    return new Promise<string[]>((resolve, reject) => {
+        wordnet.lookup(word, (err: Error | null, definitions: any[]) => {
+            if (err) {
+                reject(err);
+            } else {
+                console.log('Word:', word);  // Log the word
+                console.log('Definitions:', definitions);  // Log the definitions
+                const synonyms = definitions.reduce((acc, definition) => {
+                    console.log('Definition:', definition);  // Log the current definition
+                    if (definition.meta && definition.meta.words) {
+                        return acc.concat(definition.meta.words.map((wordObj: { word: string }) => wordObj.word));
+                    } else {
+                        return acc;
+                    }
+                }, []);                
+                resolve(synonyms);
+                console.log('Synonyms:', synonyms);  // Log the synonyms
+            }
+        });
+    });
+};
 
 const search = async (req: Request, res: Response) => {
     const { type, query } = req.query;
@@ -50,31 +75,39 @@ const search = async (req: Request, res: Response) => {
             let synonymTokens: string[] = [];
             let queryObject: any;
 
-            if (blogQueryTokens) {
-                // Retrieve synonyms for each token in the query
-                const synonyms: string[][] = await Promise.all(blogQueryTokens.map(token => wordnet.synonyms(token)));
-                synonymTokens = synonyms.flatMap((synonymList: string[]) => synonymList);
+            // ...
 
-                // Construct query object with semantic search
-                queryObject = {
-                    $or: [
-                        { title: { $in: synonymTokens } },
-                        { tags: { $in: synonymTokens } }
-                    ]
-                };
-            }
+if (blogQueryTokens) {
+    // Retrieve synonyms for each token in the query
+    const synonyms: string[][] = await Promise.all(blogQueryTokens.map(token => getSynonyms(token)));
+    console.log('Synonyms:', synonyms);  // Log the synonyms
+    synonymTokens = synonyms.flatMap((synonymList: string[]) => synonymList);
 
-            const blogs = await Blogs.find(queryObject)
-                .select(
-                    "title description img author tags views likesCount commentsCount createdAt updatedAt",
-                )
-                .populate({
-                    path: "author",
-                    select: "name profileImage",
-                })
-                .skip(req.pagination.skip)
-                .limit(req.pagination.limit)
-                .sort({ createdAt: -1 });
+    // Construct query object with semantic search
+    queryObject = {
+        $or: [
+            { title: { $in: synonymTokens } },
+            { tags: { $in: synonymTokens } }
+        ]
+    };
+    console.log('Query object:', queryObject);  // Log the query object
+}
+
+const blogs = await Blogs.find(queryObject)
+    .select(
+        "title description img author tags views likesCount commentsCount createdAt updatedAt",
+    )
+    .populate({
+        path: "author",
+        select: "name profileImage",
+    })
+    .skip(req.pagination.skip)
+    .limit(req.pagination.limit)
+    .sort({ createdAt: -1 });
+
+console.log('Blogs:', blogs);  // Log the blogs
+
+// ...
 
             return res.status(StatusCodes.OK).json({
                 data: {
