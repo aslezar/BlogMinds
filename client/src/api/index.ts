@@ -1,6 +1,12 @@
 import axios from "axios"
 import toast from "react-hot-toast"
-import { LoginType, SignUpType, BlogShortType, UserType, ForgotPasswordType } from "../definitions"
+import {
+  LoginType,
+  SignUpType,
+  BlogShortType,
+  UserType,
+  ForgotPasswordType,
+} from "../definitions"
 
 /*
  ********************** Configuring Axios **********************
@@ -60,8 +66,9 @@ export const signIn = (login: LoginType) => API.post("/auth/signin", login)
 export const signUp = (signup: SignUpType) => API.post("/auth/signup", signup)
 export const forgotPasswordSendOtpApi = (email: string) =>
   API.post("/auth/forgot-password/send-otp", { email })
-export const forgotPasswordVerifyOtpApi = (forgotPasswordValues: ForgotPasswordType) =>
-  API.post("/auth/forgot-password/verify-otp", forgotPasswordValues)
+export const forgotPasswordVerifyOtpApi = (
+  forgotPasswordValues: ForgotPasswordType,
+) => API.post("/auth/forgot-password/verify-otp", forgotPasswordValues)
 export const verifyOtp = (verifyOtpParams: VerifyOtpParams) =>
   API.post("/auth/verify", verifyOtpParams)
 export const signinToken = () => API.get("/auth/me")

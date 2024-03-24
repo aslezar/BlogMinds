@@ -1,7 +1,12 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit"
 import { RootState } from "../store"
 import toast from "react-hot-toast"
-import { ForgotPasswordType, LoginType, SignUpType, UserType } from "../definitions"
+import {
+  ForgotPasswordType,
+  LoginType,
+  SignUpType,
+  UserType,
+} from "../definitions"
 import {
   signIn,
   signUp,
@@ -133,7 +138,8 @@ export const register =
   }
 
 export const forgotPasswordSendOtp =
-  (forgotPasswordValues: ForgotPasswordType, setPage: any) => async (dispatch: any) => {
+  (forgotPasswordValues: ForgotPasswordType, setPage: any) =>
+  async (dispatch: any) => {
     toast.loading("Sending OTP", { id: "forgotPassword" })
     dispatch(userSlice.actions.SET_LOADING())
     const { email } = forgotPasswordValues
@@ -152,24 +158,25 @@ export const forgotPasswordSendOtp =
       })
   }
 
-export const forgotPasswordVerifyOtp = (forgotPasswordValues: ForgotPasswordType) => async (dispatch: any) => {
-  toast.loading("Verifying OTP", { id: "forgotPassword" })
-  dispatch(userSlice.actions.SET_LOADING())
-  forgotPasswordVerifyOtpApi(forgotPasswordValues)
-    .then((res: any) => {
-      console.log(res)
-      toast.success("OTP Verified", { id: "forgotPassword" })
-      localStorage.setItem("token", res.token)
-      dispatch(loadUser())
-    })
-    .catch((err) => {
-      console.log(err)
-      toast.dismiss("Invalid OTP")
-    })
-    .finally(() => {
-      dispatch(userSlice.actions.SET_LOADING_FALSE())
-    })
-}
+export const forgotPasswordVerifyOtp =
+  (forgotPasswordValues: ForgotPasswordType) => async (dispatch: any) => {
+    toast.loading("Verifying OTP", { id: "forgotPassword" })
+    dispatch(userSlice.actions.SET_LOADING())
+    forgotPasswordVerifyOtpApi(forgotPasswordValues)
+      .then((res: any) => {
+        console.log(res)
+        toast.success("OTP Verified", { id: "forgotPassword" })
+        localStorage.setItem("token", res.token)
+        dispatch(loadUser())
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.dismiss("forgotPassword")
+      })
+      .finally(() => {
+        dispatch(userSlice.actions.SET_LOADING_FALSE())
+      })
+  }
 
 export const verification =
   (otp: string) => async (dispatch: any, getState: any) => {

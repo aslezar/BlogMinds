@@ -3,7 +3,7 @@ import img from "../assets/img/Auth/signup.webp"
 import { useAppDispatch, useAppSelector } from "../hooks"
 import {
   forgotPasswordSendOtp,
-  forgotPasswordVerifyOtp
+  forgotPasswordVerifyOtp,
 } from "../features/userSlice"
 import { Link, useNavigate } from "react-router-dom"
 import { ForgotPasswordType } from "../definitions"
@@ -124,7 +124,10 @@ const ForgotPasswordPage = () => {
                     className="mt-1 p-2.5 px-4 w-full border rounded-3xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                   />
                 </div>
-                <div onClick={()=>setPage(0)} className="mt-4 ml-2 text-sm text-gray-600">
+                <div
+                  onClick={() => setPage(0)}
+                  className="mt-4 ml-2 text-sm text-gray-600"
+                >
                   <span className="text-black hover:underline">
                     Change Email
                   </span>

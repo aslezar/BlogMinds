@@ -90,7 +90,10 @@ export default function SignIn() {
             </div>
             <div>
               <div className="my-4 ml-2 text-sm text-gray-600">
-                <Link to="/forgot-password" className="hover:underline cursor-pointer">
+                <Link
+                  to="/forgot-password"
+                  className="hover:underline cursor-pointer"
+                >
                   <span className="text-black hover:underline">
                     Forgot password?
                   </span>

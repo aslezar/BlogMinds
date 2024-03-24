@@ -36,7 +36,7 @@ import PublicProfile from "./Pages/PublicProfile"
 
 const Layout = () => {
   const location = useLocation()
-  const hideNavbarRoutes = ["/signin", "/signup", "/verify","/forgot-password"]
+  const hideNavbarRoutes = ["/signin", "/signup", "/verify", "/forgot-password"]
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname)
   return (
     <div>

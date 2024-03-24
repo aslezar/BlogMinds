@@ -11,8 +11,8 @@ export interface SignUpType {
 }
 
 export interface ForgotPasswordType {
-  email: string,
-  otp: string,
+  email: string
+  otp: string
   password: string
 }
 
