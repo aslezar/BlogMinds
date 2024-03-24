@@ -19,7 +19,7 @@ import SignUp from "./Pages/SignUpPage"
 import VerifyOTP from "./Pages/VerifyOTP"
 import ForgotPassword from "./Pages/ForgotPasswordPage"
 import DashBoard from "./Pages/DashBoardPage"
-import Profile from "./Pages/ProfilePage"
+import ProfileSidebar from "./Pages/ProfileSidebar"
 import MyBlogs from "./Pages/MyBlogsPage"
 import AddBlog from "./Pages/AddBlogPage"
 import EditBlog from "./Pages/EditBlogPage"
@@ -33,10 +33,12 @@ import AllBlogs from "./Pages/AllBlogs"
 import Loader from "./components/Loader"
 import SearchResults from "./Pages/SearchResults"
 import PublicProfile from "./Pages/PublicProfile"
+import ProfilePage from "./Pages/ProfilePage"
+
 
 const Layout = () => {
   const location = useLocation()
-  const hideNavbarRoutes = ["/signin", "/signup", "/verify"]
+  const hideNavbarRoutes = ["/signin", "/signup", "/verify", "/forgot-password"]
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname)
   return (
     <div>
@@ -74,16 +76,16 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            path: "forgotpassword",
-            element: <ForgotPassword />,
-          },
-          {
             path: "dashboard",
             element: <DashBoard />,
           },
           {
             path: "profile",
-            element: <Profile />,
+            element: <ProfileSidebar />,
+          },
+          {
+            path:"profile2",
+            element:<ProfilePage/>
           },
           {
             path: "myblogs",
@@ -104,6 +106,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUp />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
       },
       {
         path: "verify",

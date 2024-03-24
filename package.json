@@ -15,8 +15,7 @@
         "url": "git+https://github.com/aslezar/BlogMinds.git"
     },
     "workspaces": [
-        "client",
-        "/"
+        "client"
     ],
     "keywords": [
         "blog"
