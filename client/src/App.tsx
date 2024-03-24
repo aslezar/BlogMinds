@@ -38,7 +38,7 @@ import ProfilePage from "./Pages/ProfilePage"
 
 const Layout = () => {
   const location = useLocation()
-  const hideNavbarRoutes = ["/signin", "/signup", "/verify"]
+  const hideNavbarRoutes = ["/signin", "/signup", "/verify", "/forgot-password"]
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname)
   return (
     <div>
@@ -76,10 +76,6 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            path: "forgotpassword",
-            element: <ForgotPassword />,
-          },
-          {
             path: "dashboard",
             element: <DashBoard />,
           },
@@ -110,6 +106,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUp />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
       },
       {
         path: "verify",
