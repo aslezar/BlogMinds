@@ -3,6 +3,7 @@ import authMiddleware from "../middleware/auth"
 import {
     getBlogById,
     getTrendingBlogs,
+    getRecommendedBlogs,
     getBlogByCategory,
     likeBlog,
     commentBlog,
@@ -11,7 +12,8 @@ import {
 const router = Router()
 
 router.route("/trending").get(getTrendingBlogs)
-router.route("/category/:tags").get(getBlogByCategory)
+router.route("/recommended").get(getRecommendedBlogs)
+router.route("/category").get(getBlogByCategory)
 router.route("/:blogId").get(getBlogById)
 
 router.use(authMiddleware)

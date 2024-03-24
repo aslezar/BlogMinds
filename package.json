@@ -15,8 +15,7 @@
         "url": "git+https://github.com/aslezar/BlogMinds.git"
     },
     "workspaces": [
-        "client",
-        "/"
+        "client"
     ],
     "keywords": [
         "blog"
@@ -49,8 +48,7 @@
         "nodemailer": "^6.9.12",
         "sharp": "^0.33.2",
         "uuid": "^9.0.1",
-        "wndb-with-exceptions": "^3.0.2",
-        "wordnet-db": "^3.1.14"
+        "wndb-with-exceptions": "^3.0.2"
     },
     "devDependencies": {
         "@faker-js/faker": "^8.4.1",

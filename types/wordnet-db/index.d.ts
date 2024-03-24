@@ -1,1 +1,1 @@
-declare module 'node-wordnet';
+declare module "node-wordnet"

@@ -3,7 +3,7 @@ import { getBlog, likeBlog } from "../api/index.ts"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
 import { Link, useParams } from "react-router-dom"
-import { BlogFullType } from "../definitions"
+import { BlogFullType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 
 type BlogPageProps = {
@@ -23,7 +23,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   )
 
   useEffect(() => {
-    const fetchBlog = async (userId: BlogFullType["_id"] | null) => {
+    const fetchBlog = async (userId: UserType["userId"] | null) => {
       if (!id) {
         setError(true)
         return toast.error("No such blog")

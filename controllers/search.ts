@@ -1,50 +1,57 @@
-import User from "../models/user";
-import Blogs from "../models/blog";
-import { Request, Response } from "express";
-import { BadRequestError } from "../errors";
-import { StatusCodes } from "http-status-codes";
-import natural from "natural";
-import WordNet from "node-wordnet";
+import User from "../models/user"
+import Blogs from "../models/blog"
+import { Request, Response } from "express"
+import { BadRequestError } from "../errors"
+import { StatusCodes } from "http-status-codes"
+import natural from "natural"
+import WordNet from "node-wordnet"
 
-const wordnet = new WordNet();
+const wordnet = new WordNet()
 
 const getSynonyms = (word: string) => {
     return new Promise<string[]>((resolve, reject) => {
         wordnet.lookup(word, (err: Error | null, definitions: any[]) => {
             if (err) {
-                reject(err);
+                reject(err)
             } else {
                 const synonyms = definitions.reduce((acc, definition) => {
                     if (definition.synonyms) {
-                        return acc.concat(definition.synonyms);
+                        return acc.concat(definition.synonyms)
                     } else {
-                        return acc;
+                        return acc
                     }
-                }, []);                
-                resolve(synonyms);
+                }, [])
+                resolve(synonyms)
             }
-        });
-    });
-};
+        })
+    })
+}
 
 const search = async (req: Request, res: Response) => {
-    const { type, query } = req.query;
-    if (!query) throw new BadRequestError("Query is required");
+    const { type, query } = req.query
+    if (!query) throw new BadRequestError("Query is required")
 
     switch (type) {
         case "user":
-            const userTokenizer = new natural.WordTokenizer();
-            const userQueryTokens = userTokenizer.tokenize(query.toString().toLowerCase());
-            let users;
+            const userTokenizer = new natural.WordTokenizer()
+            const userQueryTokens = userTokenizer.tokenize(
+                query.toString().toLowerCase(),
+            )
+
+            let users
 
             if (userQueryTokens) {
                 users = await User.find({
-                    name: { $in: userQueryTokens.map(token => new RegExp(token, 'i')) }
+                    name: {
+                        $in: userQueryTokens.map(
+                            (token) => new RegExp(token, "i"),
+                        ),
+                    },
                 })
                     .select("name email profileImage")
                     .skip(req.pagination.skip)
                     .limit(req.pagination.limit)
-                    .sort({ createdAt: -1 });
+                    .sort({ createdAt: -1 })
             }
 
             return res.status(StatusCodes.OK).json({
@@ -55,44 +62,45 @@ const search = async (req: Request, res: Response) => {
                 },
                 success: true,
                 msg: "Users Fetched Successfully",
-            });
+            })
 
         case "blog":
-            const blogTokenizer = new natural.WordTokenizer();
-            const blogStemmer = natural.PorterStemmer;
+            const blogTokenizer = new natural.WordTokenizer()
 
-            const blogQueryTokens = blogTokenizer.tokenize(query.toString().toLowerCase());
-            const stemmedBlogQuery = blogQueryTokens ? blogQueryTokens.map(token => blogStemmer.stem(token)) : [];
+            const blogQueryTokens = blogTokenizer.tokenize(
+                query.toString().toLowerCase(),
+            )
 
-            let synonymTokens: string[] = [];
-            let queryObject: any;
+            let synonymTokens: string[] = []
+            let queryObject: any
 
+            if (blogQueryTokens) {
+                const synonyms: string[][] = await Promise.all(
+                    blogQueryTokens.map((token) => getSynonyms(token)),
+                )
+                synonymTokens = synonyms.flatMap(
+                    (synonymList: string[]) => synonymList,
+                )
 
-if (blogQueryTokens) {
-    const synonyms: string[][] = await Promise.all(blogQueryTokens.map(token => getSynonyms(token)));
-    console.log('Synonyms:', synonyms);  
-    synonymTokens = synonyms.flatMap((synonymList: string[]) => synonymList);
+                queryObject = {
+                    $or: [
+                        { title: { $in: synonymTokens } },
+                        { tags: { $in: synonymTokens } },
+                    ],
+                }
+            }
 
-    queryObject = {
-        $or: [
-            { title: { $in: synonymTokens } },
-            { tags: { $in: synonymTokens } }
-        ]
-    };
-}
-
-const blogs = await Blogs.find(queryObject)
-    .select(
-        "title description img author tags views likesCount commentsCount createdAt updatedAt",
-    )
-    .populate({
-        path: "author",
-        select: "name profileImage",
-    })
-    .skip(req.pagination.skip)
-    .limit(req.pagination.limit)
-    .sort({ createdAt: -1 });
-
+            const blogs = await Blogs.find(queryObject)
+                .select(
+                    "title description img author tags views likesCount commentsCount createdAt updatedAt",
+                )
+                .populate({
+                    path: "author",
+                    select: "name profileImage",
+                })
+                .skip(req.pagination.skip)
+                .limit(req.pagination.limit)
+                .sort({ createdAt: -1 })
 
             return res.status(StatusCodes.OK).json({
                 data: {
@@ -102,12 +110,12 @@ const blogs = await Blogs.find(queryObject)
                 },
                 success: true,
                 msg: "Blogs Fetched Successfully",
-            });
+            })
         default:
             throw new BadRequestError(
                 "Invalid type, accepted types are 'user' and 'blog'",
-            );
+            )
     }
-};
+}
 
-export { search };
+export { search }

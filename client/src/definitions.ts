@@ -10,6 +10,12 @@ export interface SignUpType {
   password: string
 }
 
+export interface ForgotPasswordType {
+  email: string
+  otp: string
+  password: string
+}
+
 interface Author {
   _id: string
   name: string
@@ -73,4 +79,29 @@ export interface TrendingType {
   title: string
   totalScore: number
   author: Author
+}
+
+type ProfileBlogs = {
+  _id: string
+  title: string
+  author: string
+  img: string
+  tags: string[]
+  likesCount: number
+  commentsCount: number
+  views: number
+  createdAt: string
+  description: string
+}
+
+export type Profile = {
+  _id: string
+  name: string
+  blogs: ProfileBlogs[]
+  followersCount: number
+  followingCount: number
+  myInterests: string[]
+  profileImage: string
+  bio: string | undefined
+  createdAt: string
 }
