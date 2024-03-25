@@ -4,10 +4,10 @@ import { BadRequestError, UnauthenticatedError } from "../errors"
 import { Request, Response } from "express"
 import mongoose from "mongoose"
 import {
-    uploadProfileImage,
+    uploadProfileImage as cloudinaryUploadProfileImage,
     deleteProfileImage as cloudinaryDeleteProfileImage,
-    uploadAssetsImages,
-    deleteAssestImages,
+    uploadAssetsImages as cloudinaryUploadAssetsImages,
+    deleteAssestImages as cloudinaryDeleteAssestImages,
 } from "../utils/imageHandlers/cloudinary"
 
 const updateUser = async (
@@ -52,7 +52,7 @@ const updateProfileImage = async (req: Request, res: Response) => {
     const userId = req.user.userId
     if (!req.file) throw new BadRequestError("Image is required")
 
-    const cloudinary_img_url = await uploadProfileImage(req)
+    const cloudinary_img_url = await cloudinaryUploadProfileImage(req)
     await updateUser(userId, "profileImage", cloudinary_img_url)
 
     res.status(StatusCodes.OK).json({
@@ -94,7 +94,7 @@ const uploadAssets = async (req: Request, res: Response) => {
     if (!user) throw new UnauthenticatedError("User Not Found")
 
     //upload files to cloudinary
-    const cloudinary_img_urls = await uploadAssetsImages(req)
+    const cloudinary_img_urls = await cloudinaryUploadAssetsImages(req)
 
     user.myAssests.push(...cloudinary_img_urls)
     await user.save()
@@ -125,7 +125,7 @@ const deleteAssest = async (req: Request, res: Response) => {
         throw new BadRequestError("You are not authorized to delete this asset")
 
     //delete assets from cloudinary
-    const isDeleted: boolean = await deleteAssestImages(public_id)
+    const isDeleted: boolean = await cloudinaryDeleteAssestImages(public_id)
     if (!isDeleted) throw new BadRequestError("Failed to delete assets")
     await User.findByIdAndUpdate(userId, {
         $pull: { myAssests: assets },
