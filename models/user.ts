@@ -76,6 +76,12 @@ const UserSchema = new Schema<IUser>(
                 type: Date,
             },
         },
+        myAssests: [
+            {
+                type: String,
+                default: [],
+            },
+        ],
     },
     { timestamps: true },
 )

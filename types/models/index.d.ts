@@ -44,6 +44,7 @@ export interface IUser {
     updatedAt: Date
     status: string
     otp: OTP | undefined
+    myAssests: Types.Array<string>
     generateToken: () => string
     comparePassword: (pswrd: string) => boolean
 }

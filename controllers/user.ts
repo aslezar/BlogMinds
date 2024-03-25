@@ -55,5 +55,21 @@ const updateImage = async (req: Request, res: Response) => {
         msg: "Image Updated Successfully",
     })
 }
+const getAllAssests = async (req: Request, res: Response) => {
+    const userId = req.user.userId
+    const user = await User.findById(userId).select("myAssets")
+    if (!user) throw new UnauthenticatedError("User Not Found")
 
-export { updateName, updateBio, updateImage }
+    res.status(StatusCodes.OK).json({
+        data: user.myAssests,
+        success: true,
+        msg: "All Assets Fetched Successfully",
+    })
+}
+
+export {
+    updateName,
+    updateBio,
+    updateImage,
+    getAllAssests
+}
