@@ -22,6 +22,18 @@ const uploadProfileImage = async (req: Request) => {
     )
     return result.secure_url
 }
+const deleteProfileImage = async (userId: string): Promise<boolean> => {
+    const result = await cloudinary.uploader.destroy(
+        `blogmind/${userId}/profile`,
+        { invalidate: true },
+        (error, result) => {
+            if (error) return false
+            if (result.result === "ok") return true
+            return false
+        },
+    )
+    return result
+}
 
 const uploadAssetsImages = async (req: Request) => {
     const files = req.files as Express.Multer.File[]
@@ -56,4 +68,9 @@ const deleteAssestImages = async (public_id: string): Promise<boolean> => {
     return res
 }
 
-export { uploadProfileImage, uploadAssetsImages, deleteAssestImages }
+export {
+    uploadProfileImage,
+    deleteProfileImage,
+    uploadAssetsImages,
+    deleteAssestImages,
+}

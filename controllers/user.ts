@@ -5,6 +5,7 @@ import { Request, Response } from "express"
 import mongoose from "mongoose"
 import {
     uploadProfileImage,
+    deleteProfileImage as cloudinaryDeleteProfileImage,
     uploadAssetsImages,
     deleteAssestImages,
 } from "../utils/imageHandlers/cloudinary"
@@ -47,7 +48,7 @@ const updateBio = async (req: Request, res: Response) => {
         msg: "Bio Updated Successfully",
     })
 }
-const updateImage = async (req: Request, res: Response) => {
+const updateProfileImage = async (req: Request, res: Response) => {
     const userId = req.user.userId
     if (!req.file) throw new BadRequestError("Image is required")
 
@@ -55,8 +56,21 @@ const updateImage = async (req: Request, res: Response) => {
     await updateUser(userId, "profileImage", cloudinary_img_url)
 
     res.status(StatusCodes.OK).json({
+        data: { profileImage: cloudinary_img_url },
         success: true,
         msg: "Image Updated Successfully",
+    })
+}
+const deleteProfileImage = async (req: Request, res: Response) => {
+    const userId = req.user.userId
+
+    const isDeleted: boolean = await cloudinaryDeleteProfileImage(userId as any)
+    if (!isDeleted) throw new BadRequestError("Failed to delete image")
+    await updateUser(userId, "profileImage", undefined)
+
+    res.status(StatusCodes.OK).json({
+        success: true,
+        msg: "Image Deleted Successfully",
     })
 }
 const getAllAssests = async (req: Request, res: Response) => {
@@ -126,7 +140,8 @@ const deleteAssest = async (req: Request, res: Response) => {
 export {
     updateName,
     updateBio,
-    updateImage,
+    updateProfileImage,
+    deleteProfileImage,
     getAllAssests,
     uploadAssets,
     deleteAssest,

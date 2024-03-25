@@ -3,7 +3,8 @@ import upload from "../utils/imageHandlers/multer"
 import {
     updateName,
     updateBio,
-    updateImage,
+    updateProfileImage,
+    deleteProfileImage,
     getAllAssests,
     uploadAssets,
     deleteAssest,
@@ -15,7 +16,10 @@ const router = Router()
 router.use("/blog", userblogRouter)
 router.patch("/name", updateName)
 router.patch("/bio", updateBio)
-router.patch("/image", upload.single("profileImage"), updateImage)
+router
+    .route("/image")
+    .patch(upload.single("profileImage"), updateProfileImage)
+    .delete(deleteProfileImage)
 
 router
     .route("/assets")
