@@ -29,6 +29,7 @@
     "dependencies": {
         "@types/jsonwebtoken": "^9.0.6",
         "@types/multer": "^1.4.11",
+        "@types/uuid": "^9.0.8",
         "axios": "^1.6.8",
         "bcryptjs": "^2.4.3",
         "cloudinary": "^2.0.3",
