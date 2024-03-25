@@ -19,7 +19,6 @@ import SignUp from "./Pages/SignUpPage"
 import VerifyOTP from "./Pages/VerifyOTP"
 import ForgotPassword from "./Pages/ForgotPasswordPage"
 import DashBoard from "./Pages/DashBoardPage"
-import ProfileSidebar from "./Pages/ProfileSidebar"
 import MyBlogs from "./Pages/MyBlogsPage"
 import AddBlog from "./Pages/AddBlogPage"
 import EditBlog from "./Pages/EditBlogPage"
@@ -80,10 +79,6 @@ const router = createBrowserRouter([
           },
           {
             path: "profile",
-            element: <ProfileSidebar />,
-          },
-          {
-            path: "profile2",
             element: <ProfilePage />,
           },
           {
