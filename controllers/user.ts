@@ -6,6 +6,7 @@ import mongoose from "mongoose"
 import {
     uploadProfileImage,
     uploadAssetsImages,
+    deleteAssestImages,
 } from "../utils/imageHandlers/cloudinary"
 
 const updateUser = async (
@@ -91,10 +92,42 @@ const uploadAssets = async (req: Request, res: Response) => {
     })
 }
 
+const deleteAssest = async (req: Request, res: Response) => {
+    const userId = req.user.userId
+    const { assets } = req.body
+    if (!assets) throw new BadRequestError("Assets are required")
+
+    const public_id = assets
+        .split("/")
+        .slice(-3)
+        .join("/")
+        .split(".")
+        .slice(0, -1)
+        .join(".")
+
+    const userIdFromUrl = public_id.split("/")[1]
+
+    if (userIdFromUrl !== userId)
+        throw new BadRequestError("You are not authorized to delete this asset")
+
+    //delete assets from cloudinary
+    const isDeleted: boolean = await deleteAssestImages(public_id)
+    if (!isDeleted) throw new BadRequestError("Failed to delete assets")
+    await User.findByIdAndUpdate(userId, {
+        $pull: { myAssests: assets },
+    })
+
+    res.status(StatusCodes.OK).json({
+        success: true,
+        msg: "Assets Deleted Successfully",
+    })
+}
+
 export {
     updateName,
     updateBio,
     updateImage,
     getAllAssests,
-    uploadAssets
+    uploadAssets,
+    deleteAssest,
 }

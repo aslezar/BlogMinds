@@ -6,6 +6,7 @@ import {
     updateImage,
     getAllAssests,
     uploadAssets,
+    deleteAssest,
 } from "../controllers/user"
 import userblogRouter from "./userblog"
 
@@ -20,5 +21,6 @@ router
     .route("/assets")
     .get(getAllAssests)
     .post(upload.array("assetFiles", 5), uploadAssets)
+    .delete(deleteAssest)
 
 export default router

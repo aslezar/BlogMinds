@@ -16,6 +16,8 @@ const uploadProfileImage = async (req: Request) => {
             overwrite: true,
             format: "webp",
             invalidate: true,
+            width: 400,
+            height: 400,
         },
     )
     return result.secure_url
@@ -41,5 +43,17 @@ const uploadAssetsImages = async (req: Request) => {
     }
     return urls
 }
+const deleteAssestImages = async (public_id: string): Promise<boolean> => {
+    const res = await cloudinary.uploader.destroy(
+        public_id,
+        { invalidate: true },
+        (error, result) => {
+            if (error) return false
+            if (result.result === "ok") return true
+            return false
+        },
+    )
+    return res
+}
 
-export { uploadProfileImage, uploadAssetsImages }
+export { uploadProfileImage, uploadAssetsImages, deleteAssestImages }
