@@ -58,7 +58,7 @@ const Dropzone = ({
     multiple: true,
     disabled: uploading,
     maxFiles: 5,
-    maxSize: 1 * 1024 * 1024, // 4MB
+    maxSize: 4 * 1024 * 1024, // 4MB
     accept: {
       "image/*": [".png", ".jpeg", ".jpg", ".webp"],
     },

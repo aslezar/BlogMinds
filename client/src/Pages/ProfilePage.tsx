@@ -10,6 +10,9 @@ const ProfilePage = () => {
   const handleUpdate = () => {
     setEdit(false)
   }
+  const handleCancel = () => {
+    setEdit(false)
+  }
 
   const { loading, isAuthenticated, user } = useAppSelector(
     (state) => state.user,
@@ -17,6 +20,7 @@ const ProfilePage = () => {
 
   if (loading) return <div>Loading...</div>
   if (!isAuthenticated) return <div>Not Authenticated</div>
+  if (!user) return <div>No user found</div>
 
   console.log(user)
 
@@ -46,6 +50,7 @@ const ProfilePage = () => {
                 type="text"
                 placeholder="vedant Nagar"
                 disabled={!edit}
+                value={user.name}
                 className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
               />
 
@@ -60,8 +65,8 @@ const ProfilePage = () => {
               <label className="mt-2">Profile Photo</label>
               <img
                 className="h-40 w-40"
-                src="https://img.freepik.com/premium-vector/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.jpg?size=338&ext=jpg&ga=GA1.1.735520172.1711065600&semt=ais"
-                alt=""
+                src={user.profileImage}
+                alt={user.name}
               />
 
               <label className="mt-2">Location</label>
@@ -104,6 +109,12 @@ const ProfilePage = () => {
                     onClick={handleUpdate}
                   >
                     Update
+                  </button>
+                  <button
+                    className="bg-slate-500 p-2 rounded-3xl px-5 text-white hover:bg-slate-700"
+                    onClick={handleCancel}
+                  >
+                    Cancel
                   </button>
                 </div>
               )}
@@ -193,6 +204,7 @@ const ProfilePage = () => {
                 type="text"
                 placeholder="pathaa@gmail.com"
                 disabled={!edit}
+                value={user.email}
                 className={`mb-4 ${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
               />
             </form>
