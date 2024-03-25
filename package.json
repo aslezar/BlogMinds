@@ -46,7 +46,6 @@
         "natural": "^6.12.0",
         "node-wordnet": "^0.1.12",
         "nodemailer": "^6.9.12",
-        "sharp": "^0.33.2",
         "uuid": "^9.0.1",
         "wndb-with-exceptions": "^3.0.2"
     },
