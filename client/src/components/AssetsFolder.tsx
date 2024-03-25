@@ -35,7 +35,7 @@ const Dropzone = ({
   setAssets: React.Dispatch<React.SetStateAction<string[]>>
 }) => {
   const [uploading, setUploading] = React.useState(false)
-  const onDrop = React.useCallback(
+  const onDropAccepted = React.useCallback(
     async (acceptedFiles: File[]) => {
       const formData = new FormData()
       acceptedFiles.forEach((file) => {
@@ -54,15 +54,34 @@ const Dropzone = ({
     [setAssets],
   )
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop })
+  const { getRootProps, getInputProps } = useDropzone({
+    multiple: true,
+    disabled: uploading,
+    maxFiles: 5,
+    maxSize: 1 * 1024 * 1024, // 4MB
+    accept: {
+      "image/*": [".png", ".jpeg", ".jpg", ".webp"],
+    },
+    onDropRejected: (files) => {
+      console.log(files)
+      files.forEach((file) => {
+        toast.error(
+          `${file.file.name}: ${file.errors.map((err) => (err.code === "file-too-large" ? "File is larger than 4MB" : err.message)).join(", ")}`,
+        )
+      })
+    },
+    onDropAccepted: onDropAccepted,
+  })
 
   return (
     <div
       {...getRootProps()}
       className={`p-4 border-dashed border-2 border-gray-200 rounded-lg cursor-pointer ${uploading && "opacity-50"}`}
     >
-      <input {...getInputProps()} disabled={uploading} />
+      <input {...getInputProps()} />
       <p>Drag 'n' drop some files here, or click to select files</p>
+      <em>(Only *.jpeg, *.jpg, *.png, *.webp images upto 4MB)</em>
+      <em>(max 5 files)</em>
     </div>
   )
 }
@@ -91,6 +110,7 @@ const Assets = ({
     .split("_")
     .slice(0, -1)
     .join("_")
+    .replace("%20", " ")
   return (
     <div className="flex items-center gap-4">
       <img
