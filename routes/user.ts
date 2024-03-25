@@ -5,6 +5,7 @@ import {
     updateBio,
     updateImage,
     getAllAssests,
+    uploadAssets,
 } from "../controllers/user"
 import userblogRouter from "./userblog"
 
@@ -15,6 +16,9 @@ router.patch("/name", updateName)
 router.patch("/bio", updateBio)
 router.patch("/image", upload.single("profileImage"), updateImage)
 
-router.route("/assets").get(getAllAssests)
+router
+    .route("/assets")
+    .get(getAllAssests)
+    .post(upload.array("assetFiles", 5), uploadAssets)
 
 export default router

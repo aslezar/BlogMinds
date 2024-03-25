@@ -11,7 +11,7 @@ cloudinary.config({
 })
 
 // upload image to cloudinary and return the url
-const uploadImage = async (req: Request) => {
+const uploadProfileImage = async (req: Request) => {
     const webpImg = await sharp(req.file.buffer)
         .webp({ quality: 80 })
         .toBuffer()
@@ -35,4 +35,26 @@ const uploadImage = async (req: Request) => {
     return result.secure_url
 }
 
-export default uploadImage
+const uploadAssetsImages = async (req: Request) => {
+    const files = req.files as Express.Multer.File[]
+    const urls: string[] = []
+
+    for (const file of files) {
+        const webpImg = await sharp(file.buffer)
+            .webp({ quality: 80 })
+            .toBuffer()
+
+        const originalName = file.originalname.split(".")[0] // remove original extension
+        const result = await cloudinary.uploader.upload(
+            `data:${file.mimetype};base64,${webpImg.toString("base64")}`,
+            {
+                folder: "blogmind",
+                public_id: `${req.user.userId}/${originalName}`,
+            },
+        )
+        urls.push(result.secure_url)
+    }
+    return urls
+}
+
+export { uploadProfileImage, uploadAssetsImages }

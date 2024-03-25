@@ -3,7 +3,10 @@ import { StatusCodes } from "http-status-codes"
 import { BadRequestError, UnauthenticatedError } from "../errors"
 import { Request, Response } from "express"
 import mongoose from "mongoose"
-import uploadImage from "../utils/imageHandlers/cloudinary"
+import {
+    uploadProfileImage,
+    uploadAssetsImages,
+} from "../utils/imageHandlers/cloudinary"
 
 const updateUser = async (
     userId: mongoose.Schema.Types.ObjectId,
@@ -47,7 +50,7 @@ const updateImage = async (req: Request, res: Response) => {
     const userId = req.user.userId
     if (!req.file) throw new BadRequestError("Image is required")
 
-    const cloudinary_img_url = await uploadImage(req)
+    const cloudinary_img_url = await uploadProfileImage(req)
     await updateUser(userId, "profileImage", cloudinary_img_url)
 
     res.status(StatusCodes.OK).json({
@@ -57,7 +60,7 @@ const updateImage = async (req: Request, res: Response) => {
 }
 const getAllAssests = async (req: Request, res: Response) => {
     const userId = req.user.userId
-    const user = await User.findById(userId).select("myAssets")
+    const user = await User.findById(userId).select("myAssests")
     if (!user) throw new UnauthenticatedError("User Not Found")
 
     res.status(StatusCodes.OK).json({
@@ -67,9 +70,31 @@ const getAllAssests = async (req: Request, res: Response) => {
     })
 }
 
+const uploadAssets = async (req: Request, res: Response) => {
+    const userId = req.user.userId
+    const files = req.files
+    if (!files) throw new BadRequestError("Files are required")
+
+    const user = await User.findById(userId)
+    if (!user) throw new UnauthenticatedError("User Not Found")
+
+    //upload files to cloudinary
+    const cloudinary_img_urls = await uploadAssetsImages(req)
+
+    user.myAssests.push(...cloudinary_img_urls)
+    await user.save()
+
+    res.status(StatusCodes.OK).json({
+        data: cloudinary_img_urls,
+        success: true,
+        msg: "Assets Uploaded Successfully",
+    })
+}
+
 export {
     updateName,
     updateBio,
     updateImage,
-    getAllAssests
+    getAllAssests,
+    uploadAssets
 }
