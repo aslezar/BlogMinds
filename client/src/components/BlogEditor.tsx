@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react"
 import JoditEditor from "jodit-react"
 import { NavLink } from "react-router-dom"
 import { BlogFullType, Category } from "../definitions"
+import AssetsFolder from "./AssetsFolder"
 
 type BlogEditorProps = {
   blogContent: BlogFullType
@@ -22,13 +23,13 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
   }
 
   return (
-    <div className="flex min-h-screen fixed top-0 z-40  mx-auto w-screen">
-      <div className="flex flex-col  px-3 pt-4 md:w-1/5 bg-white mx-auto  gap-3 min-h-screen">
-        <NavLink to="/" className="flex items-center space-x-2  mb-2 px-2 ">
+    <div className="flex min-h-screen fixed top-0 z-40 mx-auto w-screen">
+      <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 min-h-screen">
+        <NavLink to="/" className="flex items-center space-x-2 mb-2 px-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 32 32"
-            className="h-8 "
+            className="h-8"
           >
             <g data-name="75-Write">
               <path d="M30 7v18a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5h9V0H7a7 7 0 0 0-7 7v18a7 7 0 0 0 7 7h18a7 7 0 0 0 7-7V7z" />
@@ -39,8 +40,8 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
             Creativerse
           </span>
         </NavLink>
-        <figure className="aspect-video overflow-hidden  rounded-md relative">
-          <button className=" top-1 left-1 absolute bg-white rounded-full px-2 p-1 text-sm font-medium text-gray-600">
+        <figure className="aspect-video overflow-hidden rounded-md relative">
+          <button className="top-1 left-1 absolute bg-white rounded-full px-2 p-1 text-sm font-medium text-gray-600">
             Generate with AI
           </button>
 
@@ -62,14 +63,14 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
           placeholder="Article Title"
           value={blog.title}
           onChange={(e) => setBlog({ ...blog, title: e.target.value })}
-          className=" p-3 border rounded-lg focus:outline-none focus:ring  w-full text-lg"
+          className="p-3 border rounded-lg focus:outline-none focus:ring w-full text-lg"
         />
         <textarea
           value={blog.description}
           onChange={(e) => setBlog({ ...blog, description: e.target.value })}
           placeholder="Short Description of the Article ...."
           rows={7}
-          className=" px-3 py-2 border rounded-md focus:outline-none focus:ring  resize-none "
+          className="px-3 py-2 border rounded-md focus:outline-none focus:ring resize-none"
         />
         <div>
           <span className="text-sm px-2 italic text-gray-600 mb-0.5">
@@ -82,6 +83,9 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
             }
             placeholder="Select categories"
           />
+        </div>
+        <div className="px-3 py-2 border rounded-md focus:outline-none focus:ring resize-none">
+          <AssetsFolder />
         </div>
 
         <div className="flex gap-2 mb-8 mt-auto self-end pr-2">
@@ -251,4 +255,5 @@ function ImageInput({ value, onChange }: ImageInputProps) {
     </div>
   )
 }
+
 export default BlogEditor

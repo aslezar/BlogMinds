@@ -79,7 +79,7 @@ const getAllAssests = async (req: Request, res: Response) => {
     if (!user) throw new UnauthenticatedError("User Not Found")
 
     res.status(StatusCodes.OK).json({
-        data: user.myAssests,
+        data: { assets: user.myAssests },
         success: true,
         msg: "All Assets Fetched Successfully",
     })

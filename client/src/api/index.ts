@@ -75,6 +75,18 @@ export const signinToken = () => API.get("/auth/me")
 export const signOut = () => API.post("/auth/signout")
 
 /*
+ ********************** User Requests **********************
+ */
+
+export const getAssests = () => API.get("/user/assets")
+export const deleteAssest = (assets: string) =>
+  API.delete("/user/assets", { data: { assets } })
+
+export const uploadAssests = (assetFiles: FormData) => {
+  return API.post("/user/assets", assetFiles)
+}
+
+/*
  *********************** Update User ***********************
  */
 export const updateName = (name: UserType["name"]) =>
