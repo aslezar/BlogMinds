@@ -26,7 +26,6 @@ const SearchResults: React.FC = () => {
       try {
         const response = await search(query, type, page, 20)
 
-        console.log(response.data)
         if (response.data.blogs) {
           setData(response.data.blogs)
         } else {
@@ -41,6 +40,10 @@ const SearchResults: React.FC = () => {
       }
     }
     if (query && query.length >= 3) fetchData()
+    else {
+      setIsLoading(false)
+      setData([])
+    }
   }, [query, type, page])
   const handleTabChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setCategory(categories[newValue])
@@ -48,8 +51,6 @@ const SearchResults: React.FC = () => {
   useEffect(() => {
     navigate(`/search?type=${category}&query=${query}`)
   }, [category])
-
-  console.log(totalCount)
 
   return (
     <div className="w-3/4  mx-auto pb-7">

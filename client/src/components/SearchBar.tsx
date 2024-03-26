@@ -96,11 +96,11 @@ const SearchBar = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault()
+                if (inputValue.length < 3) return
                 navigate(
                   `/search?type=${category}&query=${inputValue.replace(/\s/g, "%20")}`,
                 )
                 setIsModalOpen(!isModalOpen)
-                console.log(isModalOpen)
               }
             }}
           />
