@@ -12,6 +12,7 @@ const SearchResults: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [data, setData] = useState<{}[]>([])
   const [page, setPage] = useState<number>(1)
+  const [totalCount, setTotalCount] = useState<number>(0)
   const [params] = useSearchParams()
   const navigate = useNavigate()
   const type = params.get("type")
@@ -31,6 +32,7 @@ const SearchResults: React.FC = () => {
         } else {
           setData(response.data.users)
         }
+        setTotalCount(response.data.totalCount)
       } catch (error: any) {
         console.error(error.response)
         // Handle error
@@ -46,6 +48,9 @@ const SearchResults: React.FC = () => {
   useEffect(() => {
     navigate(`/search?type=${category}&query=${query}`)
   }, [category])
+
+  console.log(totalCount)
+
   return (
     <div className="w-3/4  mx-auto pb-7">
       <div className="flex justify-between items-center my-4 px-6 sticky py-4 top-16 bg-white">
@@ -72,7 +77,7 @@ const SearchResults: React.FC = () => {
         )}
         <Pagination
           // calculate count by the length of response and limit
-          count={Math.ceil(data.length / 20)}
+          count={Math.ceil(totalCount / 20)}
           shape="rounded"
           color="secondary"
           onChange={(_e, value: number) => setPage(value)}

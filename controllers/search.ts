@@ -34,6 +34,9 @@ const search = async (req: Request, res: Response) => {
 
     switch (type) {
         case "user":
+            const totalCount = await User.countDocuments({
+                name: { $regex: query, $options: "i" } as any,
+            })
             const users = await User.find({
                 name: { $regex: query, $options: "i" } as any,
             })
@@ -45,6 +48,7 @@ const search = async (req: Request, res: Response) => {
             return res.status(StatusCodes.OK).json({
                 data: {
                     users,
+                    totalCount,
                     page: req.pagination.page,
                     limit: req.pagination.limit,
                 },
@@ -83,23 +87,62 @@ const search = async (req: Request, res: Response) => {
                 }
             }
 
-            const blogs = await Blogs.find(queryObject)
-                .select(
-                    "title description img author tags views likesCount commentsCount createdAt updatedAt",
-                )
-                .populate({
-                    path: "author",
-                    select: "name profileImage",
-                })
-                .skip(req.pagination.skip)
-                .limit(req.pagination.limit)
+            const aggregationPipeline = [
+                { $match: queryObject }, // Match the query
+                {
+                    $lookup: {
+                        from: "users", // Assuming the collection name is "authors"
+                        localField: "author",
+                        foreignField: "_id",
+                        as: "author",
+                    },
+                },
+                { $unwind: "$author" }, // Unwind the author array
+                {
+                    $project: {
+                        // Project only the fields you need
+                        title: 1,
+                        description: 1,
+                        img: 1,
+                        tags: 1,
+                        views: 1,
+                        likesCount: 1,
+                        commentsCount: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
+                        author: { _id: 1, name: 1, profileImage: 1 },
+                    },
+                },
+
+                {
+                    $facet: {
+                        blogs: [
+                            { $skip: req.pagination.skip },
+                            { $limit: req.pagination.limit },
+                        ],
+                        totalCount: [{ $count: "total" }],
+                    },
+                },
+                {
+                    $project: {
+                        blogs: 1,
+                        totalCount: {
+                            $arrayElemAt: ["$totalCount.total", 0],
+                        },
+                        page: {
+                            $literal: req.pagination.page,
+                        },
+                        limit: {
+                            $literal: req.pagination.limit,
+                        },
+                    },
+                },
+            ]
+
+            const blogs = await Blogs.aggregate(aggregationPipeline)
 
             return res.status(StatusCodes.OK).json({
-                data: {
-                    blogs,
-                    page: req.pagination.page,
-                    limit: req.pagination.limit,
-                },
+                data: blogs[0],
                 success: true,
                 msg: "Blogs Fetched Successfully",
             })
