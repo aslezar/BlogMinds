@@ -15,7 +15,6 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const [isLoading, setLoading] = React.useState<boolean>(true)
   const [blog, setBlog] = React.useState<BlogFullType | null>(null)
   const [isLiked, setIsLiked] = React.useState<boolean>(false)
-  const [likeLoading, setLikeLoading] = React.useState<boolean>(false)
 
   const { id } = useParams<{ id: string }>()
   const { loading, isAuthenticated, user } = useAppSelector(
@@ -50,19 +49,14 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         id: "Please login to like the blog",
       })
     if (!id) return toast.error("No such blog")
-    setLikeLoading(true)
-    likeBlog(id)
-      .then(() => {
-        setIsLiked((prev) => !prev)
-        setBlog((prev) => {
-          return prev
-            ? { ...prev, likesCount: prev.likesCount + (isLiked ? -1 : 1) }
-            : prev
-        })
+    likeBlog(id).then(() => {
+      setIsLiked((prev) => !prev)
+      setBlog((prev) => {
+        return prev
+          ? { ...prev, likesCount: prev.likesCount + (isLiked ? -1 : 1) }
+          : prev
       })
-      .finally(() => {
-        setLikeLoading(false)
-      })
+    })
   }
 
   if (isLoading === true) return <Loader />
