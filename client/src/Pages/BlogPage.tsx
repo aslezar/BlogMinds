@@ -50,7 +50,6 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
     const userId = user && user.userId
     if (!loading) fetchBlog(userId)
   }, [loading, isAuthenticated, user])
-  console.log(blog)
 
   const handleLikeButton = () => {
     if (!isAuthenticated)
@@ -120,7 +119,9 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                 </div>
               </div>
             )}
-            {blog.author && <span className="text-2xl text-gray-600 font-thin">|</span>}
+            {blog.author && (
+              <span className="text-2xl text-gray-600 font-thin">|</span>
+            )}
             <div className="flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -151,15 +152,14 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             </div>
           </div>
         </div>
-
-        <figure className="">
-          <img
-            src={blog?.img}
-            alt="img"
-            width={500}
-            height={300}
-            className=" object-cover w-full max-h-96"
-          />
+        <figure>
+            <img
+              src={blog?.img}
+              alt="img"
+              width={500}
+              height={300}
+              className=" object-cover w-full max-h-96"
+            />
         </figure>
         <div className="text-gray-500 mt-2 ">
           {blog?.content && (
@@ -183,19 +183,19 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         </div>
         <div className="mt-8">
           <h3 className="text-xl font-semibold mb-4">Comments</h3>
-          {blog.comments && blog.comments.length === 0 ? (
+          {blog?.comments && blog?.comments?.length === 0 ? (
             <p>No comments yet.</p>
           ) : (
             <ul>
-              {blog.comments.map((comment, index) => (
+              {blog?.comments?.map((comment, index) => (
                 <li key={index} className="mb-4">
                   <img
                     className="object-cover w-full mx-auto lg:mx-0 lg:w-52 aspect-video rounded-xl mb-2"
-                    src={comment.author.profileImage}
+                    src={comment?.author?.profileImage}
                     alt={"img"}
                   />
-                  <p className="font-semibold">{comment.author.name}</p>
-                  <p>{comment.message}</p>
+                  <p className="font-semibold">{comment?.author?.name}</p>
+                  <p>{comment?.message}</p>
                 </li>
               ))}
             </ul>
