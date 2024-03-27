@@ -18,7 +18,9 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const [isLoading, setLoading] = React.useState<boolean>(true)
   const [blog, setBlog] = React.useState<BlogFullType | null>(null)
   const [isLiked, setIsLiked] = React.useState<boolean>(false)
+
   // const [likeLoading, setLikeLoading] = React.useState<boolean>(false)
+
 
   const { id } = useParams<{ id: string }>()
   // const navigate = useNavigate()
@@ -58,6 +60,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         id: "Please login to like the blog",
       })
     if (!id) return toast.error("No such blog")
+
     setIsLiked((prev) => !prev)
     likeBlog(id)
       .then(() => {
@@ -71,6 +74,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         toast.error("There was an error, please try again later")
         console.log(error)
       })
+    })
   }
 
   if (isLoading === true) return <Loader />
