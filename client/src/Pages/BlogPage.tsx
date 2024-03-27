@@ -6,8 +6,9 @@ import { Link, useParams } from "react-router-dom"
 import { BlogFullType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 import { format } from "date-fns/format" // Import date-fns under a namespace
-// import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { IoBookOutline } from "react-icons/io5"
+import { IoChevronBackOutline } from "react-icons/io5"
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -19,11 +20,8 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const [blog, setBlog] = React.useState<BlogFullType | null>(null)
   const [isLiked, setIsLiked] = React.useState<boolean>(false)
 
-  // const [likeLoading, setLikeLoading] = React.useState<boolean>(false)
-
-
   const { id } = useParams<{ id: string }>()
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const { loading, isAuthenticated, user } = useAppSelector(
     (state) => state.user,
   )
@@ -74,7 +72,6 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         toast.error("There was an error, please try again later")
         console.log(error)
       })
-    })
   }
 
   if (isLoading === true) return <Loader />
@@ -89,7 +86,10 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           to={"/feed"}
           className="mt-3 flex items-center gap-1 text-lg text-teal-800  pr-3  "
         >
-          <span>All Articles </span>
+          <div className="flex items-center">
+            <IoChevronBackOutline className="text-dark" />
+            <span className="text-dark">All Articles</span>
+          </div>
         </Link>
         <h2 className="text-5xl md:text-5xl w-full font-semibold text-zinc-800 font-playfair">
           {blog?.title}
@@ -100,17 +100,17 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           </p>
 
           <div className="flex gap-3 items-end text-lg">
-            {/* {blog.author && (
+            {blog.author && (
               <div className="flex items-end ">
                 <img
-                  className="object-cover object-center w-6 aspect-square rounded-full"
+                  className="object-cover object-center w-7 aspect-square rounded-full"
                   src={blog.author.profileImage}
                   alt=""
                 />
 
                 <div className="ml-2">
                   <h1
-                    className="text-[15px] text-gray-700 hover:underline hover:cursor-pointer"
+                    className="text-lg text-gray-700 hover:underline hover:cursor-pointer"
                     onClick={() => {
                       navigate(`/user/${blog.author._id}`)
                     }}
@@ -119,7 +119,8 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                   </h1>
                 </div>
               </div>
-            )} */}
+            )}
+            <span className="text-2xl text-gray-600 font-thin">|</span>
             <div className="flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
