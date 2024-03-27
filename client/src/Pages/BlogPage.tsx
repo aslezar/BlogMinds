@@ -115,13 +115,19 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           )}
         </div>
         <div className="flex items-center mt-4">
-          <button
+          {/* <button
             className={`mr-2 px-4 py-2 rounded-md ${isLiked ? "bg-red-500" : "bg-teal-500"} text-white focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed`}
             onClick={handleLikeButton}
             disabled={likeLoading}
           >
             {likeLoading ? <Loader /> : isLiked === true ? "Liked" : "Like"}
-          </button>
+          </button> */}
+          <div className="heart-bg">
+            <div
+              className={`heart-icon ${isLiked ? "liked" : ""}`}
+              onClick={handleLikeButton}
+            ></div>
+          </div>
           <span className="ml-2">{blog.likesCount} Likes</span>
         </div>
         <div className="mt-8">
