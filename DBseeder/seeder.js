@@ -4,10 +4,27 @@ const dotenv = require("dotenv")
 
 const BlogModel = require("./blog")
 const UserModel = require("./user")
+const CommentModel = require("./comment")
 
 const { blogData, userData, convertNumberToId } = require("./dataGenerator")
 
 dotenv.config("../.env")
+
+const randomComments = [
+    "I don't agree with this",
+    "I agree with this",
+    "This is a great article",
+    "This is a bad article",
+    "I don't understand this",
+    "This is too complicated",
+    "This is too simple",
+    "I don't like this",
+    "I like this",
+    "I don't know what to say",
+    "This is a great read",
+    "I don't understand this",
+    "This is too complicated",
+]
 
 const serverSelectionTimeoutMS =
     Number(process.env.SERVER_SELECTION_TIMEOUT_MS) || 5000
@@ -54,6 +71,12 @@ async function seeder() {
         for (let i = 0; i < randomInt(40, 160); i++) {
             const randomBlog = blogs[randomInt(0, blogs.length - 1)]
             randomBlog.views += 1
+            const comment = await CommentModel.create({
+                message:
+                    randomComments[randomInt(0, randomComments.length - 1)],
+                author: user._id,
+            })
+            randomBlog.comments.push(comment)
             user.readArticles.push(randomBlog)
         }
     }

@@ -100,10 +100,18 @@ const getBlogByCategory = async (req: Request, res: Response) => {
 const getBlogById = async (req: Request, res: Response) => {
     const blogId = getBlogId(req)
 
-    const blog = await Blog.findById(blogId).populate({
-        path: "author",
-        select: "name profileImage",
-    })
+    const blog = await Blog.findById(blogId)
+        .populate({
+            path: "author",
+            select: "name profileImage",
+        })
+        .populate({
+            path: "comments",
+            populate: {
+                path: "author",
+                select: "name profileImage",
+            },
+        })
     if (!blog) throw new BadRequestError("Blog not found")
 
     let isLiked = false
