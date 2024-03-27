@@ -120,7 +120,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                 </div>
               </div>
             )}
-            <span className="text-2xl text-gray-600 font-thin">|</span>
+            {blog.author && <span className="text-2xl text-gray-600 font-thin">|</span>}
             <div className="flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
