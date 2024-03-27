@@ -65,14 +65,14 @@ async function userSeeder() {
 async function commentSeeder() {
     try {
         await CommentModel.deleteMany({})
-        console.log("Old user data deleted successfully.")
+        console.log("Old comment data deleted successfully.")
     } catch (error) {
-        console.error("Error deleting old user data:", error.message)
+        console.error("Error deleting old comment data:", error.message)
     }
     try {
         await CommentModel.insertMany(commentData)
-        console.log("All user data inserted successfully.")
+        console.log("All comment data inserted successfully.")
     } catch (error) {
-        console.error("Error inserting user data:", error.message)
+        console.error("Error inserting comment data:", error.message)
     }
 }

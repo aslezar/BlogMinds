@@ -214,7 +214,7 @@ const commentData = []
 console.timeLog("executionTime", "Varibles created")
 for (let [name, id] of userIdName) {
     let readArticles = []
-    for (let i = 0; i < randomInt(10, 25); i++) {
+    for (let i = 0; i < randomInt(20, 100); i++) {
         const randomBlog = blogData[randomInt(0, blogData.length - 1)]
         commentData.push({
             _id: convertNumberToId(commentData.length + 1, "comment"),
@@ -227,25 +227,31 @@ for (let [name, id] of userIdName) {
         randomBlog.comments.push(commentData[commentData.length - 1]._id)
         randomBlog.commentsCount++
     }
-    for (let i = 0; i < randomInt(20, 80); i++) {
+    for (let i = 0; i < randomInt(50, 1000); i++) {
         const randomBlog = blogData[randomInt(0, blogData.length - 1)]
         randomBlog.views += 1
         readArticles.push(randomBlog._id)
         randomBlog.likes.push(id)
         randomBlog.likesCount++
     }
-    let myBlogs = blogData.filter((blog) => blog.author === id)
+    let myBlogs = blogData
+        .filter((blog) => blog.author === id)
+        .map((blog) => blog._id)
+    let myInterests = []
+
+    for (let i = 0; i < randomInt(1, 5); i++) {
+        myInterests.push(tagArray[randomInt(0, tagArray.length - 1)])
+    }
+
     userData.push({
         _id: id,
         name,
-        email: `${name}@$gamil.com`,
-        password: bcrypt.hashSync("password", 10),
+        email: faker.internet.email({ firstName: name }),
+        password: bcrypt.hashSync("password", 5),
         profileImage: faker.image.avatar(),
         bio: bioData[randomInt(0, bioData.length - 1)],
-        blogs: myBlogs.map((blog) => blog._id),
-        myInterests: tagArray
-            .sort(() => 0.5 - Math.random())
-            .slice(0, randomInt(1, 5)),
+        blogs: myBlogs,
+        myInterests,
         readArticles,
         following: [],
         followers: [],
@@ -268,6 +274,8 @@ for (user of userData) {
 console.timeLog("executionTime", "Followers and following created")
 
 console.log("Data generated")
+
+console.timeEnd("executionTime")
 
 module.exports = {
     blogData,
