@@ -5,7 +5,7 @@ import toast from "react-hot-toast"
 import { Link, useParams } from "react-router-dom"
 import { BlogFullType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
-import "../index.css"
+
 type BlogPageProps = {
   isEmbed?: boolean
 }
