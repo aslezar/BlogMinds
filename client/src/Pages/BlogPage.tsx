@@ -9,8 +9,6 @@ import { format } from "date-fns/format" // Import date-fns under a namespace
 // import { useNavigate } from "react-router-dom"
 import { IoBookOutline } from "react-icons/io5"
 
-
-
 type BlogPageProps = {
   isEmbed?: boolean
 }
@@ -93,7 +91,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           {blog?.title}
         </h2>
         <div>
-          <p className="font-[450] text-gray-600 text-3xl mb-3 font-[inter]">
+          <p className="font-[450] text-gray-600 text-2xl mb-3 font-[inter]">
             {blog?.description}
           </p>
 
@@ -161,7 +159,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         <div className="text-gray-500 mt-2 ">
           {blog?.content && (
             <>
-              <pre className="w-[100%] whitespace-pre-line text-xl font-[inter]">
+              <pre className="w-[100%] whitespace-pre-line text-xl font-[inter] leading-8">
                 {blog.content}
               </pre>
               Character Length: {blog.content.length}
