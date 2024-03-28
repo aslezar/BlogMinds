@@ -153,13 +153,13 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           </div>
         </div>
         <figure>
-            <img
-              src={blog?.img}
-              alt="img"
-              width={500}
-              height={300}
-              className=" object-cover w-full max-h-96"
-            />
+          <img
+            src={blog?.img}
+            alt="img"
+            width={500}
+            height={300}
+            className=" object-cover w-full max-h-96"
+          />
         </figure>
         <div className="text-gray-500 mt-2 ">
           {blog?.content && (

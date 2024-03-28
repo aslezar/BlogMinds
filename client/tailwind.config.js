@@ -10,9 +10,9 @@ export default {
         accent: "#81ffff",
         dark: "#101356",
       },
-      fontFamily:{
-        playfair: ["Playfair Display", "serif"]
-      }
+      fontFamily: {
+        playfair: ["Playfair Display", "serif"],
+      },
     },
   },
   plugins: [],
