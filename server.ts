@@ -102,8 +102,8 @@ app.use(errorHandler)
 //Function Start
 async function start() {
     try {
-        await connectDB(process.env.MONGO_URL as string)
-        console.log("Connected to the DataBase Sucessfully")
+        const db = await connectDB(process.env.MONGO_URL as string)
+        console.log(`MongoDB Connected: ${db.connection.name}`)
         server.listen(PORT, () => {
             console.log(
                 `⚡️[server]: Server is listening on http://localhost:${PORT}`,
