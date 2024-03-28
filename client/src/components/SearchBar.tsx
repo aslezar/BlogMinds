@@ -12,7 +12,9 @@ const SearchBar = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState<{}[]>([])
   const [inputValue, setInputValue] = useState<string>("")
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
+  const [timeoutId, setTimeoutId] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null)
   const navigate = useNavigate()
   // navigate type
 
