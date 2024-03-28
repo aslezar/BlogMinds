@@ -2,13 +2,12 @@ import React, { useEffect } from "react"
 import { getBlog, likeBlog } from "../api/index.ts"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
-import { Link, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { BlogFullType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 import { format } from "date-fns/format" // Import date-fns under a namespace
 import { useNavigate } from "react-router-dom"
 import { IoBookOutline } from "react-icons/io5"
-import { IoChevronBackOutline } from "react-icons/io5"
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -80,8 +79,8 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
     <div
       className={`mx-auto ${isEmbed ? "" : "pt-20"} pb-5 lg:pt-0 min-h-[75vh] bg-white flex flex-col justify-between`}
     >
-      <div className="flex flex-col gap-4 max-w-4xl mx-auto shadow-sm px-5">
-        <Link
+      <div className="flex flex-col gap-4 max-w-6xl mx-auto shadow-sm space-y-4 p-5 font-inter ">
+        {/* <Link
           to={"/feed"}
           className="mt-3 flex items-center gap-1 text-lg text-teal-800  pr-3  "
         >
@@ -89,16 +88,33 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             <IoChevronBackOutline className="text-dark" />
             <span className="text-dark">All Articles</span>
           </div>
-        </Link>
-        <h2 className="text-5xl md:text-5xl w-full font-semibold text-zinc-800 font-playfair">
+        </Link> */}
+        <figure>
+          <img
+            src={blog?.img}
+            alt="img"
+            className=" object-cover w-full aspect-video"
+          />
+        </figure>
+        <h2 className="text-5xl md:text-5xl w-full font-bold text-dark  text-center">
           {blog?.title}
         </h2>
         <div>
-          <p className="font-[450] text-gray-600 text-2xl mb-3 font-[inter]">
+          <p className="font-[400] text-center text-gray-600 text-[1.4rem] mb-7 ">
             {blog?.description}
           </p>
 
-          <div className="flex gap-3 items-end text-lg">
+          <div className="flex gap-3 items-center text-lg justify-center">
+            <div className="flex items-center ">
+              <div className="heart-bg">
+                <div
+                  className={`heart-icon ${isLiked ? "liked" : ""}`}
+                  onClick={handleLikeButton}
+                ></div>
+              </div>
+              <span className=" ">{blog.likesCount} Likes</span>
+            </div>
+            <span className="text-2xl text-gray-600 font-thin">|</span>
             {blog.author && (
               <div className="flex items-end ">
                 <img
@@ -119,6 +135,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                 </div>
               </div>
             )}
+
             {blog.author && (
               <span className="text-2xl text-gray-600 font-thin">|</span>
             )}
@@ -144,24 +161,15 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               )}
             </div>
             <span className="text-2xl text-gray-600 font-thin">|</span>
-            <div className="flex items-center gap-1">
-              <IoBookOutline className="font-thin w-5 h-5" />
-              <span className="text-center text-gray-600">
+            <div className="flex items-center gap-2 text-base  text-white bg-highlight rounded-full px-2.5  py-1">
+              <IoBookOutline className="mt-0.5" />
+              <span className="text-center ">
                 {Math.ceil(blog.content.split(" ").length / 200)}m readtime
               </span>
             </div>
           </div>
         </div>
-        <figure>
-          <img
-            src={blog?.img}
-            alt="img"
-            width={500}
-            height={300}
-            className=" object-cover w-full max-h-96"
-          />
-        </figure>
-        <div className="text-gray-500 mt-2 ">
+        <div className="text-gray-700  pt-20 px-6">
           {blog?.content && (
             <>
               <pre className="w-[100%] whitespace-pre-line text-xl font-[inter] leading-8">
@@ -172,15 +180,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             </>
           )}
         </div>
-        <div className="flex items-center mt-4">
-          <div className="heart-bg">
-            <div
-              className={`heart-icon ${isLiked ? "liked" : ""}`}
-              onClick={handleLikeButton}
-            ></div>
-          </div>
-          <span className="ml-2">{blog.likesCount} Likes</span>
-        </div>
+
         <div className="mt-8">
           <h3 className="text-xl font-semibold mb-4">Comments</h3>
           {blog?.comments && blog?.comments?.length === 0 ? (
