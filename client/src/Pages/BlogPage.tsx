@@ -93,7 +93,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           <img
             src={blog?.img}
             alt="img"
-            className=" object-cover w-full aspect-video"
+            className=" object-cover w-full aspect-[2]"
           />
         </figure>
         <h2 className="text-5xl md:text-5xl w-full font-bold text-dark  text-center">
