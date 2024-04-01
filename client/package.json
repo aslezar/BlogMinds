@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.15.4",
     "@mui/material": "^5.15.4",
     "@reduxjs/toolkit": "^2.0.1",
+    "@types/react-infinite-scroll-component": "^5.0.0",
     "axios": "^1.6.7",
     "date-fns": "^3.5.0",
     "jodit-react": "^4.0.4",

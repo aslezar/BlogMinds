@@ -28,12 +28,14 @@
 .heart-bg {
   background: rgba(255, 192, 200, 0);
   border-radius: 50%;
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
+  padding: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 100ms ease;
+  scale : 0.9;
 }
 
 .heart-bg:hover {
