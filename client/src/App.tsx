@@ -33,6 +33,7 @@ import Loader from "./components/Loader"
 import SearchResults from "./Pages/SearchResults"
 import PublicProfile from "./Pages/PublicProfile"
 import ProfilePage from "./Pages/ProfilePage"
+import EditorComponent from "./components/Editor"
 
 const Layout = () => {
   const location = useLocation()
@@ -129,6 +130,10 @@ const router = createBrowserRouter([
       {
         path: "user/:id",
         element: <PublicProfile />,
+      },
+      {
+        path: "editorjs",
+        element: <EditorComponent />,
       },
       {
         path: "/*",

@@ -181,21 +181,23 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           )}
         </div>
 
-        <div className="mt-8">
-          <h3 className="text-xl font-semibold mb-4">Comments</h3>
+        <div className="py-10">
+          <h3 className="text-xl font-semibold mb-5">Comments</h3>
           {blog?.comments && blog?.comments?.length === 0 ? (
             <p>No comments yet.</p>
           ) : (
-            <ul>
+            <ul className="space-y-7">
               {blog?.comments?.map((comment, index) => (
-                <li key={index} className="mb-4">
+                <li key={index} className="mb-4 gap-4 flex items-center text-lg">
                   <img
-                    className="object-cover w-full mx-auto lg:mx-0 lg:w-52 aspect-video rounded-xl mb-2"
+                    className="object-cover w-12 rounded-full aspect-square"
                     src={comment?.author?.profileImage}
                     alt={"img"}
                   />
-                  <p className="font-semibold">{comment?.author?.name}</p>
-                  <p>{comment?.message}</p>
+                  <div>
+                    <p className="font-medium">{comment?.author?.name}</p>
+                    <p>{comment?.message}</p>
+                  </div>
                 </li>
               ))}
             </ul>
