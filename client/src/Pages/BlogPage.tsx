@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { getBlog, likeBlog } from "../api/index.ts"
+import { commentBlog, getBlog, likeBlog } from "../api/index.ts"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
 import { useParams } from "react-router-dom"
@@ -16,9 +16,9 @@ type BlogPageProps = {
 const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const [isError, setError] = React.useState<boolean>(false)
   const [isLoading, setLoading] = React.useState<boolean>(true)
-  const [blog, setBlog] = React.useState<BlogFullType | null>(null)
+  const [blog, setBlog] = React.useState<BlogFullType>()
   const [isLiked, setIsLiked] = React.useState<boolean>(false)
-
+  const [comment, setComment] = React.useState<string>("")
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { loading, isAuthenticated, user } = useAppSelector(
@@ -27,7 +27,43 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const formatDate = (date: string) => {
     return format(new Date(date), "dd MMMM yyyy")
   }
+  const postComment = async () => {
+    if (!isAuthenticated) {
+      return toast.error("Please login to post a comment")
+    }
+    if (!id) {
+      return toast.error("No such blog")
+    }
+    try {
+      commentBlog(id, comment).then(() => {
+        toast.success("Comment posted successfully")
+      })
+      const newComment = {
+        author: {
+          profileImage: user?.profileImage, 
+          name: user?.name,
+        },
+        message: comment,
+      }
 
+      setBlog((prevBlog : any) => {
+        if (prevBlog) {
+          return {
+            ...prevBlog,
+            comments: [newComment, ...prevBlog.comments],
+          }
+        } else {
+          return prevBlog
+        }
+      })
+
+      // Clear the comment input field after posting
+      setComment("")
+    } catch (error) {
+      toast.error("There was an error, please try again later")
+      console.log(error)
+    }
+  }
   useEffect(() => {
     const fetchBlog = async (userId: UserType["userId"] | null) => {
       if (!id) {
@@ -79,16 +115,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
     <div
       className={`mx-auto ${isEmbed ? "" : "pt-20"} pb-5 lg:pt-0 min-h-[75vh] bg-white flex flex-col justify-between`}
     >
-      <div className="flex flex-col gap-4 max-w-6xl mx-auto shadow-sm space-y-4 p-5 font-inter ">
-        {/* <Link
-          to={"/feed"}
-          className="mt-3 flex items-center gap-1 text-lg text-teal-800  pr-3  "
-        >
-          <div className="flex items-center">
-            <IoChevronBackOutline className="text-dark" />
-            <span className="text-dark">All Articles</span>
-          </div>
-        </Link> */}
+      <div className="flex flex-col gap-4 max-w-6xl mx-auto shadow-sm space-y-4 p-5 font-inter">
         <figure>
           <img
             src={blog?.img}
@@ -181,14 +208,33 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           )}
         </div>
 
-        <div className="py-10">
-          <h3 className="text-xl font-semibold mb-5">Comments</h3>
+        <div className="py-10 w-5/6">
+          <h3 className="text-2xl font-semibold mb-5">Comments</h3>
           {blog?.comments && blog?.comments?.length === 0 ? (
             <p>No comments yet.</p>
           ) : (
             <ul className="space-y-7">
+              {/* input field to write comment with post button */}
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  placeholder="Write a comment"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-gray-500"
+                />
+                <button
+                  onClick={postComment}
+                  className="bg-highlight text-white px-4 py-2 rounded-full"
+                >
+                  Post
+                </button>
+              </div>
               {blog?.comments?.map((comment, index) => (
-                <li key={index} className="mb-4 gap-4 flex items-center text-lg">
+                <li
+                  key={index}
+                  className="mb-4 gap-4 flex items-center text-lg"
+                >
                   <img
                     className="object-cover w-12 rounded-full aspect-square"
                     src={comment?.author?.profileImage}
