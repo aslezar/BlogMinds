@@ -14,6 +14,7 @@ import Button from "editorjs-button"
 import InlineCode from "@editorjs/inline-code"
 import ColorPlugin from "editorjs-text-color-plugin"
 import AlignmentBlockTune from "editorjs-text-alignment-blocktune"
+import { uploadAssests } from "../api"
 
 export const EditorContext = createContext<any>(null)
 
@@ -79,6 +80,39 @@ export function EditorContextProvider(props: any) {
               // byFile: "http://localhost:3000/uploadFile",
               // byUrl: "http://localhost:3000/fetchUrl",
             },
+            field: "assetFiles",
+            types: "image/png, image/jpg, image/jpeg, image/webp",
+            uploader: {
+              uploadByFile: (file: any) => {
+                const formData = new FormData()
+                formData.append("assetFiles", file)
+
+                return uploadAssests(formData)
+                  .then((res) => {
+                    return {
+                      success: 1,
+                      file: {
+                        url: res.data[0],
+                      },
+                    }
+                  })
+                  .catch((err) => {
+                    console.log(err)
+                    return {
+                      success: 0,
+                    }
+                  })
+              },
+
+              uploadByUrl: (_url: string) => {
+                console.log(_url)
+                return new Promise((resolve) => {
+                  resolve({
+                    success: 0,
+                  })
+                })
+              },
+            },
           },
         },
         embed: {
@@ -111,7 +145,7 @@ export function EditorContextProvider(props: any) {
           },
         },
         Marker: {
-          class: ColorPlugin, 
+          class: ColorPlugin,
           config: {
             defaultColor: "#FFBF00",
             type: "marker",
