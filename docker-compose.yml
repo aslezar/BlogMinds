@@ -9,6 +9,7 @@ services:
             - ./:/app
         ports:
             - "8000:8000"
+            - "5173:5173"
         depends_on:
             - mongo
         env_file: ./.env

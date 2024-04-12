@@ -5,6 +5,7 @@ WORKDIR /app
 
 # Install Dependencies
 COPY package*.json ./
+COPY client/package*.json ./client/
 
 RUN npm install
 
@@ -16,4 +17,4 @@ RUN npm run seeder
 # Exports
 EXPOSE 8000
 
-CMD ["npm","run","dev"]
+CMD ["npm","run","dev","&&","cd","client","&&","npm","run","dev"]
