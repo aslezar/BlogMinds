@@ -105,3 +105,13 @@ export type Profile = {
   bio: string | undefined
   createdAt: string
 }
+
+export type Comment = {
+  _id: string
+  message: string
+  author: {
+    _id: string
+    name: string
+    profileImage: string
+  }
+}
