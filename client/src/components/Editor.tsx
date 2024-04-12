@@ -1,59 +1,15 @@
-import  { useEffect, useRef } from "react";
-import EditorJS from "@editorjs/editorjs";
-import Header from '@editorjs/header'; 
+import { useContext, useEffect } from "react"
+import { EditorContext } from "../context/EditorContext"
 
-const DEFAULT_INITIAL_DATA =  {
-      "time": new Date().getTime(),
-      "blocks": [
-        {
-          "type": "header",
-          "data": {
-            "text": "This is my awesome editor!",
-            "levels": [1,3,5],
-
-
-          }
-        },
-      ]
-  }
-
-const EditorComponent = () => {
-  const ejInstance = useRef<EditorJS | null >();
-
-    const initEditor = () => {
-       const editor = new EditorJS({
-          holder: 'editorjs',
-          onReady: () => {  
-            ejInstance.current = editor;
-          },
-          autofocus: true,
-          data: DEFAULT_INITIAL_DATA,
-          onChange: async () => {
-            let content = await editor.saver.save();
-
-            console.log(content);
-          },
-          tools: { 
-            header: Header, 
-            // 
-
-          },
-        });
-      };
-
-      // This will run only once
+const EditorPage = () => {
+  const { initializeEditor, editorInstanceRef } = useContext(EditorContext)
   useEffect(() => {
-    if (ejInstance?.current === null) {
-      initEditor();
+    if (editorInstanceRef.current == null) {
+      initializeEditor()
     }
-
-    return () => {
-      ejInstance?.current?.destroy();
-      ejInstance.current = null;
-    };
-  }, []);
-
-    return  <><div id='editorjs'></div></>;
+  }, [])
+  // Match the id with holder value in EditorContext.tsx
+  return <div id="editorjs"></div>
 }
 
-export default EditorComponent;
+export default EditorPage

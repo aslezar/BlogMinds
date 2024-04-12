@@ -8,13 +8,16 @@ import theme from "./theme.tsx"
 
 import { Provider } from "react-redux"
 import store from "./store"
+import { EditorContextProvider } from "./context/EditorContext.tsx"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <EditorContextProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </EditorContextProvider>
     </ThemeProvider>
     <Toaster />
   </React.StrictMode>,
