@@ -11,7 +11,7 @@ import {
 } from "../utils/imageHandlers/cloudinary"
 
 const updateUser = async (
-    userId: mongoose.Schema.Types.ObjectId,
+    userId: mongoose.Types.ObjectId,
     key: string,
     value: any,
 ) => {
@@ -23,18 +23,24 @@ const updateUser = async (
 
 const getMyProfile = async (req: Request, res: Response) => {
     const userId = req.user.userId
-    const user = await User.findById(userId).projection({
-        name: 1,
-        email: 1,
-        bio: 1,
-        profileImage: 1,
-        myInterests: 1,
-        followingCount: { $size: "$following" },
-        followersCount: { $size: "$followers" },
-    })
-    if (!user) throw new UnauthenticatedError("User Not Found")
+    const user = await User.aggregate([
+        { $match: { _id: userId } },
+        {
+            $project: {
+                name: 1,
+                email: 1,
+                bio: 1,
+                profileImage: 1,
+                myInterests: 1,
+                followingCount: { $size: "$following" },
+                followersCount: { $size: "$followers" },
+            },
+        },
+    ])
+    if (!user || user.length === 0)
+        throw new UnauthenticatedError("User Not Found")
     res.status(StatusCodes.OK).json({
-        data: user,
+        data: user[0],
         success: true,
         msg: "Profile Fetched Successfully",
     })

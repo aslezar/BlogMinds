@@ -2,7 +2,7 @@ import { Response, Request } from "express"
 import mongoose from "mongoose"
 
 export interface UserPayload {
-    userId: mongoose.Schema.Types.ObjectId
+    userId: mongoose.Types.ObjectId
 }
 
 declare global {
