@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Lemon&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,4 +15,43 @@
 .MuiButtonBase-root {
   padding: 0.75rem !important;
   min-width: 0 !important;
+}
+.heart-icon {
+  height: 100px;
+  width: 100px;
+  background: url("./assets/img/Heart/heart.png");
+  background-position: left;
+  cursor: pointer;
+  position: absolute;
+}
+
+.heart-bg {
+  background: rgba(255, 192, 200, 0);
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 100ms ease;
+  scale : 0.9;
+}
+
+.heart-bg:hover {
+  background: rgba(255, 192, 200, 0.7);
+}
+
+.heart-icon.liked {
+  animation: like-anim 0.7s steps(28) forwards;
+}
+
+@keyframes like-anim {
+  to {
+    background-position: right;
+  }
+}
+
+.likes-amount.liked {
+  color: red;
 }

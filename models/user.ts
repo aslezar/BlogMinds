@@ -95,7 +95,7 @@ const preSave = async function (this: any, next: (err?: Error) => void) {
     }
 
     try {
-        const salt = await bcrypt.genSalt(10)
+        const salt = await bcrypt.genSalt(5)
         this.password = await bcrypt.hash(this.password, salt)
         next()
     } catch (error: any) {

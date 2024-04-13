@@ -4,8 +4,9 @@ const dotenv = require("dotenv")
 
 const BlogModel = require("./blog")
 const UserModel = require("./user")
+const CommentModel = require("./comment")
 
-const { blogData, userData, convertNumberToId } = require("./dataGenerator")
+const { blogData, userData, commentData } = require("./dataGenerator")
 
 dotenv.config("../.env")
 
@@ -21,88 +22,29 @@ mongoose
 
 console.log(new Date().toLocaleString())
 
-// function to return a random number between a and b
-function randomInt(a, b) {
-    return Math.floor(Math.random() * (b - a + 1)) + a
-}
-
 async function seeder() {
     console.log("Connected to MongoDB")
 
     await userSeeder()
+    await commentSeeder()
     await blogSeeder()
-    // get all users and assign some blogs to them
-    const users = await UserModel.find({})
-    const blogs = await BlogModel.find({})
-
-    // assign 5 random blogs to each user
-    // store already assigned blogs to avoid duplicate assignment
-    let assignedBlogs = {}
-    for (const user of users) {
-        for (let i = 0; i < randomInt(5, 10); i++) {
-            let randomBlogInd = randomInt(0, blogs.length - 1)
-            while (assignedBlogs[randomBlogInd]) {
-                randomBlogInd = randomInt(0, blogs.length - 1)
-            }
-            const randomBlog = blogs[randomBlogInd]
-            assignedBlogs[randomBlogInd] = true
-            user.blogs.push(randomBlog)
-            // change the author of the blog
-            randomBlog.author = user._id
-        }
-        // add some random blogs to readArticles of each user
-        for (let i = 0; i < randomInt(40, 160); i++) {
-            const randomBlog = blogs[randomInt(0, blogs.length - 1)]
-            randomBlog.views += 1
-            user.readArticles.push(randomBlog)
-        }
-    }
-
-    // make random users follow each other
-    for (const user of users) {
-        for (let i = 0; i < 5; i++) {
-            const randomUser = users[randomInt(0, users.length - 1)]
-            if (randomUser._id.toString() !== user._id.toString()) {
-                user.following.push(randomUser)
-                randomUser.followers.push(user)
-            }
-        }
-    }
-
-    // save all users
-    await Promise.all(users.map((user) => user.save()))
-    console.log("All users updated successfully.")
-    // save all blogs
-    await Promise.all(blogs.map((blog) => blog.save()))
 
     mongoose.connection.close()
     process.exit()
 }
 
 async function blogSeeder() {
-    //delete old data
     try {
         await BlogModel.deleteMany({})
         console.log("Old blog data deleted successfully.")
     } catch (error) {
-        console.error("Error deleting old blog data:", error)
+        console.error("Error deleting old blog data:", error.message)
     }
     try {
-        // example of a 24 character hex string
-        // const exampleHex = "5f5d5f5d5f5d5f5d5f5d5f5d"
-        let blogs = []
-        let j = 0
-        for (const blog of blogData) {
-            let newBlog = { ...blog }
-            j++
-            newBlog._id = convertNumberToId(j, "blog")
-            blogs.push(newBlog)
-        }
-        await BlogModel.insertMany(blogs)
+        await BlogModel.insertMany(blogData)
         console.log("All blog data inserted successfully.")
-        return
     } catch (error) {
-        console.error("Error inserting blog data:", error)
+        console.error("Error inserting blog data:", error.message)
     }
 }
 
@@ -116,8 +58,21 @@ async function userSeeder() {
     try {
         await UserModel.insertMany(userData)
         console.log("All user data inserted successfully.")
-        return
     } catch (error) {
-        console.error("Error inserting user data:", error)
+        console.error("Error inserting user data:", error.message)
+    }
+}
+async function commentSeeder() {
+    try {
+        await CommentModel.deleteMany({})
+        console.log("Old comment data deleted successfully.")
+    } catch (error) {
+        console.error("Error deleting old comment data:", error.message)
+    }
+    try {
+        await CommentModel.insertMany(commentData)
+        console.log("All comment data inserted successfully.")
+    } catch (error) {
+        console.error("Error inserting comment data:", error.message)
     }
 }

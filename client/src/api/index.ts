@@ -142,6 +142,10 @@ export const getBlog = (
 
 export const likeBlog = (id: BlogShortType["_id"]) =>
   API.patch(`/blog/${id}/like`)
+
+export const commentBlog = (id: BlogShortType["_id"], message: string) =>
+  API.post(`/blog/${id}/comment`, { message })
+
 export const getTrendingBlog = () => API.get("/blog/trending")
 
 export const getUserProfile = (id: UserType["userId"]) =>
