@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { useAppSelector } from "../hooks"
 import { updateName,updateBio,} from "../api"
+import ClearIcon from '@mui/icons-material/Clear';
+import AddIcon from '@mui/icons-material/Add';
 
 const MyProfile = () => {
   const [edit, setEdit] = useState(false)
@@ -75,23 +77,19 @@ const MyProfile = () => {
               <h3 className="text-xl my-3 mt-6">About You</h3>
 
               <label>Profile Bio(About you)</label>
-              <input
-                type="text"
-                placeholder="I am a developer from ..."
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
+              <textarea  rows="4" cols="50" maxLength={50} disabled = {!edit} defaultValue={"vedant Pathaa"} className={`${!edit && "rounded-xl p-2 bg-gray-100"}   ${edit && "rounded-xl p-2 border text-black"}`}>
+                </textarea>
               <div className="flex gap-5 my-4">
                 
-                  <p ><span className="rounded-xl p-1 bg-gray-100 w-fit">20</span> followers </p>
+                  <p ><span className="rounded-xl p-1 bg-gray-700 w-fit text-white px-2">20</span> followers </p>
                 
                 
-                  <p ><span className="rounded-xl p-1 bg-gray-100 w-fit">20</span> following </p>
+                  <p ><span className="rounded-xl p-1 bg-gray-700 w-fit text-white px-2">20</span> following </p>
                 
               </div>
               
               {edit && (
-                <div className="my-8">
+                <div className="my-8 flex gap-10">
                   <button
                     className="bg-slate-500 p-2 rounded-3xl px-5 text-white hover:bg-slate-700"
                     onClick={handleUpdate}
@@ -109,18 +107,22 @@ const MyProfile = () => {
             </form>
           </section>
           <section className="h-screen w-3/6  p-5 ml-0">
-            <form action="" className="flex flex-col">
+            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col">
               <h3 className="text-xl mb-3">My Interests</h3>
 
               <div className="flex  flex-wrap gap-3">
                 {
                   data.map((item,index) => {
                     return (
-                      
-                          <span className="rounded-xl p-1 bg-gray-100 w-fit p-2" key={index}>{item}</span>
+                          <span className="m-1">
+                            <span className="rounded-xl  bg-gray-100 w-fit p-2" key={index}>{item}</span> 
+                            <button className={`${ !edit && "hidden" } `}><ClearIcon fontSize="small"/></button>
+                          </span>
                     )
                   })
                 }
+                <button className={`${ !edit && "hidden" } p-2 bg-slate-500 rounded-xl`}><AddIcon/> </button>
+                
               </div>
 
               <h3 className="text-xl my-3 mt-6">Profile Identity</h3>
@@ -133,8 +135,8 @@ const MyProfile = () => {
               <input
                 type="text"
                 placeholder="pathaa"
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
+                disabled={true}
+                className={"rounded-xl p-2 bg-gray-100 mb-4"}
               />
 
               <p className="mt-2">Email Address</p>
