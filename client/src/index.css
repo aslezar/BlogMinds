@@ -35,7 +35,7 @@
   align-items: center;
   justify-content: center;
   transition: all 100ms ease;
-  scale : 0.9;
+  scale: 0.9;
 }
 
 .heart-bg:hover {

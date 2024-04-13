@@ -9,33 +9,32 @@ services:
             - ./:/app
         ports:
             - "8000:8000"
-            - "5173:5173"
-        depends_on:
-            - mongo
+        # depends_on:
+        #     - mongo
         env_file: ./.env
         environment:
-            - NODE_ENV=development
+            - NODE_ENV=production
         networks:
             - app-network
-    mongo:
-        image: mongo
-        volumes:
-            - data-volume:/data/db
-        networks:
-            - app-network
-        logging:
-            driver: none
+    # mongo:
+    #     image: mongo
+    #     volumes:
+    #         - data-volume:/data/db
+    #     networks:
+    #         - app-network
+    #     logging:
+    #         driver: none
     # client:
     #     build:
     #         context: ./client
     #         dockerfile: Dockerfile
     #     image: blogmind-client
     #     container_name: blogmind-react-client
-    #     command: npm start
     #     volumes:
-    #         - ./client/:/app
-    #     depends_on:
-    #         - server
+    #         - ./client:/app
+    #     env_file: ./.env
+    #     environment:
+    #         - NODE_ENV=production
     #     ports:
     #         - "5173:5173"
     #     networks:
@@ -43,9 +42,6 @@ services:
 
 networks:
     app-network:
-        driver: bridge
 
 volumes:
     data-volume:
-    web-root:
-        driver: local

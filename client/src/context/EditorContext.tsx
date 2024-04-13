@@ -111,7 +111,7 @@ export function EditorContextProvider(props: any) {
           },
         },
         Marker: {
-          class: ColorPlugin, 
+          class: ColorPlugin,
           config: {
             defaultColor: "#FFBF00",
             type: "marker",
