@@ -21,6 +21,25 @@ const updateUser = async (
     await user.save()
 }
 
+const getMyProfile = async (req: Request, res: Response) => {
+    const userId = req.user.userId
+    const user = await User.findById(userId).projection({
+        name: 1,
+        email: 1,
+        bio: 1,
+        profileImage: 1,
+        myInterests: 1,
+        followingCount: { $size: "$following" },
+        followersCount: { $size: "$followers" },
+    })
+    if (!user) throw new UnauthenticatedError("User Not Found")
+    res.status(StatusCodes.OK).json({
+        data: user,
+        success: true,
+        msg: "Profile Fetched Successfully",
+    })
+}
+
 const updateName = async (req: Request, res: Response) => {
     const userId = req.user.userId
     const { name } = req.body
@@ -138,6 +157,7 @@ const deleteAssest = async (req: Request, res: Response) => {
 }
 
 export {
+    getMyProfile,
     updateName,
     updateBio,
     updateProfileImage,
