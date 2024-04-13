@@ -8,7 +8,7 @@ export interface IBlog {
     author: Schema.Types.ObjectId
     tags: Types.Array<string>
     views: number
-    likes: Types.Array<Schema.Types.ObjectId>
+    likes: Types.Array<Types.ObjectId>
     likesCount: number
     comments: Types.Array<Schema.Types.ObjectId>
     commentsCount: number
