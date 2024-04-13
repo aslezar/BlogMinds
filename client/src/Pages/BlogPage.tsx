@@ -40,13 +40,13 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
       })
       const newComment = {
         author: {
-          profileImage: user?.profileImage, 
+          profileImage: user?.profileImage,
           name: user?.name,
         },
         message: comment,
       }
 
-      setBlog((prevBlog : any) => {
+      setBlog((prevBlog: any) => {
         if (prevBlog) {
           return {
             ...prevBlog,
