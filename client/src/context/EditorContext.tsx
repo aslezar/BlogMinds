@@ -39,7 +39,7 @@ export function EditorContextProvider(props: any) {
           tunes: ["textAlignment"],
         },
         header: {
-          class: Header,
+          class: Header as any,
           inlineToolbar: true,
           tunes: ["textAlignment"],
           config: {

@@ -1,10 +1,22 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAppSelector } from "../hooks"
 import { updateName,updateBio,} from "../api"
+import { getMyProfile } from "../api";
 import ClearIcon from '@mui/icons-material/Clear';
 import AddIcon from '@mui/icons-material/Add';
+import { UserType } from "../definitions";
 
 const MyProfile = () => {
+  useEffect(() => {
+    const getProfile = async() => {
+      const data = await getMyProfile()
+      console.log(data)
+      setUser(data.data)
+    }
+    getProfile()
+    
+  },[])
+  const [user,setUser] = useState <UserType | null>(null)
   const [edit, setEdit] = useState(false)
   const handleEdit = () => {
     setEdit(true)
@@ -16,19 +28,16 @@ const MyProfile = () => {
     setEdit(false)
   }
 
-  const { loading, isAuthenticated, user } = useAppSelector(
-    (state) => state.user,
-  )
+  
 
   const data = ["vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa",]
 
-  if (loading) return <div>Loading...</div>
-  if (!isAuthenticated) return <div>Not Authenticated</div>
-  if (!user) return <div>No user found</div>
-
-  console.log(user)
 //name , email(cannot edit),bio,profile image,myintrests-(),following,followers,
+  if(user === null){
+    return ""
+  }
   return (
+
    
       <div className="flex flex-col">
         <nav
@@ -68,8 +77,9 @@ const MyProfile = () => {
               <label className="mt-2">Profile Photo</label>
               <img
                 className="h-40 w-40"
-                src={user.profileImage}
-                alt={user.name}
+                src={user?.profileImage
+                }
+                alt={user?.name}
               />
 
               
@@ -77,14 +87,14 @@ const MyProfile = () => {
               <h3 className="text-xl my-3 mt-6">About You</h3>
 
               <label>Profile Bio(About you)</label>
-              <textarea  rows="4" cols="50" maxLength={50} disabled = {!edit} defaultValue={"vedant Pathaa"} className={`${!edit && "rounded-xl p-2 bg-gray-100"}   ${edit && "rounded-xl p-2 border text-black"}`}>
+              <textarea  rows="4" cols="50" maxLength={50} disabled = {!edit} defaultValue={user.bio} className={`${!edit && "rounded-xl p-2 bg-gray-100"}   ${edit && "rounded-xl p-2 border text-black"}`}>
                 </textarea>
               <div className="flex gap-5 my-4">
                 
-                  <p ><span className="rounded-xl p-1 bg-gray-700 w-fit text-white px-2">20</span> followers </p>
+                  <p ><span className="rounded-xl p-1 text-slate-700 px-1 font-bold">{user?.followersCount}</span>Followers </p>
                 
                 
-                  <p ><span className="rounded-xl p-1 bg-gray-700 w-fit text-white px-2">20</span> following </p>
+                  <p ><span className="rounded-xl p-1 text-slate-700 px-1 font-bold">{user?.followingCount}</span>Following </p>
                 
               </div>
               
@@ -112,10 +122,11 @@ const MyProfile = () => {
 
               <div className="flex  flex-wrap gap-3">
                 {
-                  data.map((item,index) => {
+                  user.myInterests
+                  .map((item,index) => {
                     return (
-                          <span className="m-1">
-                            <span className="rounded-xl  bg-gray-100 w-fit p-2" key={index}>{item}</span> 
+                          <span className="m-1 rounded-xl  bg-gray-100  w-fit p-2" key={index}>
+                            <span className="" >{item}</span> 
                             <button className={`${ !edit && "hidden" } `}><ClearIcon fontSize="small"/></button>
                           </span>
                     )
@@ -127,14 +138,14 @@ const MyProfile = () => {
 
               <h3 className="text-xl my-3 mt-6">Profile Identity</h3>
 
-              <p className="mt-2">UserName</p>
+              <p className="mt-2">{user.name}</p>
               <p className="text-base font-light text-gray-400 leading-4 mb-1 italic">
                 You have the option to change your username once. Please choose
                 carefully as it cannot be changed again.
               </p>
               <input
                 type="text"
-                placeholder="pathaa"
+                placeholder={user.name}
                 disabled={true}
                 className={"rounded-xl p-2 bg-gray-100 mb-4"}
               />
