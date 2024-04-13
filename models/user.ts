@@ -43,6 +43,7 @@ const UserSchema = new Schema<IUser>(
         myInterests: [
             {
                 type: String,
+                maxlength:20
             },
         ],
         readArticles: [
@@ -103,6 +104,10 @@ const preSave = async function (this: any, next: (err?: Error) => void) {
 }
 
 UserSchema.pre("save", preSave)
+
+UserSchema.path('myInterests').validate(function(value: any) {
+    return value.length <= 8; // Change 5 to your desired maximum length
+}, 'myInterests array exceeds the maximum allowed length');
 
 UserSchema.methods.generateToken = function () {
     return jwt.sign(

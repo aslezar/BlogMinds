@@ -18,6 +18,8 @@ const MyProfile = () => {
     (state) => state.user,
   )
 
+  const data = ["vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa","vedantPathaa",]
+
   if (loading) return <div>Loading...</div>
   if (!isAuthenticated) return <div>Not Authenticated</div>
   if (!user) return <div>No user found</div>
@@ -53,13 +55,13 @@ const MyProfile = () => {
                 className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
               />
 
-              <label className="mt-2">Profline Tagline</label>
+              {/* <label className="mt-2">Profline Tagline</label>
               <input
                 type="text"
                 placeholder="Software Developer @"
                 disabled={!edit}
                 className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
+              /> */}
 
               <label className="mt-2">Profile Photo</label>
               <img
@@ -68,13 +70,7 @@ const MyProfile = () => {
                 alt={user.name}
               />
 
-              <label className="mt-2">Location</label>
-              <input
-                type="text"
-                placeholder="India, Rohini"
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
+              
 
               <h3 className="text-xl my-3 mt-6">About You</h3>
 
@@ -85,22 +81,15 @@ const MyProfile = () => {
                 disabled={!edit}
                 className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
               />
-
-              <label className="mt-2">Tech Stack</label>
-              <input
-                type="text"
-                placeholder="Search technologies,topics and more ..."
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
-
-              <label className="mt-2">Available for</label>
-              <input
-                type="text"
-                placeholder="I am available for menoring..."
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
+              <div className="flex gap-5 my-4">
+                
+                  <p ><span className="rounded-xl p-1 bg-gray-100 w-fit">20</span> followers </p>
+                
+                
+                  <p ><span className="rounded-xl p-1 bg-gray-100 w-fit">20</span> following </p>
+                
+              </div>
+              
               {edit && (
                 <div className="my-8">
                   <button
@@ -121,63 +110,18 @@ const MyProfile = () => {
           </section>
           <section className="h-screen w-3/6  p-5 ml-0">
             <form action="" className="flex flex-col">
-              <h3 className="text-xl mb-3">Social</h3>
+              <h3 className="text-xl mb-3">My Interests</h3>
 
-              <p>Twitter Profile</p>
-              <input
-                type="text"
-                placeholder="https://twitter.com/johnDoe"
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
-
-              <p className="mt-2">Instagram Profile</p>
-              <input
-                type="text"
-                placeholder="https://instagram.com/johnDoe"
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
-
-              <p className="mt-2">Github Profile</p>
-              <input
-                type="text"
-                placeholder="https://github.com/johnDoe"
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
-
-              <p className="mt-2">Stack Overflow Profile</p>
-              <input
-                type="text"
-                placeholder="https://stackoverflow.com/johnDoe"
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
-
-              <p className="mt-2">Facebook Profile</p>
-              <input
-                type="text"
-                placeholder="https://twitter.com/johnDoe"
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
-
-              <p className="mt-2">Website URL</p>
-              <input
-                type="text"
-                placeholder="https://twitter.com/johnDoe"
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
-
-              <p className="mt-2">Linkedin URL</p>
-              <input
-                type="text"
-                placeholder="https://twitter.com/johnDoe"
-                disabled={!edit}
-                className={`${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
-              />
+              <div className="flex  flex-wrap gap-3">
+                {
+                  data.map((item,index) => {
+                    return (
+                      
+                          <span className="rounded-xl p-1 bg-gray-100 w-fit p-2" key={index}>{item}</span>
+                    )
+                  })
+                }
+              </div>
 
               <h3 className="text-xl my-3 mt-6">Profile Identity</h3>
 
@@ -202,9 +146,9 @@ const MyProfile = () => {
               <input
                 type="text"
                 placeholder="pathaa@gmail.com"
-                disabled={!edit}
+                disabled={true}
                 value={user.email}
-                className={`mb-4 ${!edit && "rounded-xl p-2 bg-gray-100"}  ${edit && "rounded-xl p-2 border text-black"}`}
+                className={"rounded-xl p-2 bg-gray-100 mb-4"}
               />
             </form>
           </section>

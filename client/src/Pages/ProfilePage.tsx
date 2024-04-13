@@ -22,7 +22,7 @@ const ProfilePage = () => {
     <div
       className={` ${
         open ? "w-72" : "w-20 "
-      } bg-slate-100 h-screen p-5  pt-8 relative duration-300`}
+      } bg-slate-100 min-h-screen p-5  pt-8 relative duration-300`}
     >
       <ArrowCircleLeftIcon
         className={`bg-white text-dark-purple text-3xl rounded-full absolute -right-3 top-9 border border-dark-purple cursor-pointer ${!open && "rotate-180"}`}
