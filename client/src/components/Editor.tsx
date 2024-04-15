@@ -24,10 +24,8 @@ const EditorPage = () => {
   // Match the id with holder value in EditorContext.tsx
 
   return (
-    <div>
-      <button onClick={handleClick}>Save</button>
-      <div id="editorjs"></div>
-    </div>
+    // <button onClick={handleClick}>Save</button>
+    <div id="editorjs"></div>
   )
 }
 
