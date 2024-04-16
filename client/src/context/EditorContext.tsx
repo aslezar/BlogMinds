@@ -1,4 +1,4 @@
-import { createContext, useRef } from "react"
+import { createContext, useRef,useContext } from "react"
 import EditorJS from "@editorjs/editorjs"
 import List from "@editorjs/list"
 import ImageTool from "@editorjs/image"
@@ -13,12 +13,12 @@ import InlineCode from "@editorjs/inline-code"
 import ColorPlugin from "editorjs-text-color-plugin"
 import AlignmentBlockTune from "editorjs-text-alignment-blocktune"
 import { uploadAssests } from "../api"
-import Title from "title-editorjs";
+import Title from "title-editorjs"
 import toast from "react-hot-toast"
 
-export const EditorContext = createContext<any>(null)
+ const EditorContext = createContext<any>(null)
 
-export function EditorContextProvider(props:any) {
+ function EditorContextProvider(props: any) {
   const editorInstanceRef = useRef<EditorJS | null>(null)
   const initializeEditor = () => {
     const editor = new EditorJS({
@@ -65,10 +65,6 @@ export function EditorContextProvider(props:any) {
         image: {
           class: ImageTool,
           config: {
-            endpoints: {
-              // byFile: "http://localhost:3000/uploadFile",
-              // byUrl: "http://localhost:3000/fetchUrl",
-            },
             field: "assetFiles",
             types: "image/png, image/jpg, image/jpeg, image/webp",
             onError: (error: any) => {
@@ -97,6 +93,9 @@ export function EditorContextProvider(props:any) {
               },
 
               uploadByUrl: (_url: string) => {
+                toast.error("Upload by URL is not supported",{
+                  id: "uploadByUrl",
+                })
                 console.log(_url)
                 return new Promise((resolve) => {
                   resolve({
@@ -157,4 +156,12 @@ export function EditorContextProvider(props:any) {
       {props.children}
     </EditorContext.Provider>
   )
+}
+const useEditorContext = () => {
+  return useContext(EditorContext)
+}
+export {
+  EditorContext,
+  EditorContextProvider,
+  useEditorContext,
 }

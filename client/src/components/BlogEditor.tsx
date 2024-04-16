@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react"
 import { BlogFullType, Category } from "../definitions"
 import AssetsFolder from "./AssetsFolder"
 import EditorPage from "./Editor"
-import { EditorContext } from "../context/EditorContext"
+import { useEditorContext } from "../context/EditorContext"
 import edjsHTML from "editorjs-html"
 
 type BlogEditorProps = {
@@ -11,7 +11,7 @@ type BlogEditorProps = {
 
 function BlogEditor({ blogContent }: BlogEditorProps) {
   const [isAssetsOpen, setIsAssetsOpen] = useState(false)
-  const { editorInstanceRef } = useContext(EditorContext)
+  const { editorInstanceRef } = useEditorContext()
   const [blog, setBlog] = useState(blogContent)
 
   const handleClick = async () => {

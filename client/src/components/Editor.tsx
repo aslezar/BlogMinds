@@ -1,11 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react"
-import { EditorContext } from "../context/EditorContext"
+import { useEffect, useRef } from "react"
+import { useEditorContext } from "../context/EditorContext"
 // Import the package
 
 const EditorPage = () => {
-  const { initializeEditor } = useContext(EditorContext)
+  const { initializeEditor } = useEditorContext()
   const editorRef = useRef<any>(null)
-  
+
   useEffect(() => {
     if (editorRef.current == null) {
       initializeEditor()
