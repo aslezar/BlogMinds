@@ -1,45 +1,34 @@
-import React, { useState, useRef } from "react"
-import JoditEditor from "jodit-react"
-import { NavLink } from "react-router-dom"
+import React, { useContext, useState } from "react"
 import { BlogFullType, Category } from "../definitions"
 import AssetsFolder from "./AssetsFolder"
+import EditorPage from "./Editor"
+import { EditorContext } from "../context/EditorContext"
+import edjsHTML from "editorjs-html"
 
 type BlogEditorProps = {
   blogContent: BlogFullType
-  handleSave: (blog: BlogFullType) => void
 }
 
-function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
-  const editor = useRef(null)
+function BlogEditor({ blogContent }: BlogEditorProps) {
+  const [isAssetsOpen, setIsAssetsOpen] = useState(false)
+  const { editorInstanceRef } = useContext(EditorContext)
   const [blog, setBlog] = useState(blogContent)
 
-  const setContent = (newContent: string) => {
-    setBlog({ ...blog, content: newContent })
+  const handleClick = async () => {
+    const output = await editorInstanceRef.current.save()
+    const edjsParser = edjsHTML()
+    let html = edjsParser.parse(output)
+    console.log(output)
+    //setBlog({ ...blog, content: html })
   }
-
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault()
-    handleSave(blog)
+    handleClick()
   }
 
   return (
-    <div className="flex min-h-screen fixed top-0 z-40 mx-auto w-screen">
-      <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 min-h-screen">
-        <NavLink to="/" className="flex items-center space-x-2 mb-2 px-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 32 32"
-            className="h-8"
-          >
-            <g data-name="75-Write">
-              <path d="M30 7v18a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5h9V0H7a7 7 0 0 0-7 7v18a7 7 0 0 0 7 7h18a7 7 0 0 0 7-7V7z" />
-              <path d="M22.38 24H11a3 3 0 0 1 0-6h4v-2h-4a5 5 0 0 0 0 10h13a1 1 0 0 0 .89-.55l2-4A1 1 0 0 0 27 21V1a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v20a1 1 0 0 0 .11.45zM23 2h2v1h-2zm0 3h2v15h-2z" />
-            </g>
-          </svg>
-          <span className="self-center text-2xl font-semibold whitespace-nowrap uppercase tracking-wide">
-            Creativerse
-          </span>
-        </NavLink>
+    <div className="flex  z-40 mx-auto w-screen  top-0 bg-white pl-[25%]">
+      <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
         <figure className="aspect-video overflow-hidden rounded-md relative">
           <button className="top-1 left-1 absolute bg-white rounded-full px-2 p-1 text-sm font-medium text-gray-600">
             Generate with AI
@@ -69,13 +58,10 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
           value={blog.description}
           onChange={(e) => setBlog({ ...blog, description: e.target.value })}
           placeholder="Short Description of the Article ...."
-          rows={7}
+          rows={4}
           className="px-3 py-2 border rounded-md focus:outline-none focus:ring resize-none"
         />
         <div>
-          <span className="text-sm px-2 italic text-gray-600 mb-0.5">
-            Categories & Topics
-          </span>
           <MultiSelect
             value={blog.tags}
             onChange={(selectedOptions: Category[]) =>
@@ -84,15 +70,35 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
             placeholder="Select categories"
           />
         </div>
-        <div className="px-3 py-2 border rounded-md focus:outline-none focus:ring resize-none">
-          <AssetsFolder />
+        <div className=" border border-highlight flex items-center justify-center  font-medium rounded-md focus:outline-none focus:ring resize-none cursor-pointer">
+          <span
+            className="text-sm  text-highlight w-full h-full px-3 py-2"
+            onClick={() => setIsAssetsOpen(true)}
+          >
+            Assets and Images
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-5 h-5  ml-2 inline"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+              />
+            </svg>
+          </span>
+          {isAssetsOpen && <AssetsFolder setIsAssetsOpen={setIsAssetsOpen} />}
         </div>
 
-        <div className="flex gap-2 mb-8 mt-auto self-end pr-2">
+        <div className="flex gap-2  mt-4  pr-2 flex-col">
           <button
             type="submit"
             onClick={handleSubmit}
-            className="border-2 text-dark border-dark font-medium px-4 py-2 rounded-full hover:bg-dark hover:text-white"
+            className="border-2 text-dark border-dark font-medium px-4 py-2 rounded-full hover:bg-dark hover:text-white flex items-center justify-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +124,7 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="border-2 text-highlight border-highlight font-medium px-4 py-2 rounded-full hover:bg-highlight hover:text-white"
+            className="border-2 text-highlight border-highlight font-medium px-4 py-2 rounded-full hover:bg-highlight hover:text-white flex items-center justify-center flex-nowrap"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -134,25 +140,12 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
                 d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
               />
             </svg>
-            Save Draft
+            <span>Save Draft</span>
           </button>
         </div>
       </div>
-      <div className="border-2  md:w-4/5 mx-auto">
-        <JoditEditor
-          ref={editor}
-          value={blog.content}
-          // tabIndex={1}
-          onBlur={(newContent) => setContent(newContent)}
-          // onChange={(newContent) => setContent(newContent)}
-          config={{
-            height: "100vh",
-
-            style: {
-              padding: "2rem",
-            },
-          }}
-        />
+      <div className="mx-auto w-full ">
+        <EditorPage />
       </div>
     </div>
   )

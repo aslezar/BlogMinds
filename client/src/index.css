@@ -55,3 +55,7 @@
 .likes-amount.liked {
   color: red;
 }
+
+p{
+  font-weight: 400 !important;
+}

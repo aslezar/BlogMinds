@@ -20,14 +20,10 @@ const blog: BlogFullType = {
     profileImage: "https://source.unsplash.com/random",
   },
 }
-const AddBlogPage = () => {
-  const handleSave = (newBlog: BlogFullType) => {
-    console.log(newBlog)
-  }
-
+const AddBlogPage = () => { 
   return (
     <div>
-      <BlogEditor blogContent={blog} handleSave={handleSave} />
+      <BlogEditor blogContent={blog}/>
     </div>
   )
 }
