@@ -14,8 +14,8 @@ const AssetsFolder = ({ setIsAssetsOpen }: any) => {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-40  top-20 mx-auto  p-5 backdrop-blur-sm h-full w-screen flex pt-20 justify-center">
-      <div className="bg-white p-4 h-4/5 w-4/5 space-y-4 rounded-lg border">
+    <div className="fixed inset-0 z-40  top-5 mx-auto  p-5 backdrop-blur-sm h-full w-screen flex pt-20 start">
+      <div className="bg-white p-4 h-5/6 w-[24%] space-y-4 rounded-lg border overflow-auto">
         <div className="flex justify-between">
           <h1 className="text-2xl font-semibold">Your Saved Assets</h1>
           <button
@@ -30,7 +30,7 @@ const AssetsFolder = ({ setIsAssetsOpen }: any) => {
           </button>
         </div>
         <Dropzone setAssets={setAssets} />
-        <div className="flex flex-wrap gap-4 items-center overflow-y-auto">
+        <div className="flex flex-wrap gap-4 items-center ">
           {assets.map((asset) => (
             <Assets asset={asset} setAssets={setAssets} key={asset} />
           ))}
@@ -123,13 +123,13 @@ const Assets = ({
     .join("_")
     .replace("%20", " ")
   return (
-    <div className="flex items-center flex-col relative">
+    <div className="flex items-center flex-col relative font-light  ">
       <img
         src={asset}
         alt={name}
-        className="aspec h-24 object-cover rounded-lg w-"
+        className="h-24 object-cover rounded-lg "
       />
-      <span>name</span>
+      <span className="w-full overflow-hidden text-center">{name.slice(0,15)}</span>
       <button
         className=" p-0.5 aspect-square flex right-1 top-1 bg-white text-dark rounded-full absolute "
         onClick={() => handleDeleteButton(asset)}
