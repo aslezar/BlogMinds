@@ -1,7 +1,5 @@
 import { createContext, useRef } from "react"
 import EditorJS from "@editorjs/editorjs"
-import Paragraph from "@editorjs/paragraph"
-import Header from "@editorjs/header"
 import List from "@editorjs/list"
 import ImageTool from "@editorjs/image"
 import Embed from "@editorjs/embed"
@@ -15,10 +13,12 @@ import InlineCode from "@editorjs/inline-code"
 import ColorPlugin from "editorjs-text-color-plugin"
 import AlignmentBlockTune from "editorjs-text-alignment-blocktune"
 import { uploadAssests } from "../api"
+import Title from "title-editorjs";
+import toast from "react-hot-toast"
 
 export const EditorContext = createContext<any>(null)
 
-export function EditorContextProvider(props: any) {
+export function EditorContextProvider( props:any) {
   const editorInstanceRef = useRef<EditorJS | null>(null)
   const initializeEditor = () => {
     const editor = new EditorJS({
@@ -34,19 +34,8 @@ export function EditorContextProvider(props: any) {
             },
           },
         },
-        paragraph: {
-          class: Paragraph as any,
-          tunes: ["textAlignment"],
-        },
-        header: {
-          class: Header as any,
-          inlineToolbar: true,
-          tunes: ["textAlignment"],
-          config: {
-            placeholder: " Heading here..",
-            levels: [1, 2, 3, 4, 5],
-            defaultLevel: 1,
-          },
+        title: {
+          class: Title,
         },
         alert: {
           class: Alert,
@@ -82,8 +71,11 @@ export function EditorContextProvider(props: any) {
             },
             field: "assetFiles",
             types: "image/png, image/jpg, image/jpeg, image/webp",
+            onError: (error: any) => {
+              toast.error(error)
+            },
             uploader: {
-              uploadByFile: (file: any) => {
+              uploadByFile: async (file: any) => {
                 const formData = new FormData()
                 formData.append("assetFiles", file)
 
@@ -147,37 +139,13 @@ export function EditorContextProvider(props: any) {
         Marker: {
           class: ColorPlugin,
           config: {
-            defaultColor: "#FFBF00",
-            type: "marker",
+            defaultColor: "#9674d4",
+            type: "color",
           },
         },
         inlineCode: {
           class: InlineCode,
         },
-        Color: {
-          class: ColorPlugin,
-          config: {
-            colorCollections: [
-              "#EC7878",
-              "#9C27B0",
-              "#673AB7",
-              "#3F51B5",
-              "#0070FF",
-              "#03A9F4",
-              "#00BCD4",
-              "#4CAF50",
-              "#8BC34A",
-              "#CDDC39",
-              "#FFF",
-            ],
-            defaultColor: "#FF1300",
-            customPicker: true,
-          },
-        },
-      },
-      onChange: async () => {
-        const data = await editor.save()
-        console.log(data)
       },
     })
     editorInstanceRef.current = editor
