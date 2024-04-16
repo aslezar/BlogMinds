@@ -124,12 +124,10 @@ const Assets = ({
     .replace("%20", " ")
   return (
     <div className="flex items-center flex-col relative font-light  ">
-      <img
-        src={asset}
-        alt={name}
-        className="h-24 object-cover rounded-lg "
-      />
-      <span className="w-full overflow-hidden text-center">{name.slice(0,15)}</span>
+      <img src={asset} alt={name} className="h-24 object-cover rounded-lg " />
+      <span className="w-full overflow-hidden text-center">
+        {name.slice(0, 15)}
+      </span>
       <button
         className=" p-0.5 aspect-square flex right-1 top-1 bg-white text-dark rounded-full absolute "
         onClick={() => handleDeleteButton(asset)}

@@ -62,7 +62,7 @@ export interface UserType extends User {
   blogs?: BlogFullType[]
   followingCount: number
   followersCount: number
-  myInterests:string[]
+  myInterests: string[]
 }
 
 export enum Category {
