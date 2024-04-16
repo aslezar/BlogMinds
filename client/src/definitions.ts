@@ -60,6 +60,9 @@ export interface UserType extends User {
   createdAt: string
   updatedAt: string
   blogs?: BlogFullType[]
+  followingCount: number
+  followersCount: number
+  myInterests:string[]
 }
 
 export enum Category {
