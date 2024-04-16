@@ -146,7 +146,7 @@ const deleteAssest = async (req: Request, res: Response) => {
 
     const userIdFromUrl = public_id.split("/")[1]
 
-    if (userIdFromUrl !== userId)
+    if (userIdFromUrl != userId)
         throw new BadRequestError("You are not authorized to delete this asset")
 
     //delete assets from cloudinary
