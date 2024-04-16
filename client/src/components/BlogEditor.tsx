@@ -1,31 +1,34 @@
-import React, { useState, useRef } from "react"
-import JoditEditor from "jodit-react"
-import { NavLink } from "react-router-dom"
+import React, { useContext, useState } from "react"
 import { BlogFullType, Category } from "../definitions"
 import AssetsFolder from "./AssetsFolder"
 import EditorPage from "./Editor"
+import { EditorContext } from "../context/EditorContext"
+import edjsHTML from "editorjs-html"
 
 type BlogEditorProps = {
   blogContent: BlogFullType
-  handleSave: (blog: BlogFullType) => void
 }
 
-function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
+function BlogEditor({ blogContent }: BlogEditorProps) {
   const [isAssetsOpen, setIsAssetsOpen] = useState(false)
+  const { editorInstanceRef } = useContext(EditorContext)
   const [blog, setBlog] = useState(blogContent)
 
-  const setContent = (newContent: string) => {
-    setBlog({ ...blog, content: newContent })
+  const handleClick = async () => {
+    const output = await editorInstanceRef.current.save()
+    const edjsParser = edjsHTML()
+    let html = edjsParser.parse(output)
+    console.log(output)
+    //setBlog({ ...blog, content: html })
   }
-
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault()
-    handleSave(blog)
+    handleClick()
   }
 
   return (
-    <div className="flex  z-40 mx-auto w-screen  top-0 bg-white pl-[22%]">
-      <div className="flex flex-col px-3 pt-4 md:w-1/4 bg-white mx-auto gap-3 h-full fixed left-0">
+    <div className="flex  z-40 mx-auto w-screen  top-0 bg-white pl-[25%]">
+      <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
         <figure className="aspect-video overflow-hidden rounded-md relative">
           <button className="top-1 left-1 absolute bg-white rounded-full px-2 p-1 text-sm font-medium text-gray-600">
             Generate with AI
@@ -59,9 +62,6 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
           className="px-3 py-2 border rounded-md focus:outline-none focus:ring resize-none"
         />
         <div>
-          <span className="text-sm px-2 italic text-gray-600 mb-0.5">
-            Categories & Topics
-          </span>
           <MultiSelect
             value={blog.tags}
             onChange={(selectedOptions: Category[]) =>
@@ -94,7 +94,7 @@ function BlogEditor({ blogContent, handleSave }: BlogEditorProps) {
           {isAssetsOpen && <AssetsFolder setIsAssetsOpen={setIsAssetsOpen} />}
         </div>
 
-        <div className="flex gap-2  mt-10  pr-2 flex-col">
+        <div className="flex gap-2  mt-4  pr-2 flex-col">
           <button
             type="submit"
             onClick={handleSubmit}

@@ -18,7 +18,7 @@ import toast from "react-hot-toast"
 
 export const EditorContext = createContext<any>(null)
 
-export function EditorContextProvider( props:any) {
+export function EditorContextProvider(props:any) {
   const editorInstanceRef = useRef<EditorJS | null>(null)
   const initializeEditor = () => {
     const editor = new EditorJS({
@@ -117,7 +117,6 @@ export function EditorContextProvider( props:any) {
           },
         },
         link: Link,
-
         table: {
           class: Table,
         },
@@ -148,6 +147,8 @@ export function EditorContextProvider( props:any) {
         },
       },
     })
+    //render data
+    //editor.render(data)
     editorInstanceRef.current = editor
   }
 
