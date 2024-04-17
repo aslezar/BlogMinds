@@ -192,6 +192,21 @@ const getUserBlogs = async (req: Request, res: Response) => {
     })
 }
 
+const getUserBlogById = async (req: Request, res: Response) => {
+    const userId = getUserId(req)
+    const blogId = getBlogId(req)
+
+    const blog = await Blog.findOne({ _id: blogId, author: userId })
+    if (!blog)
+        throw new BadRequestError("Blog not found or you are not authorized")
+
+    res.status(StatusCodes.OK).json({
+        data: { blog },
+        success: true,
+        msg: "Blog Fetched Successfully",
+    })
+}
+
 const createBlog = async (req: Request, res: Response) => {
     const userId = getUserId(req)
     const { title, description, content, img, tags } = req.body
@@ -338,6 +353,7 @@ export {
     likeBlog,
     commentBlog,
     getUserBlogs,
+    getUserBlogById,
     createBlog,
     deleteBlog,
     updateBlog,

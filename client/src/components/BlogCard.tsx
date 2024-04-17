@@ -1,9 +1,9 @@
 import { useNavigate, Link } from "react-router-dom"
-import { BlogShortType } from "../definitions"
+import { BlogCardType } from "../definitions"
 import { format } from "date-fns/format" // Import date-fns under a namespace
 
 interface BlogCardProps {
-  blog: BlogShortType
+  blog: BlogCardType
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {

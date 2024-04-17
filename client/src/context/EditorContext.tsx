@@ -1,4 +1,4 @@
-import { createContext, useRef,useContext } from "react"
+import { createContext, useContext, useState } from "react"
 import EditorJS from "@editorjs/editorjs"
 import List from "@editorjs/list"
 import ImageTool from "@editorjs/image"
@@ -16,14 +16,19 @@ import { uploadAssests } from "../api"
 import Title from "title-editorjs"
 import toast from "react-hot-toast"
 
- const EditorContext = createContext<any>(null)
+const EditorContext = createContext<any>(null)
 
- function EditorContextProvider(props: any) {
-  const editorInstanceRef = useRef<EditorJS | null>(null)
-  const initializeEditor = () => {
-    const editor = new EditorJS({
+function EditorContextProvider(props: any) {
+  // const editorInstanceRef = useRef<EditorJS | null>(null)
+  const [editor, setEditor] = useState<EditorJS | null>(null)
+  const initializeEditor = async (readOnly: boolean = false) => {
+    const editorjs = new EditorJS({
       holder: "editorjs",
       placeholder: "Start writing your blog here...",
+      onReady: () => {
+        setEditor(editorjs)
+      },
+      readOnly: readOnly,
       tools: {
         textAlignment: {
           class: AlignmentBlockTune,
@@ -93,7 +98,7 @@ import toast from "react-hot-toast"
               },
 
               uploadByUrl: (_url: string) => {
-                toast.error("Upload by URL is not supported",{
+                toast.error("Upload by URL is not supported", {
                   id: "uploadByUrl",
                 })
                 console.log(_url)
@@ -148,11 +153,13 @@ import toast from "react-hot-toast"
     })
     //render data
     //editor.render(data)
-    editorInstanceRef.current = editor
+    // editorInstanceRef.current = editor
+    // await editor.isReady
+    // setEditor(editor)
   }
 
   return (
-    <EditorContext.Provider value={{ editorInstanceRef, initializeEditor }}>
+    <EditorContext.Provider value={{ editor, initializeEditor }}>
       {props.children}
     </EditorContext.Provider>
   )
@@ -160,8 +167,4 @@ import toast from "react-hot-toast"
 const useEditorContext = () => {
   return useContext(EditorContext)
 }
-export {
-  EditorContext,
-  EditorContextProvider,
-  useEditorContext,
-}
+export { EditorContext, EditorContextProvider, useEditorContext }

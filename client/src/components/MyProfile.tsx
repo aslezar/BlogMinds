@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { useAppSelector } from "../hooks"
-import { updateName, updateBio } from "../api"
+// import { useAppSelector } from "../hooks"
+// import { updateName, updateBio } from "../api"
 import { getMyProfile } from "../api"
 import ClearIcon from "@mui/icons-material/Clear"
 import AddIcon from "@mui/icons-material/Add"
@@ -26,17 +26,6 @@ const MyProfile = () => {
   const handleCancel = () => {
     setEdit(false)
   }
-
-  const data = [
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-  ]
 
   //name , email(cannot edit),bio,profile image,myintrests-(),following,followers,
   if (user === null) {
@@ -89,8 +78,8 @@ const MyProfile = () => {
 
             <label>Profile Bio(About you)</label>
             <textarea
-              rows="4"
-              cols="50"
+              rows={4}
+              cols={50}
               maxLength={50}
               disabled={!edit}
               defaultValue={user.bio}

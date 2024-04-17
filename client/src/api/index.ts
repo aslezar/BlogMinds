@@ -6,6 +6,7 @@ import {
   BlogShortType,
   UserType,
   ForgotPasswordType,
+  BlogCreateType,
 } from "../definitions"
 
 /*
@@ -88,8 +89,12 @@ export const uploadAssests = (assetFiles: FormData) => {
 }
 
 /*
- *********************** Update User ***********************
+ *********************** User Requests ***********************
  */
+
+export const getUserProfile = (id: UserType["userId"]) =>
+  API.get(`/public/profile/${id}`)
+
 export const updateName = (name: UserType["name"]) =>
   API.patch("/user/updatename", { name })
 
@@ -101,6 +106,40 @@ export const updateBio = (bio: UserType["bio"]) =>
 //   formData.append("profileImage", profileImage)
 //   return API.patch("/user/updateimage", formData)
 // }
+
+/*User Blog Req*/
+
+export const getUserBlogs = (page: number = 1, limit: number = 10) =>
+  API.get("/user/blog", {
+    params: {
+      page,
+      limit,
+    },
+  })
+
+export const getUserBlogById = (id: BlogShortType["_id"]) =>
+  API.get(`/user/blog/${id}`)
+
+export const createBlog = (blog: BlogCreateType) =>
+  API.post("/user/blog", {
+    title: blog.title,
+    description: blog.description,
+    content: JSON.stringify(blog.content),
+    img: blog.img,
+    tags: blog.tags,
+  })
+
+export const updateBlog = (blog: BlogCreateType) =>
+  API.patch(`/user/blog/${blog._id}`, {
+    title: blog.title,
+    description: blog.description,
+    content: JSON.stringify(blog.content),
+    img: blog.img,
+    tags: blog.tags,
+  })
+
+export const deleteBlog = (id: BlogShortType["_id"]) =>
+  API.delete(`/user/blog/${id}`)
 
 /*
  ************************ Blogs Requests ************************
@@ -148,9 +187,6 @@ export const commentBlog = (id: BlogShortType["_id"], message: string) =>
   API.post(`/blog/${id}/comment`, { message })
 
 export const getTrendingBlog = () => API.get("/blog/trending")
-
-export const getUserProfile = (id: UserType["userId"]) =>
-  API.get(`/public/profile/${id}`)
 
 /*
  ************************ Search Requests ************************

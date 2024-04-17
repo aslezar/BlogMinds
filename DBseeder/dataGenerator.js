@@ -43,11 +43,25 @@ const filteredBlogs = blogs
         tags = JSON.parse(tagsArray)
         tags = tags.map((tag) => tag.toLowerCase())
 
+        const content = JSON.stringify({
+            time: 1550476186479,
+            blocks: [
+                {
+                    id: "zbGZFPM-iI",
+                    type: "paragraph",
+                    data: {
+                        text: text,
+                    },
+                },
+            ],
+            version: "2.8.1",
+        })
+
         return {
             _id: convertNumberToId(index + 1, "blog"),
             title,
             description: text.split(" ").slice(0, randomInt(30, 50)).join(" "),
-            content: text,
+            content: content,
             img: `https://picsum.photos/id/${randomInt(10, 1000)}/800/450`,
             author: authors[0] || null,
             tags,

@@ -122,7 +122,7 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <SearchBar />
               <NavLink
-                to={"/write"}
+                to={"/write/new_blog"}
                 className="bg-dark px-6 hover:bg-highlight transition-all duration-75 py-3 flex items-end justify-center gap-1 rounded-full text-sm"
               >
                 <svg
