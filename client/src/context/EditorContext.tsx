@@ -98,13 +98,14 @@ function EditorContextProvider(props: any) {
               },
 
               uploadByUrl: (_url: string) => {
-                toast.error("Upload by URL is not supported", {
-                  id: "uploadByUrl",
-                })
+                
                 console.log(_url)
                 return new Promise((resolve) => {
                   resolve({
-                    success: 0,
+                    success: 1,
+                    file: {
+                      url: _url,
+                    },
                   })
                 })
               },
