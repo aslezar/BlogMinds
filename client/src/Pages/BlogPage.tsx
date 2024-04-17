@@ -213,12 +213,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
 
         <div className="py-10 w-5/6">
           <h3 className="text-2xl font-semibold mb-5">Comments</h3>
-          {blog?.comments && blog?.comments?.length === 0 ? (
-            <p>No comments yet.</p>
-          ) : (
-            <ul className="space-y-7">
-              {/* input field to write comment with post button */}
-              <div className="flex gap-3">
+          <div className="flex gap-3">
                 <input
                   type="text"
                   placeholder="Write a comment"
@@ -233,6 +228,12 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                   Post
                 </button>
               </div>
+          {blog?.comments && blog?.comments?.length === 0 ? (
+            <p>No comments yet.</p>
+          ) : (
+            <ul className="space-y-7">
+              {/* input field to write comment with post button */}
+              
               {blog?.comments?.map((comment, index) => (
                 <li
                   key={index}
