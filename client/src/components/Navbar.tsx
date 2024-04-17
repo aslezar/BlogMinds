@@ -123,7 +123,6 @@ const Navbar = () => {
               <SearchBar />
               <NavLink
                 to={"/write/new_blog"}
-
                 className="bg-dark px-6 hover:bg-highlight transition-all py-3 flex items-end justify-center gap-1 rounded-full text-sm duration-200"
               >
                 <svg

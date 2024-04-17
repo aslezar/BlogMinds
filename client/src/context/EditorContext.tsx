@@ -98,7 +98,6 @@ function EditorContextProvider(props: any) {
               },
 
               uploadByUrl: (_url: string) => {
-                
                 console.log(_url)
                 return new Promise((resolve) => {
                   resolve({

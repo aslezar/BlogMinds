@@ -214,26 +214,26 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         <div className="py-10 w-5/6">
           <h3 className="text-2xl font-semibold mb-5">Comments</h3>
           <div className="flex gap-3">
-                <input
-                  type="text"
-                  placeholder="Write a comment"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-gray-500"
-                />
-                <button
-                  onClick={postComment}
-                  className="bg-highlight text-white px-4 py-2 rounded-full"
-                >
-                  Post
-                </button>
-              </div>
+            <input
+              type="text"
+              placeholder="Write a comment"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-gray-500"
+            />
+            <button
+              onClick={postComment}
+              className="bg-highlight text-white px-4 py-2 rounded-full"
+            >
+              Post
+            </button>
+          </div>
           {blog?.comments && blog?.comments?.length === 0 ? (
             <p>No comments yet.</p>
           ) : (
             <ul className="space-y-7">
               {/* input field to write comment with post button */}
-              
+
               {blog?.comments?.map((comment, index) => (
                 <li
                   key={index}
