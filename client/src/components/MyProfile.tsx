@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { useAppSelector } from "../hooks"
-import { updateName, updateBio } from "../api"
+// import { useAppSelector } from "../hooks"
+// import { updateName, updateBio } from "../api"
 import { getMyProfile } from "../api"
 import ClearIcon from "@mui/icons-material/Clear"
 import AddIcon from "@mui/icons-material/Add"
@@ -27,16 +27,16 @@ const MyProfile = () => {
     setEdit(false)
   }
 
-  const data = [
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-    "vedantPathaa",
-  ]
+  // const data = [
+  //   "vedantPathaa",
+  //   "vedantPathaa",
+  //   "vedantPathaa",
+  //   "vedantPathaa",
+  //   "vedantPathaa",
+  //   "vedantPathaa",
+  //   "vedantPathaa",
+  //   "vedantPathaa",
+  // ]
 
   //name , email(cannot edit),bio,profile image,myintrests-(),following,followers,
   if (user === null) {
