@@ -12,8 +12,9 @@ const errorHandlerMiddleware = (
     res: Response,
     next: NextFunction,
 ) => {
-    if (process.env.NODE_ENV === "development")
-        console.error("ERROR: " + err.message)
+    // if (process.env.NODE_ENV === "development")
+    console.error("ERROR: " + err.message)
+    console.error(err)
 
     //These all are known error that why there is no need to log them
 

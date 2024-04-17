@@ -115,14 +115,13 @@ const uploadAssets = async (req: Request, res: Response) => {
     const files = req.files
     if (!files) throw new BadRequestError("Files are required")
 
-    const user = await User.findById(userId)
-    if (!user) throw new UnauthenticatedError("User Not Found")
 
     //upload files to cloudinary
     const cloudinary_img_urls = await cloudinaryUploadAssetsImages(req)
 
-    user.myAssests.push(...cloudinary_img_urls)
-    await user.save()
+    await User.findByIdAndUpdate(userId, {
+        $push: { myAssests: { $each: cloudinary_img_urls } },
+    })
 
     res.status(StatusCodes.OK).json({
         data: cloudinary_img_urls,

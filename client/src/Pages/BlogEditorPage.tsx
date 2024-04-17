@@ -58,11 +58,11 @@ function BlogEditor() {
     if (blog) {
       editor.render(blog.content)
     }
-    if(blogId == "new_blog"){
+    if (blogId == "new_blog") {
       const id = setInterval(async () => {
         if (!editor) return
         const output = await editor.save()
-  
+
         localStorage.setItem(
           "new_blog",
           JSON.stringify({ ...blog, content: output }),
@@ -294,13 +294,6 @@ function ImageInput({ value, onChange }: ImageInputProps) {
         onChange={handleImageUrlChange}
         className="border px-3 py-2 rounded-lg focus:outline-none focus:ring  flex-grow"
       />
-      <style>
-        {`
-					.jodit-status-bar{
-						display:none;
-					}
-					`}
-      </style>
     </div>
   )
 }
