@@ -8,6 +8,7 @@ import { useAppSelector } from "../hooks.tsx"
 import { format } from "date-fns/format" // Import date-fns under a namespace
 import { useNavigate } from "react-router-dom"
 import { IoBookOutline } from "react-icons/io5"
+// import { useEditorContext } from "../context/EditorContext"
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -19,8 +20,12 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const [blog, setBlog] = React.useState<BlogFullType>()
   const [isLiked, setIsLiked] = React.useState<boolean>(false)
   const [comment, setComment] = React.useState<string>("")
+
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+
+  // const { editor } = useEditorContext()
+
   const { loading, isAuthenticated, user } = useAppSelector(
     (state) => state.user,
   )
@@ -202,8 +207,6 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               <pre className="w-[100%] whitespace-pre-line text-xl font-[inter] leading-8">
                 {blog.content}
               </pre>
-              Character Length: {blog.content.length}
-              <br />
             </>
           )}
         </div>

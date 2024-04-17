@@ -36,6 +36,22 @@ export interface BlogShortType {
   author: Author
   img: string
   tags: Category[]
+}
+
+export interface BlogCreateType {
+  _id: string
+  title: string
+  description: string
+  img: string
+  tags: Category[]
+  content: {
+    time: number
+    blocks: { type: string; data: any }[]
+    version: string
+  }
+}
+
+export interface BlogCardType extends BlogShortType {
   likesCount: number
   commentsCount: number
   views: number
@@ -44,6 +60,11 @@ export interface BlogShortType {
 }
 
 export interface BlogFullType extends BlogShortType {
+  likesCount: number
+  commentsCount: number
+  views: number
+  createdAt: string
+  updatedAt: string
   content: string
   comments: CommentType[]
 }
@@ -62,7 +83,7 @@ export interface UserType extends User {
   blogs?: BlogFullType[]
   followingCount: number
   followersCount: number
-  myInterests:string[]
+  myInterests: string[]
 }
 
 export enum Category {

@@ -1,6 +1,7 @@
 import { Router } from "express"
 import {
     getUserBlogs,
+    getUserBlogById,
     createBlog,
     deleteBlog,
     updateBlog,
@@ -9,6 +10,10 @@ import {
 const router = Router()
 
 router.route("/").get(getUserBlogs).post(createBlog)
-router.route("/:blogId").delete(deleteBlog).patch(updateBlog)
+router
+    .route("/:blogId")
+    .get(getUserBlogById)
+    .delete(deleteBlog)
+    .patch(updateBlog)
 
 export default router

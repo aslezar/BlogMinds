@@ -124,6 +124,7 @@ const Navbar = () => {
               <NavLink
                 to={"/write"}
                 className="bg-dark px-6 hover:bg-highlight transition-all duration-75 py-3 flex items-end justify-center gap-1 rounded-full text-sm duration-200"
+
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

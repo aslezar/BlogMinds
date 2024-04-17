@@ -1,4 +1,4 @@
-import { createContext, useRef } from "react"
+import { createContext, useContext, useState } from "react"
 import EditorJS from "@editorjs/editorjs"
 import List from "@editorjs/list"
 import ImageTool from "@editorjs/image"
@@ -13,17 +13,22 @@ import InlineCode from "@editorjs/inline-code"
 import ColorPlugin from "editorjs-text-color-plugin"
 import AlignmentBlockTune from "editorjs-text-alignment-blocktune"
 import { uploadAssests } from "../api"
-import Title from "title-editorjs";
+import Title from "title-editorjs"
 import toast from "react-hot-toast"
 
-export const EditorContext = createContext<any>(null)
+const EditorContext = createContext<any>(null)
 
-export function EditorContextProvider(props:any) {
-  const editorInstanceRef = useRef<EditorJS | null>(null)
-  const initializeEditor = () => {
-    const editor = new EditorJS({
+function EditorContextProvider(props: any) {
+  // const editorInstanceRef = useRef<EditorJS | null>(null)
+  const [editor, setEditor] = useState<EditorJS | null>(null)
+  const initializeEditor = async (readOnly: boolean = false) => {
+    const editorjs = new EditorJS({
       holder: "editorjs",
       placeholder: "Start writing your blog here...",
+      onReady: () => {
+        setEditor(editorjs)
+      },
+      readOnly: readOnly,
       tools: {
         textAlignment: {
           class: AlignmentBlockTune,
@@ -65,10 +70,6 @@ export function EditorContextProvider(props:any) {
         image: {
           class: ImageTool,
           config: {
-            endpoints: {
-              // byFile: "http://localhost:3000/uploadFile",
-              // byUrl: "http://localhost:3000/fetchUrl",
-            },
             field: "assetFiles",
             types: "image/png, image/jpg, image/jpeg, image/webp",
             onError: (error: any) => {
@@ -97,6 +98,9 @@ export function EditorContextProvider(props:any) {
               },
 
               uploadByUrl: (_url: string) => {
+                toast.error("Upload by URL is not supported", {
+                  id: "uploadByUrl",
+                })
                 console.log(_url)
                 return new Promise((resolve) => {
                   resolve({
@@ -149,12 +153,18 @@ export function EditorContextProvider(props:any) {
     })
     //render data
     //editor.render(data)
-    editorInstanceRef.current = editor
+    // editorInstanceRef.current = editor
+    // await editor.isReady
+    // setEditor(editor)
   }
 
   return (
-    <EditorContext.Provider value={{ editorInstanceRef, initializeEditor }}>
+    <EditorContext.Provider value={{ editor, initializeEditor }}>
       {props.children}
     </EditorContext.Provider>
   )
 }
+const useEditorContext = () => {
+  return useContext(EditorContext)
+}
+export { EditorContext, EditorContextProvider, useEditorContext }

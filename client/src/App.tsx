@@ -20,8 +20,7 @@ import VerifyOTP from "./Pages/VerifyOTP"
 import ForgotPassword from "./Pages/ForgotPasswordPage"
 import DashBoard from "./Pages/DashBoardPage"
 import MyBlogs from "./Pages/MyBlogsPage"
-import AddBlog from "./Pages/AddBlogPage"
-import EditBlog from "./Pages/EditBlogPage"
+import BlogEditor from "./Pages/BlogEditorPage"
 import Blog from "./Pages/BlogPage"
 import About from "./Pages/AboutPage"
 import ContactUs from "./Pages/ContactUsPage"
@@ -33,7 +32,6 @@ import Loader from "./components/Loader"
 import SearchResults from "./Pages/SearchResults"
 import PublicProfile from "./Pages/PublicProfile"
 import ProfilePage from "./Pages/ProfilePage"
-import EditorComponent from "./components/Editor"
 
 const Layout = () => {
   const location = useLocation()
@@ -87,12 +85,8 @@ const router = createBrowserRouter([
             element: <MyBlogs />,
           },
           {
-            path: "write",
-            element: <AddBlog />,
-          },
-          {
-            path: "editBlog/:id",
-            element: <EditBlog />,
+            path: "write/:id",
+            element: <BlogEditor />,
           },
         ],
       },
@@ -130,10 +124,6 @@ const router = createBrowserRouter([
       {
         path: "user/:id",
         element: <PublicProfile />,
-      },
-      {
-        path: "editorjs",
-        element: <EditorComponent />,
       },
       {
         path: "/*",

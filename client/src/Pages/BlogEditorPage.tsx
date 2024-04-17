@@ -1,29 +1,98 @@
-import React, { useContext, useState } from "react"
-import { BlogFullType, Category } from "../definitions"
-import AssetsFolder from "./AssetsFolder"
-import EditorPage from "./Editor"
-import { EditorContext } from "../context/EditorContext"
-import edjsHTML from "editorjs-html"
+import React from "react"
+import { BlogCreateType, Category } from "../definitions"
+import AssetsFolder from "../components/AssetsFolder"
+import EditorPage from "../components/Editor"
+import toast from "react-hot-toast"
+import { getUserBlogById, createBlog, updateBlog } from "../api"
+import { useParams } from "react-router-dom"
+import { useEditorContext } from "../context/EditorContext"
 
-type BlogEditorProps = {
-  blogContent: BlogFullType
-}
+const initalBlog =
+  '{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{"time":1550476186479,"blocks":[{"type":"title","data":{"text":"Editor.js","level":2}},{"type":"paragraph","data":{"text":"Hey. Meet the new Editor. On this page you can see it in action — try to edit this text. Source code of the page contains the example of connection and configuration."}},{"type":"title","data":{"text":"Key features","level":3}}],"version":"2.8.1"},"tags":[]}'
 
-function BlogEditor({ blogContent }: BlogEditorProps) {
-  const [isAssetsOpen, setIsAssetsOpen] = useState(false)
-  const { editorInstanceRef } = useContext(EditorContext)
-  const [blog, setBlog] = useState(blogContent)
+function BlogEditor() {
+  const [isAssetsOpen, setIsAssetsOpen] = React.useState(false)
+  const [loadingPublish, setLoadingPublish] = React.useState(false)
+  const [blog, setBlog] = React.useState<BlogCreateType>(JSON.parse(initalBlog))
+  const [intervalId, setIntervalId] = React.useState<ReturnType<
+    typeof setTimeout
+  > | null>(null)
 
-  const handleClick = async () => {
-    const output = await editorInstanceRef.current.save()
-    const edjsParser = edjsHTML()
-    let html = edjsParser.parse(output)
-    console.log(output)
-    //setBlog({ ...blog, content: html })
+  //if `blogId === new_blog` then it is a new blog
+  const { id: blogId } = useParams<{ id: string }>()
+
+  const { editor } = useEditorContext()
+
+  React.useEffect(() => {
+    if (!editor || !blogId) return
+
+    if (blogId === "new_blog") {
+      const blogFromStorageString =
+        localStorage.getItem("new_blog") || initalBlog
+
+      const blogFromStorage = JSON.parse(blogFromStorageString)
+      setBlog((_prevBlog) => blogFromStorage)
+
+      //set interval
+      const id = setInterval(async () => {
+        const output = await editor.save()
+
+        localStorage.setItem(
+          "new_blog",
+          JSON.stringify({ ...blog, content: output }),
+        )
+      }, 1000)
+      setIntervalId(id)
+    } else {
+      getUserBlogById(blogId)
+        .then((response) => {
+          const resBlog = response.data.blog
+          blog.content = JSON.parse(resBlog.content)
+          setBlog(resBlog)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+
+    return () => {
+      intervalId && clearInterval(intervalId)
+    }
+  }, [blogId, editor])
+
+  React.useEffect(() => {
+    if (!editor) return
+    editor.render(blog.content)
+  }, [editor, blog.content])
+
+  const createOrUpdateBlog = async (
+    blog: BlogCreateType,
+    latestContent: BlogCreateType["content"],
+  ) => {
+    if (blogId) localStorage.setItem("new_blog", JSON.stringify(blog))
+    await (blog._id === "new_blog"
+      ? createBlog({ ...blog, content: latestContent })
+      : updateBlog({ ...blog, content: latestContent }))
   }
-  const handleSubmit = (event: React.SyntheticEvent) => {
+
+  const handlePublish = async (event: React.SyntheticEvent) => {
     event.preventDefault()
-    handleClick()
+    setLoadingPublish(true)
+    try {
+      const latestContent = await editor.save()
+      console.log(latestContent)
+      await createOrUpdateBlog(blog, latestContent)
+      toast.success(
+        blog._id === "new_blog" ? "Blog Published" : "Blog updated",
+        {
+          id: "publish",
+        },
+      )
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoadingPublish(false)
+    }
   }
 
   return (
@@ -94,55 +163,34 @@ function BlogEditor({ blogContent }: BlogEditorProps) {
           {isAssetsOpen && <AssetsFolder setIsAssetsOpen={setIsAssetsOpen} />}
         </div>
 
-        <div className="flex gap-2  mt-4  pr-2 flex-col">
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="border-2 text-dark border-dark font-medium px-4 py-2 rounded-full hover:bg-dark hover:text-white flex items-center justify-center"
+        <button
+          type="submit"
+          onClick={handlePublish}
+          disabled={loadingPublish || !editor}
+          className={`border-2 border-dark font-medium px-4 py-2 rounded-full flex items-center justify-center text-dark
+              ${loadingPublish ? "opacity-50 cursor-progress" : "hover:bg-dark hover:text-white"}`}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-5 h-5 inline mr-1"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-5 h-5 inline mr-1"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-              />
-            </svg>
-            Publish
-          </button>
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="border-2 text-highlight border-highlight font-medium px-4 py-2 rounded-full hover:bg-highlight hover:text-white flex items-center justify-center flex-nowrap"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-5 h-5 mr-1 inline"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
-              />
-            </svg>
-            <span>Save Draft</span>
-          </button>
-        </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+          {blogId === "new_blog" ? "Publish" : "Update"}
+        </button>
       </div>
       <div className="mx-auto w-full ">
         <EditorPage />
@@ -157,7 +205,7 @@ type MultiSelectProps = {
   placeholder: string
 }
 function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = React.useState(false)
 
   const toggleOption = (option: Category) => {
     const isSelected = value.includes(option)
@@ -220,7 +268,7 @@ type ImageInputProps = {
   onChange: (img: string) => void
 }
 function ImageInput({ value, onChange }: ImageInputProps) {
-  const [imageUrl, setImageUrl] = useState(value)
+  const [imageUrl, setImageUrl] = React.useState(value)
 
   const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value
