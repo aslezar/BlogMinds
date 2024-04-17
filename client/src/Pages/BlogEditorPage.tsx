@@ -14,9 +14,6 @@ function BlogEditor() {
   const [isAssetsOpen, setIsAssetsOpen] = React.useState(false)
   const [loadingPublish, setLoadingPublish] = React.useState(false)
   const [blog, setBlog] = React.useState<BlogCreateType | null>(null)
-  const [intervalId, setIntervalId] = React.useState<ReturnType<
-    typeof setTimeout
-  > | null>(null)
 
   //if `blogId === new_blog` then it is a new blog
   const { id: blogId } = useParams<{ id: string }>()
@@ -47,10 +44,6 @@ function BlogEditor() {
           console.error(err)
         })
     }
-
-    return () => {
-      intervalId && clearInterval(intervalId)
-    }
   }, [blogId])
 
   React.useEffect(() => {
@@ -68,7 +61,9 @@ function BlogEditor() {
           JSON.stringify({ ...blog, content: output }),
         )
       }, 1000)
-      setIntervalId(id)
+      return () => {
+        clearInterval(id)
+      }
     }
   }, [editor, blog?.content])
 
