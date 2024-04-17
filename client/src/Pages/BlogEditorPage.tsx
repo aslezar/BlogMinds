@@ -13,18 +13,18 @@ const initalBlog =
 function BlogEditor() {
   const [isAssetsOpen, setIsAssetsOpen] = React.useState(false)
   const [loadingPublish, setLoadingPublish] = React.useState(false)
-  const [blog, setBlog] = React.useState<BlogCreateType>(JSON.parse(initalBlog))
+  const [blog, setBlog] = React.useState<BlogCreateType | null>(null)
   const [intervalId, setIntervalId] = React.useState<ReturnType<
     typeof setTimeout
   > | null>(null)
 
   //if `blogId === new_blog` then it is a new blog
   const { id: blogId } = useParams<{ id: string }>()
-
+  console.log(blog)
   const { editor } = useEditorContext()
 
   React.useEffect(() => {
-    if (!editor || !blogId) return
+    if (!blogId) return
 
     if (blogId === "new_blog") {
       const blogFromStorageString =
@@ -33,21 +33,14 @@ function BlogEditor() {
       const blogFromStorage = JSON.parse(blogFromStorageString)
       setBlog((_prevBlog) => blogFromStorage)
 
-      //set interval
-      const id = setInterval(async () => {
-        const output = await editor.save()
-
-        localStorage.setItem(
-          "new_blog",
-          JSON.stringify({ ...blog, content: output }),
-        )
-      }, 1000)
-      setIntervalId(id)
+      // set interval
     } else {
       getUserBlogById(blogId)
         .then((response) => {
           const resBlog = response.data.blog
-          blog.content = JSON.parse(resBlog.content)
+          if (blog) {
+            blog.content = JSON.parse(resBlog.content)
+          }
           setBlog(resBlog)
         })
         .catch((err) => {
@@ -58,12 +51,26 @@ function BlogEditor() {
     return () => {
       intervalId && clearInterval(intervalId)
     }
-  }, [blogId, editor])
+  }, [blogId])
 
   React.useEffect(() => {
     if (!editor) return
-    editor.render(blog.content)
-  }, [editor, blog.content])
+    if (blog) {
+      editor.render(blog.content)
+    }
+    if(blogId == "new_blog"){
+      const id = setInterval(async () => {
+        if (!editor) return
+        const output = await editor.save()
+  
+        localStorage.setItem(
+          "new_blog",
+          JSON.stringify({ ...blog, content: output }),
+        )
+      }, 1000)
+      setIntervalId(id)
+    }
+  }, [editor, blog?.content])
 
   const createOrUpdateBlog = async (
     blog: BlogCreateType,
@@ -77,6 +84,7 @@ function BlogEditor() {
 
   const handlePublish = async (event: React.SyntheticEvent) => {
     event.preventDefault()
+    if (blog === null) return
     setLoadingPublish(true)
     try {
       const latestContent = await editor.save()
@@ -94,7 +102,7 @@ function BlogEditor() {
       setLoadingPublish(false)
     }
   }
-
+  if (blog === null) return <div>Loading...</div>
   return (
     <div className="flex  z-40 mx-auto w-screen  top-0 bg-white pl-[25%]">
       <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
