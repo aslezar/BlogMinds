@@ -107,6 +107,7 @@ const getBlogById = async (req: Request, res: Response) => {
         })
         .populate({
             path: "comments",
+            options: { sort: { createdAt: -1 } }, // Sort comments in descending order by createdAt field
             populate: {
                 path: "author",
                 select: "name profileImage",
