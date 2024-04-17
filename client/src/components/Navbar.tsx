@@ -122,8 +122,9 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <SearchBar />
               <NavLink
-                to={"/write/new_blog"}
-                className="bg-dark px-6 hover:bg-highlight transition-all duration-75 py-3 flex items-end justify-center gap-1 rounded-full text-sm"
+                to={"/write"}
+                className="bg-dark px-6 hover:bg-highlight transition-all duration-75 py-3 flex items-end justify-center gap-1 rounded-full text-sm duration-200"
+
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +141,7 @@ const Navbar = () => {
                 onClick={() => {
                   setIsOpen(!isOpen)
                 }}
-                className="p-3 rounded-full bg-dark relative"
+                className="p-3 rounded-full bg-dark relative hover:bg-highlight duration-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +222,7 @@ const Navbar = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="w-5 h-5  "
+                      className="w-5 h-5"
                     >
                       <path
                         strokeLinecap="round"
