@@ -4,7 +4,7 @@ import AssetsFolder from "../components/AssetsFolder"
 import EditorPage from "../components/Editor"
 import toast from "react-hot-toast"
 import { getUserBlogById, createBlog, updateBlog } from "../api"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useEditorContext } from "../context/EditorContext"
 
 const initalBlog =
@@ -14,7 +14,7 @@ function BlogEditor() {
   const [isAssetsOpen, setIsAssetsOpen] = React.useState(false)
   const [loadingPublish, setLoadingPublish] = React.useState(false)
   const [blog, setBlog] = React.useState<BlogCreateType | null>(null)
-
+  const navigate = useNavigate()
   //if `blogId === new_blog` then it is a new blog
   const { id: blogId } = useParams<{ id: string }>()
   console.log(blog)
@@ -34,10 +34,10 @@ function BlogEditor() {
     } else {
       getUserBlogById(blogId)
         .then((response) => {
-          const resBlog = response.data.blog
-          if (blog) {
-            blog.content = JSON.parse(resBlog.content)
-          }
+          let resBlog = response.data.blog
+
+          resBlog.content = JSON.parse(resBlog.content)
+
           setBlog(resBlog)
         })
         .catch((err) => {
@@ -91,6 +91,7 @@ function BlogEditor() {
           id: "publish",
         },
       )
+      navigate(`/feed`)
     } catch (err) {
       console.log(err)
     } finally {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { commentBlog, getBlog, likeBlog } from "../api/index.ts"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
@@ -8,7 +8,7 @@ import { useAppSelector } from "../hooks.tsx"
 import { format } from "date-fns/format" // Import date-fns under a namespace
 import { useNavigate } from "react-router-dom"
 import { IoBookOutline } from "react-icons/io5"
-// import { useEditorContext } from "../context/EditorContext"
+import { useEditorContext } from "../context/EditorContext"
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -20,11 +20,27 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const [blog, setBlog] = React.useState<BlogFullType>()
   const [isLiked, setIsLiked] = React.useState<boolean>(false)
   const [comment, setComment] = React.useState<string>("")
-
+  const { initializeEditor, editor } = useEditorContext()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const editorRef = useRef<any>(null)
+  console.log(blog?.content)
+  // pass blog content to editor
+  useEffect(() => {
+    if (blog?.content) {
+      if (editorRef.current === null) {
+        initializeEditor(true, JSON.parse(blog.content))
+        editorRef.current = true
+        // editor?.render({blocks: JSON.parse(blog.content)})
+      }
+    }
+  }, [blog?.content, editor, initializeEditor])
 
-  // const { editor } = useEditorContext()
+  // useEffect(() => {
+  //   if (blog?.content && editor) {
+  //     editor?.render({ blocks: JSON.parse(blog?.content) })
+  //   }
+  // }, [blog?.content])
 
   const { loading, isAuthenticated, user } = useAppSelector(
     (state) => state.user,
@@ -201,7 +217,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             </div>
           </div>
         </div>
-        <div className="text-gray-700  pt-20 px-6">
+        {/* <div className="text-gray-700  pt-20 px-6">
           {blog?.content && (
             <>
               <pre className="w-[100%] whitespace-pre-line text-xl font-[inter] leading-8">
@@ -209,8 +225,8 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               </pre>
             </>
           )}
-        </div>
-
+        </div> */}
+        <div id="editorjs" className="text-gray-700  pt-20 px-6"></div>
         <div className="py-10 w-5/6">
           <h3 className="text-2xl font-semibold mb-5">Comments</h3>
           <div className="flex gap-3">
