@@ -1,12 +1,11 @@
 import { createContext, useContext, useState } from "react"
-import EditorJS from "@editorjs/editorjs"
+import EditorJS, { OutputData } from "@editorjs/editorjs"
 import List from "@editorjs/list"
 import ImageTool from "@editorjs/image"
 import Embed from "@editorjs/embed"
 import Alert from "editorjs-alert"
 import CheckList from "@editorjs/checklist"
 import Link from "@editorjs/link"
-import Table from "editorjs-table"
 import Code from "@editorjs/code"
 import Button from "editorjs-button"
 import InlineCode from "@editorjs/inline-code"
@@ -15,19 +14,22 @@ import AlignmentBlockTune from "editorjs-text-alignment-blocktune"
 import { uploadAssests } from "../api"
 import Title from "title-editorjs"
 import toast from "react-hot-toast"
-
 const EditorContext = createContext<any>(null)
 
 function EditorContextProvider(props: any) {
   // const editorInstanceRef = useRef<EditorJS | null>(null)
   const [editor, setEditor] = useState<EditorJS | null>(null)
-  const initializeEditor = async (readOnly: boolean = false) => {
+  const initializeEditor = async (
+    readOnly: boolean = false,
+    data: OutputData | undefined = undefined,
+  ) => {
     const editorjs = new EditorJS({
       holder: "editorjs",
       placeholder: "Start writing your blog here...",
       onReady: () => {
         setEditor(editorjs)
       },
+      data: data,
       readOnly: readOnly,
       tools: {
         textAlignment: {
@@ -121,9 +123,6 @@ function EditorContextProvider(props: any) {
           },
         },
         link: Link,
-        table: {
-          class: Table,
-        },
         code: {
           class: Code,
           config: {
@@ -152,7 +151,6 @@ function EditorContextProvider(props: any) {
       },
     })
     //render data
-    //editor.render(data)
     // editorInstanceRef.current = editor
     // await editor.isReady
     // setEditor(editor)
