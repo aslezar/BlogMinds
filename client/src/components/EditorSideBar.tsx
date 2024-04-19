@@ -4,6 +4,7 @@ import AssetsFolder from "./AssetsFolder"
 import ImageInput from "./ImageInput"
 import MultiSelect from "./MultiSelect"
 import AICompletion from "./AICompletion"
+import Loader from "./Loader"
 
 interface BlogEditorProps {
   blogId: BlogCreateType["_id"] | undefined
@@ -23,7 +24,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
   const [isAssetsOpen, setIsAssetsOpen] = React.useState(false)
   const [isAICompletionOpen, setIsAICompletionOpen] = React.useState(false)
 
-  if (blog === null) return <div>Loading...</div>
+  if (blog === null) return <Loader />
   return (
     <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
       <ImageInput

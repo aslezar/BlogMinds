@@ -6,11 +6,13 @@ import toast from "react-hot-toast"
 import { getUserBlogById, createBlog, updateBlog } from "../api"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEditorContext } from "../context/EditorContext"
+import Loader from "../components/Loader"
 
 const initalBlog =
   '{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{"time":1550476186479,"blocks":[{"type":"title","data":{"text":"Editor.js","level":2}},{"type":"paragraph","data":{"text":"Hey. Meet the new Editor. On this page you can see it in action — try to edit this text. Source code of the page contains the example of connection and configuration."}},{"type":"title","data":{"text":"Key features","level":3}}],"version":"2.8.1"},"tags":[]}'
 
 function BlogEditor() {
+  const [loading, setLoading] = React.useState<boolean>(true)
   const [loadingPublish, setLoadingPublish] = React.useState<boolean>(false)
   const [blog, setBlog] = React.useState<BlogCreateType | null>(null)
 
@@ -29,17 +31,18 @@ function BlogEditor() {
 
       const blogFromStorage = JSON.parse(blogFromStorageString)
       setBlog((_prevBlog) => blogFromStorage)
-
-      // set interval
+      setLoading(false)
     } else {
       const blogFromStorageString = localStorage.getItem(blogId)
 
       if (blogFromStorageString) {
         const blogFromStorage = JSON.parse(blogFromStorageString)
         setBlog((_prevBlog) => blogFromStorage)
+        setLoading(false)
         return
       }
 
+      setLoading(true)
       getUserBlogById(blogId)
         .then((response) => {
           let resBlog = response.data.blog
@@ -48,6 +51,9 @@ function BlogEditor() {
         })
         .catch((err) => {
           console.error(err)
+        })
+        .finally(() => {
+          setLoading(false)
         })
     }
   }, [blogId])
@@ -108,7 +114,13 @@ function BlogEditor() {
       setLoadingPublish(false)
     }
   }
-  if (blog === null) return <div>Loading...</div>
+  if (loading) return <Loader />
+  if (blog === null)
+    return (
+      <div style={{ color: "red", fontWeight: "bold", textAlign: "center" }}>
+        You are not authorized to edit this blog.
+      </div>
+    )
   return (
     <div className="flex  z-40 mx-auto w-screen  top-0 bg-white pl-[25%]">
       <EditorSideBar

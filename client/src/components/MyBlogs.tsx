@@ -1,6 +1,7 @@
 import React from "react"
 import { getUserBlogs } from "../api"
 import { BlogShortType } from "../definitions"
+import Loader from "./Loader"
 
 const MyBlogs = () => {
   const [page, setPage] = React.useState<number>(1)
@@ -40,7 +41,7 @@ const MyBlogs = () => {
       </div>
 
       {loading
-        ? "Loading..."
+        ? <Loader />
         : blogs.length === 0
           ? "No blogs found"
           : blogs.map((blog, index) => (
