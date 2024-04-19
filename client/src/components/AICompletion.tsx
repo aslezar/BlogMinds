@@ -52,10 +52,9 @@ const AICompletion: React.FC<AICompletionProps> = ({
     return imageSuggestions.some((pair) => pair.prompt === prompt)
   }
   const handleImageSuggestion = async () => {
-    if (isPromptAlreadySuggested(prompt)) {
-      toast.error("This prompt is already suggested, please try another one.")
-      return
-    }
+    if (isPromptAlreadySuggested(prompt))
+      return toast.success("Prompt already suggested, please try another one.")
+
     setLoading(true)
     toast.loading("Generating Image", {
       id: "loading",
@@ -148,9 +147,9 @@ const AICompletion: React.FC<AICompletionProps> = ({
           {page === 0 ? (
             <div>
               <h1>Text Suggestions</h1>
-              {textSuggestions.map((suggestion, index) => (
+              {textSuggestions.map((textSuggestion, index) => (
                 <div key={index} className="border p-2">
-                  <div>{suggestion}</div>
+                  <div>{textSuggestion}</div>
                   <Button text="Use in Blog" onClick={handleButtonClick} />
                   <Button
                     text="Discard"
@@ -159,6 +158,13 @@ const AICompletion: React.FC<AICompletionProps> = ({
                         prev.filter((_, i) => i !== index),
                       )
                     }
+                  />
+                  <Button
+                    text="Copy Text"
+                    onClick={() => {
+                      navigator.clipboard.writeText(textSuggestion)
+                      toast.success("Text copied to clipboard")
+                    }}
                   />
                 </div>
               ))}
