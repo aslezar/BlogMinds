@@ -60,7 +60,7 @@ const filteredBlogs = blogs
         return {
             _id: convertNumberToId(index + 1, "blog"),
             title,
-            description: text.split(" ").slice(0, randomInt(30, 50)).join(" "),
+            description: text.slice(0, randomInt(200, 250)),
             content: content,
             img: `https://picsum.photos/id/${randomInt(10, 1000)}/800/450`,
             author: authors[0] || null,

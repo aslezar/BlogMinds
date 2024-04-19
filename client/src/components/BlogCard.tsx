@@ -17,7 +17,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
         <img
           className="object-cover w-full mx-auto lg:mx-0 lg:w-52 aspect-video rounded-xl mb-2"
           src={blog.img}
-          alt={"img"}
+          alt={blog.title}
           loading="lazy"
         />
         <div className="mt-6  lg:mt-0 lg:mx-6">
@@ -72,11 +72,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
             {blog.title}
           </Link>
 
-          <p className="mt-2  text-gray-500">
-            {blog.description.length > 150
-              ? blog.description.slice(0, 150) + "..."
-              : blog.description}
-          </p>
+          <p className="mt-2  text-gray-500">{blog.description}</p>
 
           <div className="flex items-center gap-4 text-sm text-gray-600 mt-5">
             <div className="flex gap-1 items-center">

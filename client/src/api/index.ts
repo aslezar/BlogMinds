@@ -205,3 +205,12 @@ export const search = (
       limit,
     },
   })
+/*
+ ************************ AI Requests ************************
+ */
+
+export const getAICompletion = (text: string) =>
+  API.post("/ai/suggest/text", { text })
+
+export const getAImage = (prompt: string) =>
+  API.post("/ai/suggest/image", { prompt })

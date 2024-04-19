@@ -60,7 +60,7 @@ export const userSlice = createSlice({
       state.user = null
       verificationRequired: false
       verificationUserID: ""
-      localStorage.removeItem("token")
+      localStorage.clear()
     },
     UPDATE_NAME: (state, action) => {
       if (state.user) state.user.name = action.payload
