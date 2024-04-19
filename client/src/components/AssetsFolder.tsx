@@ -3,6 +3,7 @@ import { useDropzone } from "react-dropzone"
 import { getAssests, uploadAssests, deleteAssest } from "../api"
 import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
+import Loader from "./Loader"
 
 interface AssetsFolderProps {
   setIsAssetsOpen?: React.Dispatch<React.SetStateAction<boolean>>
@@ -10,11 +11,14 @@ interface AssetsFolderProps {
 
 const AssetsFolder: React.FC<AssetsFolderProps> = ({ setIsAssetsOpen }) => {
   const [assets, setAssets] = React.useState<string[]>([])
+  const [loading, setLoading] = React.useState<boolean>(true)
 
   React.useEffect(() => {
+    setLoading(true)
     getAssests()
       .then((res) => setAssets(res.data.assets))
       .catch((err) => console.log(err))
+      .finally(() => setLoading(false))
   }, [])
 
   return (
@@ -35,11 +39,15 @@ const AssetsFolder: React.FC<AssetsFolderProps> = ({ setIsAssetsOpen }) => {
         )}
       </div>
       <Dropzone setAssets={setAssets} />
-      <div className="flex flex-wrap gap-4 items-center ">
-        {assets.map((asset) => (
-          <Assets asset={asset} setAssets={setAssets} key={asset} />
-        ))}
-      </div>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="flex flex-wrap gap-4 items-center ">
+          {assets.map((asset) => (
+            <Assets asset={asset} setAssets={setAssets} key={asset} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
