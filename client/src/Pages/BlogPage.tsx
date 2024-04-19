@@ -140,7 +140,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         <figure>
           <img
             src={blog?.img}
-            alt="img"
+            alt={blog?.title}
             className=" object-cover w-full aspect-[2]"
           />
         </figure>

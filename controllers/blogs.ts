@@ -227,6 +227,7 @@ const createBlog = async (req: Request, res: Response) => {
         $push: { blogs: blog._id },
     })
     res.status(StatusCodes.CREATED).json({
+        data: { id: blog._id },
         success: true,
         msg: "Blog Created Successfully",
     })
@@ -284,6 +285,7 @@ const updateBlog = async (req: Request, res: Response) => {
         )
 
     res.status(StatusCodes.OK).json({
+        data: { id: blog._id },
         success: true,
         msg: "Successfully updated blog.",
     })

@@ -115,7 +115,6 @@ const uploadAssets = async (req: Request, res: Response) => {
     const files = req.files
     if (!files) throw new BadRequestError("Files are required")
 
-
     //upload files to cloudinary
     const cloudinary_img_urls = await cloudinaryUploadAssetsImages(req)
 

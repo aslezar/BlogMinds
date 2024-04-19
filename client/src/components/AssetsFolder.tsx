@@ -4,7 +4,11 @@ import { getAssests, uploadAssests, deleteAssest } from "../api"
 import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
 
-const AssetsFolder = ({ setIsAssetsOpen }: any) => {
+interface AssetsFolderProps {
+  setIsAssetsOpen?: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const AssetsFolder: React.FC<AssetsFolderProps> = ({ setIsAssetsOpen }) => {
   const [assets, setAssets] = React.useState<string[]>([])
 
   React.useEffect(() => {
@@ -14,10 +18,10 @@ const AssetsFolder = ({ setIsAssetsOpen }: any) => {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-40  top-5 mx-auto  p-5 backdrop-blur-sm h-full w-screen flex pt-20 start">
-      <div className="bg-white p-4 h-5/6 w-[24%] space-y-4 rounded-lg border overflow-auto">
-        <div className="flex justify-between">
-          <h1 className="text-2xl font-semibold">Your Saved Assets</h1>
+    <div className="bg-white p-4 h-5/6 w-[24%] space-y-4 rounded-lg border overflow-auto">
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-semibold">Your Saved Assets</h1>
+        {setIsAssetsOpen && (
           <button
             onClick={(e) => {
               e.preventDefault()
@@ -28,13 +32,13 @@ const AssetsFolder = ({ setIsAssetsOpen }: any) => {
           >
             Close
           </button>
-        </div>
-        <Dropzone setAssets={setAssets} />
-        <div className="flex flex-wrap gap-4 items-center ">
-          {assets.map((asset) => (
-            <Assets asset={asset} setAssets={setAssets} key={asset} />
-          ))}
-        </div>
+        )}
+      </div>
+      <Dropzone setAssets={setAssets} />
+      <div className="flex flex-wrap gap-4 items-center ">
+        {assets.map((asset) => (
+          <Assets asset={asset} setAssets={setAssets} key={asset} />
+        ))}
       </div>
     </div>
   )
