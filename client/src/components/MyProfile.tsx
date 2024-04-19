@@ -27,23 +27,14 @@ const MyProfile = () => {
     setEdit(false)
   }
 
-  // const data = [
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  // ]
+
 
   //name , email(cannot edit),bio,profile image,myintrests-(),following,followers,
   if (user === null) {
     return ""
   }
   return (
-    <div className="flex flex-col font-inter mx-6 w-screen">
+    <div className="flex flex-col font-inter mx-6 w-full">
       <nav className="p-5 rounded-xl flex justify-between ">
         <div>
           <h1 className="text-2xl font-medium">My Profile</h1>
@@ -60,8 +51,8 @@ const MyProfile = () => {
         </button>
       </nav>
       <hr className="mx-8" />
-      <main>
-        <section className="sm:w-3/4 xs:w-3/4 lg:w-1/2 p-5">
+      <main className="flex xs:flex-wrap">
+        <section className="sm:w-100 xs:w-3/4 lg:w-1/2 p-5">
           <form action="" className="flex flex-col">
             <label className="text-lg my-2 font-medium">
               Your profile photo
