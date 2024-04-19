@@ -4,6 +4,7 @@ const { faker } = require("@faker-js/faker")
 const bcrypt = require("bcryptjs")
 
 const maxUsersToPush = 200
+// const maxUsersToPush = 5000
 
 function replaceSingleQuotesWithDoubleQuotes(inputString) {
     return inputString.replace(/'/g, '"')

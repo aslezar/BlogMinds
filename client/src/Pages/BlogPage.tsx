@@ -6,9 +6,9 @@ import { useParams } from "react-router-dom"
 import { BlogFullType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 import { format } from "date-fns/format" // Import date-fns under a namespace
-import { useNavigate } from "react-router-dom"
 import { IoBookOutline } from "react-icons/io5"
 import { useEditorContext } from "../context/EditorContext"
+import { Link } from "react-router-dom"
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -22,7 +22,6 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const [comment, setComment] = React.useState<string>("")
   const { initializeEditor, editor } = useEditorContext()
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
   const editorRef = useRef<any>(null)
   console.log(blog?.content)
   // pass blog content to editor
@@ -164,7 +163,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             </div>
             <span className="text-2xl text-gray-600 font-thin">|</span>
             {blog.author && (
-              <div className="flex items-end ">
+              <Link className="flex items-end " to={`/user/${blog.author._id}`}>
                 <img
                   className="object-cover object-center w-7 aspect-square rounded-full"
                   src={blog.author.profileImage}
@@ -172,16 +171,11 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                 />
 
                 <div className="ml-2">
-                  <h1
-                    className="text-lg text-gray-700 hover:underline hover:cursor-pointer"
-                    onClick={() => {
-                      navigate(`/user/${blog.author._id}`)
-                    }}
-                  >
+                  <h1 className="text-lg text-gray-700 hover:underline hover:cursor-pointer">
                     {blog.author.name}
                   </h1>
                 </div>
-              </div>
+              </Link>
             )}
 
             {blog.author && (
@@ -255,13 +249,19 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                   key={index}
                   className="mb-4 gap-4 flex items-center text-lg"
                 >
-                  <img
-                    className="object-cover w-12 rounded-full aspect-square"
-                    src={comment?.author?.profileImage}
-                    alt={"img"}
-                  />
+                  <Link to={`/user/${comment.author._id}`}>
+                    <img
+                      className="object-cover w-12 rounded-full aspect-square"
+                      src={comment?.author?.profileImage}
+                      alt={"img"}
+                    />
+                  </Link>
                   <div>
-                    <p className="font-medium">{comment?.author?.name}</p>
+                    <Link to={`/user/${comment.author._id}`}>
+                      <p className="font-medium hover:underline hover:cursor-pointer">
+                        {comment.author.name}
+                      </p>
+                    </Link>
                     <p>{comment?.message}</p>
                   </div>
                 </li>

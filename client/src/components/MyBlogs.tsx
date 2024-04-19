@@ -40,15 +40,17 @@ const MyBlogs = () => {
         <button onClick={nextPage}>Next</button>
       </div>
 
-      {loading
-        ? <Loader />
-        : blogs.length === 0
-          ? "No blogs found"
-          : blogs.map((blog, index) => (
-              <div key={blog._id}>
-                {index}. {blog.title}
-              </div>
-            ))}
+      {loading ? (
+        <Loader />
+      ) : blogs.length === 0 ? (
+        "No blogs found"
+      ) : (
+        blogs.map((blog, index) => (
+          <div key={blog._id}>
+            {index}. {blog.title}
+          </div>
+        ))
+      )}
     </div>
   )
 }

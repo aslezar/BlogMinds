@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { BlogCardType } from "../definitions"
 import { format } from "date-fns/format" // Import date-fns under a namespace
 
@@ -7,7 +7,6 @@ interface BlogCardProps {
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
-  const navigate = useNavigate()
   const formatDate = (date: string) => {
     return format(new Date(date), "dd MMMM yyyy")
   }
@@ -31,14 +30,12 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
                 />
 
                 <div className="ml-2">
-                  <h1
+                  <Link
                     className="text-[15px] text-gray-700 hover:underline hover:cursor-pointer"
-                    onClick={() => {
-                      navigate(`/user/${blog.author._id}`)
-                    }}
+                    to={`/user/${blog.author._id}`}
                   >
                     {blog.author.name}
-                  </h1>
+                  </Link>
                 </div>
               </div>
             )}
