@@ -53,7 +53,9 @@ const ProfilePage = () => {
         <Tabs
           value={value}
           onChange={handleChange}
+          textColor="secondary"
           aria-label="basic tabs example"
+          centered
           TabIndicatorProps={{
             style: {
               background: "#9674d4",
