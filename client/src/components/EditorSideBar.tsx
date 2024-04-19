@@ -102,13 +102,9 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
             />
           </svg>
         </span>
-        {isAICompletionOpen && (
-          <>
-            <div className="fixed inset-0 z-40 top-5 mx-auto p-5 backdrop-blur-sm h-full w-screen flex pt-20 start">
-              <AICompletion setIsAICompletionOpen={setIsAICompletionOpen} />
-            </div>
-          </>
-        )}
+        <div className={`fixed inset-0 z-40 top-5 mx-auto p-5 backdrop-blur-sm h-full w-screen flex pt-20 start ${isAICompletionOpen ? "block" : "hidden"}`}>
+          <AICompletion setIsAICompletionOpen={setIsAICompletionOpen} />
+        </div>
       </div>
       <button
         type="submit"

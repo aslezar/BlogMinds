@@ -33,6 +33,9 @@ API.interceptors.request.use(
 )
 API.interceptors.response.use(
   function (response) {
+    const isAIImage = response.headers["x-ai-generated-image"] === "true"
+    if (isAIImage) return response
+
     if (response.data.success) {
       return response.data
     } else {
@@ -210,7 +213,7 @@ export const search = (
  */
 
 export const getAICompletion = (text: string) =>
-  API.post("/ai/suggest/text", { text })
+  API.get("/ai/suggest/text", { params: { text } })
 
 export const getAImage = (prompt: string) =>
-  API.post("/ai/suggest/image", { prompt })
+  API.get("/ai/suggest/image", { params: { prompt }, responseType: 'blob' })
