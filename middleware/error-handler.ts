@@ -12,9 +12,8 @@ const errorHandlerMiddleware = (
     res: Response,
     next: NextFunction,
 ) => {
-    // if (process.env.NODE_ENV === "development")
-    console.error("ERROR: " + err.message)
-    console.error(err)
+    if (process.env.NODE_ENV === "development")
+        console.error("ERROR: " + err.message)
 
     //These all are known error that why there is no need to log them
 
@@ -46,14 +45,14 @@ const errorHandlerMiddleware = (
     }
 
     // Handle CastError, ValidationError, ValidatorError separately
-    if (err instanceof mongoose.Error.CastError) {
-        return res.status(StatusCodes.NOT_FOUND).json({
-            success: false,
-            msg: `No item found with id : ${err.value}`,
-        })
-    }
     if (err instanceof mongoose.Error) {
-        if (err instanceof mongoose.Error.ValidationError) {
+        console.log(err)
+        if (err instanceof mongoose.Error.CastError) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                success: false,
+                msg: `No item found with id : ${err.value}`,
+            })
+        } else if (err instanceof mongoose.Error.ValidationError) {
             const messages = Object.values(err.errors)
                 .map((item) => item.message)
                 .join("\n")
