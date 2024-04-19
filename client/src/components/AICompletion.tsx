@@ -36,7 +36,7 @@ const AICompletion: React.FC<AICompletionProps> = ({
     getAICompletion(prompt)
       .then((response) => {
         const text = response.data
-        setTextSuggestions((prev) => [...prev, text])
+        setTextSuggestions((prev) => [text, ...prev])
         setPage(0)
       })
       .catch((error) => {
