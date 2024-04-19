@@ -85,6 +85,7 @@ const AICompletion: React.FC<AICompletionProps> = ({
     setImageSuggestions(newImageSuggestions)
   }
   const handleAddtoBlog = (image: StringPair) => {
+    console.log(image)
     toast.error("this feature is not implemented yet.Reminder!!!")
   }
 

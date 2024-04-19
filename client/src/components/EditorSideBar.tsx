@@ -102,7 +102,9 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
             />
           </svg>
         </span>
-        <div className={`fixed inset-0 z-40 top-5 mx-auto p-5 backdrop-blur-sm h-full w-screen flex pt-20 start ${isAICompletionOpen ? "block" : "hidden"}`}>
+        <div
+          className={`fixed inset-0 z-40 top-5 mx-auto p-5 backdrop-blur-sm h-full w-screen flex pt-20 start ${isAICompletionOpen ? "block" : "hidden"}`}
+        >
           <AICompletion setIsAICompletionOpen={setIsAICompletionOpen} />
         </div>
       </div>

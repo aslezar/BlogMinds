@@ -216,4 +216,4 @@ export const getAICompletion = (text: string) =>
   API.get("/ai/suggest/text", { params: { text } })
 
 export const getAImage = (prompt: string) =>
-  API.get("/ai/suggest/image", { params: { prompt }, responseType: 'blob' })
+  API.get("/ai/suggest/image", { params: { prompt }, responseType: "blob" })
