@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
@@ -7,6 +7,7 @@ import Box from "@mui/material/Box"
 import MyBlogs from "../components/MyBlogs"
 import MyAssets from "../components/MyAssets"
 import MyProfile from "../components/MyProfile"
+import { useSearchParams } from "react-router-dom"
 
 function CustomTabPanel(props: any) {
   const { children, value, index, ...other } = props
@@ -40,12 +41,36 @@ function a11yProps(index: number) {
     "aria-controls": `simple-tabpanel-${index}`,
   }
 }
+const tabMap = [
+  {
+    label: "My profile",
+    value: "profile",
+    component: <MyProfile />,
+  },
+  {
+    label: "My Assets",
+    value: "assets",
+    component: <MyAssets />,
+  },
+  {
+    label: "My blogs",
+    value: "blogs",
+    component: <MyBlogs />,
+  },
+]
 const ProfilePage = () => {
-  const [value, setValue] = React.useState(0)
-  const handleChange = (event: any, newValue: any) => {
-    setValue(newValue)
-    console.log(event)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const tabValue = searchParams.get("tab") || tabMap[0].value
+  const value = tabMap.findIndex((tab) => tab.value === tabValue)
+
+  const handleChange = (_event: any, newValue: any) => {
+    setSearchParams({ tab: tabMap[newValue].value })
   }
+
+  React.useEffect(() => {
+    if (!searchParams.get("tab")) setSearchParams({ tab: tabMap[0].value })
+  }, [])
 
   return (
     <Box className="w-11/12 mx-auto">
@@ -62,32 +87,21 @@ const ProfilePage = () => {
             },
           }}
         >
-          <Tab
-            label="My profile"
-            {...a11yProps(0)}
-            className="hover:text-highlight"
-          />
-          <Tab
-            label="assets"
-            {...a11yProps(1)}
-            className="hover:text-highlight"
-          />
-          <Tab
-            label="Your blogs"
-            {...a11yProps(2)}
-            className="hover:text-highlight"
-          />
+          {tabMap.map((tab, index) => (
+            <Tab
+              label={tab.label}
+              {...a11yProps(index)}
+              className="hover:text-highlight"
+              key={index}
+            />
+          ))}
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
-        <MyProfile />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <MyAssets />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <MyBlogs />
-      </CustomTabPanel>
+      {tabMap.map((tab, index) => (
+        <CustomTabPanel value={value} index={index} key={index}>
+          {tab.component}
+        </CustomTabPanel>
+      ))}
     </Box>
   )
 }
