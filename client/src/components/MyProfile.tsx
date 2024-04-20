@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react"
-// import { useAppSelector } from "../hooks"
-// import { updateName, updateBio } from "../api"
 import { getMyProfile } from "../api"
 import ClearIcon from "@mui/icons-material/Clear"
 import AddIcon from "@mui/icons-material/Add"
@@ -27,24 +25,12 @@ const MyProfile = () => {
     setEdit(false)
   }
 
-  // const data = [
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  //   "vedantPathaa",
-  // ]
-
-  //name , email(cannot edit),bio,profile image,myintrests-(),following,followers,
   if (user === null) {
     return ""
   }
   return (
-    <div className="flex flex-col font-inter mx-6 w-screen">
-      <nav className="p-5 rounded-xl flex justify-between ">
+    <div className="flex flex-col font-inter mx-6 w-full">
+      <nav className="pb-5 px-5 rounded-xl flex justify-between ">
         <div>
           <h1 className="text-2xl font-medium">My Profile</h1>
           <span className="text-sm text-slate-500 ">
@@ -59,9 +45,9 @@ const MyProfile = () => {
           Edit
         </button>
       </nav>
-      <hr className="mx-8" />
-      <main>
-        <section className="sm:w-3/4 xs:w-3/4 lg:w-1/2 p-5">
+      <hr className="" />
+      <main className="flex xs:flex-wrap">
+        <section className="sm:w-100 xs:w-3/4 lg:w-1/2 p-5">
           <form action="" className="flex flex-col">
             <label className="text-lg my-2 font-medium">
               Your profile photo
@@ -146,20 +132,6 @@ const MyProfile = () => {
                 <AddIcon />{" "}
               </button>
             </div>
-
-            <h3 className="text-lg font-medium mt-6">Profile Identity</h3>
-
-            <p className="mt-2  font-light">Change your name</p>
-            <p className="text-sm font-light text-slate-500 leading-4 mb-1 italic">
-              You have the option to change your username once. Please choose
-              carefully as it cannot be changed again.
-            </p>
-            <input
-              type="text"
-              placeholder={user.name}
-              disabled={true}
-              className="rounded-lg p-2 border mb-4"
-            />
           </form>
 
           {edit && (

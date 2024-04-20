@@ -59,3 +59,8 @@
 p {
   font-weight: 400 !important;
 }
+
+/* MUI Tabs */
+.css-l7hts-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: #9674d4 !important;
+}
