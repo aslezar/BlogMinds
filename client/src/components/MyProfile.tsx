@@ -3,18 +3,29 @@ import { getMyProfile } from "../api"
 import ClearIcon from "@mui/icons-material/Clear"
 import AddIcon from "@mui/icons-material/Add"
 import { UserType } from "../definitions"
+import Loader from "./Loader"
 
 const MyProfile = () => {
+  const [user, setUser] = useState<UserType | null>(null)
+  const [edit, setEdit] = useState(false)
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     const getProfile = async () => {
-      const data = await getMyProfile()
-      console.log(data)
-      setUser(data.data)
+      setLoading(true)
+      getMyProfile()
+        .then((data) => {
+          console.log(data.data)
+          setUser(data.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
     }
     getProfile()
   }, [])
-  const [user, setUser] = useState<UserType | null>(null)
-  const [edit, setEdit] = useState(false)
   const handleEdit = () => {
     setEdit(true)
   }
@@ -25,9 +36,14 @@ const MyProfile = () => {
     setEdit(false)
   }
 
-  if (user === null) {
-    return ""
-  }
+  if (loading) return <Loader />
+
+  if (user === null)
+    return (
+      <div style={{ color: "red", fontWeight: "bold", textAlign: "center" }}>
+        You are not authorized to view this page.
+      </div>
+    )
   return (
     <div className="flex flex-col font-inter mx-6 w-full">
       <nav className="pb-5 px-5 rounded-xl flex justify-between ">
