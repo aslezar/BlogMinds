@@ -21,9 +21,11 @@ const defUser: UserType = {
 }
 
 const MyProfile = () => {
-  const [user, setUser] = useState<UserType>(defUser);
+  const [user, setUser] = useState<UserType>(defUser)
   const [edit, setEdit] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [addInterest, setAddInterest] = useState(false)
+  const [newInterest, setNewInterest] = useState("")
   useEffect(() => {
     const getProfile = async () => {
       setLoading(true)
@@ -31,7 +33,6 @@ const MyProfile = () => {
         .then((data) => {
           console.log(data.data)
           setUser(data.data)
-          console.log(user)
         })
         .catch((error) => {
           console.log(error)
@@ -46,19 +47,43 @@ const MyProfile = () => {
     setEdit(true)
   }
   const handleUpdate = () => {
+    
     setEdit(false)
   }
   const handleCancel = () => {
     setEdit(false)
   }
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setUser(prevUser => ({
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target
+    setUser((prevUser) => ({
       ...prevUser,
-      [name]: value
-    }));
+      [name]: value,
+    }))
   }
+
+  const handleRemoveInterest = (indexToRemove: number) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      myInterests: prevUser.myInterests.filter(
+        (_, index) => index !== indexToRemove,
+      ),
+    }))
+  }
+
+  const handleAddInterest = () => {
+    if (newInterest.trim() !== "") {
+      setUser(prevUser => ({
+        ...prevUser,
+        myInterests: [...prevUser.myInterests, newInterest]
+      }));
+      setNewInterest(""); // Clear the input field after adding the interest
+      setAddInterest(false); // Hide the input field after adding the interest
+    }
+  };
   
+
   if (loading) return <Loader />
 
   if (user === null)
@@ -67,6 +92,8 @@ const MyProfile = () => {
         You are not authorized to view this page.
       </div>
     )
+
+  console.log(user)
   return (
     <div className="flex flex-col font-inter mx-6 w-full">
       <nav className="pb-5 px-5 rounded-xl flex justify-between ">
@@ -117,8 +144,8 @@ const MyProfile = () => {
               type="text"
               placeholder="Vedant Nagar"
               disabled={!edit}
-              name = "name"
-              value={user.name }
+              name="name"
+              value={user.name}
               onChange={handleChange}
               className={`${!edit && "rounded-lg p-2 border"}  ${edit && "rounded-lg p-2 border text-black"}`}
             />
@@ -142,9 +169,11 @@ const MyProfile = () => {
             <textarea
               rows={4}
               cols={50}
-              maxLength={50}
+              maxLength={150}
               disabled={!edit}
-              defaultValue={user.bio}
+              name="bio"
+              value={user.bio}
+              onChange={handleChange}
               className={`${!edit && "rounded-lg p-2 border"}   ${edit && "rounded-lg p-2 border text-black"}`}
             ></textarea>
           </form>
@@ -161,7 +190,10 @@ const MyProfile = () => {
                     key={index}
                   >
                     <span>{item}</span>
-                    <button className={`${!edit && "hidden"} `}>
+                    <button
+                      className={`${!edit && "hidden"} `}
+                      onClick={() => handleRemoveInterest(index)}
+                    >
                       <ClearIcon fontSize="small" />
                     </button>
                   </span>
@@ -169,9 +201,28 @@ const MyProfile = () => {
               })}
               <button
                 className={`${!edit && "hidden"} p-2 bg-dark rounded-xl text-white hover:bg-highlight duration-200`}
+                onClick={() => setAddInterest(true)}
               >
                 <AddIcon />{" "}
               </button>
+              {addInterest && (
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Add Interest"
+                    disabled={!edit}
+                    value={newInterest}
+                    onChange={(e) => setNewInterest(e.target.value)}
+                    className={`${!edit && "rounded-lg p-2 border"}  ${edit && "rounded-lg p-2 border text-black"}`}
+                  />
+                  <button
+                className="bg-dark p-2 rounded-3xl px-5 text-white hover:bg-highlight duration-200"
+                onClick={handleAddInterest}
+              >
+                Update
+              </button>
+                </div>
+              )}
             </div>
           </form>
 
