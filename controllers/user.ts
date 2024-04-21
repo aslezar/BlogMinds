@@ -73,7 +73,7 @@ const updateCompleteProfile = async (req: Request, res: Response) => {
     ]);
 
     res.status(StatusCodes.OK).json({
-        data: updatedUser,
+        data: updatedUser[0],
         success: true,
         msg: "Profile Updated Successfully",
     });

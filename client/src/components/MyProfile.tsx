@@ -4,6 +4,7 @@ import ClearIcon from "@mui/icons-material/Clear"
 import AddIcon from "@mui/icons-material/Add"
 import { UserType } from "../definitions"
 import Loader from "./Loader"
+import { updateProfile } from "../api"
 // import { userInfo } from "os"
 
 const defUser: UserType = {
@@ -46,8 +47,10 @@ const MyProfile = () => {
   const handleEdit = () => {
     setEdit(true)
   }
-  const handleUpdate = () => {
-    
+  const handleUpdate = async() => {
+    const response = await updateProfile(user)
+    setUser(response.data)
+    console.log(response)
     setEdit(false)
   }
   const handleCancel = () => {
