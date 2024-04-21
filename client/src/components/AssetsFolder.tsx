@@ -4,6 +4,7 @@ import { getAssests, uploadAssests, deleteAssest } from "../api"
 import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
 import Loader from "./Loader"
+import { LuImagePlus } from "react-icons/lu"
 
 interface AssetsFolderProps {
   setIsAssetsOpen?: React.Dispatch<React.SetStateAction<boolean>>
@@ -22,7 +23,7 @@ const AssetsFolder: React.FC<AssetsFolderProps> = ({ setIsAssetsOpen }) => {
   }, [])
 
   return (
-    <div className="bg-white p-4 h-5/6 w-[24%] space-y-4 rounded-lg border overflow-auto">
+    <div className="bg-white p-4 h-5/6 w-full space-y-4 rounded-lg border overflow-auto">
       <div className="flex justify-between">
         <h1 className="text-2xl font-semibold">Your Saved Assets</h1>
         {setIsAssetsOpen && (
@@ -102,9 +103,13 @@ const Dropzone = ({
       className={`p-4 border-dashed border-2 flex relative flex-col text-center text-gray-600 border-gray-200 rounded-lg cursor-pointer ${uploading && "opacity-50"}`}
     >
       <input {...getInputProps()} className="absolute left-0" />
-      <p>Drag 'n' drop some files here, or click to select files</p>
-      <em>(Only *.jpeg, *.jpg, *.png, *.webp images upto 4MB)</em>
-      <em>(max 5 files)</em>
+      <div className="flex items-center w-full justify-center gap-5">
+        <LuImagePlus className="text-5xl text-gray-500"/>
+        <div>
+          <p>Drag 'n' drop some files here, or click to select files</p>
+          <em>(Only *.jpeg, *.jpg, *.png, *.webp images upto 4MB)</em>
+        </div>
+      </div>
     </div>
   )
 }

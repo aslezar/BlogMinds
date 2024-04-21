@@ -21,7 +21,7 @@ function ImageInput({ value, onChange }: ImageInputProps) {
         </button>
 
         <img
-          src="https://source.unsplash.com/random"
+          src={imageUrl}
           className="w-full aspect-video object-cover"
           alt="Generate with AI"
         />
@@ -36,7 +36,7 @@ function ImageInput({ value, onChange }: ImageInputProps) {
           placeholder="Paste Image Url here ..."
           value={imageUrl}
           onChange={handleImageUrlChange}
-          className="border px-3 py-2 rounded-lg focus:outline-none focus:ring  flex-grow"
+          className="border px-3 py-2 rounded-lg focus:outline-none focus:ring  flex-grow text-sm text-gray-800"
         />
       </div>
     </>
