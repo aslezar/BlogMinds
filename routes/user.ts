@@ -2,6 +2,7 @@ import { Router } from "express"
 import upload from "../utils/imageHandlers/multer"
 import {
     getMyProfile,
+    updateCompleteProfile,
     updateName,
     updateBio,
     updateProfileImage,
@@ -16,6 +17,7 @@ const router = Router()
 
 router.get("/my-profile", getMyProfile)
 router.use("/blog", userblogRouter)
+router.patch("/update-profile", updateCompleteProfile)
 router.patch("/name", updateName)
 router.patch("/bio", updateBio)
 router
