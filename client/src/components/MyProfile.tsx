@@ -4,18 +4,24 @@ import ClearIcon from "@mui/icons-material/Clear"
 import AddIcon from "@mui/icons-material/Add"
 import { UserType } from "../definitions"
 import Loader from "./Loader"
-import { userInfo } from "os"
+// import { userInfo } from "os"
 
-const MyProfile = () => {
-  const [user, setUser] = useState<UserType>({
-    userId: "",
+const defUser: UserType = {
+  userId: "",
   createdAt: "",
   updatedAt: "",
   blogs: [],
-  followingCount: number,
-  followersCount: number,
-  myInterests: string[]}
-  ))
+  followingCount: 0,
+  followersCount: 0,
+  myInterests: [],
+  name: "",
+  email: "",
+  bio: "",
+  profileImage: "",
+}
+
+const MyProfile = () => {
+  const [user, setUser] = useState<UserType>(defUser);
   const [edit, setEdit] = useState(false)
   const [loading, setLoading] = useState(true)
   useEffect(() => {
@@ -53,8 +59,6 @@ const MyProfile = () => {
     }));
   }
   
-  
-  +
   if (loading) return <Loader />
 
   if (user === null)
