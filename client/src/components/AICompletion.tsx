@@ -4,6 +4,10 @@ import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { IoClose } from "react-icons/io5";
+import { LuImagePlus } from "react-icons/lu"
+import Tooltip from "@mui/material/Tooltip"
+import { IconButton } from "@mui/material"
+import ContentCopyRounded from "@mui/icons-material/ContentCopyRounded"
 interface AICompletionProps {
   setIsAICompletionOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -106,7 +110,7 @@ const AICompletion: React.FC<AICompletionProps> = ({
             }}
             className="bg-red-500 z-50 text-white p-0.5 text-lg hover:bg-red-700 fit rounded-full flex  justify-center text-center"
           >
-           <IoClose/>
+            <IoClose />
           </button>
         )}
       </div>
@@ -159,14 +163,15 @@ const AICompletion: React.FC<AICompletionProps> = ({
                   <div className="p-1 pt-3 text-gray-800">{textSuggestion}</div>
                   <div className="flex justify-around absolute top-3 right-1 gap-0.5">
                     <button
-                    onClick={
-                      () => {
+                      onClick={() => {
                         navigator.clipboard.writeText(textSuggestion)
                         toast.success("Text copied to clipboard")
-                      }
-                    }
+                      }}
                     >
-                      <ContentCopyRoundedIcon fontSize="small" className="text-gray-600 hover:text-gray-800"/>
+                      <ContentCopyRoundedIcon
+                        fontSize="small"
+                        className="text-gray-600 hover:text-gray-800"
+                      />
                     </button>
                     <button
                       onClick={() =>
@@ -175,7 +180,10 @@ const AICompletion: React.FC<AICompletionProps> = ({
                         )
                       }
                     >
-                      <DeleteIcon fontSize="small" className="hover:text-red-600 text-red-500"/>
+                      <DeleteIcon
+                        fontSize="small"
+                        className="hover:text-red-600 text-red-500"
+                      />
                     </button>
                   </div>
                 </div>
@@ -184,8 +192,8 @@ const AICompletion: React.FC<AICompletionProps> = ({
           ) : (
             <div>
               {imageSuggestions.map((image, index) => (
-                <div key={image.imageUrl} className="border p-2">
-                  <div>
+                <div key={image.imageUrl} className="border p-2 rounded-md">
+                  <div className="text-gray-700 italic p-1">
                     {index + 1}. {image.prompt}
                   </div>
                   <img
@@ -193,27 +201,41 @@ const AICompletion: React.FC<AICompletionProps> = ({
                     alt={image.prompt}
                     onClick={() => handleAddtoBlog(image)}
                   />
-                  <Button
-                    onClick={handleButtonClick}
-                    text="Save to Assest Folder"
-                  />
-                  <Button
+                  <div className="flex justify-center items-center gap-2">
+                    <Tooltip title="Save to Assets">
+                      <IconButton>
+                        <LuImagePlus
+                          onClick={handleButtonClick}
+                          className="text-dark"
+                        />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Copy URL">
+                      <IconButton>
+                        <ContentCopyRounded
+                          className="text-dark"
+                          onClick={() => {
+                            navigator.clipboard.writeText(image.imageUrl)
+                            toast.success("URL copied to clipboard")
+                          }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Discard">
+                      <IconButton>
+                        <DeleteIcon
+                          className="text-red-500"
+                          onClick={() => {
+                            handleImageDiscard(index)
+                          }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                  {/* <Button
                     onClick={() => handleAddtoBlog(image)}
                     text="Use in Blog ->"
-                  />
-                  <Button
-                    onClick={() => {
-                      handleImageDiscard(index)
-                    }}
-                    text="Discard"
-                  />
-                  <Button
-                    text="Copy URL"
-                    onClick={() => {
-                      navigator.clipboard.writeText(image.imageUrl)
-                      toast.success("URL copied to clipboard")
-                    }}
-                  />
+                  /> */}
                 </div>
               ))}
             </div>
