@@ -2,8 +2,8 @@ import React from "react"
 import { getAICompletion, getAImage } from "../api"
 import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
-import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
-import { IoClose } from "react-icons/io5";
+import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded"
+import { IoClose } from "react-icons/io5"
 import { LuImagePlus } from "react-icons/lu"
 import Tooltip from "@mui/material/Tooltip"
 import { IconButton } from "@mui/material"
@@ -108,7 +108,7 @@ const AICompletion: React.FC<AICompletionProps> = ({
               setIsAICompletionOpen(false)
               console.log("clicked")
             }}
-            className="bg-red-500 z-50 text-white p-0.5 text-lg hover:bg-red-700 fit rounded-full flex  justify-center text-center"
+            className="bg-red-500 z-50 text-white p-0.5 text-lg hover:bg-red-700 fit rounded-full flex justify-center text-center"
           >
             <IoClose />
           </button>

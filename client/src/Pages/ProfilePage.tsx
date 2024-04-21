@@ -9,7 +9,6 @@ import MyAssets from "../components/MyAssets"
 import MyProfile from "../components/MyProfile"
 import { useSearchParams } from "react-router-dom"
 
-
 function CustomTabPanel(props: any) {
   const { children, value, index, ...other } = props
 

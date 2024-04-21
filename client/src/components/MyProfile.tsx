@@ -158,7 +158,7 @@ const MyProfile = () => {
               minLength={3}
               maxLength={50}
               onChange={handleChange}
-              className={`rounded-lg p-2 border ${edit ? 'text-black' : ''}`}
+              className={`rounded-lg p-2 border ${edit ? "text-black" : ""}`}
             />
 
             <label className="mt-2 text-slate-600 font-light">
