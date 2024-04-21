@@ -4,9 +4,18 @@ import ClearIcon from "@mui/icons-material/Clear"
 import AddIcon from "@mui/icons-material/Add"
 import { UserType } from "../definitions"
 import Loader from "./Loader"
+import { userInfo } from "os"
 
 const MyProfile = () => {
-  const [user, setUser] = useState<UserType | null>(null)
+  const [user, setUser] = useState<UserType>({
+    userId: "",
+  createdAt: "",
+  updatedAt: "",
+  blogs: [],
+  followingCount: number,
+  followersCount: number,
+  myInterests: string[]}
+  ))
   const [edit, setEdit] = useState(false)
   const [loading, setLoading] = useState(true)
   useEffect(() => {
@@ -16,6 +25,7 @@ const MyProfile = () => {
         .then((data) => {
           console.log(data.data)
           setUser(data.data)
+          console.log(user)
         })
         .catch((error) => {
           console.log(error)
@@ -35,7 +45,16 @@ const MyProfile = () => {
   const handleCancel = () => {
     setEdit(false)
   }
-
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setUser(prevUser => ({
+      ...prevUser,
+      [name]: value
+    }));
+  }
+  
+  
+  +
   if (loading) return <Loader />
 
   if (user === null)
@@ -94,7 +113,9 @@ const MyProfile = () => {
               type="text"
               placeholder="Vedant Nagar"
               disabled={!edit}
-              value={user.name}
+              name = "name"
+              value={user.name }
+              onChange={handleChange}
               className={`${!edit && "rounded-lg p-2 border"}  ${edit && "rounded-lg p-2 border text-black"}`}
             />
 
