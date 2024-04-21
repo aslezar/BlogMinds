@@ -1,7 +1,9 @@
 import React from "react"
 import { getAICompletion, getAImage } from "../api"
 import { toast } from "react-hot-toast"
-
+import DeleteIcon from "@mui/icons-material/Delete"
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import { IoClose } from "react-icons/io5";
 interface AICompletionProps {
   setIsAICompletionOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -30,6 +32,7 @@ const AICompletion: React.FC<AICompletionProps> = ({
 
   const handleTextSuggestion = async () => {
     setLoading(true)
+    setPage(0)
     toast.loading("Generating Suggestion", {
       id: "loading",
     })
@@ -56,6 +59,7 @@ const AICompletion: React.FC<AICompletionProps> = ({
       return toast.success("Prompt already suggested, please try another one.")
 
     setLoading(true)
+    setPage(1)
     toast.loading("Generating Image", {
       id: "loading",
     })
@@ -90,9 +94,9 @@ const AICompletion: React.FC<AICompletionProps> = ({
   }
 
   return (
-    <div className="bg-white p-4 h-5/6 w-[24%] space-y-4 rounded-lg border overflow-auto">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-semibold">Your AI Assistant</h1>
+    <div className="bg-white p-4 h-[90%] w-[24%] space-y-4 rounded-lg border overflow-auto font-normal">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-semibold">Generate with AI</h1>
         {setIsAICompletionOpen && (
           <button
             onClick={(e) => {
@@ -100,79 +104,85 @@ const AICompletion: React.FC<AICompletionProps> = ({
               setIsAICompletionOpen(false)
               console.log("clicked")
             }}
-            className="bg-red-500 z-50 text-white py-1 px-2 h-fit rounded-lg flex  justify-center text-center"
+            className="bg-red-500 z-50 text-white p-0.5 text-lg hover:bg-red-700 fit rounded-full flex  justify-center text-center"
           >
-            Close
+           <IoClose/>
           </button>
         )}
       </div>
-      <div className="flex flex-wrap gap-4 items-center ">
+      <div className="flex flex-col gap-4 items-center ">
         <textarea
           value={prompt}
           rows={4}
           placeholder="Enter prompt here"
           onChange={(e) => setPrompt(e.target.value)}
-          className="p-3 border rounded-lg focus:outline-none focus:ring w-full text-lg resize-none"
+          className="p-3 border rounded-lg focus:outline-none ring-highlight focus:ring-2 w-full  resize-none text-sm"
         />
-        <div className="flex gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <Button
-            text="Get Suggestion"
+            text="Autocomplete Text"
             disable={loading || prompt === ""}
             onClick={handleTextSuggestion}
           />
           <Button
-            text="Get Image"
+            text="Generate Img"
             disable={loading || prompt === ""}
             onClick={handleImageSuggestion}
           />
         </div>
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
+        <div className="flex flex-col gap-2 w-full">
+          <div className="flex mx-auto text-base bg-dark w-full rounded-md overflow-hidden ">
             <button
               onClick={() => setPage(0)}
               className={`${
-                page === 0 ? "text-blue-500" : "text-gray-500"
-              } hover:text-blue-500`}
+                page === 0 ? "text-white bg-highlight " : "text-gray-200"
+              } hover:bg-highlight text-center w-1/2`}
             >
               Text
             </button>
             <button
               onClick={() => setPage(1)}
               className={`${
-                page === 1 ? "text-blue-500" : "text-gray-500"
-              } hover:text-blue-500`}
+                page === 1 ? "text-white  bg-highlight" : "text-gray-200"
+              } hover:bg-highlight text-center w-1/2`}
             >
               Image
             </button>
           </div>
           {page === 0 ? (
             <div>
-              <h1>Text Suggestions</h1>
               {textSuggestions.map((textSuggestion, index) => (
-                <div key={index} className="border p-2">
-                  <div>{textSuggestion}</div>
-                  <Button text="Use in Blog" onClick={handleButtonClick} />
-                  <Button
-                    text="Discard"
-                    onClick={() =>
-                      setTextSuggestions((prev) =>
-                        prev.filter((_, i) => i !== index),
-                      )
+                <div
+                  key={index}
+                  className="border p-2 rounded-lg text-sm relative"
+                >
+                  <div className="p-1 pt-3 text-gray-800">{textSuggestion}</div>
+                  <div className="flex justify-around absolute top-3 right-1 gap-0.5">
+                    <button
+                    onClick={
+                      () => {
+                        navigator.clipboard.writeText(textSuggestion)
+                        toast.success("Text copied to clipboard")
+                      }
                     }
-                  />
-                  <Button
-                    text="Copy Text"
-                    onClick={() => {
-                      navigator.clipboard.writeText(textSuggestion)
-                      toast.success("Text copied to clipboard")
-                    }}
-                  />
+                    >
+                      <ContentCopyRoundedIcon fontSize="small" className="text-gray-600 hover:text-gray-800"/>
+                    </button>
+                    <button
+                      onClick={() =>
+                        setTextSuggestions((prev) =>
+                          prev.filter((_, i) => i !== index),
+                        )
+                      }
+                    >
+                      <DeleteIcon fontSize="small" className="hover:text-red-600 text-red-500"/>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
             <div>
-              <h1>Image Suggestions</h1>
               {imageSuggestions.map((image, index) => (
                 <div key={image.imageUrl} className="border p-2">
                   <div>
@@ -223,7 +233,7 @@ const Button: React.FC<ButtonProps> = ({ text, onClick, disable }) => {
     <button
       onClick={onClick}
       disabled={disable}
-      className={`border-2 border-dark font-medium px-4 py-2 flex items-center justify-center text-dark
+      className={`border-2 border-dark font-medium px-4 py-2 flex items-center text-sm rounded-lg justify-center text-dark
         ${disable ? "opacity-50 cursor-not-allowed" : "hover:bg-dark hover:text-white"}`}
     >
       {text}

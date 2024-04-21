@@ -220,8 +220,8 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             </>
           )}
         </div> */}
-        <div id="editorjs" className="text-gray-700  pt-20 px-6"></div>
-        <div className="py-10 w-5/6">
+        <div id="editorjs" className="text-gray-700 mx-auto"></div>
+        <div className="py-10 w-5/6 mx-auto">
           <h3 className="text-2xl font-semibold mb-5">Comments</h3>
           <div className="flex gap-3">
             <input
@@ -270,6 +270,13 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           )}
         </div>
       </div>
+      <style>{`
+        .ce-block__content{
+          max-width: 1000px !important;
+          font-size: 1.1rem;
+          padding: 0 1rem;
+        }
+      `}</style>
     </div>
   )
 }
