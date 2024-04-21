@@ -55,7 +55,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       <div className=" border border-highlight flex items-center justify-center  font-medium rounded-md focus:outline-none focus:ring resize-none cursor-pointer
       `">
         <span
-          className="text-sm  text-highlight w-full h-full px-3 py-2"
+          className="text-sm  text-highlight w-full h-full px-3 py-2 flex items-center justify-center"
           onClick={() => setIsAssetsOpen(true)}
         >
           Assets and Images
