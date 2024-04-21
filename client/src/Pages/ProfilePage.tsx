@@ -43,17 +43,17 @@ function a11yProps(index: number) {
 }
 const tabMap = [
   {
-    label: "My profile",
+    label: "Profile",
     value: "profile",
     component: <MyProfile />,
   },
   {
-    label: "My Assets",
+    label: "Assets",
     value: "assets",
     component: <MyAssets />,
   },
   {
-    label: "My blogs",
+    label: "Blogs",
     value: "blogs",
     component: <MyBlogs />,
   },
@@ -74,13 +74,12 @@ const ProfilePage = () => {
 
   return (
     <Box className="w-11/12 mx-auto">
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="mx-16">
         <Tabs
           value={value}
           onChange={handleChange}
           textColor="secondary"
           aria-label="basic tabs example"
-          centered
           TabIndicatorProps={{
             style: {
               background: "#9674d4",
@@ -91,7 +90,7 @@ const ProfilePage = () => {
             <Tab
               label={tab.label}
               {...a11yProps(index)}
-              className="hover:text-highlight"
+              className="hover:text-highlight !text-xs"
               key={index}
             />
           ))}
