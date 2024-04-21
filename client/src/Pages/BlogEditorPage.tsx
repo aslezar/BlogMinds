@@ -9,7 +9,7 @@ import { useEditorContext } from "../context/EditorContext"
 import Loader from "../components/Loader"
 
 const initalBlog =
-  '{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{"time":1550476186479,"blocks":[{"type":"title","data":{"text":"Editor.js","level":2}},{"type":"paragraph","data":{"text":"Hey. Meet the new Editor. On this page you can see it in action — try to edit this text. Source code of the page contains the example of connection and configuration."}},{"type":"title","data":{"text":"Key features","level":3}}],"version":"2.8.1"},"tags":[]}'
+  '{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{},"tags":[]}'
 
 function BlogEditor() {
   const [loading, setLoading] = React.useState<boolean>(true)
