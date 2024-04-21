@@ -35,6 +35,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         type="text"
         placeholder="Article Title"
         value={blog.title}
+        maxLength={100}
         onChange={(e) => setBlog({ ...blog, title: e.target.value })}
         className="p-3 border rounded-lg focus:outline-none focus:ring w-full text-base"
       />
@@ -43,6 +44,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         onChange={(e) => setBlog({ ...blog, description: e.target.value })}
         placeholder="Short Description of the Article ...."
         rows={4}
+        maxLength={250}
         className="px-3 py-2 border rounded-md focus:outline-none focus:ring resize-none text-sm"
       />
       <MultiSelect

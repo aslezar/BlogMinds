@@ -5,6 +5,7 @@ import AddIcon from "@mui/icons-material/Add"
 import { UserType } from "../definitions"
 import Loader from "./Loader"
 import { updateProfile } from "../api"
+import toast from "react-hot-toast"
 // import { userInfo } from "os"
 
 const defUser: UserType = {
@@ -32,8 +33,8 @@ const MyProfile = () => {
       setLoading(true)
       getMyProfile()
         .then((data) => {
-          console.log(data.data)
-          setUser(data.data)
+          const user = data.data
+          setUser(user)
         })
         .catch((error) => {
           console.log(error)
@@ -47,11 +48,17 @@ const MyProfile = () => {
   const handleEdit = () => {
     setEdit(true)
   }
-  const handleUpdate = async() => {
-    const response = await updateProfile(user)
-    setUser(response.data)
-    console.log(response)
-    setEdit(false)
+  const handleUpdate = async () => {
+    updateProfile(user)
+      .then((response) => {
+        const user = response.data
+        setUser(user)
+        toast.success("Profile updated successfully")
+        setEdit(false)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
   const handleCancel = () => {
     setEdit(false)
@@ -77,15 +84,14 @@ const MyProfile = () => {
 
   const handleAddInterest = () => {
     if (newInterest.trim() !== "") {
-      setUser(prevUser => ({
+      setUser((prevUser) => ({
         ...prevUser,
-        myInterests: [...prevUser.myInterests, newInterest]
-      }));
-      setNewInterest(""); // Clear the input field after adding the interest
-      setAddInterest(false); // Hide the input field after adding the interest
+        myInterests: [...prevUser.myInterests, newInterest],
+      }))
+      setNewInterest("") // Clear the input field after adding the interest
+      setAddInterest(false) // Hide the input field after adding the interest
     }
-  };
-  
+  }
 
   if (loading) return <Loader />
 
@@ -108,7 +114,7 @@ const MyProfile = () => {
         </div>
 
         <button
-          className="bg-secondary rounded-3xl px-3 text-dark hover:bg-highlight hover:text-primary duration-100"
+          className="bg-secondary rounded-xl px-3 text-dark hover:bg-highlight hover:text-primary duration-100"
           onClick={handleEdit}
         >
           Edit
@@ -149,18 +155,15 @@ const MyProfile = () => {
               disabled={!edit}
               name="name"
               value={user.name}
+              minLength={3}
+              maxLength={50}
               onChange={handleChange}
-              className={`${!edit && "rounded-lg p-2 border"}  ${edit && "rounded-lg p-2 border text-black"}`}
+              className={`rounded-lg p-2 border ${edit ? 'text-black' : ''}`}
             />
 
             <label className="mt-2 text-slate-600 font-light">
               Email Address
             </label>
-            {/* <p className="text-base font-light text-gray-400 leading-4 mb-1 italic">
-              Changing your email address might break your OAuth sign-in if your
-              social media accounts do not use the same email address. Please
-              use magic link sign-in if you encounter such an issue..
-            </p> */}
             <input
               type="text"
               placeholder="pathaa@gmail.com"
@@ -177,7 +180,7 @@ const MyProfile = () => {
               name="bio"
               value={user.bio}
               onChange={handleChange}
-              className={`${!edit && "rounded-lg p-2 border"}   ${edit && "rounded-lg p-2 border text-black"}`}
+              className={`rounded-lg p-2 border ${edit ? "text-black" : ""}`}
             ></textarea>
           </form>
         </section>
@@ -216,14 +219,14 @@ const MyProfile = () => {
                     disabled={!edit}
                     value={newInterest}
                     onChange={(e) => setNewInterest(e.target.value)}
-                    className={`${!edit && "rounded-lg p-2 border"}  ${edit && "rounded-lg p-2 border text-black"}`}
+                    className={`${!edit && "rounded-xl p-2 border"}  ${edit && "rounded-xl p-2 border text-black"}`}
                   />
                   <button
-                className="bg-dark p-2 rounded-3xl px-5 text-white hover:bg-highlight duration-200"
-                onClick={handleAddInterest}
-              >
-                Update
-              </button>
+                    className="bg-dark p-2 rounded-xl px-5 text-white hover:bg-highlight duration-200"
+                    onClick={handleAddInterest}
+                  >
+                    Update
+                  </button>
                 </div>
               )}
             </div>
@@ -232,13 +235,13 @@ const MyProfile = () => {
           {edit && (
             <div className="my-8 flex gap-10">
               <button
-                className="bg-dark p-2 rounded-3xl px-5 text-white hover:bg-highlight duration-200"
+                className="bg-dark p-2 rounded-xl px-5 text-white hover:bg-highlight duration-200"
                 onClick={handleUpdate}
               >
                 Update
               </button>
               <button
-                className="bg-dark p-2 rounded-3xl px-5 text-white hover:bg-highlight duration-200"
+                className="bg-dark p-2 rounded-xl px-5 text-white hover:bg-highlight duration-200"
                 onClick={handleCancel}
               >
                 Cancel
