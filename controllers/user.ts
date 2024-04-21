@@ -46,6 +46,40 @@ const getMyProfile = async (req: Request, res: Response) => {
     })
 }
 
+const updateCompleteProfile = async (req: Request, res: Response) => {
+    const { name, bio, myInterests } = req.body;
+    const userId = req.user.userId;
+
+    if (!name || !bio || !myInterests)
+        throw new BadRequestError("Name, Bio and Interests are required");
+    const user = await User.findById(userId);
+    if (!user) throw new UnauthenticatedError("User Not Found");
+    user.set({ name, bio, myInterests });
+    await user.save();
+
+    const updatedUser = await User.aggregate([
+        { $match: { _id: userId } },
+        {
+            $project: {
+                name: 1,
+                email: 1,
+                bio: 1,
+                profileImage: 1,
+                myInterests: 1,
+                followingCount: { $size: "$following" },
+                followersCount: { $size: "$followers" },
+            },
+        },
+    ]);
+
+    res.status(StatusCodes.OK).json({
+        data: updatedUser,
+        success: true,
+        msg: "Profile Updated Successfully",
+    });
+}
+
+
 const updateName = async (req: Request, res: Response) => {
     const userId = req.user.userId
     const { name } = req.body
@@ -162,6 +196,7 @@ const deleteAssest = async (req: Request, res: Response) => {
 
 export {
     getMyProfile,
+    updateCompleteProfile,
     updateName,
     updateBio,
     updateProfileImage,
