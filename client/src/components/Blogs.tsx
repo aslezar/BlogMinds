@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { getBlogs, getRecommendedBlogs } from "../api/index"
-import { Category, BlogShortType, UserType } from "../definitions"
+import { Category, BlogCardType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 import InfiniteScroll from "react-infinite-scroll-component"
 
@@ -9,7 +9,7 @@ import BlogCard from "./BlogCard"
 import BlogLoader from "./BlogLoader"
 
 const Blogs = () => {
-  const [blogs, setBlogs] = useState<BlogShortType[]>([])
+  const [blogs, setBlogs] = useState<BlogCardType[]>([])
   const page = useRef(1)
   const [hasMore, setHasMore] = useState(true)
   const limit = 10

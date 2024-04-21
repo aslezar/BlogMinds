@@ -1,9 +1,7 @@
-
+import AssetsFolder from "./AssetsFolder"
 
 const MyAssets = () => {
-  return (
-    <div>MyAssets</div>
-  )
+  return <AssetsFolder />
 }
 
 export default MyAssets

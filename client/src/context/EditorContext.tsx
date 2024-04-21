@@ -1,29 +1,36 @@
-import { createContext, useRef } from "react"
-import EditorJS from "@editorjs/editorjs"
+import { createContext, useContext, useState } from "react"
+import EditorJS, { OutputData } from "@editorjs/editorjs"
 import List from "@editorjs/list"
 import ImageTool from "@editorjs/image"
 import Embed from "@editorjs/embed"
 import Alert from "editorjs-alert"
 import CheckList from "@editorjs/checklist"
 import Link from "@editorjs/link"
-import Table from "editorjs-table"
 import Code from "@editorjs/code"
 import Button from "editorjs-button"
 import InlineCode from "@editorjs/inline-code"
 import ColorPlugin from "editorjs-text-color-plugin"
 import AlignmentBlockTune from "editorjs-text-alignment-blocktune"
 import { uploadAssests } from "../api"
-import Title from "title-editorjs";
+import Title from "title-editorjs"
 import toast from "react-hot-toast"
+const EditorContext = createContext<any>(null)
 
-export const EditorContext = createContext<any>(null)
-
-export function EditorContextProvider( props:any) {
-  const editorInstanceRef = useRef<EditorJS | null>(null)
-  const initializeEditor = () => {
-    const editor = new EditorJS({
+function EditorContextProvider(props: any) {
+  // const editorInstanceRef = useRef<EditorJS | null>(null)
+  const [editor, setEditor] = useState<EditorJS | null>(null)
+  const initializeEditor = async (
+    readOnly: boolean = false,
+    data: OutputData | undefined = undefined,
+  ) => {
+    const editorjs = new EditorJS({
       holder: "editorjs",
       placeholder: "Start writing your blog here...",
+      onReady: () => {
+        setEditor(editorjs)
+      },
+      data: data,
+      readOnly: readOnly,
       tools: {
         textAlignment: {
           class: AlignmentBlockTune,
@@ -65,10 +72,6 @@ export function EditorContextProvider( props:any) {
         image: {
           class: ImageTool,
           config: {
-            endpoints: {
-              // byFile: "http://localhost:3000/uploadFile",
-              // byUrl: "http://localhost:3000/fetchUrl",
-            },
             field: "assetFiles",
             types: "image/png, image/jpg, image/jpeg, image/webp",
             onError: (error: any) => {
@@ -100,7 +103,10 @@ export function EditorContextProvider( props:any) {
                 console.log(_url)
                 return new Promise((resolve) => {
                   resolve({
-                    success: 0,
+                    success: 1,
+                    file: {
+                      url: _url,
+                    },
                   })
                 })
               },
@@ -117,10 +123,6 @@ export function EditorContextProvider( props:any) {
           },
         },
         link: Link,
-
-        table: {
-          class: Table,
-        },
         code: {
           class: Code,
           config: {
@@ -148,12 +150,19 @@ export function EditorContextProvider( props:any) {
         },
       },
     })
-    editorInstanceRef.current = editor
+    //render data
+    // editorInstanceRef.current = editor
+    // await editor.isReady
+    // setEditor(editor)
   }
 
   return (
-    <EditorContext.Provider value={{ editorInstanceRef, initializeEditor }}>
+    <EditorContext.Provider value={{ editor, initializeEditor }}>
       {props.children}
     </EditorContext.Provider>
   )
 }
+const useEditorContext = () => {
+  return useContext(EditorContext)
+}
+export { EditorContext, EditorContextProvider, useEditorContext }

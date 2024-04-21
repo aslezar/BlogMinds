@@ -1,71 +1,109 @@
-import { useState } from "react"
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft"
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
-import StickyNote2Icon from "@mui/icons-material/StickyNote2"
-import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
-import BookIcon from '@mui/icons-material/Book'
-import MyBlogs from '../components/MyBlogs'
-import MyAssets from '../components/MyAssets'
-import MyProfile from '../components/MyProfile'
-const ProfilePage = () => {
-  const [open, setOpen] = useState(true) 
-  const [tabSelected,setTabSelected] =  useState <number>(0) 
-  const data = [
-    { title: "Profile", icon: <AccountCircleIcon />,page:MyProfile },
-    { title: "My Assets", icon: <CreateNewFolderIcon/>,page:MyAssets },
-    { title: "My Blogs", icon: <StickyNote2Icon /> ,page:MyBlogs},
-  ]
-  const PageComponent = data[tabSelected].page
+import React from "react"
+import PropTypes from "prop-types"
+import Tabs from "@mui/material/Tabs"
+import Tab from "@mui/material/Tab"
+import Typography from "@mui/material/Typography"
+import Box from "@mui/material/Box"
+import MyBlogs from "../components/MyBlogs"
+import MyAssets from "../components/MyAssets"
+import MyProfile from "../components/MyProfile"
+import { useSearchParams } from "react-router-dom"
+
+function CustomTabPanel(props: any) {
+  const { children, value, index, ...other } = props
+
   return (
-    <div className="flex"> 
-
     <div
-      className={` ${
-        open ? "w-72" : "w-20 "
-      } bg-slate-100 min-h-screen p-5  pt-8 relative duration-300`}
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
     >
-      <ArrowCircleLeftIcon
-        className={`bg-white text-dark-purple text-3xl rounded-full absolute -right-3 top-9 border border-dark-purple cursor-pointer ${!open && "rotate-180"}`}
-        onClick={() => setOpen(!open)}
-      />
-      <div className="inline-flex">
-        <BookIcon
-          className={`text-4xl rounded cursor-pointer block float-left mr-2 ${open && "rotate"}`}
-        />
-        <h1
-          className={` origin-left font-medium text-2xl duration-300 ${
-            !open && "scale-0"
-          }`}
-        >
-          BlogMind
-        </h1>
-      </div>
-      <ul className="pt-2">
-        {data.map((item, index) => {
-
-          return (
-            <>
-              <li onClick={() => setTabSelected(index)}
-                key={index}
-                className={`gap-y-4 my-4 flex text-sm items-center gap-x-4 cursor-pointer p-2 hover:bg-slate-50 rounded-xl active:bg-slate-50`}
-              >
-                <span>{item.icon}</span>
-                <span
-                  className={`text-base font-medium duration-300 ${!open && " scale-0"} `}
-                >
-                  {item.title}
-                </span>
-              </li>
-            </>
-          )
-        })}
-      </ul>
-    </div>
-    <PageComponent/>
-     
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
     </div>
   )
+}
 
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  }
+}
+const tabMap = [
+  {
+    label: "My profile",
+    value: "profile",
+    component: <MyProfile />,
+  },
+  {
+    label: "My Assets",
+    value: "assets",
+    component: <MyAssets />,
+  },
+  {
+    label: "My blogs",
+    value: "blogs",
+    component: <MyBlogs />,
+  },
+]
+const ProfilePage = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const tabValue = searchParams.get("tab") || tabMap[0].value
+  const value = tabMap.findIndex((tab) => tab.value === tabValue)
+
+  const handleChange = (_event: any, newValue: any) => {
+    setSearchParams({ tab: tabMap[newValue].value })
+  }
+
+  React.useEffect(() => {
+    if (!searchParams.get("tab")) setSearchParams({ tab: tabMap[0].value })
+  }, [])
+
+  return (
+    <Box className="w-11/12 mx-auto">
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          textColor="secondary"
+          aria-label="basic tabs example"
+          centered
+          TabIndicatorProps={{
+            style: {
+              background: "#9674d4",
+            },
+          }}
+        >
+          {tabMap.map((tab, index) => (
+            <Tab
+              label={tab.label}
+              {...a11yProps(index)}
+              className="hover:text-highlight"
+              key={index}
+            />
+          ))}
+        </Tabs>
+      </Box>
+      {tabMap.map((tab, index) => (
+        <CustomTabPanel value={value} index={index} key={index}>
+          {tab.component}
+        </CustomTabPanel>
+      ))}
+    </Box>
+  )
 }
 
 export default ProfilePage

@@ -107,6 +107,7 @@ const getBlogById = async (req: Request, res: Response) => {
         })
         .populate({
             path: "comments",
+            options: { sort: { createdAt: -1 } }, // Sort comments in descending order by createdAt field
             populate: {
                 path: "author",
                 select: "name profileImage",
@@ -192,6 +193,21 @@ const getUserBlogs = async (req: Request, res: Response) => {
     })
 }
 
+const getUserBlogById = async (req: Request, res: Response) => {
+    const userId = getUserId(req)
+    const blogId = getBlogId(req)
+
+    const blog = await Blog.findOne({ _id: blogId, author: userId })
+    if (!blog)
+        throw new BadRequestError("Blog not found or you are not authorized")
+
+    res.status(StatusCodes.OK).json({
+        data: { blog },
+        success: true,
+        msg: "Blog Fetched Successfully",
+    })
+}
+
 const createBlog = async (req: Request, res: Response) => {
     const userId = getUserId(req)
     const { title, description, content, img, tags } = req.body
@@ -211,6 +227,7 @@ const createBlog = async (req: Request, res: Response) => {
         $push: { blogs: blog._id },
     })
     res.status(StatusCodes.CREATED).json({
+        data: { id: blog._id },
         success: true,
         msg: "Blog Created Successfully",
     })
@@ -268,6 +285,7 @@ const updateBlog = async (req: Request, res: Response) => {
         )
 
     res.status(StatusCodes.OK).json({
+        data: { id: blog._id },
         success: true,
         msg: "Successfully updated blog.",
     })
@@ -338,6 +356,7 @@ export {
     likeBlog,
     commentBlog,
     getUserBlogs,
+    getUserBlogById,
     createBlog,
     deleteBlog,
     updateBlog,

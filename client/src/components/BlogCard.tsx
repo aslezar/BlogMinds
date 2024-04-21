@@ -1,13 +1,12 @@
-import { useNavigate, Link } from "react-router-dom"
-import { BlogShortType } from "../definitions"
+import { Link } from "react-router-dom"
+import { BlogCardType } from "../definitions"
 import { format } from "date-fns/format" // Import date-fns under a namespace
 
 interface BlogCardProps {
-  blog: BlogShortType
+  blog: BlogCardType
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
-  const navigate = useNavigate()
   const formatDate = (date: string) => {
     return format(new Date(date), "dd MMMM yyyy")
   }
@@ -17,7 +16,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
         <img
           className="object-cover w-full mx-auto lg:mx-0 lg:w-52 aspect-video rounded-xl mb-2"
           src={blog.img}
-          alt={"img"}
+          alt={blog.title}
           loading="lazy"
         />
         <div className="mt-6  lg:mt-0 lg:mx-6">
@@ -31,14 +30,12 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
                 />
 
                 <div className="ml-2">
-                  <h1
+                  <Link
                     className="text-[15px] text-gray-700 hover:underline hover:cursor-pointer"
-                    onClick={() => {
-                      navigate(`/user/${blog.author._id}`)
-                    }}
+                    to={`/user/${blog.author._id}`}
                   >
                     {blog.author.name}
-                  </h1>
+                  </Link>
                 </div>
               </div>
             )}
@@ -72,11 +69,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
             {blog.title}
           </Link>
 
-          <p className="mt-2  text-gray-500">
-            {blog.description.length > 150
-              ? blog.description.slice(0, 150) + "..."
-              : blog.description}
-          </p>
+          <p className="mt-2  text-gray-500">{blog.description}</p>
 
           <div className="flex items-center gap-4 text-sm text-gray-600 mt-5">
             <div className="flex gap-1 items-center">

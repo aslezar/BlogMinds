@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { commentBlog, getBlog, likeBlog } from "../api/index.ts"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
@@ -6,8 +6,9 @@ import { useParams } from "react-router-dom"
 import { BlogFullType, UserType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 import { format } from "date-fns/format" // Import date-fns under a namespace
-import { useNavigate } from "react-router-dom"
 import { IoBookOutline } from "react-icons/io5"
+import { useEditorContext } from "../context/EditorContext"
+import { Link } from "react-router-dom"
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -19,8 +20,27 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const [blog, setBlog] = React.useState<BlogFullType>()
   const [isLiked, setIsLiked] = React.useState<boolean>(false)
   const [comment, setComment] = React.useState<string>("")
+  const { initializeEditor, editor } = useEditorContext()
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
+  const editorRef = useRef<any>(null)
+  console.log(blog?.content)
+  // pass blog content to editor
+  useEffect(() => {
+    if (blog?.content) {
+      if (editorRef.current === null) {
+        initializeEditor(true, JSON.parse(blog.content))
+        editorRef.current = true
+        // editor?.render({blocks: JSON.parse(blog.content)})
+      }
+    }
+  }, [blog?.content, editor, initializeEditor])
+
+  // useEffect(() => {
+  //   if (blog?.content && editor) {
+  //     editor?.render({ blocks: JSON.parse(blog?.content) })
+  //   }
+  // }, [blog?.content])
+
   const { loading, isAuthenticated, user } = useAppSelector(
     (state) => state.user,
   )
@@ -119,7 +139,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         <figure>
           <img
             src={blog?.img}
-            alt="img"
+            alt={blog?.title}
             className=" object-cover w-full aspect-[2]"
           />
         </figure>
@@ -143,7 +163,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             </div>
             <span className="text-2xl text-gray-600 font-thin">|</span>
             {blog.author && (
-              <div className="flex items-end ">
+              <Link className="flex items-end " to={`/user/${blog.author._id}`}>
                 <img
                   className="object-cover object-center w-7 aspect-square rounded-full"
                   src={blog.author.profileImage}
@@ -151,16 +171,11 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                 />
 
                 <div className="ml-2">
-                  <h1
-                    className="text-lg text-gray-700 hover:underline hover:cursor-pointer"
-                    onClick={() => {
-                      navigate(`/user/${blog.author._id}`)
-                    }}
-                  >
+                  <h1 className="text-lg text-gray-700 hover:underline hover:cursor-pointer">
                     {blog.author.name}
                   </h1>
                 </div>
-              </div>
+              </Link>
             )}
 
             {blog.author && (
@@ -196,52 +211,57 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             </div>
           </div>
         </div>
-        <div className="text-gray-700  pt-20 px-6">
+        {/* <div className="text-gray-700  pt-20 px-6">
           {blog?.content && (
             <>
               <pre className="w-[100%] whitespace-pre-line text-xl font-[inter] leading-8">
                 {blog.content}
               </pre>
-              Character Length: {blog.content.length}
-              <br />
             </>
           )}
-        </div>
-
+        </div> */}
+        <div id="editorjs" className="text-gray-700  pt-20 px-6"></div>
         <div className="py-10 w-5/6">
           <h3 className="text-2xl font-semibold mb-5">Comments</h3>
+          <div className="flex gap-3">
+            <input
+              type="text"
+              placeholder="Write a comment"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-gray-500"
+            />
+            <button
+              onClick={postComment}
+              className="bg-highlight text-white px-4 py-2 rounded-full"
+            >
+              Post
+            </button>
+          </div>
           {blog?.comments && blog?.comments?.length === 0 ? (
             <p>No comments yet.</p>
           ) : (
             <ul className="space-y-7">
               {/* input field to write comment with post button */}
-              <div className="flex gap-3">
-                <input
-                  type="text"
-                  placeholder="Write a comment"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-gray-500"
-                />
-                <button
-                  onClick={postComment}
-                  className="bg-highlight text-white px-4 py-2 rounded-full"
-                >
-                  Post
-                </button>
-              </div>
+
               {blog?.comments?.map((comment, index) => (
                 <li
                   key={index}
                   className="mb-4 gap-4 flex items-center text-lg"
                 >
-                  <img
-                    className="object-cover w-12 rounded-full aspect-square"
-                    src={comment?.author?.profileImage}
-                    alt={"img"}
-                  />
+                  <Link to={`/user/${comment.author._id}`}>
+                    <img
+                      className="object-cover w-12 rounded-full aspect-square"
+                      src={comment?.author?.profileImage}
+                      alt={"img"}
+                    />
+                  </Link>
                   <div>
-                    <p className="font-medium">{comment?.author?.name}</p>
+                    <Link to={`/user/${comment.author._id}`}>
+                      <p className="font-medium hover:underline hover:cursor-pointer">
+                        {comment.author.name}
+                      </p>
+                    </Link>
                     <p>{comment?.message}</p>
                   </div>
                 </li>
