@@ -53,12 +53,12 @@ const Navbar = () => {
               </li>
 
               <li>
-                <a
-                  href="#features"
+                <NavLink
+                  to="features"
                   className="block py-2 px-3 text-dark rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-highlight md:p-0"
                 >
                   Features
-                </a>
+                </NavLink>
               </li>
               <li>
                 <a

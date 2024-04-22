@@ -31,6 +31,7 @@ import Loader from "./components/Loader"
 import SearchResults from "./Pages/SearchResults"
 import PublicProfile from "./Pages/PublicProfile"
 import ProfilePage from "./Pages/ProfilePage"
+import Features from "./Pages/Features"
 
 const Layout = () => {
   const location = useLocation()
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
           {
             path: "write/:id",
             element: <BlogEditor />,
+          },
+          {
+            path: "features",
+            element: <Features />,
           },
         ],
       },

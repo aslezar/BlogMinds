@@ -97,7 +97,7 @@ const MyProfile = () => {
 
   if (user === null)
     return (
-      <div style={{ color: "red", fontWeight: "bold", textAlign: "center" }}>
+      <div className="text-red-500 font-bold text-center">
         You are not authorized to view this page.
       </div>
     )
