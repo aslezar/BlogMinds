@@ -4,10 +4,11 @@ import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded"
 import { IoClose } from "react-icons/io5"
-import { LuImagePlus } from "react-icons/lu"
 import Tooltip from "@mui/material/Tooltip"
 import { IconButton } from "@mui/material"
 import ContentCopyRounded from "@mui/icons-material/ContentCopyRounded"
+import { TbFileTextAi } from "react-icons/tb"
+import { LuImagePlus } from "react-icons/lu"
 interface AICompletionProps {
   setIsAICompletionOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -124,14 +125,16 @@ const AICompletion: React.FC<AICompletionProps> = ({
         />
         <div className="grid grid-cols-2 gap-3">
           <Button
-            text="Autocomplete Text"
+            text="Autocomplete"
             disable={loading || prompt === ""}
             onClick={handleTextSuggestion}
+            icon={<TbFileTextAi className="text-lg" />}
           />
           <Button
-            text="Generate Img"
+            text="Generate"
             disable={loading || prompt === ""}
             onClick={handleImageSuggestion}
+            icon={<LuImagePlus className="text-lg" />}
           />
         </div>
         <div className="flex flex-col gap-2 w-full">
@@ -249,16 +252,18 @@ interface ButtonProps {
   text: string
   onClick: () => any
   disable?: boolean
+  icon: React.ReactNode
 }
-const Button: React.FC<ButtonProps> = ({ text, onClick, disable }) => {
+const Button: React.FC<ButtonProps> = ({ text, onClick, disable, icon }) => {
   return (
     <button
       onClick={onClick}
       disabled={disable}
-      className={`border-2 border-dark font-medium px-4 py-2 flex items-center text-sm rounded-lg justify-center text-dark
+      className={`border-2 border-dark font-medium px-3 py-2 flex items-center rounded-lg justify-center text-dark gap-1 
         ${disable ? "opacity-50 cursor-not-allowed" : "hover:bg-dark hover:text-white"}`}
     >
-      {text}
+      <span className="text-sm mb-0.5">{text}</span>
+      <span>{icon}</span>
     </button>
   )
 }
