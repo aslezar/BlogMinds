@@ -36,6 +36,7 @@ const allowedOrigins = [
     "http://localhost:5173",
     "http://localhost:8000",
     "https://blogminds.onrender.com",
+    "https://creativerse-tj.onrender.com"
 ]
 const corsOptions = {
     origin: function (origin: string | undefined, callback: any) {
