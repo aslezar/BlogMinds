@@ -35,6 +35,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         type="text"
         placeholder="Article Title"
         value={blog.title}
+        maxLength={100}
         onChange={(e) => setBlog({ ...blog, title: e.target.value })}
         className="p-3 border rounded-lg focus:outline-none focus:ring w-full text-base"
       />
@@ -43,6 +44,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         onChange={(e) => setBlog({ ...blog, description: e.target.value })}
         placeholder="Short Description of the Article ...."
         rows={4}
+        maxLength={250}
         className="px-3 py-2 border rounded-md focus:outline-none focus:ring resize-none text-sm"
       />
       <MultiSelect
@@ -52,8 +54,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         }
         placeholder="Select categories"
       />
-      <div className=" border border-highlight flex items-center justify-center  font-medium rounded-md focus:outline-none focus:ring resize-none cursor-pointer
-      `">
+      <div
+        className=" border border-highlight flex items-center justify-center  font-medium rounded-md focus:outline-none focus:ring resize-none cursor-pointer
+      `"
+      >
         <span
           className="text-sm  text-highlight w-full h-full px-3 py-2 flex items-center justify-center"
           onClick={() => setIsAssetsOpen(true)}

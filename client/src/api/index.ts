@@ -91,10 +91,12 @@ export const uploadAssests = (assetFiles: FormData) => {
   return API.post("/user/assets", assetFiles)
 }
 
-export const updateProfile = (userData:UserType) => {
-  const {name,bio,myInterests} = userData
-  return API.patch('/user/update-profile',{
-    name,bio,myInterests
+export const updateProfile = (userData: UserType) => {
+  const { name, bio, myInterests } = userData
+  return API.patch("/user/update-profile", {
+    name,
+    bio,
+    myInterests,
   })
 }
 

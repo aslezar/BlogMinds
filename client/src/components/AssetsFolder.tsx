@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
 import Loader from "./Loader"
 import { LuImagePlus } from "react-icons/lu"
+import { IoClose } from "react-icons/io5"
 
 interface AssetsFolderProps {
   setIsAssetsOpen?: React.Dispatch<React.SetStateAction<boolean>>
@@ -33,9 +34,9 @@ const AssetsFolder: React.FC<AssetsFolderProps> = ({ setIsAssetsOpen }) => {
               setIsAssetsOpen(false)
               console.log("clicked")
             }}
-            className="bg-red-500 z-50 text-white py-1 px-2 h-fit rounded-lg flex  justify-center text-center"
+            className="bg-red-500 z-50 text-white p-0.5 h-fit flex hover:bg-red-700 justify-center rounded-full text-center"
           >
-            Close
+            <IoClose />
           </button>
         )}
       </div>
@@ -104,7 +105,7 @@ const Dropzone = ({
     >
       <input {...getInputProps()} className="absolute left-0" />
       <div className="flex items-center w-full justify-center gap-5">
-        <LuImagePlus className="text-5xl text-gray-500"/>
+        <LuImagePlus className="text-5xl text-gray-500" />
         <div>
           <p>Drag 'n' drop some files here, or click to select files</p>
           <em>(Only *.jpeg, *.jpg, *.png, *.webp images upto 4MB)</em>
