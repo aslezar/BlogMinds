@@ -27,6 +27,7 @@ const ContactUs = () => {
         },
         (error) => {
           console.error("FAILED...", error)
+          toast.success("Message failed")
         },
       )
   }
