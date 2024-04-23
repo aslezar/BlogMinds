@@ -14,9 +14,14 @@ const ContactUs = () => {
     }
 
     emailjs
-      .sendForm("service_fd0rr6l", "template_q3rza5b", formRef.current, {
-        publicKey: "2fdItATcsl3Ktnmvs",
-      })
+      .sendForm(
+        import.meta.env.VITE_SERVICE_ID!,
+        import.meta.env.VITE_TEMPLATE_ID!,
+        formRef.current,
+        {
+          publicKey: import.meta.env.VITE_PUBLIC_KEY!,
+        },
+      )
       .then(
         (response) => {
           console.log("SUCCESS!", response)
@@ -27,7 +32,7 @@ const ContactUs = () => {
         },
         (error) => {
           console.error("FAILED...", error)
-          toast.success("Message failed")
+          toast.error("Message failed")
         },
       )
   }
