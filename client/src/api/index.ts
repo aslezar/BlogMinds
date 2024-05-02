@@ -15,7 +15,7 @@ import {
 
 const URL = import.meta.env.PROD ? "/api/v1" : "http://localhost:8000/api/v1"
 
-const API = axios.create({ baseURL: URL })
+const API = axios.create({ baseURL: URL, withCredentials: true })
 
 // Add a request interceptor
 API.interceptors.request.use(

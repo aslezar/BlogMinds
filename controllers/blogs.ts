@@ -100,7 +100,25 @@ const getBlogByCategory = async (req: Request, res: Response) => {
 const getBlogById = async (req: Request, res: Response) => {
     const blogId = getBlogId(req)
 
-    const blog = await Blog.findById(blogId)
+    let increment = false
+
+    //print every cookie
+    // for (let [key, value] of Object.entries(req.cookies)) {
+    //     console.log(`${key}: ${value}`)
+    // }
+
+    if (!req.cookies[`blogViewed_${blogId}`]) {
+        increment = true
+        res.cookie(`blogViewed_${blogId}`, true, {
+            maxAge: 10 * 60 * 1000, //10 minutes
+            secure: req.secure,
+        })
+    }
+    const blog = await Blog.findByIdAndUpdate(
+        blogId,
+        increment ? { $inc: { views: 1 } } : {},
+        { new: true },
+    )
         .populate({
             path: "author",
             select: "name profileImage",

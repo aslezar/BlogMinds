@@ -7,6 +7,7 @@ import fs from "fs"
 import helmet from "helmet"
 import cors from "cors"
 import rateLimiter from "express-rate-limit"
+import cookieParser from "cookie-parser"
 
 import morgan from "morgan"
 
@@ -59,6 +60,7 @@ app.use(
         max: 5000, //limit each IP to 100 requests per windowMs
     }),
 )
+app.use(cookieParser())
 app.use(express.json())
 // app.use(helmet()) //set security HTTP headers
 app.use(cors(corsOptions)) //enable CORS

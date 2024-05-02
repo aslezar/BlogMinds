@@ -31,17 +31,6 @@ const BlogSchema = new Schema<IBlog>(
         tags: {
             type: [String],
             required: [true, "Please provide tags."],
-            enum: [
-                "technology",
-                "science",
-                "programming",
-                "health",
-                "business",
-                "entertainment",
-                "sports",
-                "education",
-                "lifestyle",
-            ],
         },
         views: {
             type: Number,
