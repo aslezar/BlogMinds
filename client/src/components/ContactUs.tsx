@@ -12,14 +12,14 @@ const ContactUs = () => {
       console.error("Form reference is not defined.")
       return
     }
-
+    toast.loading("Sending message...", { id: "sending-message" })
     emailjs
       .sendForm(
-        import.meta.env.VITE_SERVICE_ID!,
-        import.meta.env.VITE_TEMPLATE_ID!,
+        import.meta.env.VITE_EMAILJS_SERVICE_ID!,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID!,
         formRef.current,
         {
-          publicKey: import.meta.env.VITE_PUBLIC_KEY!,
+          publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY!,
         },
       )
       .then(
@@ -35,6 +35,9 @@ const ContactUs = () => {
           toast.error("Message failed")
         },
       )
+      .finally(() => {
+        toast.dismiss("sending-message")
+      })
   }
   return (
     <section className="bg-white ">
@@ -55,7 +58,7 @@ const ContactUs = () => {
               Your email
             </label>
             <input
-              name="user_email"
+              name="email"
               type="email"
               id="email"
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-dark focus:border-dark block w-full p-2.5"

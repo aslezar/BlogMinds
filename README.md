@@ -17,13 +17,19 @@ To run BlogMind locally, follow these steps:
 
 2. Set Environment Variables:
 
-    Create a file named `.env` in the root directory, and copy the contents from the `.env.example` provided in the repository. Customize the variables as needed.
+    Create a file named `.env` in the root directory, and copy the contents from the `.env.example` provided in the repository folder. Customize the variables as needed.
     Explanation of each variable is provided in the .env.example itself.
 
     ```bash
     cp .env.example .env
     ```
 
+    Create a file named `.env` in the client directory, and copy the contents from the `.env.example` provided in the repository folder. Customize the variables as needed.
+    Explanation of each variable is provided in the .env.example itself.
+
+    ```bash
+    cp client/.env.example client/.env
+    ```
 3. Install server dependencies:
 
     ```bash
