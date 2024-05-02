@@ -27,7 +27,7 @@ const HomePage = () => {
           className="absolute w-[37.5%] m-auto -right-5 top-[15%] shadow-2xl rounded-xl"
         />
       </div>
-      <Features/>
+      <Features />
       <PricingTable />
       <ContactUs />
     </div>

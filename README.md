@@ -30,6 +30,7 @@ To run BlogMind locally, follow these steps:
     ```bash
     cp client/.env.example client/.env
     ```
+
 3. Install server dependencies:
 
     ```bash

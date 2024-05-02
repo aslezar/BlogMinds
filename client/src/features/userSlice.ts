@@ -184,7 +184,7 @@ export const verification =
     dispatch(userSlice.actions.SET_LOADING())
     verifyOtp({ userId, otp })
       .then((res: any) => {
-        // console.log(res)
+        console.log(res)
 
         dispatch(loadUser())
         toast.success("Registered Successfully", { id: "verification" })
