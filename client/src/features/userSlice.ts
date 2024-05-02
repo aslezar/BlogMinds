@@ -199,7 +199,6 @@ export const verification =
   }
 
 export const loadUser = () => async (dispatch: Dispatch) => {
-  toast.loading("Loading", { id: "loadUser" })
   dispatch(userSlice.actions.SET_LOADING())
   signinToken()
     .then((res: any) => {
@@ -209,8 +208,6 @@ export const loadUser = () => async (dispatch: Dispatch) => {
       dispatch(userSlice.actions.SET_USER(user))
     })
     .catch((err) => {
-      dispatch(userSlice.actions.LOGOUT_USER())
-      toast.dismiss("loadUser")
       console.log(err)
     })
     .finally(() => {

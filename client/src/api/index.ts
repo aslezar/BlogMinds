@@ -34,7 +34,18 @@ API.interceptors.response.use(
     console.log(error)
 
     if (error.response) {
-      toast.error(error.response.data?.msg, { id: error.response.data?.msg })
+      if (error.response.data?.msg === "Token not found") {
+        //do nothing
+      } else if (error.response.status === 401) {
+        toast.error("Session Expired. Please login again.", {
+          id: "Session Expired",
+        })
+      } else if (error.response.status === 403) {
+        toast.error("Forbidden Access: Please login again.", {
+          id: "Forbidden Access",
+        })
+      } else
+        toast.error(error.response.data?.msg, { id: error.response.data?.msg })
     } else {
       toast.error("Network Error: Please try again later.", {
         id: "Network Error",
