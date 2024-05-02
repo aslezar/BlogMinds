@@ -1,4 +1,41 @@
+import React, { useRef } from "react"
+import emailjs from "@emailjs/browser"
+import toast from "react-hot-toast"
+
 const ContactUs = () => {
+  const formRef = useRef<HTMLFormElement>(null)
+
+  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (!formRef.current) {
+      console.error("Form reference is not defined.")
+      return
+    }
+
+    emailjs
+      .sendForm(
+        import.meta.env.VITE_SERVICE_ID!,
+        import.meta.env.VITE_TEMPLATE_ID!,
+        formRef.current,
+        {
+          publicKey: import.meta.env.VITE_PUBLIC_KEY!,
+        },
+      )
+      .then(
+        (response) => {
+          console.log("SUCCESS!", response)
+          toast.success("Message sent successfully")
+          if (formRef.current) {
+            formRef.current.reset() // Reset form
+          }
+        },
+        (error) => {
+          console.error("FAILED...", error)
+          toast.error("Message failed")
+        },
+      )
+  }
   return (
     <section className="bg-white ">
       <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
@@ -9,7 +46,7 @@ const ContactUs = () => {
           Got a query? Want to send feedback about a feature? Need details about
           our premium plan? Let us know.
         </p>
-        <form action="#" className="space-y-8">
+        <form ref={formRef} onSubmit={sendEmail} className="space-y-8">
           <div>
             <label
               htmlFor="email"
@@ -18,6 +55,7 @@ const ContactUs = () => {
               Your email
             </label>
             <input
+              name="user_email"
               type="email"
               id="email"
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-dark focus:border-dark block w-full p-2.5"
@@ -34,6 +72,7 @@ const ContactUs = () => {
             </label>
             <input
               type="text"
+              name="subject"
               id="subject"
               className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-dark focus:border-dark"
               placeholder="Let us know how we can help you"
@@ -49,6 +88,7 @@ const ContactUs = () => {
             </label>
             <textarea
               id="message"
+              name="message"
               rows={6}
               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-dark focus:border-dark"
               placeholder="Leave a comment..."
