@@ -22,11 +22,9 @@ const authenticate = async (
     res: Response,
     next: NextFunction,
 ) => {
-    const header = req.headers.authorization
-    if (!header || !header.startsWith("Bearer")) {
-        throw new UnauthenticatedError("Authentication Invalid")
-    }
-    const token = header.split(" ")[1]
+    const token = req.cookies.token
+    if (!token) throw new UnauthenticatedError("Token not found")
+        
     const tempUserPayload = jwt.verify(
         token,
         process.env.JWT_SECRET as jwt.Secret,

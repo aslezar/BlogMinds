@@ -17,20 +17,6 @@ const URL = import.meta.env.PROD ? "/api/v1" : "http://localhost:8000/api/v1"
 
 const API = axios.create({ baseURL: URL, withCredentials: true })
 
-// Add a request interceptor
-API.interceptors.request.use(
-  function (config) {
-    // Do something before request is sent
-    const token = localStorage.getItem("token") || ""
-
-    if (token) config.headers.Authorization = `Bearer ${token}`
-    return config
-  },
-  function (error) {
-    // Do something with request error
-    return Promise.reject(error)
-  },
-)
 API.interceptors.response.use(
   function (response) {
     const isAIImage = response.headers["x-ai-generated-image"] === "true"
