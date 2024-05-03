@@ -11,7 +11,7 @@ const getTextSuggestion = async (req: Request, res: Response) => {
         throw new BadRequestError("Please provide a 'text' for suggestion.")
 
     const response = await fetch(
-        "https://api-inference.huggingface.co/models/google/gemma-7b",
+        "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct",
         {
             method: "POST",
             headers: {

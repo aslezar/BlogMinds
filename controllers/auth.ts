@@ -165,12 +165,16 @@ const verifyEmail = async (req: Request, res: Response) => {
     user.status = "active"
     user.otp = undefined
     await user.save()
-    res.status(StatusCodes.CREATED).json({
-        token: user.generateToken(),
-        success: true,
-        msg: "User Registered Successfully",
-    })
-    // sendUserData(user, res, "User Registered Successfully")
+    res.status(StatusCodes.CREATED)
+        .cookie("token", user.generateToken(), {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            // expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
+        })
+        .json({
+            success: true,
+            msg: "User Registered Successfully",
+        })
 }
 
 const login = async (req: Request, res: Response) => {
