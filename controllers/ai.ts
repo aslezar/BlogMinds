@@ -20,6 +20,7 @@ const getTextSuggestion = async (req: Request, res: Response) => {
             },
             body: JSON.stringify({
                 inputs: text,
+                parameters: { max_new_tokens: 25 },
             }),
             redirect: "follow",
         },
