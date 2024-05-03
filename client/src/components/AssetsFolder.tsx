@@ -1,6 +1,6 @@
 import React from "react"
 import { useDropzone } from "react-dropzone"
-import { getAssests, uploadAssests, deleteAssest } from "../api"
+import { getAssets as getAssets, uploadAssets, deleteAssest } from "../api"
 import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
 import Loader from "./Loader"
@@ -17,7 +17,7 @@ const AssetsFolder: React.FC<AssetsFolderProps> = ({ setIsAssetsOpen }) => {
 
   React.useEffect(() => {
     setLoading(true)
-    getAssests()
+    getAssets()
       .then((res) => setAssets(res.data.assets))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false))
@@ -68,7 +68,7 @@ const Dropzone = ({
       })
       toast.loading("Uploading...", { id: "uploading" })
       setUploading(true)
-      uploadAssests(formData)
+      uploadAssets(formData)
         .then((res) => setAssets((prev) => [...prev, ...res.data]))
         .catch((err) => console.log(err))
         .finally(() => {

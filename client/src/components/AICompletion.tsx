@@ -1,20 +1,24 @@
 import React from "react"
-import { getAICompletion, getAImage } from "../api"
+import { getAICompletion, getAImage, uploadAssets } from "../api"
 import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded"
 import { IoClose } from "react-icons/io5"
 import Tooltip from "@mui/material/Tooltip"
 import { IconButton } from "@mui/material"
-import ContentCopyRounded from "@mui/icons-material/ContentCopyRounded"
 import { TbFileTextAi } from "react-icons/tb"
 import { LuImagePlus } from "react-icons/lu"
+import { FaPlay } from "react-icons/fa"
+import { MdContentCopy } from "react-icons/md"
+import { BsFillEraserFill } from "react-icons/bs"
 interface AICompletionProps {
   setIsAICompletionOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
-type StringPair = {
+type ImageDataType = {
+  id: string
   prompt: string
+  imageBlob: Blob | null
   imageUrl: string
+  isSaved: boolean
 }
 
 const AICompletion: React.FC<AICompletionProps> = ({
@@ -25,23 +29,23 @@ const AICompletion: React.FC<AICompletionProps> = ({
   const [page, setPage] = React.useState(0)
 
   const [textSuggestions, setTextSuggestions] = React.useState<string[]>([])
-  const [imageSuggestions, setImageSuggestions] = React.useState<StringPair[]>(
-    [],
-  )
+  const [imageSuggestions, setImageSuggestions] = React.useState<
+    ImageDataType[]
+  >([])
 
   React.useEffect(() => {
     return () => {
       imageSuggestions.forEach((image) => URL.revokeObjectURL(image.imageUrl))
     }
   }, [])
-
-  const handleTextSuggestion = async () => {
+  const handleTextSuggestion = async (textPrompt?: string) => {
     setLoading(true)
     setPage(0)
     toast.loading("Generating Suggestion", {
       id: "loading",
     })
-    getAICompletion(prompt)
+
+    getAICompletion(textPrompt || prompt)
       .then((response) => {
         const text = response.data
         setTextSuggestions((prev) => [text, ...prev])
@@ -70,9 +74,18 @@ const AICompletion: React.FC<AICompletionProps> = ({
     })
     getAImage(prompt)
       .then((response) => {
-        const image = response.data
-        const imageUrl = URL.createObjectURL(image)
-        setImageSuggestions((prev) => [{ prompt, imageUrl }, ...prev])
+        const imageBlob = response.data
+        const imageUrl = URL.createObjectURL(imageBlob)
+        setImageSuggestions((prev) => [
+          {
+            id: Date.now().toString(),
+            prompt,
+            imageBlob,
+            imageUrl,
+            isSaved: false,
+          },
+          ...prev,
+        ])
         setPage(1)
       })
       .catch((error) => {
@@ -83,8 +96,47 @@ const AICompletion: React.FC<AICompletionProps> = ({
         toast.dismiss("loading")
       })
   }
-  const handleButtonClick = () => {
-    toast.error("This feature is not implemented yet.Reminder!!!")
+  const saveToAssets = (image: ImageDataType): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      if (!image.imageBlob || image.isSaved)
+        return reject(new Error("Image already saved"))
+
+      const file = new File([image.imageBlob], image.prompt.slice(0, 20), {
+        type: "image/jpeg",
+      })
+      const formData = new FormData()
+      formData.append("assetFiles", file)
+
+      toast.loading("Saving to Assets Folder ...", { id: "uploading" })
+      uploadAssets(formData)
+        .then((res) => {
+          //update image in state
+          const imageUrl = res.data[0]
+          console.log(imageUrl)
+
+          setImageSuggestions((prev) =>
+            prev.map((img) => {
+              if (img.id === image.id) {
+                URL.revokeObjectURL(img.imageUrl)
+                img.imageUrl = imageUrl
+                img.imageBlob = null
+                img.isSaved = true
+              }
+              return img
+            }),
+          )
+          resolve()
+        })
+        .catch((err) => {
+          console.log(err)
+          reject(err)
+        })
+        .finally(() =>
+          toast.success("Saved", {
+            id: "uploading",
+          }),
+        )
+    })
   }
   const handleImageDiscard = (index: number) => {
     const newImageSuggestions = imageSuggestions.filter((_, i) => {
@@ -93,7 +145,7 @@ const AICompletion: React.FC<AICompletionProps> = ({
     })
     setImageSuggestions(newImageSuggestions)
   }
-  const handleAddtoBlog = (image: StringPair) => {
+  const handleAddToBlog = (image: ImageDataType) => {
     console.log(image)
     toast.error("this feature is not implemented yet.Reminder!!!")
   }
@@ -115,19 +167,33 @@ const AICompletion: React.FC<AICompletionProps> = ({
           </button>
         )}
       </div>
-      <div className="flex flex-col gap-4 items-center ">
+      <div className="flex flex-col gap-4 items-center relative">
         <textarea
           value={prompt}
-          rows={4}
+          rows={5}
           placeholder="Enter prompt here"
           onChange={(e) => setPrompt(e.target.value)}
           className="p-3 border rounded-lg focus:outline-none ring-highlight focus:ring-2 w-full  resize-none text-sm"
         />
+        <Tooltip title="Clear Prompt" className="absolute top-1 right-1">
+          <span>
+            <button
+              onClick={() => {
+                setPrompt("")
+              }}
+              disabled={prompt === ""}
+            >
+              <BsFillEraserFill
+                className={prompt === "" ? "text-gray-300" : "text-gray-600"}
+              />
+            </button>
+          </span>
+        </Tooltip>
         <div className="grid grid-cols-2 gap-3">
           <Button
             text="Autocomplete"
             disable={loading || prompt === ""}
-            onClick={handleTextSuggestion}
+            onClick={() => handleTextSuggestion(prompt)}
             icon={<TbFileTextAi className="text-lg" />}
           />
           <Button
@@ -156,93 +222,114 @@ const AICompletion: React.FC<AICompletionProps> = ({
               Image
             </button>
           </div>
-          {page === 0 ? (
-            <div>
-              {textSuggestions.map((textSuggestion, index) => (
-                <div
-                  key={index}
-                  className="border p-2 rounded-lg text-sm relative"
-                >
-                  <div className="p-1 pt-3 text-gray-800">{textSuggestion}</div>
-                  <div className="flex justify-around absolute top-3 right-1 gap-0.5">
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(textSuggestion)
-                        toast.success("Text copied to clipboard")
-                      }}
-                    >
-                      <ContentCopyRoundedIcon
-                        fontSize="small"
-                        className="text-gray-600 hover:text-gray-800"
-                      />
-                    </button>
-                    <button
-                      onClick={() =>
-                        setTextSuggestions((prev) =>
-                          prev.filter((_, i) => i !== index),
-                        )
-                      }
-                    >
-                      <DeleteIcon
-                        fontSize="small"
-                        className="hover:text-red-600 text-red-500"
-                      />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>
-              {imageSuggestions.map((image, index) => (
-                <div key={image.imageUrl} className="border p-2 rounded-md">
-                  <div className="text-gray-700 italic p-1">
-                    {index + 1}. {image.prompt}
-                  </div>
-                  <img
-                    src={image.imageUrl}
-                    alt={image.prompt}
-                    onClick={() => handleAddtoBlog(image)}
-                  />
-                  <div className="flex justify-center items-center gap-2">
-                    <Tooltip title="Save to Assets">
-                      <IconButton>
-                        <LuImagePlus
-                          onClick={handleButtonClick}
-                          className="text-dark"
-                        />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Copy URL">
-                      <IconButton>
-                        <ContentCopyRounded
-                          className="text-dark"
+          <div className="flex flex-col gap-2">
+            {page === 0 ? (
+              <>
+                {textSuggestions.map((textSuggestion, index) => (
+                  <div
+                    key={index}
+                    className="border p-2 rounded-lg text-sm relative"
+                  >
+                    <div className="p-1 text-gray-800">{textSuggestion}</div>
+                    <div className="flex justify-around absolute bottom-3 right-1 gap-1 items-center">
+                      <Tooltip title="Continue Text">
+                        <button
                           onClick={() => {
+                            setPrompt(textSuggestion)
+                            handleTextSuggestion(textSuggestion)
+                          }}
+                        >
+                          <FaPlay
+                            fontSize="small"
+                            className="text-gray-600 hover:text-gray-800"
+                          />
+                        </button>
+                      </Tooltip>
+                      <Tooltip title="Copy Text">
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(textSuggestion)
+                            toast.success("Text copied to clipboard")
+                          }}
+                        >
+                          <MdContentCopy
+                            fontSize="medium"
+                            className="text-gray-600 hover:text-gray-800"
+                          />
+                        </button>
+                      </Tooltip>
+                      <Tooltip title="Discard">
+                        <button
+                          onClick={() =>
+                            setTextSuggestions((prev) =>
+                              prev.filter((_, i) => i !== index),
+                            )
+                          }
+                        >
+                          <DeleteIcon
+                            fontSize="small"
+                            className="hover:text-red-600 text-red-500"
+                          />
+                        </button>
+                      </Tooltip>
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {imageSuggestions.map((image, index) => (
+                  <div key={image.id} className="border p-2 rounded-md">
+                    <div className="text-gray-700 italic p-1">
+                      {index + 1}. {image.prompt}
+                    </div>
+                    <img
+                      src={image.imageUrl}
+                      alt={image.prompt}
+                      onClick={() => handleAddToBlog(image)}
+                    />
+                    <div className="flex justify-center items-center gap-2">
+                      <Tooltip title="Save to Assets">
+                        <IconButton onClick={() => saveToAssets(image)}>
+                          <LuImagePlus className="text-dark" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Copy URL">
+                        <IconButton
+                          onClick={async () => {
+                            if (!image.isSaved) {
+                              try {
+                                await saveToAssets(image)
+                              } catch (error) {
+                                console.log(error)
+                              }
+                            }
                             navigator.clipboard.writeText(image.imageUrl)
                             toast.success("URL copied to clipboard")
                           }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Discard">
-                      <IconButton>
-                        <DeleteIcon
-                          className="text-red-500"
+                        >
+                          <MdContentCopy className="text-dark" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Discard">
+                        <IconButton
                           onClick={() => {
                             handleImageDiscard(index)
                           }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                  {/* <Button
-                    onClick={() => handleAddtoBlog(image)}
+                        >
+                          <DeleteIcon className="text-red-500" />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                    {/* <Button
+                    onClick={() => handleAddToBlog(image)}
                     text="Use in Blog ->"
                   /> */}
-                </div>
-              ))}
-            </div>
-          )}
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

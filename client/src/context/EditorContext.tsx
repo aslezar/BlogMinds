@@ -11,7 +11,7 @@ import Button from "editorjs-button"
 import InlineCode from "@editorjs/inline-code"
 import ColorPlugin from "editorjs-text-color-plugin"
 import AlignmentBlockTune from "editorjs-text-alignment-blocktune"
-import { uploadAssests } from "../api"
+import { uploadAssets } from "../api"
 import Title from "title-editorjs"
 import toast from "react-hot-toast"
 const EditorContext = createContext<any>(null)
@@ -82,7 +82,7 @@ function EditorContextProvider(props: any) {
                 const formData = new FormData()
                 formData.append("assetFiles", file)
 
-                return uploadAssests(formData)
+                return uploadAssets(formData)
                   .then((res) => {
                     return {
                       success: 1,
