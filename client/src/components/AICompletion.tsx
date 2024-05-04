@@ -98,8 +98,10 @@ const AICompletion: React.FC<AICompletionProps> = ({
   }
   const saveToAssets = (image: ImageDataType): Promise<void> => {
     return new Promise((resolve, reject) => {
-      if (!image.imageBlob || image.isSaved)
+      if (!image.imageBlob || image.isSaved) {
+        toast.success("Saved")
         return reject(new Error("Image already saved"))
+      }
 
       const file = new File([image.imageBlob], image.prompt.slice(0, 20), {
         type: "image/jpeg",

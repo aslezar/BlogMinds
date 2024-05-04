@@ -4,6 +4,7 @@ import { getUserProfile } from "../api"
 import { Profile } from "../definitions"
 import { format } from "date-fns/format"
 import Loader from "../components/Loader"
+import toast from "react-hot-toast"
 
 const PublicProfile = () => {
   const userId = useParams().id
@@ -100,7 +101,12 @@ const PublicProfile = () => {
                   </div>
                 </div>
                 <div className="flex gap-2 mt-3">
-                  <button className="bg-dark text-white px-4 py-1 rounded-lg mt-3 hover:bg-highlight ">
+                  <button
+                    className="bg-dark text-white px-4 py-1 rounded-lg mt-3 hover:bg-highlight"
+                    onClick={() => {
+                      toast.success("This feature is not available yet")
+                    }}
+                  >
                     Follow
                   </button>
                 </div>
