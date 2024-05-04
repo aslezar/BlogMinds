@@ -8,7 +8,7 @@ import { useAppSelector } from "../hooks.tsx"
 import { format } from "date-fns/format" // Import date-fns under a namespace
 import { IoBookOutline } from "react-icons/io5"
 import { useEditorContext } from "../context/EditorContext"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -159,7 +159,10 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             </div>
             <span className="text-2xl text-gray-600 font-thin">|</span>
             {blog.author && (
-              <Link className="flex items-end " to={`/user/${blog.author._id}`}>
+              <NavLink
+                className="flex items-end "
+                to={`/user/${blog.author._id}`}
+              >
                 <img
                   className="object-cover object-center w-7 aspect-square rounded-full"
                   src={blog.author.profileImage}
@@ -171,11 +174,11 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                     {blog.author.name}
                   </h1>
                 </div>
-              </Link>
+              </NavLink>
             )}
 
             {blog.author && (
-              <span className="text-2xl text-gray-600 font-thin">|</span>
+              <span className="text-2xl text-</svg>gray-600 font-thin">|</span>
             )}
             <div className="flex items-center gap-1">
               <svg
@@ -205,6 +208,17 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                 {Math.ceil(blog.content.split(" ").length / 200)}m read time
               </span>
             </div>
+            {user?.userId === blog.author._id && (
+              <>
+                <span className="text-2xl text-gray-600 font-thin">|</span>
+                <NavLink
+                  to={`/write/${id}`}
+                  className="bg-dark px-4 hover:bg-highlight transition-all py-1 rounded-full duration-200 text-white font-medium"
+                >
+                  Edit
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
         {/* <div className="text-gray-700  pt-20 px-6">
@@ -252,19 +266,19 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                   key={index}
                   className="mb-4 gap-4 flex items-center text-lg"
                 >
-                  <Link to={`/user/${comment.author._id}`}>
+                  <NavLink to={`/user/${comment.author._id}`}>
                     <img
                       className="object-cover w-12 rounded-full aspect-square"
                       src={comment?.author?.profileImage}
                       alt={"img"}
                     />
-                  </Link>
+                  </NavLink>
                   <div>
-                    <Link to={`/user/${comment.author._id}`}>
+                    <NavLink to={`/user/${comment.author._id}`}>
                       <p className="font-medium hover:underline hover:cursor-pointer">
                         {comment.author.name}
                       </p>
-                    </Link>
+                    </NavLink>
                     <p>{comment?.message}</p>
                   </div>
                 </li>
