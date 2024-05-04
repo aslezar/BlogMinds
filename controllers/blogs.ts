@@ -10,7 +10,7 @@ import { Request, Response } from "express"
 import { BadRequestError, UnauthenticatedError } from "../errors"
 import trendingCache from "../utils/cache"
 
-//UTITLIY FUNCTIONS
+//UTILITY FUNCTIONS
 
 const getId = (id: string) => {
     try {
@@ -161,7 +161,7 @@ const likeBlog = async (req: Request, res: Response) => {
     await blog.save()
     res.status(StatusCodes.OK).json({
         success: true,
-        msg: isLiked ? `${blog.title} Unliked` : `${blog.title} Liked`,
+        msg: isLiked ? `${blog.title} Unlike` : `${blog.title} Liked`,
     })
 }
 
@@ -200,11 +200,13 @@ const getUserBlogs = async (req: Request, res: Response) => {
         .select("title description img tags")
 
     if (!userBlogs) throw new UnauthenticatedError("User Not Found")
+    const totalCount = await Blog.countDocuments({ author: userId })
     res.status(StatusCodes.OK).json({
         data: {
             blogs: userBlogs,
             page: req.pagination.page,
             limit: req.pagination.limit,
+            totalCount: totalCount,
         },
         success: true,
         msg: "Data Fetched Successfully",
