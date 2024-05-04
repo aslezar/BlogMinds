@@ -6,28 +6,41 @@ import { Request, Response } from "express"
 import SendMail from "../utils/sendMail"
 import { OTP } from "../types/models"
 
+const setTokenCookie = (res: Response, user: IUser) => {
+    const token = user.generateToken()
+
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        expires: new Date(
+            Date.now() +
+                parseInt(process.env.JWT_LIFETIME as string) *
+                    1000 *
+                    24 *
+                    60 *
+                    60,
+        ),
+    })
+}
+
 const sendUserData = (user: IUser, res: Response, msg: String) => {
     const token = user.generateToken()
 
     const { _id: userId, name, email, bio, profileImage } = user
 
-    res.status(StatusCodes.CREATED)
-        .cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            // expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 days
-        })
-        .json({
-            data: {
-                userId,
-                name,
-                email,
-                bio,
-                profileImage,
-            },
-            success: true,
-            msg,
-        })
+    setTokenCookie(res, user)
+
+    res.status(StatusCodes.CREATED).json({
+        data: {
+            userId,
+            name,
+            email,
+            bio,
+            profileImage,
+        },
+        success: true,
+        msg,
+    })
 }
 
 const register = async (req: Request, res: Response) => {
@@ -165,16 +178,11 @@ const verifyEmail = async (req: Request, res: Response) => {
     user.status = "active"
     user.otp = undefined
     await user.save()
-    res.status(StatusCodes.CREATED)
-        .cookie("token", user.generateToken(), {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            // expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
-        })
-        .json({
-            success: true,
-            msg: "User Registered Successfully",
-        })
+    setTokenCookie(res, user)
+    res.status(StatusCodes.CREATED).json({
+        success: true,
+        msg: "User Registered Successfully",
+    })
 }
 
 const login = async (req: Request, res: Response) => {
@@ -196,17 +204,11 @@ const login = async (req: Request, res: Response) => {
 
     if (!isPasswordCorrect) throw new UnauthenticatedError("Invalid Password.")
 
-    // sendUserData(user, res, "User Login Successfully")
-    res.status(StatusCodes.CREATED)
-        .cookie("token", user.generateToken(), {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            // expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
-        })
-        .json({
-            success: true,
-            msg: "User Login Successfully",
-        })
+    setTokenCookie(res, user)
+    res.status(StatusCodes.CREATED).json({
+        success: true,
+        msg: "User Login Successfully",
+    })
 }
 const tokenLogin = async (req: Request, res: Response) => {
     const user = await User.findById(req.user.userId)
