@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useEditorContext } from "../context/EditorContext"
 import Loader from "../components/Loader"
 
-const initalBlog =
+const initialBlog =
   '{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{},"tags":[]}'
 
 function BlogEditor() {
@@ -27,7 +27,7 @@ function BlogEditor() {
 
     if (blogId === "new_blog") {
       const blogFromStorageString =
-        localStorage.getItem("new_blog") || initalBlog
+        localStorage.getItem("new_blog") || initialBlog
 
       const blogFromStorage = JSON.parse(blogFromStorageString)
       setBlog((_prevBlog) => blogFromStorage)
