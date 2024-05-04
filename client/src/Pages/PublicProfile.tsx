@@ -111,6 +111,7 @@ const PublicProfile = () => {
           <ul className="list-none grid grid-cols-3 gap-7  p-6">
             {user?.blogs.map((blog) => (
               <Link
+                key={blog._id}
                 to={`/blog/${blog._id}`}
                 className="max-w-sm mx-auto flex flex-col gap-2 border-b py-4"
               >
@@ -173,7 +174,10 @@ const PublicProfile = () => {
                 {/* render blogs.myInterests.map in a flex div */}
                 <div className="flex gap-2 items-center flex-wrap">
                   {blog.tags.map((tag) => (
-                    <span className="text-gray-600 bg-gray-200 px-2 py-1 rounded-full text-xs">
+                    <span
+                      className="text-gray-600 bg-gray-200 px-2 py-1 rounded-full text-xs"
+                      key={tag}
+                    >
                       {tag}
                     </span>
                   ))}

@@ -185,6 +185,7 @@ const commentBlog = async (req: Request, res: Response) => {
         throw new BadRequestError("Error commenting on blog")
     }
     res.status(StatusCodes.OK).json({
+        data: { comment },
         success: true,
         msg: "Commented Successfully",
     })

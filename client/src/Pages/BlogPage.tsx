@@ -23,7 +23,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const { initializeEditor, editor } = useEditorContext()
   const { id } = useParams<{ id: string }>()
   const editorRef = useRef<any>(null)
-  console.log(blog?.content)
+  // console.log(blog?.content)
   // pass blog content to editor
   useEffect(() => {
     if (blog?.content) {
@@ -48,41 +48,37 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
     return format(new Date(date), "dd MMMM yyyy")
   }
   const postComment = async () => {
-    if (!isAuthenticated) {
-      return toast.error("Please login to post a comment")
-    }
-    if (!id) {
-      return toast.error("No such blog")
-    }
-    try {
-      commentBlog(id, comment).then(() => {
-        toast.success("Comment posted successfully")
-      })
-      const newComment = {
-        author: {
-          profileImage: user?.profileImage,
-          name: user?.name,
-        },
-        message: comment,
-      }
+    if (!isAuthenticated) return toast.error("Please login to post a comment")
+    if (comment === "") return toast.error("Please write a comment")
+    if (!id) return toast.error("No such blog")
+    if (!user) return toast.error("Please login to post a comment")
+    commentBlog(id, comment)
+      .then((res) => {
+        const comment = res.data
 
-      setBlog((prevBlog: any) => {
-        if (prevBlog) {
-          return {
-            ...prevBlog,
-            comments: [newComment, ...prevBlog.comments],
-          }
-        } else {
-          return prevBlog
+        const newComment: BlogFullType["comments"][0] = {
+          _id: comment._id,
+          message: comment.message,
+          createdAt: comment.createdAt,
+          author: {
+            _id: user.userId,
+            name: user.name,
+            profileImage: user.profileImage,
+          },
         }
-      })
 
-      // Clear the comment input field after posting
-      setComment("")
-    } catch (error) {
-      toast.error("There was an error, please try again later")
-      console.log(error)
-    }
+        setBlog((prevBlog) =>
+          prevBlog
+            ? { ...prevBlog, comments: [newComment, ...prevBlog.comments] }
+            : prevBlog,
+        )
+
+        setComment("")
+      })
+      .catch((error) => {
+        toast.error("There was an error, please try again later")
+        console.log(error)
+      })
   }
   useEffect(() => {
     const fetchBlog = async (userId: UserType["userId"] | null) => {
@@ -206,7 +202,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             <div className="flex items-center gap-2 text-base  text-white bg-highlight rounded-full px-2.5  py-1">
               <IoBookOutline className="mt-0.5" />
               <span className="text-center ">
-                {Math.ceil(blog.content.split(" ").length / 200)}m readtime
+                {Math.ceil(blog.content.split(" ").length / 200)}m read time
               </span>
             </div>
           </div>
@@ -223,7 +219,13 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         <div id="editorjs" className="text-gray-700 mx-auto"></div>
         <div className="py-10 w-5/6 mx-auto">
           <h3 className="text-2xl font-semibold mb-5">Comments</h3>
-          <div className="flex gap-3">
+          <form
+            className="flex gap-3"
+            onSubmit={(e) => {
+              e.preventDefault()
+              postComment()
+            }}
+          >
             <input
               type="text"
               placeholder="Write a comment"
@@ -232,12 +234,13 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-gray-500"
             />
             <button
-              onClick={postComment}
+              type="submit"
+              disabled={comment === ""}
               className="bg-highlight text-white px-4 py-2 rounded-full"
             >
               Post
             </button>
-          </div>
+          </form>
           {blog?.comments && blog?.comments?.length === 0 ? (
             <p>No comments yet.</p>
           ) : (
