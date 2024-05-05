@@ -1,31 +1,25 @@
-import React from "react";
-import { Category } from "../definitions";
-import {
-  Autocomplete,
-  Box,
-  Chip,
-  Modal,
-  TextField,
-} from "@mui/material";
-import { BiSolidCategoryAlt } from "react-icons/bi";
+import React from "react"
+import { Category } from "../definitions"
+import { Autocomplete, Box, Chip, Modal, TextField } from "@mui/material"
+import { BiSolidCategoryAlt } from "react-icons/bi"
 
 type MultiSelectProps = {
-  value: string[];
-  onChange: (selectedOptions: string[]) => void;
-  placeholder: string;
-};
+  value: string[]
+  onChange: (selectedOptions: string[]) => void
+  placeholder: string
+}
 
 function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
 
   // Create a new array of capitalized options
-  const options = Object.values(Category).map((option) =>
-    option.charAt(0).toUpperCase() + option.slice(1)
-  );
+  const options = Object.values(Category)
+    .map((option) => option.charAt(0).toUpperCase() + option.slice(1))
+    .filter((option) => option !== "All")
 
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: string[]) => {
-    onChange(newValue);
-  };
+    onChange(newValue)
+  }
 
   return (
     <div>
@@ -66,9 +60,12 @@ function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
                 {...params}
                 variant="outlined"
                 placeholder={placeholder}
-                className="capitalize "
+                className="capitalize"
                 color="secondary"
-
+                inputProps={{
+                  ...params.inputProps,
+                  maxLength: 20,
+                }}
               />
             )}
             renderTags={(value, getTagProps) =>
@@ -85,15 +82,14 @@ function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
           {/* Button to close the modal */}
           <button
             onClick={() => setIsModalOpen(false)}
-            className="px-4 w-fit font-medium text-highlight text-sm border border-highlight rounded-md gap-1 flex items-center justify-center py-2 "
+            className="px-4 w-fit font-medium text-highlight text-sm border border-highlight rounded-md gap-1 flex items-center justify-center py-2 hover:bg-highlight hover:text-white"
           >
-            Close Tab 
+            Save
           </button>
-
         </Box>
       </Modal>
     </div>
-  );
+  )
 }
 
-export default MultiSelect;
+export default MultiSelect

@@ -12,7 +12,8 @@ import { MdContentCopy } from "react-icons/md"
 import { BsFillEraserFill } from "react-icons/bs"
 interface AICompletionProps {
   setIsAICompletionOpen?: React.Dispatch<React.SetStateAction<boolean>>
-  handleImageUpload: (imageUrl: string, prompt : string) => void
+  handleImageUpload: (imageUrl: string, prompt: string) => void
+  handleTextUploadToEditor: (text: string) => void
 }
 type ImageDataType = {
   id: string
@@ -23,7 +24,9 @@ type ImageDataType = {
 }
 
 const AICompletion: React.FC<AICompletionProps> = ({
-  setIsAICompletionOpen, handleImageUpload
+  setIsAICompletionOpen,
+  handleImageUpload,
+  handleTextUploadToEditor,
 }) => {
   const [prompt, setPrompt] = React.useState<string>("")
   const [loading, setLoading] = React.useState(false)
@@ -153,16 +156,16 @@ const AICompletion: React.FC<AICompletionProps> = ({
     try {
       // If the image is not saved, save it first
       if (!image.isSaved) {
-        await saveToAssets(image);
+        await saveToAssets(image)
       }
-  
+
       // Upload the image to the blog post
-      handleImageUpload(image.imageUrl, image.prompt);
+      handleImageUpload(image.imageUrl, image.prompt)
     } catch (error) {
-      console.log(error);
+      console.log(error)
       // Handle error if saving to assets or uploading to the blog post fails
-    } 
-  };
+    }
+  }
 
   return (
     <div className="bg-white p-4 h-[90%] w-[24%] space-y-4 rounded-lg border overflow-auto font-normal">
@@ -242,9 +245,14 @@ const AICompletion: React.FC<AICompletionProps> = ({
                 {textSuggestions.map((textSuggestion, index) => (
                   <div
                     key={index}
-                    className="border p-2 rounded-lg text-sm relative"
+                    className="border p-2 rounded-lg text-sm relative hover:bg-gray-100 cursor-pointer"
                   >
-                    <div className="p-1 text-gray-800">{textSuggestion}</div>
+                    <div
+                      className="p-1 text-gray-800"
+                      onClick={() => handleTextUploadToEditor(textSuggestion)}
+                    >
+                      {textSuggestion}
+                    </div>
                     <div className="flex justify-around absolute bottom-3 right-1 gap-1 items-center">
                       <Tooltip title="Continue Text">
                         <button
@@ -300,7 +308,7 @@ const AICompletion: React.FC<AICompletionProps> = ({
                     <img
                       src={image.imageUrl}
                       alt={image.prompt}
-                      className="hover:ring rounded-lg ring-highlight"
+                      className="hover:ring rounded-lg ring-dark"
                       onClick={() => handleAddToBlog(image)}
                     />
                     <div className="flex justify-center items-center gap-2">

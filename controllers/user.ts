@@ -7,7 +7,7 @@ import {
     uploadProfileImage as cloudinaryUploadProfileImage,
     deleteProfileImage as cloudinaryDeleteProfileImage,
     uploadAssetsImages as cloudinaryUploadAssetsImages,
-    deleteAssestImages as cloudinaryDeleteAssestImages,
+    deleteAssetImages as cloudinaryDeleteAssestImages,
 } from "../utils/imageHandlers/cloudinary"
 
 const updateUser = async (
@@ -162,7 +162,7 @@ const uploadAssets = async (req: Request, res: Response) => {
     })
 }
 
-const deleteAssest = async (req: Request, res: Response) => {
+const deleteAsset = async (req: Request, res: Response) => {
     const userId = req.user.userId
     const { assets } = req.body
     if (!assets) throw new BadRequestError("Assets are required")
@@ -262,7 +262,7 @@ export {
     deleteProfileImage,
     getAllAssests,
     uploadAssets,
-    deleteAssest,
+    deleteAsset,
     followUnfollowUser,
     isFollowing,
 }

@@ -73,7 +73,7 @@ export const signOut = () => API.post("/auth/signout")
 /* /my-profile */
 export const getMyProfile = () => API.get("/user/my-profile")
 export const getAssets = () => API.get("/user/assets")
-export const deleteAssest = (assets: string) =>
+export const deleteAsset = (assets: string) =>
   API.delete("/user/assets", { data: { assets } })
 
 export const uploadAssets = (assetFiles: FormData) => {

@@ -55,7 +55,7 @@ const uploadAssetsImages = async (req: Request) => {
     }
     return urls
 }
-const deleteAssestImages = async (public_id: string): Promise<boolean> => {
+const deleteAssetImages = async (public_id: string): Promise<boolean> => {
     const res = await cloudinary.uploader.destroy(
         public_id,
         { invalidate: true },
@@ -72,5 +72,5 @@ export {
     uploadProfileImage,
     deleteProfileImage,
     uploadAssetsImages,
-    deleteAssestImages,
+    deleteAssetImages,
 }

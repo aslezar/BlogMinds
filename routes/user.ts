@@ -9,7 +9,7 @@ import {
     deleteProfileImage,
     getAllAssests,
     uploadAssets,
-    deleteAssest,
+    deleteAsset,
     followUnfollowUser,
     isFollowing,
 } from "../controllers/user"
@@ -30,7 +30,7 @@ router
     .route("/assets")
     .get(getAllAssests)
     .post(upload.array("assetFiles", 5), uploadAssets)
-    .delete(deleteAssest)
+    .delete(deleteAsset)
 router.post("/follow-unfollow", followUnfollowUser)
 router.get("/is-following", isFollowing)
 

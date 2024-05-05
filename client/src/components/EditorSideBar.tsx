@@ -26,26 +26,47 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
   const [isAICompletionOpen, setIsAICompletionOpen] = React.useState(false)
   const { editor } = useEditorContext()
 
-  const handleImageUpload = (imageUrl : string, prompt: string) => {
+  const handleTextUploadToEditor = (text: string) => {
     if (!editor) {
-        console.error("EditorJS instance is not available.");
-        return;
+      console.error("EditorJS instance is not available.")
+      return
+    }
+
+    // Define the data for the new paragraph block
+    const paragraphData = {
+      text,
+    }
+
+    editor.blocks.insert(
+      "paragraph",
+      paragraphData,
+      {},
+      editor.blocks.getBlocksCount(),
+      true,
+    )
+
+    console.log(editor.blocks)
+  }
+
+  const handleImageUploadToEditor = (imageUrl: string, prompt: string) => {
+    if (!editor) {
+      console.error("EditorJS instance is not available.")
+      return
     }
 
     // Define the data for the new image block
     const imageData = {
-        file: {
-            url: imageUrl
-        },
-        caption: prompt,
-        withBorder: false,
-        stretched: false,
-        withBackground: false
-    };
+      file: {
+        url: imageUrl,
+      },
+      caption: prompt,
+      withBorder: false,
+      stretched: false,
+      withBackground: false,
+    }
 
-    editor.blocks.insert("image", imageData);
-};
-
+    editor.blocks.insert("image", imageData, {}, editor.blocks.getBlocksCount(), true)
+  }
 
   if (blog === null) return <Loader />
   return (
@@ -104,7 +125,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         {isAssetsOpen && (
           <>
             <div className="fixed inset-0 z-40 top-5  p-5 backdrop-blur-sm h-full w-[24%] flex pt-20 start">
-              <AssetsFolder setIsAssetsOpen={setIsAssetsOpen} />
+              <AssetsFolder
+                setIsAssetsOpen={setIsAssetsOpen}
+                handleImageUpload={handleImageUploadToEditor}
+              />
             </div>
           </>
         )}
@@ -134,7 +158,11 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         <div
           className={`fixed inset-0 z-40 top-5 mx-auto p-5 backdrop-blur-sm h-full w-screen flex pt-20 start ${isAICompletionOpen ? "block" : "hidden"}`}
         >
-          <AICompletion setIsAICompletionOpen={setIsAICompletionOpen} handleImageUpload={handleImageUpload} />
+          <AICompletion
+            setIsAICompletionOpen={setIsAICompletionOpen}
+            handleImageUpload={handleImageUploadToEditor}
+            handleTextUploadToEditor={handleTextUploadToEditor}
+          />
         </div>
       </div>
       <button

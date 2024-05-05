@@ -1,6 +1,6 @@
 import React from "react"
 import { useDropzone } from "react-dropzone"
-import { getAssets as getAssets, uploadAssets, deleteAssest } from "../api"
+import { getAssets as getAssets, uploadAssets, deleteAsset } from "../api"
 import { toast } from "react-hot-toast"
 import DeleteIcon from "@mui/icons-material/Delete"
 import Loader from "./Loader"
@@ -9,9 +9,13 @@ import { IoClose } from "react-icons/io5"
 
 interface AssetsFolderProps {
   setIsAssetsOpen?: React.Dispatch<React.SetStateAction<boolean>>
+  handleImageUpload: (imageUrl: string, prompt: string) => void
 }
 
-const AssetsFolder: React.FC<AssetsFolderProps> = ({ setIsAssetsOpen }) => {
+const AssetsFolder: React.FC<AssetsFolderProps> = ({
+  setIsAssetsOpen,
+  handleImageUpload,
+}) => {
   const [assets, setAssets] = React.useState<string[]>([])
   const [loading, setLoading] = React.useState<boolean>(true)
 
@@ -46,7 +50,12 @@ const AssetsFolder: React.FC<AssetsFolderProps> = ({ setIsAssetsOpen }) => {
       ) : (
         <div className="flex flex-wrap gap-4 items-center ">
           {assets.map((asset) => (
-            <Assets asset={asset} setAssets={setAssets} key={asset} />
+            <Assets
+              asset={asset}
+              setAssets={setAssets}
+              key={asset}
+              handleImageUpload={handleImageUpload}
+            />
           ))}
         </div>
       )}
@@ -118,16 +127,18 @@ const Dropzone = ({
 const Assets = ({
   asset,
   setAssets,
+  handleImageUpload,
 }: {
   asset: string
   setAssets: React.Dispatch<React.SetStateAction<string[]>>
+  handleImageUpload: (imageUrl: string, prompt: string) => void
 }) => {
   const [loading, setLoading] = React.useState(false)
-  const handleDeleteButton = async (assestUrl: string) => {
+  const handleDeleteButton = async (assetUrl: string) => {
     setLoading(true)
-    deleteAssest(assestUrl)
+    deleteAsset(assetUrl)
       .then(() => {
-        setAssets((prev) => prev.filter((item) => item !== assestUrl))
+        setAssets((prev) => prev.filter((item) => item !== assetUrl))
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false))
@@ -142,7 +153,12 @@ const Assets = ({
     .replace("%20", " ")
   return (
     <div className="flex items-center flex-col relative font-light  ">
-      <img src={asset} alt={name} className="h-24 object-cover rounded-lg " />
+      <img
+        src={asset}
+        alt={name}
+        className="h-24 object-cover rounded-lg hover:ring ring-dark"
+        onClick={() => handleImageUpload(asset, name)}
+      />
       <span className="w-full overflow-hidden text-center">
         {name.slice(0, 15)}
       </span>
