@@ -193,6 +193,44 @@ const deleteAssest = async (req: Request, res: Response) => {
     })
 }
 
+const followUnfollowUser = async (req: Request, res: Response) => {
+    const userId = req.user.userId
+    const { followId } = req.body
+
+    if (!followId) throw new BadRequestError("FollowId is required")
+
+    const user = await User.findById(userId)
+    const followUser = await User.findById(followId)
+
+    if (!user) throw new UnauthenticatedError("User Not Found")
+    if (!followUser) throw new BadRequestError("Follow User Not Found")
+
+    const isFollowing = user.following.includes(followId)
+    const isFollower = followUser.followers.includes(userId)
+
+    if (isFollowing && isFollower) {
+        await User.findByIdAndUpdate(userId, {
+            $pull: { following: followId },
+        })
+        await User.findByIdAndUpdate(followId, {
+            $pull: { followers: userId },
+        })
+    }
+    if (!isFollowing && !isFollower) {
+        await User.findByIdAndUpdate(userId, {
+            $push: { following: followId },
+        })
+        await User.findByIdAndUpdate(followId, {
+            $push: { followers: userId },
+        })
+    }
+
+    res.status(StatusCodes.OK).json({
+        success: true,
+        msg: "Follow/Unfollow User Successfully",
+    })
+}
+
 export {
     getMyProfile,
     updateCompleteProfile,
@@ -203,4 +241,5 @@ export {
     getAllAssests,
     uploadAssets,
     deleteAssest,
+    followUnfollowUser,
 }

@@ -38,8 +38,8 @@ export interface IUser {
     blogs: Types.Array<Schema.Types.ObjectId>
     myInterests: Types.Array<string>
     readArticles: Types.Array<Schema.Types.ObjectId>
-    following: Types.Array<Schema.Types.ObjectId>
-    followers: Types.Array<Schema.Types.ObjectId>
+    following: Types.Array<Types.ObjectId>
+    followers: Types.Array<Types.ObjectId>
     createdAt: Date
     updatedAt: Date
     status: string

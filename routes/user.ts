@@ -10,6 +10,7 @@ import {
     getAllAssests,
     uploadAssets,
     deleteAssest,
+    followUnfollowUser,
 } from "../controllers/user"
 import userblogRouter from "./userblog"
 
@@ -29,5 +30,6 @@ router
     .get(getAllAssests)
     .post(upload.array("assetFiles", 5), uploadAssets)
     .delete(deleteAssest)
+router.post("/follow-unfollow", followUnfollowUser)
 
 export default router
