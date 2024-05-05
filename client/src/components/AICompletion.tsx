@@ -12,6 +12,7 @@ import { MdContentCopy } from "react-icons/md"
 import { BsFillEraserFill } from "react-icons/bs"
 interface AICompletionProps {
   setIsAICompletionOpen?: React.Dispatch<React.SetStateAction<boolean>>
+  handleImageUpload: (imageUrl: string, prompt : string) => void
 }
 type ImageDataType = {
   id: string
@@ -22,7 +23,7 @@ type ImageDataType = {
 }
 
 const AICompletion: React.FC<AICompletionProps> = ({
-  setIsAICompletionOpen,
+  setIsAICompletionOpen, handleImageUpload
 }) => {
   const [prompt, setPrompt] = React.useState<string>("")
   const [loading, setLoading] = React.useState(false)
@@ -147,10 +148,21 @@ const AICompletion: React.FC<AICompletionProps> = ({
     })
     setImageSuggestions(newImageSuggestions)
   }
-  const handleAddToBlog = (image: ImageDataType) => {
-    console.log(image)
-    toast.error("this feature is not implemented yet.Reminder!!!")
-  }
+
+  const handleAddToBlog = async (image: ImageDataType) => {
+    try {
+      // If the image is not saved, save it first
+      if (!image.isSaved) {
+        await saveToAssets(image);
+      }
+  
+      // Upload the image to the blog post
+      handleImageUpload(image.imageUrl, image.prompt);
+    } catch (error) {
+      console.log(error);
+      // Handle error if saving to assets or uploading to the blog post fails
+    } 
+  };
 
   return (
     <div className="bg-white p-4 h-[90%] w-[24%] space-y-4 rounded-lg border overflow-auto font-normal">
@@ -288,6 +300,7 @@ const AICompletion: React.FC<AICompletionProps> = ({
                     <img
                       src={image.imageUrl}
                       alt={image.prompt}
+                      className="hover:ring rounded-lg ring-highlight"
                       onClick={() => handleAddToBlog(image)}
                     />
                     <div className="flex justify-center items-center gap-2">
