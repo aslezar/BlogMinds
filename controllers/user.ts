@@ -231,6 +231,28 @@ const followUnfollowUser = async (req: Request, res: Response) => {
     })
 }
 
+const isFollowing = async (req: Request, res: Response) => {
+    const userId = req.user.userId
+    const { followId } = req.body
+
+    if (!followId) throw new BadRequestError("FollowId is required")
+
+    const user = await User.findById(userId)
+    const followUser = await User.findById(followId)
+
+    if (!user) throw new UnauthenticatedError("User Not Found")
+    if (!followUser) throw new BadRequestError("Follow User Not Found")
+
+    const isFollowing = user.following.includes(followId)
+    const isFollower = followUser.followers.includes(userId)
+
+    res.status(StatusCodes.OK).json({
+        data: { isFollowing: isFollowing && isFollower },
+        success: true,
+        msg: "Check Following Successfully",
+    })
+}
+
 export {
     getMyProfile,
     updateCompleteProfile,
@@ -242,4 +264,5 @@ export {
     uploadAssets,
     deleteAssest,
     followUnfollowUser,
+    isFollowing,
 }

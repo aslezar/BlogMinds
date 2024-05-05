@@ -11,6 +11,7 @@ import {
     uploadAssets,
     deleteAssest,
     followUnfollowUser,
+    isFollowing,
 } from "../controllers/user"
 import userblogRouter from "./userblog"
 
@@ -31,5 +32,6 @@ router
     .post(upload.array("assetFiles", 5), uploadAssets)
     .delete(deleteAssest)
 router.post("/follow-unfollow", followUnfollowUser)
+router.get("/is-following", isFollowing)
 
 export default router
