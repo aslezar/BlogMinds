@@ -1,10 +1,11 @@
 import React from "react"
-import { BlogCreateType, Category } from "../definitions"
+import { BlogCreateType } from "../definitions"
 import AssetsFolder from "./AssetsFolder"
 import ImageInput from "./ImageInput"
 import MultiSelect from "./MultiSelect"
 import AICompletion from "./AICompletion"
 import Loader from "./Loader"
+import { useEditorContext } from "../context/EditorContext"
 
 interface BlogEditorProps {
   blogId: BlogCreateType["_id"] | undefined
@@ -23,6 +24,28 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
 }) => {
   const [isAssetsOpen, setIsAssetsOpen] = React.useState(false)
   const [isAICompletionOpen, setIsAICompletionOpen] = React.useState(false)
+  const { editor } = useEditorContext()
+
+  const handleImageUpload = (imageUrl : string, prompt: string) => {
+    if (!editor) {
+        console.error("EditorJS instance is not available.");
+        return;
+    }
+
+    // Define the data for the new image block
+    const imageData = {
+        file: {
+            url: imageUrl
+        },
+        caption: prompt,
+        withBorder: false,
+        stretched: false,
+        withBackground: false
+    };
+
+    editor.blocks.insert("image", imageData);
+};
+
 
   if (blog === null) return <Loader />
   return (
@@ -49,8 +72,8 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       />
       <MultiSelect
         value={blog.tags}
-        onChange={(selectedOptions: Category[]) =>
-          setBlog({ ...blog, tags: selectedOptions })
+        onChange={(selectedOptions: string[]) =>
+          setBlog({ ...blog, tags: selectedOptions as any })
         }
         placeholder="Select categories"
       />
@@ -111,7 +134,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         <div
           className={`fixed inset-0 z-40 top-5 mx-auto p-5 backdrop-blur-sm h-full w-screen flex pt-20 start ${isAICompletionOpen ? "block" : "hidden"}`}
         >
-          <AICompletion setIsAICompletionOpen={setIsAICompletionOpen} />
+          <AICompletion setIsAICompletionOpen={setIsAICompletionOpen} handleImageUpload={handleImageUpload} />
         </div>
       </div>
       <button
