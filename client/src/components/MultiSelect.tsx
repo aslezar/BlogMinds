@@ -1,67 +1,99 @@
-import React from "react"
-import { Category } from "../definitions"
+import React from "react";
+import { Category } from "../definitions";
+import {
+  Autocomplete,
+  Box,
+  Chip,
+  Modal,
+  TextField,
+} from "@mui/material";
+import { BiSolidCategoryAlt } from "react-icons/bi";
 
 type MultiSelectProps = {
-  value: Category[]
-  onChange: (selectedOptions: Category[]) => void
-  placeholder: string
-}
-function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
-  const [isOpen, setIsOpen] = React.useState(false)
+  value: string[];
+  onChange: (selectedOptions: string[]) => void;
+  placeholder: string;
+};
 
-  const toggleOption = (option: Category) => {
-    const isSelected = value.includes(option)
-    if (isSelected) onChange(value.filter((item) => item !== option))
-    else onChange([...value, option])
-  }
+function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  // Create a new array of capitalized options
+  const options = Object.values(Category).map((option) =>
+    option.charAt(0).toUpperCase() + option.slice(1)
+  );
+
+  const handleChange = (_event: React.ChangeEvent<{}>, newValue: string[]) => {
+    onChange(newValue);
+  };
 
   return (
-    <div className="relative my-1 text-gray-700 text-[15px]">
+    <div>
       <button
-        type="button"
-        className="border border-gray-300 rounded-md px-4 py-2 flex items-center justify-between w-full capitalize"
-        onClick={() => setIsOpen(!isOpen)}
+        className="w-full font-medium text-highlight text-sm border border-highlight rounded-md gap-1 flex items-center justify-center py-2 "
+        onClick={() => setIsModalOpen(true)}
       >
-        {value.length === 0 ? placeholder : value.join(", ")}
-        <svg
-          className="h-5 w-5 ml-2"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 12a2 2 0 100-4 2 2 0 000 4z"
-            clipRule="evenodd"
-          />
-          <path
-            fillRule="evenodd"
-            d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm14 0a6 6 0 11-12 0 6 6 0 0112 0z"
-            clipRule="evenodd"
-          />
-        </svg>
+        Add Categories Tags
+        <BiSolidCategoryAlt className="inline text-highlight" />
       </button>
-      {isOpen && (
-        <div className="absolute z-10 top-full left-0 mt-1 w-full bg-white rounded-md border border-gray-300 shadow-lg overflow-y-scroll">
-          {Object.values(Category).map(
-            (option) =>
-              option !== Category.All && (
-                <div
-                  key={option}
-                  className={`px-4 py-2 cursor-pointer capitalize hover:bg-highlight hover:text-white  ${
-                    value.includes(option) ? "bg-gray-100" : ""
-                  }`}
-                  onClick={() => toggleOption(option)}
-                >
-                  {option}
-                </div>
-              ),
-          )}
-        </div>
-      )}
+      <Modal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        className="outline "
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "20%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            p: 4,
+          }}
+          className="w-3/5 flex flex-col gap-2 rounded-lg"
+        >
+          <h2 className="text-lg text-gray-600  italic">
+            Search / Add Category Tags
+          </h2>
+          <Autocomplete
+            multiple
+            freeSolo
+            options={options}
+            value={value}
+            onChange={handleChange}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                placeholder={placeholder}
+                className="capitalize "
+                color="secondary"
+
+              />
+            )}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip
+                  label={option}
+                  variant="outlined"
+                  {...getTagProps({ index })}
+                  className="capitalize !m-1"
+                />
+              ))
+            }
+          />
+          {/* Button to close the modal */}
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="px-4 w-fit font-medium text-highlight text-sm border border-highlight rounded-md gap-1 flex items-center justify-center py-2 "
+          >
+            Close Tab 
+          </button>
+
+        </Box>
+      </Modal>
     </div>
-  )
+  );
 }
-export default MultiSelect
+
+export default MultiSelect;
