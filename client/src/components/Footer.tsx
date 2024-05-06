@@ -1,33 +1,60 @@
-import { Link } from "react-router-dom"
-
 const Footer = () => {
+  const date = new Date()
+  const presentYear = date.getFullYear()
   return (
-    <footer className="bg-white shadow dark:bg-gray-800  w-full bottom-0">
-      <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-        <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-          © 2024{" "}
+    <footer className="shadow bg-gray-900">
+      <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div className="sm:flex sm:items-center sm:justify-between">
           <a
             href="https://flowbite.com/"
-            className="hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
+            className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
           >
-            BlogMinds™
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 32 32"
+              className="h-8"
+              fill="white"
+            >
+              <g data-name="75-Write">
+                <path d="M30 7v18a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5h9V0H7a7 7 0 0 0-7 7v18a7 7 0 0 0 7 7h18a7 7 0 0 0 7-7V7z" />
+                <path d="M22.38 24H11a3 3 0 0 1 0-6h4v-2h-4a5 5 0 0 0 0 10h13a1 1 0 0 0 .89-.55l2-4A1 1 0 0 0 27 21V1a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v20a1 1 0 0 0 .11.45zM23 2h2v1h-2zm0 3h2v15h-2z" />
+              </g>
+            </svg>
+            <span className="self-center text-2xl font-semibold whitespace-nowrap text-white tracking-wide uppercase">
+              Creativerse
+            </span>
+          </a>
+          <ul className="flex flex-wrap items-center mb-6 text-sm font-medium sm:mb-0 text-gray-400">
+            <li>
+              <a href="#" className="hover:underline me-4 md:me-6">
+                About
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline me-4 md:me-6">
+                Privacy Policy
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline me-4 md:me-6">
+                Licensing
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline">
+                Contact
+              </a>
+            </li>
+          </ul>
+        </div>
+        <hr className="my-6 sm:mx-auto border-gray-700 lg:my-8" />
+        <span className="block text-sm sm:text-center text-gray-400">
+          © {presentYear}{" "}
+          <a href="https://flowbite.com/" className="hover:underline">
+            Flowbite™
           </a>
           . All Rights Reserved.
         </span>
-        <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
-          <li className="mb-2 md:mb-0">
-            <Link to="/about" className="hover:underline me-4 md:me-6">
-              About
-            </Link>
-          </li>
-          <li>
-            <Link to="/contactus" className="hover:underline">
-              Contact Us
-            </Link>
-          </li>
-        </ul>
       </div>
     </footer>
   )
