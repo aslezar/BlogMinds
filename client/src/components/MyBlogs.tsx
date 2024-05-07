@@ -7,6 +7,7 @@ import Loader from "./Loader"
 import { BsTrash } from "react-icons/bs"
 import { Link, NavLink } from "react-router-dom"
 import { CiEdit } from "react-icons/ci"
+import toast from "react-hot-toast"
 
 const MyBlogs = () => {
   const [page, setPage] = useState<number>(1)
@@ -31,7 +32,10 @@ const MyBlogs = () => {
         setTotalCount((prev) => prev - 1)
       })
       .catch((err) => console.log(err))
-      .finally(() => setDeleteLoading(false))
+      .finally(() => {
+        setDeleteLoading(false)
+        toast.success("Blog deleted")
+      })
   }
 
   useEffect(() => {
@@ -56,7 +60,10 @@ const MyBlogs = () => {
       {!!blogs.length && (
         <ul className="list-none grid grid-cols-1 gap-7 sm:grid-cols-2 md:grid-cols-3">
           {blogs.map((blog) => (
-            <div className="max-w-sm mx-auto flex flex-col gap-2 py-4 border-b" key={blog._id}>
+            <div
+              className="max-w-sm mx-auto flex flex-col gap-2 py-4 border-b"
+              key={blog._id}
+            >
               <Link
                 to={`/blog/${blog._id}`}
                 className="flex flex-col gap-2 py-2"
