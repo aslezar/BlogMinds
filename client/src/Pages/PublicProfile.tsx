@@ -5,29 +5,31 @@ import { Profile } from "../definitions"
 import { format } from "date-fns/format"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
+import Pagination from "@mui/material/Pagination"
 
 const PublicProfile = () => {
   const userId = useParams().id
   const [user, setUser] = useState<Profile | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [page, setPage] = useState<number>(1)
+  const [totalCount, setTotalCount] = useState<number>(0)
+
+  const limit = 6
+
   const formatDate = (date: string) => {
     return format(new Date(date), "dd MMMM yyyy")
   }
   useEffect(() => {
     setLoading(true)
-    const fetchUserProfile = async () => {
-      if (!userId) return
-      try {
-        const response = await getUserProfile(userId)
+    if (!userId) return
+    getUserProfile(userId, page, limit)
+      .then((response) => {
         setUser(response.data.user)
-      } catch (error) {
-        console.log("Error fetching user profile", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchUserProfile()
-  }, [userId])
+        setTotalCount(response.data.totalCount)
+      })
+      .catch((error) => console.log("Error fetching user profile", error))
+      .finally(() => setLoading(false))
+  }, [userId, page])
 
   if (loading) return <Loader />
   return (
@@ -191,6 +193,15 @@ const PublicProfile = () => {
               </Link>
             ))}
           </ul>
+          <Pagination
+            className="!my-6 !ml-auto !w-fit !mr-6"
+            count={Math.ceil(totalCount / limit)}
+            color="secondary"
+            shape="rounded"
+            onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
+              setPage(value)
+            }}
+          />
         </section>
       </main>
 

@@ -93,8 +93,17 @@ export const updateProfile = (userData: UserType) => {
  *********************** User Requests ***********************
  */
 
-export const getUserProfile = (id: UserType["userId"]) =>
-  API.get(`/public/profile/${id}`)
+export const getUserProfile = (
+  id: UserType["userId"],
+  page: number = 1,
+  limit: number = 10,
+) =>
+  API.get(`/public/profile/${id}`, {
+    params: {
+      page,
+      limit,
+    },
+  })
 
 export const updateName = (name: UserType["name"]) =>
   API.patch("/user/updatename", { name })

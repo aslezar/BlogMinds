@@ -103,9 +103,8 @@ const getBlogById = async (req: Request, res: Response) => {
     let increment = false
 
     //print every cookie
-    for (let [key, value] of Object.entries(req.cookies)) {
-        console.log(`${key}: ${value}`)
-    }
+    // for (let [key, value] of Object.entries(req.cookies))
+        // console.log(`${key}: ${value}`)
 
     if (!req.cookies[`blogViewed_${blogId}`]) {
         increment = true
