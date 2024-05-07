@@ -65,9 +65,13 @@ const MyProfile = () => {
       });
   };
   const handleCancel = () => {
+    // If new interest was being added but not confirmed, discard it
+    setAddInterest(false);
+    // Reset the user's data to the original state
     setUser(originalUser);
     setEdit(false);
   };
+  
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
