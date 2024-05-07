@@ -13,6 +13,7 @@ interface BlogEditorProps {
   setBlog: React.Dispatch<React.SetStateAction<BlogCreateType | null>>
   disabledPublish: boolean
   handlePublish: (event: React.SyntheticEvent) => void
+  resetBlog : () => void
 }
 
 const BlogEditor: React.FC<BlogEditorProps> = ({
