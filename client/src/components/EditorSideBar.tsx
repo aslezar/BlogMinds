@@ -65,7 +65,13 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       withBackground: false,
     }
 
-    editor.blocks.insert("image", imageData, {}, editor.blocks.getBlocksCount(), true)
+    editor.blocks.insert(
+      "image",
+      imageData,
+      {},
+      editor.blocks.getBlocksCount(),
+      true,
+    )
   }
 
   if (blog === null) return <Loader />

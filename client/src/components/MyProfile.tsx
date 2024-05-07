@@ -7,7 +7,6 @@ import Loader from "./Loader"
 import { updateProfile } from "../api"
 import toast from "react-hot-toast"
 
-
 const defUser: UserType = {
   userId: "",
   createdAt: "",

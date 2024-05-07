@@ -9,7 +9,7 @@ import { IoClose } from "react-icons/io5"
 
 interface AssetsFolderProps {
   setIsAssetsOpen?: React.Dispatch<React.SetStateAction<boolean>>
-  handleImageUpload: (imageUrl: string, prompt: string) => void
+  handleImageUpload?: (imageUrl: string, prompt: string) => void
 }
 
 const AssetsFolder: React.FC<AssetsFolderProps> = ({
@@ -131,7 +131,7 @@ const Assets = ({
 }: {
   asset: string
   setAssets: React.Dispatch<React.SetStateAction<string[]>>
-  handleImageUpload: (imageUrl: string, prompt: string) => void
+  handleImageUpload?: (imageUrl: string, prompt: string) => void
 }) => {
   const [loading, setLoading] = React.useState(false)
   const handleDeleteButton = async (assetUrl: string) => {
@@ -157,7 +157,9 @@ const Assets = ({
         src={asset}
         alt={name}
         className="h-24 object-cover rounded-lg hover:ring ring-dark"
-        onClick={() => handleImageUpload(asset, name)}
+        onClick={
+          handleImageUpload ? () => handleImageUpload(asset, name) : undefined
+        }
       />
       <span className="w-full overflow-hidden text-center">
         {name.slice(0, 15)}

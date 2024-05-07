@@ -31,7 +31,7 @@ const HomePage = () => {
       <Features />
       <PricingTable />
       <ContactUs />
-      <Footer/>
+      <Footer />
     </div>
   )
 }
