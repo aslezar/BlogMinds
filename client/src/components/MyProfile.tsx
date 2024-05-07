@@ -28,41 +28,47 @@ const MyProfile = () => {
   const [loading, setLoading] = useState(true)
   const [addInterest, setAddInterest] = useState(false)
   const [newInterest, setNewInterest] = useState("")
+  const [originalUser, setOriginalUser] = useState<UserType>(defUser);
+  
   useEffect(() => {
     const getProfile = async () => {
-      setLoading(true)
+      setLoading(true);
       getMyProfile()
         .then((data) => {
-          const user = data.data
-          setUser(user)
+          const user = data.data;
+          setUser(user);
+          setOriginalUser(user);
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         })
         .finally(() => {
-          setLoading(false)
-        })
-    }
-    getProfile()
-  }, [])
+          setLoading(false);
+        });
+    };
+    getProfile();
+  }, []);
   const handleEdit = () => {
-    setEdit(true)
-  }
+    setUser(originalUser);
+    setEdit(true);
+  };
   const handleUpdate = async () => {
     updateProfile(user)
       .then((response) => {
-        const user = response.data
-        setUser(user)
-        toast.success("Profile updated successfully")
-        setEdit(false)
+        const updatedUser = response.data;
+        setUser(updatedUser);
+        setOriginalUser(updatedUser);
+        toast.success("Profile updated successfully");
+        setEdit(false);
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }
+        console.log(error);
+      });
+  };
   const handleCancel = () => {
-    setEdit(false)
-  }
+    setUser(originalUser);
+    setEdit(false);
+  };
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -225,7 +231,7 @@ const MyProfile = () => {
                     className="bg-dark p-2 rounded-xl px-5 text-white hover:bg-highlight duration-200"
                     onClick={handleAddInterest}
                   >
-                    Update
+                    Add
                   </button>
                 </div>
               )}
