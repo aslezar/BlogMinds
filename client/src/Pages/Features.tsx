@@ -3,7 +3,7 @@ import dragNdrop from "../assets/videos/Features/dragNdrop.mp4"
 import imgGen from "../assets/videos/Features/imgGen.mp4"
 const Features: React.FC = () => {
   return (
-    <div className="w-5/6 mx-auto">
+    <div className="w-5/6 mx-auto mt-6">
       <h1 className="text-7xl font-semibold text-center my-6 ">
         Discover the{" "}
         <span className="bg-gradient-to-r from-dark from-60% to-highlight text-transparent bg-clip-text">

@@ -5,7 +5,8 @@ import { BlogShortType } from "../definitions"
 import Pagination from "@mui/material/Pagination"
 import Loader from "./Loader"
 import { BsTrash } from "react-icons/bs"
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
+import { CiEdit } from "react-icons/ci"
 
 const MyBlogs = () => {
   const [page, setPage] = useState<number>(1)
@@ -53,16 +54,14 @@ const MyBlogs = () => {
       )}
       {!blogs && loading && <Loader />}
       {!!blogs.length && (
-        <ul className="list-none grid grid-cols-3 gap-7">
+        <ul className="list-none grid grid-cols-1 gap-7 sm:grid-cols-2 md:grid-cols-3">
           {blogs.map((blog) => (
-            <div className="max-w-sm mx-auto flex flex-col gap-2 py-4 border-b">
+            <div className="max-w-sm mx-auto flex flex-col gap-2 py-4 border-b" key={blog._id}>
               <Link
                 to={`/blog/${blog._id}`}
                 className="flex flex-col gap-2 py-2"
               >
-                <h1
-                  className="text-2xl font-bold text-gray-600 line-clamp-1 hover:underline"
-                >
+                <h1 className="text-2xl font-bold text-gray-600 line-clamp-1 hover:underline">
                   {blog.title}
                 </h1>
                 <p className="width-auto  text-gray-600 flex-shrink line-clamp-2 h-14">
@@ -86,15 +85,26 @@ const MyBlogs = () => {
                   ))}
                 </div>
               </Link>
-              <button
-                title="Delete blog"
-                onClick={() => handleDeleteBlog(blog._id)}
-                disabled={deleteLoading}
-                type="button"
-                className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900 w-fit ml-auto duration-150"
-              >
-                <BsTrash className="text-base" />
-              </button>
+              <div className="flex">
+                <NavLink
+                  to={`/write/${blog._id}`}
+                  type="button"
+                  className="text-dark hover:text-white border border-dark hover:bg-highlight hover:border-highlight font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-purple-900 duration-150 w-full flex items-center justify-center gap-1"
+                >
+                  <CiEdit className="text-base" />
+                  Edit
+                </NavLink>
+                <button
+                  title="Edit blog"
+                  onClick={() => handleDeleteBlog(blog._id)}
+                  disabled={deleteLoading}
+                  type="button"
+                  className="flex items-center gap-1 text-red-500 hover:text-white border border-[#ED5E68] hover:bg-[#ED5E68] focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2  duration-150 w-full justify-center"
+                >
+                  <BsTrash className="text-base" />
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </ul>
