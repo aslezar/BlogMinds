@@ -104,7 +104,7 @@ const getBlogById = async (req: Request, res: Response) => {
 
     //print every cookie
     // for (let [key, value] of Object.entries(req.cookies))
-        // console.log(`${key}: ${value}`)
+    // console.log(`${key}: ${value}`)
 
     if (!req.cookies[`blogViewed_${blogId}`]) {
         increment = true
@@ -206,6 +206,25 @@ const getUserBlogs = async (req: Request, res: Response) => {
             blogs: userBlogs,
             page: req.pagination.page,
             limit: req.pagination.limit,
+            totalCount: totalCount,
+        },
+        success: true,
+        msg: "Data Fetched Successfully",
+    })
+}
+
+const getOtherUserBlogs = async (req: Request, res: Response) => {
+    const userId = getId(req.params.userId)
+    const userBlogs = await Blog.find({ author: userId })
+        .skip(req.pagination.skip)
+        .limit(req.pagination.limit)
+        .sort({ createdAt: -1 })
+        .select("title description img tags likesCount commentsCount createdAt")
+
+    const totalCount = await Blog.countDocuments({ author: userId })
+    res.status(StatusCodes.OK).json({
+        data: {
+            blogs: userBlogs,
             totalCount: totalCount,
         },
         success: true,
@@ -376,6 +395,7 @@ export {
     likeBlog,
     commentBlog,
     getUserBlogs,
+    getOtherUserBlogs,
     getUserBlogById,
     createBlog,
     deleteBlog,

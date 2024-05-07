@@ -1,4 +1,8 @@
 **/temp/*
+db/connect.js
+DBseeder/dev-utils/get-blogs-by-each-user.js
+models/blog.js
+models/user.js
 
 # Logs
 logs

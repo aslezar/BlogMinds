@@ -35,24 +35,6 @@ const getUserProfile = async (req: Request, res: Response) => {
                 followingCount: { $size: "$following" },
                 myInterests: 1,
                 createdAt: 1,
-                blogs: {
-                    $map: {
-                        input: "$blogs",
-                        as: "blog",
-                        in: {
-                            _id: "$$blog._id",
-                            title: "$$blog.title",
-                            author: "$$blog.author",
-                            img: "$$blog.img",
-                            tags: "$$blog.tags",
-                            likesCount: "$$blog.likesCount",
-                            commentsCount: "$$blog.commentsCount",
-                            views: "$$blog.views",
-                            createdAt: "$$blog.createdAt",
-                            description: "$$blog.description",
-                        },
-                    },
-                },
             },
         },
     ])

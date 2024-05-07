@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-import { getUserProfile } from "../api"
-import { Profile } from "../definitions"
+import { getOtherUserBlogs, getUserProfile } from "../api"
+import { Profile, ProfileBlogs } from "../definitions"
 import { format } from "date-fns/format"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
@@ -10,7 +10,9 @@ import Pagination from "@mui/material/Pagination"
 const PublicProfile = () => {
   const userId = useParams().id
   const [user, setUser] = useState<Profile | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [blogs, setBlogs] = useState<ProfileBlogs[]>([])
+  const [loading1, setLoading1] = useState<boolean>(false)
+  const [loading2, setLoading2] = useState<boolean>(false)
   const [page, setPage] = useState<number>(1)
   const [totalCount, setTotalCount] = useState<number>(0)
 
@@ -20,18 +22,28 @@ const PublicProfile = () => {
     return format(new Date(date), "dd MMMM yyyy")
   }
   useEffect(() => {
-    setLoading(true)
     if (!userId) return
+    setLoading1(true)
     getUserProfile(userId, page, limit)
       .then((response) => {
         setUser(response.data.user)
-        setTotalCount(response.data.totalCount)
       })
       .catch((error) => console.log("Error fetching user profile", error))
-      .finally(() => setLoading(false))
+      .finally(() => setLoading1(false))
   }, [userId, page])
+  useEffect(() => {
+    if (!userId) return
+    setLoading2(true)
+    getOtherUserBlogs(userId, page, limit).then((response) => {
+      setBlogs(response.data.blogs)
+      setTotalCount(response.data.totalCount)
+      console.log(response.data)
+    })
+    .catch((error) => console.log("Error fetching user blogs", error))
+    .finally(() => setLoading2(false))
+  },[page])
 
-  if (loading) return <Loader />
+  if (loading1) return <Loader />
   return (
     <div>
       <main className=" w-4/5 mx-auto border-[1.5px] mt-3 rounded-xl p-4">
@@ -117,7 +129,7 @@ const PublicProfile = () => {
           </div>
 
           <ul className="list-none grid grid-cols-3 gap-7  p-6">
-            {user?.blogs.map((blog) => (
+            {blogs?.map((blog) => (
               <Link
                 key={blog._id}
                 to={`/blog/${blog._id}`}
@@ -198,6 +210,7 @@ const PublicProfile = () => {
             count={Math.ceil(totalCount / limit)}
             color="secondary"
             shape="rounded"
+            page={page}
             onChange={(_event: React.ChangeEvent<unknown>, value: number) => {
               setPage(value)
             }}

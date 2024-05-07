@@ -126,6 +126,14 @@ export const getUserBlogs = (page: number = 1, limit: number = 10) =>
       limit,
     },
   })
+  
+export const getOtherUserBlogs = (userId:string, page: number = 1, limit: number = 10) =>
+  API.get(`/blog/blogsByUser/${userId}`, {
+    params: {
+      page,
+      limit,
+    },
+  })
 
 export const getUserBlogById = (id: BlogShortType["_id"]) =>
   API.get(`/user/blog/${id}`)

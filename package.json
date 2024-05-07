@@ -8,7 +8,8 @@
         "start": "node dist/server.js",
         "dev": "nodemon --ignore 'client/*' server.ts",
         "format": "prettier --write . && cd client && prettier --write .",
-        "seeder": "node DBseeder/seeder.js"
+        "seeder": "node DBseeder/seeder.js",
+        "get-blogs-by-each-user": "ts-node ./DBseeder/dev-utils/get-blogs-by-each-user.ts"
     },
     "repository": {
         "type": "git",

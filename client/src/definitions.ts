@@ -105,7 +105,7 @@ export interface TrendingType {
   author: Author
 }
 
-type ProfileBlogs = {
+export type ProfileBlogs = {
   _id: string
   title: string
   author: string
@@ -121,7 +121,6 @@ type ProfileBlogs = {
 export type Profile = {
   _id: string
   name: string
-  blogs: ProfileBlogs[]
   followersCount: number
   followingCount: number
   myInterests: string[]
