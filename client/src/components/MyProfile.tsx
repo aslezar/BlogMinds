@@ -6,7 +6,7 @@ import { UserType } from "../definitions"
 import Loader from "./Loader"
 import { updateProfile } from "../api"
 import toast from "react-hot-toast"
-// import { userInfo } from "os"
+
 
 const defUser: UserType = {
   userId: "",

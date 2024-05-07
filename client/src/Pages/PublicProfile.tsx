@@ -140,7 +140,7 @@ const PublicProfile = () => {
                 <h1 className="text-2xl font-bold text-gray-600 line-clamp-1">
                   {blog.title}
                 </h1>
-                <p className="width-auto  text-gray-600 flex-shrink line-clamp-2">
+                <p className="width-auto  text-gray-600 flex-shrink line-clamp-2 h-14">
                   {blog.description}
                 </p>
 
