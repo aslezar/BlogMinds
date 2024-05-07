@@ -96,18 +96,13 @@ function BlogEditor() {
       console.log(latestContent)
       const id = await createOrUpdateBlog(blog, latestContent)
       toast.success(
-        blog._id === "new_blog" ? "Blog Published" : "Blog updated",
+        blog._id === "new_blog" ? "Blog Published" : "Blog Updated",
         {
           id: "publish",
         },
       )
-      if (blogId === "new_blog") {
-        localStorage.removeItem("new_blog")
-        navigate(`/write/${id}`)
-      } else if (blogId) {
-        localStorage.removeItem(blogId)
-        navigate(`/blog/${blogId}`)
-      }
+      localStorage.removeItem("new_blog")
+      navigate(`/blog/${id}`)
     } catch (err) {
       console.log(err)
     } finally {

@@ -21,7 +21,7 @@ const MyBlogs = () => {
   const handleDeleteBlog = (id: BlogShortType["_id"]) => {
     if (
       !window.confirm(
-        "Are you sure you want to delete this blog?\nThis Action can revert back.",
+        "Are you sure you want to delete this blog?\nThis Action is irreversible.",
       )
     )
       return
@@ -30,12 +30,10 @@ const MyBlogs = () => {
       .then((_res) => {
         setBlogs((prev) => prev.filter((blog) => blog._id !== id))
         setTotalCount((prev) => prev - 1)
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setDeleteLoading(false)
         toast.success("Blog deleted")
       })
+      .catch((err) => console.log(err))
+      .finally(() => setDeleteLoading(false))
   }
 
   useEffect(() => {

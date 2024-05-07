@@ -54,7 +54,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
     if (!user) return toast.error("Please login to post a comment")
     commentBlog(id, comment)
       .then((res) => {
-        const comment = res.data
+        const comment = res.data.comment
 
         const newComment: BlogFullType["comments"][0] = {
           _id: comment._id,

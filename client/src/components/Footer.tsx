@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom"
+
 const Footer = () => {
   const date = new Date()
   const presentYear = date.getFullYear()
@@ -26,33 +28,36 @@ const Footer = () => {
           </a>
           <ul className="flex flex-wrap items-center mb-6 text-sm font-medium sm:mb-0 text-gray-400">
             <li>
-              <a href="#" className="hover:underline me-4 md:me-6">
+              <NavLink to="/about" className="hover:underline me-4 md:me-6">
                 About
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="#" className="hover:underline me-4 md:me-6">
+              <NavLink to="#" className="hover:underline me-4 md:me-6">
                 Privacy Policy
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="#" className="hover:underline me-4 md:me-6">
+              <NavLink to="#" className="hover:underline me-4 md:me-6">
                 Licensing
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="#" className="hover:underline">
+              <NavLink to="/contact-us" className="hover:underline">
                 Contact
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>
         <hr className="my-6 sm:mx-auto border-gray-700 lg:my-8" />
         <span className="block text-sm sm:text-center text-gray-400">
           © {presentYear}{" "}
-          <a href="https://flowbite.com/" className="hover:underline">
-            Flowbite™
-          </a>
+          <NavLink
+            to="https://blogminds.onrender.com/"
+            className="hover:underline"
+          >
+            Creativerse™
+          </NavLink>
           . All Rights Reserved.
         </span>
       </div>

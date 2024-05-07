@@ -64,7 +64,7 @@ function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
                 color="secondary"
                 inputProps={{
                   ...params.inputProps,
-                  maxLength: 20,
+                  maxLength: 30,
                 }}
               />
             )}
@@ -84,7 +84,7 @@ function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
             onClick={() => setIsModalOpen(false)}
             className="px-4 w-fit font-medium text-highlight text-sm border border-highlight rounded-md gap-1 flex items-center justify-center py-2 hover:bg-highlight hover:text-white"
           >
-            Save
+            Done
           </button>
         </Box>
       </Modal>

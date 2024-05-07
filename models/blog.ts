@@ -31,6 +31,10 @@ const BlogSchema = new Schema<IBlog>(
         tags: {
             type: [String],
             required: [true, "Please provide tags."],
+            validate: {
+                validator: (tags: string[]) => tags.length > 0,
+                message: "Please provide at least one tag.",
+            },
         },
         views: {
             type: Number,
