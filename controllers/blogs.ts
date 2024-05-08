@@ -221,11 +221,9 @@ const getOtherUserBlogs = async (req: Request, res: Response) => {
         .sort({ createdAt: -1 })
         .select("title description img tags likesCount commentsCount createdAt")
 
-    const totalCount = await Blog.countDocuments({ author: userId })
     res.status(StatusCodes.OK).json({
         data: {
             blogs: userBlogs,
-            totalCount: totalCount,
         },
         success: true,
         msg: "Data Fetched Successfully",

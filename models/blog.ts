@@ -8,7 +8,7 @@ const BlogSchema = new Schema<IBlog>(
             type: String,
             required: [true, "Please provide title."],
             minlength: [6, "Title should be at least 10 characters."],
-            maxlength: [200, "Title should be less than 100 characters."],
+            maxlength: [100, "Title should be less than 100 characters."],
         },
         description: {
             type: String,

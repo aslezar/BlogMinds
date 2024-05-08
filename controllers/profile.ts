@@ -38,16 +38,16 @@ const getUserProfile = async (req: Request, res: Response) => {
             },
         },
     ])
+    const totalCount = await Blog.countDocuments({ author: userId })
 
-    if (matchedUsers.length == 0) {
-        throw new BadRequestError("User not found")
-    }
+    if (matchedUsers.length == 0) throw new BadRequestError("User not found")
 
     const user = matchedUsers[0]
 
     return res.status(StatusCodes.OK).json({
         data: {
             user,
+            totalCount,
         },
         success: true,
         msg: "User Fetched Successfully",

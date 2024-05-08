@@ -26,19 +26,18 @@ const PublicProfile = () => {
     getUserProfile(userId, page, limit)
       .then((response) => {
         setUser(response.data.user)
+        setTotalCount(response.data.totalCount)
       })
       .catch((error) => console.log("Error fetching user profile", error))
       .finally(() => setLoading(false))
   }, [userId, page])
+  
   useEffect(() => {
     if (!userId) return
-    getOtherUserBlogs(userId, page, limit).then((response) => {
-      setBlogs(response.data.blogs)
-      setTotalCount(response.data.totalCount)
-      console.log(response.data)
-    })
-    .catch((error) => console.log("Error fetching user blogs", error))
-  },[page])
+    getOtherUserBlogs(userId, page, limit)
+      .then((response) => setBlogs(response.data.blogs))
+      .catch((error) => console.log("Error fetching user blogs", error))
+  }, [page])
 
   if (loading) return <Loader />
   return (

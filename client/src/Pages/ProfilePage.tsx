@@ -1,5 +1,4 @@
 import React from "react"
-import PropTypes from "prop-types"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Typography from "@mui/material/Typography"
@@ -9,9 +8,18 @@ import MyAssets from "../components/MyAssets"
 import MyProfile from "../components/MyProfile"
 import { useSearchParams } from "react-router-dom"
 
-function CustomTabPanel(props: any) {
-  const { children, value, index, ...other } = props
+type CustomTabPanelType = {
+  children: React.ReactNode
+  index: number
+  value: number
+}
 
+const CustomTabPanel: React.FC<CustomTabPanelType> = ({
+  children,
+  value,
+  index,
+  ...other
+}) => {
   return (
     <div
       role="tabpanel"
@@ -27,12 +35,6 @@ function CustomTabPanel(props: any) {
       )}
     </div>
   )
-}
-
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
 }
 
 function a11yProps(index: number) {

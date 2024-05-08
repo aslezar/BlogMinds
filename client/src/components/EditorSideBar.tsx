@@ -1,11 +1,12 @@
 import React from "react"
 import { BlogCreateType } from "../definitions"
 import AssetsFolder from "./AssetsFolder"
-import ImageInput from "./ImageInput"
 import MultiSelect from "./MultiSelect"
 import AICompletion from "./AICompletion"
 import Loader from "./Loader"
 import { useEditorContext } from "../context/EditorContext"
+import { getAImage, uploadAssets } from "../api"
+import toast from "react-hot-toast"
 
 interface BlogEditorProps {
   blogId: BlogCreateType["_id"] | undefined
@@ -24,6 +25,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
 }) => {
   const [isAssetsOpen, setIsAssetsOpen] = React.useState(false)
   const [isAICompletionOpen, setIsAICompletionOpen] = React.useState(false)
+  const [loadingGenerateAI, setLoadingGenerateAI] = React.useState(false)
   const { editor } = useEditorContext()
 
   const handleTextUploadToEditor = (text: string) => {
@@ -73,14 +75,63 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       true,
     )
   }
+  const handleGenerateWithAI = () => {
+    if (blog === null) return
+
+    if (blog.title === "")
+      return toast.error("Please enter a title to generate with AI")
+
+    setLoadingGenerateAI(true)
+
+    getAImage(blog.title)
+      .then((response) => {
+        const imageBlob = response.data
+        const file = new File([imageBlob], blog.title, {
+          type: "image/jpeg",
+        })
+        const formData = new FormData()
+        formData.append("assetFiles", file)
+        return uploadAssets(formData)
+      })
+      .then((res) => {
+        const imageUrl = res.data[0]
+        setBlog({ ...blog, img: imageUrl })
+      })
+      .catch((error) => console.log(error))
+      .finally(() => setLoadingGenerateAI(false))
+  }
 
   if (blog === null) return <Loader />
   return (
     <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
-      <ImageInput
-        value={blog.img}
-        onChange={(img: string) => setBlog({ ...blog, img })}
-      />
+      <figure className="aspect-video overflow-hidden rounded-md relative">
+        <button
+          className="top-1 left-1 absolute bg-dark rounded-full px-2 p-1 text-sm font-medium text-white hover:bg-highlight"
+          onClick={handleGenerateWithAI}
+        >
+          {loadingGenerateAI && <Loader />}
+          Generate with AI
+        </button>
+
+        <img
+          src={blog.img}
+          className="w-full aspect-video object-cover"
+          alt="Generate with AI"
+        />
+        <figcaption className="absolute bg-white text-dark py-1 px-2 text-xs font-medium rounded-full bottom-1 right-1">
+          Cover
+        </figcaption>
+      </figure>
+      <div className=" flex items-center">
+        <input
+          type="text"
+          id="image-url"
+          placeholder="Paste Image Url here ..."
+          value={blog.img}
+          onChange={(e) => setBlog({ ...blog, img: e.target.value })}
+          className="border px-3 py-2 rounded-lg focus:outline-none focus:ring  flex-grow text-sm text-gray-800"
+        />
+      </div>
       <input
         type="text"
         placeholder="Article Title"
