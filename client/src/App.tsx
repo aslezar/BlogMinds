@@ -29,9 +29,10 @@ import { loadUser } from "./features/userSlice"
 import AllBlogs from "./Pages/AllBlogs"
 import Loader from "./components/Loader"
 import SearchResults from "./Pages/SearchResults"
-import PublicProfile from "./Pages/PublicProfile"
+import PublicProfilePage from "./Pages/PublicProfile"
 import ProfilePage from "./Pages/ProfilePage"
-import Features from "./Pages/Features"
+import FeaturesPage from "./Pages/Features"
+import PricingTablePage from "./Pages/PricingPage"
 
 const Layout = () => {
   const location = useLocation()
@@ -86,7 +87,7 @@ const router = createBrowserRouter([
           },
           {
             path: "features",
-            element: <Features />,
+            element: <FeaturesPage />,
           },
         ],
       },
@@ -122,8 +123,12 @@ const router = createBrowserRouter([
         element: <ContactUs />,
       },
       {
+        path: "pricing",
+        element: <PricingTablePage />,
+      },
+      {
         path: "user/:id",
-        element: <PublicProfile />,
+        element: <PublicProfilePage />,
       },
       {
         path: "/*",

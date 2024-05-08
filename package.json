@@ -1,7 +1,7 @@
 {
     "name": "blogminds",
     "version": "1.0.0",
-    "description": "a simple bloggin website",
+    "description": "a simple blogging website",
     "main": "server.js",
     "scripts": {
         "build": "npx tsc",

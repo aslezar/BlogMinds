@@ -68,7 +68,7 @@ const Navbar = () => {
 
               <li>
                 <NavLink
-                  to="features"
+                  to="/features"
                   className="block py-2 px-3 text-dark rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-highlight md:p-0"
                 >
                   Features
@@ -76,7 +76,7 @@ const Navbar = () => {
               </li>
               <li>
                 <NavLink
-                  to="/#pricing"
+                  to="/pricing"
                   className="block py-2 px-3 text-dark rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-highlight md:p-0"
                 >
                   Pricing
@@ -84,7 +84,7 @@ const Navbar = () => {
               </li>
               <li>
                 <NavLink
-                  to="/#contact"
+                  to="/contact-us"
                   className="block py-2 px-3 text-dark rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-highlight md:p-0"
                 >
                   Contact
