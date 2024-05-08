@@ -7,9 +7,7 @@ import { getUserBlogById, createBlog, updateBlog } from "../api"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEditorContext } from "../context/EditorContext"
 import Loader from "../components/Loader"
-
-const initialBlog =
-  '{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{},"tags":[]}'
+const initialBlog = `{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{"time":${Date.now()},"blocks":[],"version":"2.29.1"},"tags":[]}`
 
 function BlogEditor() {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -30,6 +28,8 @@ function BlogEditor() {
         localStorage.getItem("new_blog") || initialBlog
 
       const blogFromStorage = JSON.parse(blogFromStorageString)
+      console.log(blogFromStorage)
+
       setBlog((_prevBlog) => blogFromStorage)
       setLoading(false)
     } else {
@@ -109,6 +109,36 @@ function BlogEditor() {
       setLoadingPublish(false)
     }
   }
+
+  const resetBlog = () => {
+    if (!blogId) return
+
+    setLoading(true)
+
+    if (blogId === "new_blog") {
+      const blogFromStorageString = initialBlog
+
+      const blogFromStorage = JSON.parse(blogFromStorageString)
+      console.log(blogFromStorage)
+
+      setBlog((_prevBlog) => blogFromStorage)
+      setLoading(false)
+    } else {
+      getUserBlogById(blogId)
+        .then((response) => {
+          let resBlog = response.data.blog
+          resBlog.content = JSON.parse(resBlog.content)
+          setBlog((_prevBlog) => resBlog)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    }
+  }
+
   if (loading) return <Loader />
   if (blog === null)
     return (
@@ -124,6 +154,7 @@ function BlogEditor() {
         setBlog={setBlog}
         disabledPublish={loadingPublish || !editor}
         handlePublish={handlePublish}
+        resetBlog={resetBlog}
       />
       <EditorPage />
     </div>
