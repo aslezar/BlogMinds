@@ -113,7 +113,7 @@ function BlogEditor() {
   const resetBlog = () => {
     if (!blogId) return
 
-    setLoading(true)
+    if (!window.confirm("Are you sure you want to reset the blog?")) return
 
     if (blogId === "new_blog") {
       const blogFromStorageString = initialBlog
@@ -122,7 +122,6 @@ function BlogEditor() {
       console.log(blogFromStorage)
 
       setBlog((_prevBlog) => blogFromStorage)
-      setLoading(false)
     } else {
       getUserBlogById(blogId)
         .then((response) => {
@@ -130,12 +129,7 @@ function BlogEditor() {
           resBlog.content = JSON.parse(resBlog.content)
           setBlog((_prevBlog) => resBlog)
         })
-        .catch((err) => {
-          console.error(err)
-        })
-        .finally(() => {
-          setLoading(false)
-        })
+        .catch((err) => console.error(err))
     }
   }
 
