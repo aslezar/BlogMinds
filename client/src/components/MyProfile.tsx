@@ -6,6 +6,8 @@ import { UserType } from "../definitions"
 import Loader from "./Loader"
 import { updateProfile } from "../api"
 import toast from "react-hot-toast"
+import { CiEdit } from "react-icons/ci"
+import { IoIosAddCircleOutline } from "react-icons/io"
 
 const defUser: UserType = {
   userId: "",
@@ -27,51 +29,54 @@ const MyProfile = () => {
   const [loading, setLoading] = useState(true)
   const [addInterest, setAddInterest] = useState(false)
   const [newInterest, setNewInterest] = useState("")
-  const [originalUser, setOriginalUser] = useState<UserType>(defUser);
-  
+  const [originalUser, setOriginalUser] = useState<UserType>(defUser)
+
   useEffect(() => {
     const getProfile = async () => {
-      setLoading(true);
+      setLoading(true)
       getMyProfile()
         .then((data) => {
-          const user = data.data;
-          setUser(user);
-          setOriginalUser(user);
+          const user = data.data
+          setUser(user)
+          setOriginalUser(user)
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error)
         })
         .finally(() => {
-          setLoading(false);
-        });
-    };
-    getProfile();
-  }, []);
+          setLoading(false)
+        })
+    }
+    getProfile()
+  }, [])
   const handleEdit = () => {
-    setUser(originalUser);
-    setEdit(true);
-  };
+    setUser(originalUser)
+    setEdit(true)
+  }
   const handleUpdate = async () => {
+    toast.loading("Updating your profile")
     updateProfile(user)
       .then((response) => {
-        const updatedUser = response.data;
-        setUser(updatedUser);
-        setOriginalUser(updatedUser);
-        toast.success("Profile updated successfully");
-        setEdit(false);
+        const updatedUser = response.data
+        setUser(updatedUser)
+        setOriginalUser(updatedUser)
+        setEdit(false)
+        setAddInterest(false)
+        toast.dismiss()
       })
       .catch((error) => {
-        console.log(error);
-      });
-  };
+        console.log(error)
+      })
+      .finally(() => toast.success("Profile updated successfully"))
+  }
   const handleCancel = () => {
     // If new interest was being added but not confirmed, discard it
-    setAddInterest(false);
+    setAddInterest(false)
     // Reset the user's data to the original state
-    setUser(originalUser);
-    setEdit(false);
-  };
-  
+    setUser(originalUser)
+    setEdit(false)
+  }
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -111,7 +116,6 @@ const MyProfile = () => {
       </div>
     )
 
-  console.log(user)
   return (
     <div className="flex flex-col font-inter mx-6 w-full">
       <nav className="pb-5 px-5 rounded-xl flex justify-between ">
@@ -122,14 +126,35 @@ const MyProfile = () => {
           </span>
         </div>
 
-        <button
-          className="bg-secondary rounded-xl px-3 text-dark hover:bg-highlight hover:text-primary duration-100"
-          onClick={handleEdit}
-        >
-          Edit
-        </button>
+        {!edit ? (
+          <button
+            onClick={handleEdit}
+            type="button"
+            className="text-dark hover:text-white border border-dark hover:bg-highlight hover:border-highlight font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-purple-900 duration-150 flex items-center justify-center gap-1"
+          >
+            <CiEdit className="text-base" />
+            Edit profile
+          </button>
+        ) : (
+          <div className="flex">
+            <button
+              onClick={handleUpdate}
+              type="button"
+              className="text-dark hover:text-white border border-dark hover:bg-highlight hover:border-highlight font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-purple-900 duration-150 flex items-center justify-center gap-1"
+            >
+              Save
+            </button>
+            <button
+              onClick={handleCancel}
+              type="button"
+              className="text-dark hover:text-white border border-dark hover:bg-highlight hover:border-highlight font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-purple-900 duration-150 flex items-center justify-center gap-1"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </nav>
-      <hr className="" />
+      <hr />
       <main className="flex xs:flex-wrap">
         <section className="sm:w-100 xs:w-3/4 lg:w-1/2 p-5">
           <form action="" className="flex flex-col">
@@ -197,66 +222,52 @@ const MyProfile = () => {
           <form onSubmit={(e) => e.preventDefault()} className="flex flex-col">
             <h3 className="text-lg font-medium mb-3">My Interests</h3>
 
-            <div className="flex flex-wrap gap-3">
-              {user.myInterests.map((item, index) => {
-                return (
-                  <span
-                    className="rounded-xl border w-fit p-2 hover:border-highlight duration-200"
-                    key={index}
-                  >
-                    <span>{item}</span>
-                    <button
-                      className={`${!edit && "hidden"} `}
-                      onClick={() => handleRemoveInterest(index)}
+            <div className="flex flex-col flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
+                {user.myInterests.map((item, index) => {
+                  return (
+                    <span
+                      className="flex rounded-xl border w-fit p-2 hover:border-highlight duration-200"
+                      key={index}
                     >
-                      <ClearIcon fontSize="small" />
-                    </button>
-                  </span>
-                )
-              })}
-              <button
-                className={`${!edit && "hidden"} p-2 bg-dark rounded-xl text-white hover:bg-highlight duration-200`}
-                onClick={() => setAddInterest(true)}
-              >
-                <AddIcon />{" "}
-              </button>
+                      <span>{item}</span>
+                      <button
+                        className={`${!edit && "hidden"} `}
+                        onClick={() => handleRemoveInterest(index)}
+                      >
+                        <ClearIcon fontSize="small" />
+                      </button>
+                    </span>
+                  )
+                })}
+                <button
+                  className={`${!edit && "hidden"} border p-2 rounded-xl text-gray-700 hover:bg-gray-100  duration-150`}
+                  onClick={() => setAddInterest(true)}
+                >
+                  <AddIcon />{" "}
+                </button>
+              </div>
               {addInterest && (
-                <div>
+                <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="Add Interest"
+                    placeholder="Type to add interest"
                     disabled={!edit}
                     value={newInterest}
                     onChange={(e) => setNewInterest(e.target.value)}
-                    className={`${!edit && "rounded-xl p-2 border"}  ${edit && "rounded-xl p-2 border text-black"}`}
+                    className="rounded-lg p-2 border"
                   />
                   <button
-                    className="bg-dark p-2 rounded-xl px-5 text-white hover:bg-highlight duration-200"
+                    className="flex gap-0.5 border hover:border-highlight p-2 rounded-xl px-5 text-gray-700 hover:bg-gray-50  duration-150 hover:scale-105"
                     onClick={handleAddInterest}
                   >
+                    <IoIosAddCircleOutline className="my-auto" />
                     Add
                   </button>
                 </div>
               )}
             </div>
           </form>
-
-          {edit && (
-            <div className="my-8 flex gap-10">
-              <button
-                className="bg-dark p-2 rounded-xl px-5 text-white hover:bg-highlight duration-200"
-                onClick={handleUpdate}
-              >
-                Update
-              </button>
-              <button
-                className="bg-dark p-2 rounded-xl px-5 text-white hover:bg-highlight duration-200"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-            </div>
-          )}
         </section>
       </main>
     </div>

@@ -11,7 +11,7 @@ const HomePage = () => {
   return (
     <div className="pt-12">
       <Hero />
-      <div className="relative h-screen mb-7">
+      <div className="relative h-screen mb-7 overflow-hidden">
         <img
           src={middle}
           alt=""
