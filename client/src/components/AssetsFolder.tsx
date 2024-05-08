@@ -71,13 +71,9 @@ const Dropzone = ({
   const [uploading, setUploading] = React.useState(false)
   const onDropAccepted = React.useCallback(
     async (acceptedFiles: File[]) => {
-      const formData = new FormData()
-      acceptedFiles.forEach((file) => {
-        formData.append("assetFiles", file)
-      })
       toast.loading("Uploading...", { id: "uploading" })
       setUploading(true)
-      uploadAssets(formData)
+      uploadAssets(acceptedFiles)
         .then((res) => setAssets((prev) => [...prev, ...res.data]))
         .catch((err) => console.log(err))
         .finally(() => {
@@ -135,6 +131,7 @@ const Assets = ({
 }) => {
   const [loading, setLoading] = React.useState(false)
   const handleDeleteButton = async (assetUrl: string) => {
+    if (!window.confirm("Are you sure you want to delete this asset?")) return
     setLoading(true)
     deleteAsset(assetUrl)
       .then(() => {
@@ -153,6 +150,11 @@ const Assets = ({
     .replace("%20", " ")
   return (
     <div className="flex items-center flex-col relative font-light  ">
+      {loading && (
+        <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-70 flex items-center justify-center rounded-lg z-50">
+          <Loader />
+        </div>
+      )}
       <img
         src={asset}
         alt={name}

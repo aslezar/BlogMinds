@@ -78,11 +78,8 @@ function EditorContextProvider(props: any) {
               toast.error(error)
             },
             uploader: {
-              uploadByFile: async (file: any) => {
-                const formData = new FormData()
-                formData.append("assetFiles", file)
-
-                return uploadAssets(formData)
+              uploadByFile: async (file: File) => {
+                return uploadAssets([file])
                   .then((res) => {
                     return {
                       success: 1,

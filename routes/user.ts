@@ -15,12 +15,11 @@ import userBlogRouter from "./userBlog"
 
 const router = Router()
 
-// router.get("/my-profile", getMyProfile)
 router.use("/blog", userBlogRouter)
 router.patch("/update-profile", updateCompleteProfile)
 router
     .route("/image")
-    .patch(upload.single("profileImage"), updateProfileImage)
+    .post(upload.single("profileImage"), updateProfileImage)
     .delete(deleteProfileImage)
 router
     .route("/assets")

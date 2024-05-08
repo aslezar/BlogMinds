@@ -8,13 +8,13 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { loading, isAuthenticated } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
-  const dropdownRef = useRef<any>(null);
+  const dropdownRef = useRef<any>(null)
 
-  const handleClickOutside = (event : any) => {
+  const handleClickOutside = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsOpen(false);
+      setIsOpen(false)
     }
-  };
+  }
   const handleLogout = () => {
     const res = window.confirm(
       "Are you sure you want to logout? This will clear all saved blog data.",
@@ -24,12 +24,12 @@ const Navbar = () => {
     setIsOpen(false)
   }
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
   return (
     <div>
       <nav className="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200">
@@ -178,7 +178,10 @@ const Navbar = () => {
                 </svg>
               </button>
               {isOpen && (
-                <div ref={dropdownRef} className="absolute z-10 top-20 right-[5%] mt-1 w-52 font-medium  text-gray-600 flex flex-col bg-white rounded-xl overflow-auto border border-gray-300 shadow-lg ">
+                <div
+                  ref={dropdownRef}
+                  className="absolute z-10 top-20 right-[5%] mt-1 w-52 font-medium  text-gray-600 flex flex-col bg-white rounded-xl overflow-auto border border-gray-300 shadow-lg "
+                >
                   <NavLink
                     to={"/profile"}
                     onClick={() => {

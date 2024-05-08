@@ -89,9 +89,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         const file = new File([imageBlob], blog.title, {
           type: "image/jpeg",
         })
-        const formData = new FormData()
-        formData.append("assetFiles", file)
-        return uploadAssets(formData)
+        return uploadAssets([file])
       })
       .then((res) => {
         const imageUrl = res.data[0]

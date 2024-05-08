@@ -44,6 +44,9 @@ const updateProfileImage = async (req: Request, res: Response) => {
     const userId = req.user.userId
     if (!req.file) throw new BadRequestError("Image is required")
 
+    const isDeleted: boolean = await cloudinaryDeleteProfileImage(userId as any)
+    if (!isDeleted) throw new BadRequestError("Failed to delete image")
+
     const cloudinary_img_url = await cloudinaryUploadProfileImage(req)
     await updateUser(userId, "profileImage", cloudinary_img_url)
 

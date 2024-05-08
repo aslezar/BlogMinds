@@ -75,8 +75,10 @@ export const getAssets = () => API.get("/user/assets")
 export const deleteAsset = (assets: string) =>
   API.delete("/user/assets", { data: { assets } })
 
-export const uploadAssets = (assetFiles: FormData) => {
-  return API.post("/user/assets", assetFiles)
+export const uploadAssets = (assetFiles: File[]) => {
+  const formData = new FormData()
+  assetFiles.forEach((file) => formData.append("assetFiles", file))
+  return API.post("/user/assets", formData)
 }
 
 export const updateProfile = (userData: UserType) => {
@@ -104,8 +106,14 @@ export const getUserProfile = (
     },
   })
 
-export const updateImage = (profileImage: FormData) =>
-  API.patch("/user/image", profileImage)
+export const updateImage = (profileImage: File) => {
+  console.log(profileImage)
+
+  const formData = new FormData()
+  formData.append("profileImage", profileImage)
+  return API.post("/user/image", formData)
+}
+export const deleteProfileImage = () => API.delete("/user/image")
 
 /*User Blog Req*/
 

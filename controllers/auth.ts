@@ -27,8 +27,6 @@ const setTokenCookie = (res: Response, user: IUser) => {
 const sendUserData = (user: IUser, res: Response, msg: String) => {
     const token = user.generateToken()
 
-    console.log(user)
-
     const sendUser = {
         userId: user._id,
         name: user.name,

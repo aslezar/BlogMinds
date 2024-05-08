@@ -31,7 +31,7 @@ const PublicProfile = () => {
       .catch((error) => console.log("Error fetching user profile", error))
       .finally(() => setLoading(false))
   }, [userId, page])
-  
+
   useEffect(() => {
     if (!userId) return
     getOtherUserBlogs(userId, page, limit)

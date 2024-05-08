@@ -110,11 +110,9 @@ const AICompletion: React.FC<AICompletionProps> = ({
       const file = new File([image.imageBlob], image.prompt.slice(0, 20), {
         type: "image/jpeg",
       })
-      const formData = new FormData()
-      formData.append("assetFiles", file)
 
       toast.loading("Saving to Assets Folder ...", { id: "uploading" })
-      uploadAssets(formData)
+      uploadAssets([file])
         .then((res) => {
           //update image in state
           const imageUrl = res.data[0]

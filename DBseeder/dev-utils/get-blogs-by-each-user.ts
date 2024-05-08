@@ -33,7 +33,7 @@ const getBlogsByEachUser = async () => {
             (a, b) => b[1] - a[1],
         ) // sort in descending order
 
-        console.log(sortedBlogsByAuthor.slice(0, 5))// top 5 authors with most blogs
+        console.log(sortedBlogsByAuthor.slice(0, 5)) // top 5 authors with most blogs
         // process.exit(0)
     } catch (error) {
         console.error(error)
@@ -50,7 +50,9 @@ const changeBlogAuthor = async () => {
         const blogsToUpdate = blogs.slice(0, 40)
         await Promise.all(
             blogsToUpdate.map(async (blog) => {
-                blog.author = new Types.ObjectId("aaaaaaaaaaaaaaaaaaaaaaa1") as any as Schema.Types.ObjectId;
+                blog.author = new Types.ObjectId(
+                    "aaaaaaaaaaaaaaaaaaaaaaa1",
+                ) as any as Schema.Types.ObjectId
                 await blog.save()
             }),
         )
@@ -63,7 +65,10 @@ const changeBlogAuthor = async () => {
         const updatedBlogs = await Blog.find({ author: user._id })
         console.log(updatedBlogs.length)
         // empty user.blogs array
-        user.set('blogs', updatedBlogs.map(blog => blog._id)) 
+        user.set(
+            "blogs",
+            updatedBlogs.map((blog) => blog._id),
+        )
         await user.save()
         console.log(user)
 

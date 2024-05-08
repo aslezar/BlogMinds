@@ -15,7 +15,6 @@ import {
   verifyOtp,
   forgotPasswordSendOtpApi,
   forgotPasswordVerifyOtpApi,
-  // updateImage as updateImageApi,
 } from "../api/index.ts"
 
 interface CounterState {

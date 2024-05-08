@@ -3,7 +3,7 @@ import ClearIcon from "@mui/icons-material/Clear"
 import AddIcon from "@mui/icons-material/Add"
 import { UserType } from "../definitions"
 import Loader from "./Loader"
-import { updateProfile, updateImage } from "../api"
+import { updateProfile, updateImage, deleteProfileImage } from "../api"
 import toast from "react-hot-toast"
 import { CiEdit } from "react-icons/ci"
 import { IoIosAddCircleOutline } from "react-icons/io"
@@ -29,6 +29,7 @@ const MyProfile = () => {
   const [addInterest, setAddInterest] = useState(false)
   const [newInterest, setNewInterest] = useState("")
   const [editedUser, setEditedUser] = useState<UserType>(defUser)
+  const [loadingProfileImage, setLoadingProfileImage] = useState<boolean>(false)
 
   const dispatch = useAppDispatch()
   const { user: originalUser, loading } = useAppSelector((state) => state.user)
@@ -86,22 +87,71 @@ const MyProfile = () => {
     }
   }
 
-  if (originalUser === null)
+  const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      if (!originalUser) return
+      setLoadingProfileImage(true)
+      updateImage(e.target.files[0])
+        .then((response) => {
+          console.log(response)
+          toast.success("Profile image updated successfully")
+          dispatch(
+            updateUser({
+              ...originalUser,
+              profileImage: response.data.profileImage,
+            }),
+          )
+          setEditedUser((prevUser) => ({
+            ...prevUser,
+            profileImage: response.data.profileImage,
+          }))
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setLoadingProfileImage(false))
+    }
+  }
+
+  const handleProfileImageDelete = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault()
+    if (!originalUser) return
+    setLoadingProfileImage(true)
+    deleteProfileImage()
+      .then((_response) => {
+        dispatch(
+          updateUser({
+            ...originalUser,
+            profileImage: "",
+          }),
+        )
+        setEditedUser((prevUser) => ({
+          ...prevUser,
+          profileImage: "",
+        }))
+        toast.success("Profile image deleted successfully")
+      })
+      .catch((e) => console.log(e))
+      .finally(() => setLoadingProfileImage(false))
+  }
+
+  const user = edit ? editedUser : originalUser
+
+  if (loading) return <Loader />
+
+  if (user === null)
     return (
       <div className="text-red-500 font-bold text-center">
         You are not authorized to view this page.
       </div>
     )
-  if (loading) return <Loader />
-
-  const user = edit ? editedUser : originalUser
 
   return (
     <div className="flex flex-col font-inter mx-6 w-full">
-      <nav className="pb-5 px-5 rounded-xl flex justify-between ">
+      <nav className="pb-5 px-5 rounded-xl flex justify-between">
         <div>
           <h1 className="text-2xl font-medium">My Profile</h1>
-          <span className="text-sm text-slate-500 ">
+          <span className="text-sm text-slate-500">
             Manage your profile settings
           </span>
         </div>
@@ -141,17 +191,48 @@ const MyProfile = () => {
             <label className="text-lg my-2 font-medium">
               Your profile photo
             </label>
-            <img
-              className="h-40 w-40 rounded-full border"
-              src={user?.profileImage}
-              alt={user?.name}
-            />
+            <div className="flex ">
+              <div className="flex relative">
+                {loadingProfileImage && (
+                  <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-70 flex items-center justify-center rounded-lg z-50">
+                    <Loader />
+                  </div>
+                )}
+                <img
+                  className="h-40 w-40 rounded-full border"
+                  src={
+                    user.profileImage ||
+                    "https://res.cloudinary.com/blogmind/image/upload/v1709974103/blogmind/m7ndwlipeesy1jmab7la.png"
+                  }
+                  alt={user.name}
+                />
+              </div>
+              {edit && (
+                <span className="flex flex-col justify-center gap-2 ml-5">
+                  <input
+                    className="text-blue-500"
+                    type="file"
+                    accept="image/jpeg, image/png, image/jpg, image/webp"
+                    onChange={handleProfileChange}
+                    name="profileImage"
+                  />
+                  <button
+                    className="text-red-500"
+                    disabled={loadingProfileImage || user.profileImage === ""}
+                    onClick={handleProfileImageDelete}
+                  >
+                    Delete
+                  </button>
+                </span>
+              )}
+            </div>
+
             <div className="flex gap-5 my-4 text-sm">
               <p>
                 <span className="rounded-xl p-1 text-slate-700 px-1 font-bold">
                   {user?.followersCount}
                 </span>
-                <span className="text-slate-500 ">Followers</span>
+                <span className="text-slate-500">Followers</span>
               </p>
 
               <p>
@@ -234,6 +315,7 @@ const MyProfile = () => {
                     placeholder="Type to add interest"
                     disabled={!edit}
                     value={newInterest}
+                    maxLength={20}
                     onChange={(e) => setNewInterest(e.target.value)}
                     className="rounded-lg p-2 border"
                   />
