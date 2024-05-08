@@ -109,6 +109,30 @@ function BlogEditor() {
       setLoadingPublish(false)
     }
   }
+
+  const resetBlog = () => {
+    try {
+      const initalBlog = JSON.parse(initialBlog);
+      setBlog(initalBlog);
+      if (editor) {
+        editor.render(initalBlog.content);
+      }  
+      localStorage.setItem("new_blog", JSON.stringify(initialBlog));
+  
+      if (blogId && blogId !== "new_blog") {
+        const blogFromStorageString = localStorage.getItem(blogId);
+        if (blogFromStorageString) {
+          const blogFromStorage = JSON.parse(blogFromStorageString);
+          setBlog(blogFromStorage);
+          editor.render(blogFromStorage.content);
+          localStorage.setItem(blogId, JSON.stringify(blogFromStorage));
+        }
+      }
+    } catch (err) {
+      console.error("Error resetting blog:", err);
+    }
+  };
+
   if (loading) return <Loader />
   if (blog === null)
     return (
@@ -124,6 +148,7 @@ function BlogEditor() {
         setBlog={setBlog}
         disabledPublish={loadingPublish || !editor}
         handlePublish={handlePublish}
+        resetBlog={resetBlog}
       />
       <EditorPage />
     </div>

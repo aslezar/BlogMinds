@@ -13,6 +13,7 @@ interface BlogEditorProps {
   setBlog: React.Dispatch<React.SetStateAction<BlogCreateType | null>>
   disabledPublish: boolean
   handlePublish: (event: React.SyntheticEvent) => void
+  resetBlog : () => void
 }
 
 const BlogEditor: React.FC<BlogEditorProps> = ({
@@ -21,6 +22,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
   setBlog,
   disabledPublish,
   handlePublish,
+  resetBlog,
 }) => {
   const [isAssetsOpen, setIsAssetsOpen] = React.useState(false)
   const [isAICompletionOpen, setIsAICompletionOpen] = React.useState(false)
@@ -198,6 +200,12 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           />
         </svg>
         {blogId === "new_blog" ? "Publish" : "Update"}
+      </button>
+      <button
+        onClick={resetBlog}
+        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Reset
       </button>
     </div>
   )
