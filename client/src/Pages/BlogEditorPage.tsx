@@ -7,9 +7,7 @@ import { getUserBlogById, createBlog, updateBlog } from "../api"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEditorContext } from "../context/EditorContext"
 import Loader from "../components/Loader"
-
-const initialBlog =
-  '{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{},"tags":[]}'
+const initialBlog = `{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{"time":${Date.now()},"blocks":[],"version":"2.29.1"},"tags":[]}`
 
 function BlogEditor() {
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -30,6 +28,8 @@ function BlogEditor() {
         localStorage.getItem("new_blog") || initialBlog
 
       const blogFromStorage = JSON.parse(blogFromStorageString)
+      console.log(blogFromStorage)
+
       setBlog((_prevBlog) => blogFromStorage)
       setLoading(false)
     } else {
@@ -111,27 +111,33 @@ function BlogEditor() {
   }
 
   const resetBlog = () => {
-    try {
-      const initalBlog = JSON.parse(initialBlog);
-      setBlog(initalBlog);
-      if (editor) {
-        editor.render(initalBlog.content);
-      }  
-      localStorage.setItem("new_blog", JSON.stringify(initialBlog));
-  
-      if (blogId && blogId !== "new_blog") {
-        const blogFromStorageString = localStorage.getItem(blogId);
-        if (blogFromStorageString) {
-          const blogFromStorage = JSON.parse(blogFromStorageString);
-          setBlog(blogFromStorage);
-          editor.render(blogFromStorage.content);
-          localStorage.setItem(blogId, JSON.stringify(blogFromStorage));
-        }
-      }
-    } catch (err) {
-      console.error("Error resetting blog:", err);
+    if (!blogId) return
+
+    setLoading(true)
+
+    if (blogId === "new_blog") {
+      const blogFromStorageString = initialBlog
+
+      const blogFromStorage = JSON.parse(blogFromStorageString)
+      console.log(blogFromStorage)
+
+      setBlog((_prevBlog) => blogFromStorage)
+      setLoading(false)
+    } else {
+      getUserBlogById(blogId)
+        .then((response) => {
+          let resBlog = response.data.blog
+          resBlog.content = JSON.parse(resBlog.content)
+          setBlog((_prevBlog) => resBlog)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
     }
-  };
+  }
 
   if (loading) return <Loader />
   if (blog === null)

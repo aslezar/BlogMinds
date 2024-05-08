@@ -13,7 +13,7 @@ interface BlogEditorProps {
   setBlog: React.Dispatch<React.SetStateAction<BlogCreateType | null>>
   disabledPublish: boolean
   handlePublish: (event: React.SyntheticEvent) => void
-  resetBlog : () => void
+  resetBlog: () => void
 }
 
 const BlogEditor: React.FC<BlogEditorProps> = ({
@@ -203,7 +203,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       </button>
       <button
         onClick={resetBlog}
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-2xl w-[40%] ml-auto"
       >
         Reset
       </button>
