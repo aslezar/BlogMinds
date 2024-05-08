@@ -11,8 +11,7 @@ const PublicProfile = () => {
   const userId = useParams().id
   const [user, setUser] = useState<Profile | null>(null)
   const [blogs, setBlogs] = useState<ProfileBlogs[]>([])
-  const [loading1, setLoading1] = useState<boolean>(false)
-  const [loading2, setLoading2] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [page, setPage] = useState<number>(1)
   const [totalCount, setTotalCount] = useState<number>(0)
 
@@ -23,27 +22,25 @@ const PublicProfile = () => {
   }
   useEffect(() => {
     if (!userId) return
-    setLoading1(true)
+    setLoading(true)
     getUserProfile(userId, page, limit)
       .then((response) => {
         setUser(response.data.user)
       })
       .catch((error) => console.log("Error fetching user profile", error))
-      .finally(() => setLoading1(false))
+      .finally(() => setLoading(false))
   }, [userId, page])
   useEffect(() => {
     if (!userId) return
-    setLoading2(true)
     getOtherUserBlogs(userId, page, limit).then((response) => {
       setBlogs(response.data.blogs)
       setTotalCount(response.data.totalCount)
       console.log(response.data)
     })
     .catch((error) => console.log("Error fetching user blogs", error))
-    .finally(() => setLoading2(false))
   },[page])
 
-  if (loading1) return <Loader />
+  if (loading) return <Loader />
   return (
     <div>
       <main className=" w-4/5 mx-auto border-[1.5px] mt-3 rounded-xl p-4">
