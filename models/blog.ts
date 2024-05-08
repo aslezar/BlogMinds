@@ -27,8 +27,14 @@ const BlogSchema = new Schema<IBlog>(
             ref: "User",
             required: [true, "Please provide author."],
         },
+
         tags: {
-            type: [String],
+            type: [
+                {
+                    type: String,
+                    maxlength: [30, "Tag should be less than 30 characters."],
+                },
+            ],
             required: [true, "Please provide tags."],
             validate: {
                 validator: (tags: string[]) => tags.length > 0,

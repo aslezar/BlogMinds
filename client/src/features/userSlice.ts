@@ -13,8 +13,6 @@ import {
   signinToken,
   signOut,
   verifyOtp,
-  updateName as updateNameApi,
-  updateBio as updateBioApi,
   forgotPasswordSendOtpApi,
   forgotPasswordVerifyOtpApi,
   // updateImage as updateImageApi,
@@ -215,46 +213,9 @@ export const loadUser = () => async (dispatch: Dispatch) => {
     })
 }
 
-export const updateName =
-  (name: UserType["name"]) => async (dispatch: Dispatch) => {
-    toast.loading("Updating Name", { id: "name" })
-    dispatch(userSlice.actions.SET_LOADING())
-    updateNameApi(name)
-      .then((_res) => {
-        // console.log(res)
-        dispatch(userSlice.actions.UPDATE_NAME(name))
-        toast.success("Name Updated")
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-      .finally(() => {
-        dispatch(userSlice.actions.SET_LOADING_FALSE())
-        toast.dismiss("name")
-      })
-  }
-
-export const updateBio =
-  (bio: UserType["bio"]) => async (dispatch: Dispatch) => {
-    if (!bio) return toast.error("Bio is required")
-    if (bio.length > 150)
-      return toast.error("Bio should be less than 150 characters")
-    toast.loading("Updating Bio", { id: "bio" })
-    dispatch(userSlice.actions.SET_LOADING())
-    updateBioApi(bio)
-      .then((_res) => {
-        // console.log(res)
-        dispatch(userSlice.actions.UPDATE_BIO(bio))
-        toast.success("Bio Updated")
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-      .finally(() => {
-        dispatch(userSlice.actions.SET_LOADING_FALSE())
-        toast.dismiss("bio")
-      })
-  }
+export const updateUser = (user: UserType) => async (dispatch: Dispatch) => {
+  dispatch(userSlice.actions.SET_USER(user))
+}
 export const selectUserState = (state: RootState) => state.user
 
 export default userSlice.reducer

@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react"
-import { getMyProfile } from "../api"
+import { useState } from "react"
 import ClearIcon from "@mui/icons-material/Clear"
 import AddIcon from "@mui/icons-material/Add"
 import { UserType } from "../definitions"
 import Loader from "./Loader"
-import { updateProfile } from "../api"
+import { updateProfile, updateImage } from "../api"
 import toast from "react-hot-toast"
 import { CiEdit } from "react-icons/ci"
 import { IoIosAddCircleOutline } from "react-icons/io"
+import { useAppDispatch, useAppSelector } from "../hooks"
+import { updateUser } from "../features/userSlice"
 
 const defUser: UserType = {
   userId: "",
@@ -24,71 +25,49 @@ const defUser: UserType = {
 }
 
 const MyProfile = () => {
-  const [user, setUser] = useState<UserType>(defUser)
   const [edit, setEdit] = useState(false)
-  const [loading, setLoading] = useState(true)
   const [addInterest, setAddInterest] = useState(false)
   const [newInterest, setNewInterest] = useState("")
-  const [originalUser, setOriginalUser] = useState<UserType>(defUser)
+  const [editedUser, setEditedUser] = useState<UserType>(defUser)
 
-  useEffect(() => {
-    const getProfile = async () => {
-      setLoading(true)
-      getMyProfile()
-        .then((data) => {
-          const user = data.data
-          setUser(user)
-          setOriginalUser(user)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-        .finally(() => {
-          setLoading(false)
-        })
-    }
-    getProfile()
-  }, [])
+  const dispatch = useAppDispatch()
+  const { user: originalUser, loading } = useAppSelector((state) => state.user)
+
   const handleEdit = () => {
-    setUser(originalUser)
-    setEdit(true)
+    if (originalUser) {
+      setEdit(true)
+      setEditedUser(originalUser)
+    }
   }
-  const handleUpdate = async () => {
-    toast.loading("Updating your profile")
-    updateProfile(user)
-      .then((response) => {
-        const updatedUser = response.data
-        setUser(updatedUser)
-        setOriginalUser(updatedUser)
-        setEdit(false)
-        setAddInterest(false)
-        toast.dismiss()
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-      .finally(() => toast.success("Profile updated successfully"))
-  }
+
   const handleCancel = () => {
     // If new interest was being added but not confirmed, discard it
     setAddInterest(false)
-    // Reset the user's data to the original state
-    setUser(originalUser)
+    setNewInterest("")
     setEdit(false)
+  }
+  const handleUpdate = async () => {
+    updateProfile(editedUser)
+      .then((_response) => {
+        toast.success("Profile updated successfully")
+        dispatch(updateUser(editedUser))
+      })
+      .catch((error) => console.log(error))
+      .finally(() => handleCancel())
   }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target
-    setUser((prevUser) => ({
+    setEditedUser((prevUser) => ({
       ...prevUser,
       [name]: value,
     }))
   }
 
   const handleRemoveInterest = (indexToRemove: number) => {
-    setUser((prevUser) => ({
+    setEditedUser((prevUser) => ({
       ...prevUser,
       myInterests: prevUser.myInterests.filter(
         (_, index) => index !== indexToRemove,
@@ -98,7 +77,7 @@ const MyProfile = () => {
 
   const handleAddInterest = () => {
     if (newInterest.trim() !== "") {
-      setUser((prevUser) => ({
+      setEditedUser((prevUser) => ({
         ...prevUser,
         myInterests: [...prevUser.myInterests, newInterest],
       }))
@@ -107,14 +86,15 @@ const MyProfile = () => {
     }
   }
 
-  if (loading) return <Loader />
-
-  if (user === null)
+  if (originalUser === null)
     return (
       <div className="text-red-500 font-bold text-center">
         You are not authorized to view this page.
       </div>
     )
+  if (loading) return <Loader />
+
+  const user = edit ? editedUser : originalUser
 
   return (
     <div className="flex flex-col font-inter mx-6 w-full">

@@ -21,91 +21,25 @@ const updateUser = async (
     await user.save()
 }
 
-const getMyProfile = async (req: Request, res: Response) => {
-    const userId = req.user.userId
-    const user = await User.aggregate([
-        { $match: { _id: userId } },
-        {
-            $project: {
-                name: 1,
-                email: 1,
-                bio: 1,
-                profileImage: 1,
-                myInterests: 1,
-                followingCount: { $size: "$following" },
-                followersCount: { $size: "$followers" },
-            },
-        },
-    ])
-    if (!user || user.length === 0)
-        throw new UnauthenticatedError("User Not Found")
-    res.status(StatusCodes.OK).json({
-        data: user[0],
-        success: true,
-        msg: "Profile Fetched Successfully",
-    })
-}
-
 const updateCompleteProfile = async (req: Request, res: Response) => {
     const { name, bio, myInterests } = req.body
     const userId = req.user.userId
 
     if (!name || !bio || !myInterests)
-        throw new BadRequestError("Name, Bio and Interests are required")
-    const user = await User.findById(userId)
-    if (!user) throw new UnauthenticatedError("User Not Found")
-    user.set({ name, bio, myInterests })
-    await user.save()
+        throw new BadRequestError("Name, Bio or Interests are required")
 
-    const updatedUser = await User.aggregate([
-        { $match: { _id: userId } },
-        {
-            $project: {
-                name: 1,
-                email: 1,
-                bio: 1,
-                profileImage: 1,
-                myInterests: 1,
-                followingCount: { $size: "$following" },
-                followersCount: { $size: "$followers" },
-            },
-        },
-    ])
+    const user = await User.findByIdAndUpdate(userId, {
+        name,
+        bio,
+        myInterests,
+    })
 
     res.status(StatusCodes.OK).json({
-        data: updatedUser[0],
         success: true,
         msg: "Profile Updated Successfully",
     })
 }
 
-const updateName = async (req: Request, res: Response) => {
-    const userId = req.user.userId
-    const { name } = req.body
-    if (!name) throw new BadRequestError("Name is required")
-
-    await updateUser(userId, "name", name)
-    res.status(StatusCodes.OK).json({
-        data: { name },
-        success: true,
-        msg: "Name Updated Successfully",
-    })
-}
-const updateBio = async (req: Request, res: Response) => {
-    const userId = req.user.userId
-    const { bio } = req.body
-    if (!bio) throw new BadRequestError("Bio is required")
-
-    if (bio.length > 150)
-        throw new BadRequestError("Bio should be less than 150 characters")
-
-    await updateUser(userId, "bio", bio)
-    res.status(StatusCodes.OK).json({
-        data: { bio },
-        success: true,
-        msg: "Bio Updated Successfully",
-    })
-}
 const updateProfileImage = async (req: Request, res: Response) => {
     const userId = req.user.userId
     if (!req.file) throw new BadRequestError("Image is required")
@@ -131,7 +65,7 @@ const deleteProfileImage = async (req: Request, res: Response) => {
         msg: "Image Deleted Successfully",
     })
 }
-const getAllAssests = async (req: Request, res: Response) => {
+const getAllAssets = async (req: Request, res: Response) => {
     const userId = req.user.userId
     const user = await User.findById(userId).select("myAssests")
     if (!user) throw new UnauthenticatedError("User Not Found")
@@ -254,13 +188,10 @@ const isFollowing = async (req: Request, res: Response) => {
 }
 
 export {
-    getMyProfile,
     updateCompleteProfile,
-    updateName,
-    updateBio,
     updateProfileImage,
     deleteProfileImage,
-    getAllAssests,
+    getAllAssets,
     uploadAssets,
     deleteAsset,
     followUnfollowUser,

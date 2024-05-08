@@ -27,17 +27,26 @@ const setTokenCookie = (res: Response, user: IUser) => {
 const sendUserData = (user: IUser, res: Response, msg: String) => {
     const token = user.generateToken()
 
-    const { _id: userId, name, email, bio, profileImage } = user
+    console.log(user)
+
+    const sendUser = {
+        userId: user._id,
+        name: user.name,
+        email: user.email,
+        bio: user.bio,
+        profileImage: user.profileImage,
+        myInterests: user.myInterests,
+        followingCount: user.following.length,
+        followersCount: user.followers.length,
+    }
+
+    // const { _id: userId, name, email, bio, profileImage,myInterests } = user
 
     setTokenCookie(res, user)
 
     res.status(StatusCodes.CREATED).json({
         data: {
-            userId,
-            name,
-            email,
-            bio,
-            profileImage,
+            ...sendUser,
         },
         success: true,
         msg,

@@ -71,7 +71,6 @@ export const signOut = () => API.post("/auth/signout")
  ********************** User Requests **********************
  */
 /* /my-profile */
-export const getMyProfile = () => API.get("/user/my-profile")
 export const getAssets = () => API.get("/user/assets")
 export const deleteAsset = (assets: string) =>
   API.delete("/user/assets", { data: { assets } })
@@ -105,17 +104,8 @@ export const getUserProfile = (
     },
   })
 
-export const updateName = (name: UserType["name"]) =>
-  API.patch("/user/updatename", { name })
-
-export const updateBio = (bio: UserType["bio"]) =>
-  API.patch("/user/updatebio", { bio })
-
-// export const updateImage = (profileImage: UserType["profileImage"]) => {
-//   const formData = new FormData()
-//   formData.append("profileImage", profileImage)
-//   return API.patch("/user/updateimage", formData)
-// }
+export const updateImage = (profileImage: FormData) =>
+  API.patch("/user/image", profileImage)
 
 /*User Blog Req*/
 
@@ -126,8 +116,12 @@ export const getUserBlogs = (page: number = 1, limit: number = 10) =>
       limit,
     },
   })
-  
-export const getOtherUserBlogs = (userId:string, page: number = 1, limit: number = 10) =>
+
+export const getOtherUserBlogs = (
+  userId: string,
+  page: number = 1,
+  limit: number = 10,
+) =>
   API.get(`/blog/blogsByUser/${userId}`, {
     params: {
       page,
