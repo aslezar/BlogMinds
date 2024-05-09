@@ -148,8 +148,9 @@ export default function SignUp() {
           <div className="mt-4 text-sm text-gray-600 text-center">
             <p>OR</p>
           </div>
-
-          <ContinueWithGoogleButton />
+          <div className="mt-4 flex items-center justify-center">
+            <ContinueWithGoogleButton />
+          </div>
           <div className="mt-4 text-sm text-gray-600 text-center">
             <Link to="/sign-in" className="hover:underline">
               Already have an account?{" "}

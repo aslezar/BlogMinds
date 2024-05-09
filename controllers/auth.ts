@@ -262,8 +262,6 @@ const continueWithGoogle = async (req: Request, res: Response) => {
         throw new BadRequestError("Invalid Token")
     }
 
-    console.log(payload)
-
     const { email, name, picture } = payload
     let user = await User.findOne({ email })
     if (user) {
