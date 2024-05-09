@@ -6,6 +6,7 @@ import AICompletion from "./AICompletion"
 import Loader from "./Loader"
 import { useEditorContext } from "../context/EditorContext"
 import { getAImage, uploadAssets } from "../api"
+import { GrPowerReset } from "react-icons/gr"
 import toast from "react-hot-toast"
 
 interface BlogEditorProps {
@@ -27,7 +28,6 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
 }) => {
   const [isAssetsOpen, setIsAssetsOpen] = React.useState(false)
   const [isAICompletionOpen, setIsAICompletionOpen] = React.useState(false)
-  const [loadingGenerateAI, setLoadingGenerateAI] = React.useState(false)
   const { editor } = useEditorContext()
 
   const handleTextUploadToEditor = (text: string) => {
@@ -83,7 +83,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
     if (blog.title === "")
       return toast.error("Please enter a title to generate with AI")
 
-    setLoadingGenerateAI(true)
+    toast.loading("Generating your cover image")
 
     getAImage(blog.title)
       .then((response) => {
@@ -98,7 +98,10 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         setBlog({ ...blog, img: imageUrl })
       })
       .catch((error) => console.log(error))
-      .finally(() => setLoadingGenerateAI(false))
+      .finally(() => {
+        toast.dismiss()
+        toast.success("Cover image is ready")
+      })
   }
 
   if (blog === null) return <Loader />
@@ -106,11 +109,25 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
     <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
       <figure className="aspect-video overflow-hidden rounded-md relative">
         <button
-          className="top-1 left-1 absolute bg-dark rounded-full px-2 p-1 text-sm font-medium text-white hover:bg-highlight"
+          className="top-1 left-1 absolute  bg-gradient-to-tl from-dark  to-highlight py-2 rounded-lg px-2 p-1 text-xs font-medium text-white hover:bg-highlight opacity-80 hover:scale-105 duration-150"
           onClick={handleGenerateWithAI}
         >
-          {loadingGenerateAI && <Loader />}
+          {/* {loadingGenerateAI && <Loader />} */}
           Generate with AI
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-5 h-5 inline ml-1"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+            />
+          </svg>
         </button>
 
         <img
@@ -192,7 +209,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       </div>
 
       <div className=" bg-gradient-to-tl from-dark  to-highlight py-2 rounded-lg font-medium flex items-center cursor-pointer">
-        <span
+        <button
           className="text-sm text-white h-full px-3 w-full text-center "
           onClick={() => setIsAICompletionOpen(true)}
         >
@@ -211,7 +228,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
               d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
             />
           </svg>
-        </span>
+        </button>
         <div
           className={`fixed inset-0 z-40 top-5 mx-auto p-5 backdrop-blur-sm h-full w-screen flex pt-20 start ${isAICompletionOpen ? "block" : "hidden"}`}
         >
@@ -222,40 +239,43 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
           />
         </div>
       </div>
-      <button
-        type="submit"
-        onClick={handlePublish}
-        disabled={disabledPublish}
-        className={`border-2 border-dark font-medium px-4 py-2 rounded-full flex items-center justify-center text-dark
+      <div className="flex flex-row-reverse justify-between gap-2">
+        <button
+          type="submit"
+          onClick={handlePublish}
+          disabled={disabledPublish}
+          className={`duration-150 w-full border border-dark px-4 py-2 rounded-lg flex items-center justify-center text-dark hover:scale-105
               ${disabledPublish ? "opacity-50 cursor-progress" : "hover:bg-dark hover:text-white"}`}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="w-5 h-5 inline mr-1"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-          />
-        </svg>
-        {blogId === "new_blog" ? "Publish" : "Update"}
-      </button>
-      <button
-        onClick={resetBlog}
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-2xl w-[40%] ml-auto"
-      >
-        Reset
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-5 h-5 inline mr-1"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+          {blogId === "new_blog" ? "Publish" : "Update"}
+        </button>
+        <button
+          onClick={resetBlog}
+          className="flex gap-1 items-center justify-center w-full hover:bg-red-500 text-red-500 border border-red-500 py-2 px-4 rounded-lg hover:text-white duration-150 hover:scale-105"
+        >
+          <GrPowerReset className="my-auto" />
+          Reset
+        </button>
+      </div>
     </div>
   )
 }

@@ -9,6 +9,9 @@ import { CiEdit } from "react-icons/ci"
 import { IoIosAddCircleOutline } from "react-icons/io"
 import { useAppDispatch, useAppSelector } from "../hooks"
 import { updateUser } from "../features/userSlice"
+import userAltImg from "../assets/img/MyProfilePage/user-alt.jpg"
+import { TbPhotoPlus } from "react-icons/tb"
+import { RiDeleteBack2Line } from "react-icons/ri"
 
 const defUser: UserType = {
   userId: "",
@@ -90,11 +93,11 @@ const MyProfile = () => {
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       if (!originalUser) return
+      toast.loading("Uploading new profile photo")
       setLoadingProfileImage(true)
       updateImage(e.target.files[0])
         .then((response) => {
           console.log(response)
-          toast.success("Profile image updated successfully")
           dispatch(
             updateUser({
               ...originalUser,
@@ -107,7 +110,11 @@ const MyProfile = () => {
           }))
         })
         .catch((error) => console.log(error))
-        .finally(() => setLoadingProfileImage(false))
+        .finally(() => {
+          toast.dismiss()
+          toast.success("Profile image updated successfully")
+          setLoadingProfileImage(false)
+        })
     }
   }
 
@@ -200,27 +207,33 @@ const MyProfile = () => {
                 )}
                 <img
                   className="h-40 w-40 rounded-full border"
-                  src={
-                    user.profileImage ||
-                    "https://res.cloudinary.com/blogmind/image/upload/v1709974103/blogmind/m7ndwlipeesy1jmab7la.png"
-                  }
+                  src={user.profileImage || userAltImg}
                   alt={user.name}
                 />
               </div>
               {edit && (
-                <span className="flex flex-col justify-center gap-2 ml-5">
+                <span className="flex flex-col justify-center gap-2 ml-5 p-4">
+                  <label
+                    htmlFor="file-upload"
+                    className="flex gap-1 text-sm border rounded-lg py-2 px-5 cursor-pointer hover:border-highlight duration-150"
+                  >
+                    <TbPhotoPlus className="my-auto text-base" />
+                    Upload new photo
+                  </label>
                   <input
-                    className="text-blue-500"
+                    id="file-upload"
+                    className="hidden"
                     type="file"
                     accept="image/jpeg, image/png, image/jpg, image/webp"
                     onChange={handleProfileChange}
                     name="profileImage"
                   />
                   <button
-                    className="text-red-500"
+                    className="flex gap-1 border w-fit p-2 rounded-lg cursor-pointer text-xs text-red-500 hover:border-red-500 duration-150 py-2 px-5"
                     disabled={loadingProfileImage || user.profileImage === ""}
                     onClick={handleProfileImageDelete}
                   >
+                    <RiDeleteBack2Line className="my-auto text-base" />
                     Delete
                   </button>
                 </span>
