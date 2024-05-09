@@ -12,7 +12,6 @@ import Loader from "../components/Loader"
 
 import Pagination from "@mui/material/Pagination"
 
-
 const PublicProfile = () => {
   const userId = useParams().id
   const [user, setUser] = useState<Profile | null>(null)
@@ -25,18 +24,18 @@ const PublicProfile = () => {
   const limit = 6
 
   const handleFollowUnfollow = async () => {
-    await followUnfollowUser(userId as UserType["userId"]);
-    setIsFollow(!isFollow);
+    await followUnfollowUser(userId as UserType["userId"])
+    setIsFollow(!isFollow)
     setUser((prev) => {
-      if (!prev) return prev;
+      if (!prev) return prev
       return {
         ...prev,
         followingCount: isFollow
           ? prev.followingCount - 1
           : prev.followingCount + 1,
-      };
+      }
     })
-  };
+  }
   const formatDate = (date: string) => {
     return format(new Date(date), "dd MMMM yyyy")
   }
@@ -58,14 +57,14 @@ const PublicProfile = () => {
       .then((response) => setBlogs(response.data.blogs))
       .catch((error) => console.log("Error fetching user blogs", error))
   }, [page])
-  
+
   useEffect(() => {
     const ifFollowing = async () => {
-      const res = await isFollowing(userId as UserType["userId"]);
-      setIsFollow(res.data.isFollowing);
-    };
-    ifFollowing();
-  }, [userId]);
+      const res = await isFollowing(userId as UserType["userId"])
+      setIsFollow(res.data.isFollowing)
+    }
+    ifFollowing()
+  }, [userId])
 
   if (loading) return <Loader />
   return (

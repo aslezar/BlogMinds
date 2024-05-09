@@ -147,7 +147,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
             {blog?.description}
           </p>
           {/* blog tags */}
-          
+
           <div className="flex gap-3 items-center text-lg justify-center">
             <div className="flex items-center ">
               <div className="heart-bg">
@@ -221,7 +221,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               </>
             )}
           </div>
-        <div className="flex gap-2 mt-5 justify-center">
+          <div className="flex gap-2 mt-5 justify-center">
             {blog?.tags.map((tag, index) => (
               <span
                 key={index}

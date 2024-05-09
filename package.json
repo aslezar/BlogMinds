@@ -61,6 +61,7 @@
         "@types/nodemailer": "^6.4.14",
         "@types/uuid": "^9.0.8",
         "dotenv": "^16.4.5",
+        "google-auth-library": "^9.9.0",
         "node-cache": "^5.1.2",
         "nodemon": "^3.1.0",
         "prettier": "^3.2.5",

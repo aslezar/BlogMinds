@@ -22,7 +22,6 @@ const UserSchema = new Schema<IUser>(
         },
         password: {
             type: String,
-            required: [true, "Please provide password."],
             minlength: 8,
         },
         bio: {

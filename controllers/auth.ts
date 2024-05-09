@@ -5,6 +5,8 @@ import { IUser } from "../types/models"
 import { Request, Response } from "express"
 import SendMail from "../utils/sendMail"
 import { OTP } from "../types/models"
+const { OAuth2Client } = require("google-auth-library")
+const client = new OAuth2Client()
 
 const setTokenCookie = (res: Response, user: IUser) => {
     const token = user.generateToken()
@@ -54,8 +56,8 @@ const sendUserData = (user: IUser, res: Response, msg: String) => {
 const register = async (req: Request, res: Response) => {
     const { firstName, lastName, email, password } = req.body
     const name = firstName + " " + lastName
-    if (!name || !email || !password)
-        throw new BadRequestError("Please provide all details")
+    if (!name || !email) throw new BadRequestError("Please provide all details")
+    if (!password) throw new BadRequestError("Please provide password")
     const userExist: IUser | null = await User.findOne({ email }) // Using findOne
 
     if (userExist && userExist.status === "active") {
@@ -153,10 +155,10 @@ const forgotPasswordVerifyOtp = async (req: Request, res: Response) => {
     user.otp = undefined
     user.password = password
     await user.save()
+    setTokenCookie(res, user)
     res.status(StatusCodes.CREATED).json({
-        token: user.generateToken(),
         success: true,
-        msg: "OTP verified successfully",
+        msg: "Password Changed Successfully",
     })
 }
 
@@ -208,6 +210,11 @@ const login = async (req: Request, res: Response) => {
     if (user.status === "blocked")
         throw new UnauthenticatedError("User is blocked.")
 
+    if (!user.password)
+        throw new UnauthenticatedError(
+            "Please login with Google.\nOr Reset Password.",
+        )
+
     const isPasswordCorrect = await user.comparePassword(password)
 
     if (!isPasswordCorrect) throw new UnauthenticatedError("Invalid Password.")
@@ -239,9 +246,48 @@ const signOut = async (req: Request, res: Response) => {
     })
 }
 
+const continueWithGoogle = async (req: Request, res: Response) => {
+    const tokenId = req.body.tokenId
+
+    let payload: any = null
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: tokenId,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        })
+        payload = ticket.getPayload()
+    } catch (error) {
+        console.log(error)
+        throw new BadRequestError("Invalid Token")
+    }
+
+    console.log(payload)
+
+    const { email, name, picture } = payload
+    let user = await User.findOne({ email })
+    if (user) {
+        if (user.status === "blocked")
+            throw new UnauthenticatedError("User is blocked.")
+    } else {
+        user = await User.create({
+            email,
+            name,
+            profileImage: picture,
+            status: "active",
+        })
+    }
+    setTokenCookie(res, user)
+    res.status(StatusCodes.CREATED).json({
+        success: true,
+        msg: "Google Login Successfully",
+    })
+}
+
 export {
     register,
     login,
+    continueWithGoogle,
     verifyEmail,
     tokenLogin,
     signOut,

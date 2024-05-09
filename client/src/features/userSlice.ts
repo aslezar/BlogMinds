@@ -10,7 +10,8 @@ import {
 import {
   signIn,
   signUp,
-  signinToken,
+  signInGoogle,
+  signInToken,
   signOut,
   verifyOtp,
   forgotPasswordSendOtpApi,
@@ -129,6 +130,14 @@ export const register =
       })
   }
 
+export const loginGoogle = (token: string) => async (dispatch: any) => {
+  dispatch(userSlice.actions.SET_LOADING())
+  signInGoogle(token)
+    .then((_res) => dispatch(loadUser()))
+    .catch((err) => console.log(err))
+    .finally(() => dispatch(userSlice.actions.SET_LOADING_FALSE()))
+}
+
 export const forgotPasswordSendOtp =
   (forgotPasswordValues: ForgotPasswordType, setPage: any) =>
   async (dispatch: any) => {
@@ -197,19 +206,15 @@ export const verification =
 
 export const loadUser = () => async (dispatch: Dispatch) => {
   dispatch(userSlice.actions.SET_LOADING())
-  signinToken()
+  signInToken()
     .then((res: any) => {
       const user = res.data
 
       toast.success("Logged in", { id: "loadUser" })
       dispatch(userSlice.actions.SET_USER(user))
     })
-    .catch((err) => {
-      console.log(err)
-    })
-    .finally(() => {
-      dispatch(userSlice.actions.SET_LOADING_FALSE())
-    })
+    .catch((err) => console.log(err))
+    .finally(() => dispatch(userSlice.actions.SET_LOADING_FALSE()))
 }
 
 export const updateUser = (user: UserType) => async (dispatch: Dispatch) => {

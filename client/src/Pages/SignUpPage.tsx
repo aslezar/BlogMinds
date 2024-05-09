@@ -4,16 +4,15 @@ import { useAppDispatch, useAppSelector } from "../hooks"
 import img from "../assets/img/Auth/signup.webp"
 import { SignUpType } from "../definitions"
 import { register } from "../features/userSlice"
-import GoogleSvg from "../assets/img/Auth/GoogleSvg"
+import ContinueWithGoogleButton from "../components/ContinueWithGoogleButton"
 
 export default function SignUp() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { isAuthenticated, loading, verificationRequired } = useAppSelector(
+  const { loading, verificationRequired } = useAppSelector(
     (state) => state.user,
   )
-  console.log(isAuthenticated, loading, verificationRequired)
-  const [signupValues, setSignupValues] = React.useState<SignUpType>({
+  const [signUpValues, setSignUpValues] = React.useState<SignUpType>({
     firstName: "",
     lastName: "",
     email: "",
@@ -22,7 +21,7 @@ export default function SignUp() {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
-    setSignupValues((prevValues) => ({
+    setSignUpValues((prevValues) => ({
       ...prevValues,
       [name]: value,
     }))
@@ -31,12 +30,12 @@ export default function SignUp() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (
-      !signupValues.firstName ||
-      !signupValues.email ||
-      !signupValues.password
+      !signUpValues.firstName ||
+      !signUpValues.email ||
+      !signUpValues.password
     )
       return alert("All fields are required")
-    dispatch(register(signupValues))
+    dispatch(register(signUpValues))
   }
 
   React.useEffect(() => {
@@ -80,7 +79,7 @@ export default function SignUp() {
                   id="firstName"
                   name="firstName"
                   placeholder="John"
-                  value={signupValues.firstName}
+                  value={signUpValues.firstName}
                   onChange={handleChange}
                   className="mt-1 p-2.5 px-4 w-full border rounded-3xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
@@ -96,7 +95,7 @@ export default function SignUp() {
                   type="text"
                   id="lastName"
                   name="lastName"
-                  value={signupValues.lastName}
+                  value={signUpValues.lastName}
                   onChange={handleChange}
                   placeholder="Doe"
                   className="mt-1 p-2.5 px-4 w-full border rounded-3xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
@@ -114,7 +113,7 @@ export default function SignUp() {
                 type="text"
                 id="email"
                 name="email"
-                value={signupValues.email}
+                value={signUpValues.email}
                 onChange={handleChange}
                 placeholder="johndoe@example.com"
                 className="mt-1 p-2.5 px-4 w-full border rounded-3xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
@@ -131,7 +130,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 name="password"
-                value={signupValues.password}
+                value={signUpValues.password}
                 onChange={handleChange}
                 placeholder="*********"
                 className="mt-1 p-2.5 px-4 w-full border rounded-3xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
@@ -150,17 +149,7 @@ export default function SignUp() {
             <p>OR</p>
           </div>
 
-          <div className="mt-4 flex flex-col lg:flex-row items-center justify-between">
-            <div className="w-full  mb-2 lg:mb-0">
-              <button
-                type="button"
-                className="w-full flex justify-center items-center gap-2 bg-highlight  text-white p-2.5 px-4 rounded-3xl hover:bg-dark border border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-colors duration-300 text-base font-medium"
-              >
-                <GoogleSvg />
-                Continue with Google
-              </button>
-            </div>
-          </div>
+          <ContinueWithGoogleButton />
           <div className="mt-4 text-sm text-gray-600 text-center">
             <Link to="/signin" className="hover:underline">
               Already have an account?{" "}

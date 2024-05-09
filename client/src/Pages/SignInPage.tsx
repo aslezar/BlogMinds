@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../hooks"
 import { login } from "../features/userSlice"
 import { Link, useNavigate } from "react-router-dom"
 import { LoginType } from "../definitions"
-import GoogleSvg from "../assets/img/Auth/GoogleSvg"
+import ContinueWithGoogleButton from "../components/ContinueWithGoogleButton"
 
 export default function SignIn() {
   const dispatch = useAppDispatch()
@@ -110,18 +110,7 @@ export default function SignIn() {
           <div className="mt-4 text-sm text-gray-600 text-center">
             <p>OR</p>
           </div>
-
-          <div className="mt-4 flex flex-col lg:flex-row items-center justify-between">
-            <div className="w-full  mb-2 lg:mb-0">
-              <button
-                type="button"
-                className="w-full flex justify-center items-center gap-2 bg-highlight  text-white p-2.5 px-4 rounded-3xl hover:bg-dark border border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-colors duration-300 text-base font-medium"
-              >
-                <GoogleSvg />
-                Continue with Google
-              </button>
-            </div>
-          </div>
+          <ContinueWithGoogleButton />
           <div className="mt-4 text-sm text-gray-600 text-center">
             <Link to="/signup" className="hover:underline cursor-pointer">
               Don't have an account?

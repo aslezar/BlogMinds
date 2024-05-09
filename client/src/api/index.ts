@@ -55,8 +55,10 @@ interface VerifyOtpParams {
 /*
  ********************** Sign In and Sign Up **********************
  */
-export const signIn = (login: LoginType) => API.post("/auth/signin", login)
-export const signUp = (signup: SignUpType) => API.post("/auth/signup", signup)
+export const signIn = (login: LoginType) => API.post("/auth/sign-in", login)
+export const signUp = (signup: SignUpType) => API.post("/auth/sign-up", signup)
+export const signInGoogle = (tokenId: string) =>
+  API.post("/auth/sign-in/google", { tokenId })
 export const forgotPasswordSendOtpApi = (email: string) =>
   API.post("/auth/forgot-password/send-otp", { email })
 export const forgotPasswordVerifyOtpApi = (
@@ -64,8 +66,8 @@ export const forgotPasswordVerifyOtpApi = (
 ) => API.post("/auth/forgot-password/verify-otp", forgotPasswordValues)
 export const verifyOtp = (verifyOtpParams: VerifyOtpParams) =>
   API.post("/auth/verify", verifyOtpParams)
-export const signinToken = () => API.get("/auth/me")
-export const signOut = () => API.post("/auth/signout")
+export const signInToken = () => API.get("/auth/me")
+export const signOut = () => API.post("/auth/sign-out")
 
 /*
  ********************** User Requests **********************
