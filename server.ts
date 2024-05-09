@@ -85,12 +85,12 @@ app.use(
     }),
 )
 
-//Functionlity Middleware
+//Functionality Middleware
 app.use(paginateMW)
 
 //Routes
 app.use("/", express.static("./client/dist"))
-app.use("/assests", express.static("./client/dist/assests"))
+app.use("/assets", express.static("./client/dist/assets"))
 app.use("/hello", (req: Request, res: Response) => {
     res.status(200).json({ message: "Hello World" })
 })

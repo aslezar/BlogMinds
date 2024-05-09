@@ -83,7 +83,9 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
     if (blog.title === "")
       return toast.error("Please enter a title to generate with AI")
 
-    toast.loading("Generating your cover image")
+    toast.loading("Generating your cover image", {
+      id: "generate-with-ai",
+    })
 
     getAImage(blog.title)
       .then((response) => {
@@ -99,8 +101,9 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       })
       .catch((error) => console.log(error))
       .finally(() => {
-        toast.dismiss()
-        toast.success("Cover image is ready")
+        toast.success("Cover image is ready", {
+          id: "generate-with-ai",
+        })
       })
   }
 

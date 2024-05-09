@@ -93,7 +93,9 @@ const MyProfile = () => {
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       if (!originalUser) return
-      toast.loading("Uploading new profile photo")
+      toast.loading("Uploading new profile photo", {
+        id: "uploading-profile-image",
+      })
       setLoadingProfileImage(true)
       updateImage(e.target.files[0])
         .then((response) => {
@@ -111,8 +113,9 @@ const MyProfile = () => {
         })
         .catch((error) => console.log(error))
         .finally(() => {
-          toast.dismiss()
-          toast.success("Profile image updated successfully")
+          toast.success("Profile image updated successfully", {
+            id: "uploading-profile-image",
+          })
           setLoadingProfileImage(false)
         })
     }

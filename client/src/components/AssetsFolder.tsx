@@ -158,7 +158,7 @@ const Assets = ({
       <img
         src={asset}
         alt={name}
-        className="h-24 object-cover rounded-lg hover:ring ring-dark"
+        className="h-24 min-w-24 object-cover rounded-lg hover:ring ring-dark"
         onClick={
           handleImageUpload ? () => handleImageUpload(asset, name) : undefined
         }

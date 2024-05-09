@@ -71,13 +71,13 @@ const errorHandlerMiddleware = (
             err instanceof mongoose.Error.VersionError
         ) {
             console.log(err)
-            //Heavy error occured
+            //Heavy error occurred
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
                 .json({ success: false, msg: "Mongoose error: " + err.message })
         } else {
             console.log(err)
-            //Unknown error occured
+            //Unknown error occurred
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 msg: "Mongoose error: Something went wrong",
@@ -94,7 +94,7 @@ const errorHandlerMiddleware = (
         LIMIT_FIELD_VALUE: "Field value is too long",
         LIMIT_FIELD_COUNT: "Too many fields",
         LIMIT_UNEXPECTED_FILE:
-            "Unexpected file: Acceptes files are jpg, jpeg, png, webp",
+            "Unexpected file: Accepted files are jpg, jpeg, png, webp",
     }
     if (err instanceof multer.MulterError) {
         const errorCode = err.code
@@ -107,7 +107,7 @@ const errorHandlerMiddleware = (
         })
     }
 
-    //Unknown error occured, log it
+    //Unknown error occurred, log it
     console.log(err)
 
     //Internal Server Error
