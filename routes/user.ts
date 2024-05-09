@@ -27,6 +27,6 @@ router
     .post(upload.array("assetFiles", 5), uploadAssets)
     .delete(deleteAsset)
 router.post("/follow-unfollow", followUnfollowUser)
-router.get("/is-following", isFollowing)
+router.post("/is-following", isFollowing)
 
 export default router

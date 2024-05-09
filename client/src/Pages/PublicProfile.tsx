@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-import { getOtherUserBlogs, getUserProfile } from "../api"
-import { Profile, ProfileBlogs } from "../definitions"
+import {
+  followUnfollowUser,
+  getOtherUserBlogs,
+  getUserProfile,
+  isFollowing,
+} from "../api"
+import { Profile, ProfileBlogs, UserType } from "../definitions"
 import { format } from "date-fns/format"
 import Loader from "../components/Loader"
-import toast from "react-hot-toast"
+
 import Pagination from "@mui/material/Pagination"
+
 
 const PublicProfile = () => {
   const userId = useParams().id
@@ -14,9 +20,23 @@ const PublicProfile = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [page, setPage] = useState<number>(1)
   const [totalCount, setTotalCount] = useState<number>(0)
+  const [isFollow, setIsFollow] = useState<boolean>(false)
 
   const limit = 6
 
+  const handleFollowUnfollow = async () => {
+    await followUnfollowUser(userId as UserType["userId"]);
+    setIsFollow(!isFollow);
+    setUser((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        followingCount: isFollow
+          ? prev.followingCount - 1
+          : prev.followingCount + 1,
+      };
+    })
+  };
   const formatDate = (date: string) => {
     return format(new Date(date), "dd MMMM yyyy")
   }
@@ -38,6 +58,14 @@ const PublicProfile = () => {
       .then((response) => setBlogs(response.data.blogs))
       .catch((error) => console.log("Error fetching user blogs", error))
   }, [page])
+  
+  useEffect(() => {
+    const ifFollowing = async () => {
+      const res = await isFollowing(userId as UserType["userId"]);
+      setIsFollow(res.data.isFollowing);
+    };
+    ifFollowing();
+  }, [userId]);
 
   if (loading) return <Loader />
   return (
@@ -112,12 +140,10 @@ const PublicProfile = () => {
                 </div>
                 <div className="flex gap-2 mt-3">
                   <button
-                    className="bg-dark text-white px-4 py-1 rounded-lg mt-3 hover:bg-highlight"
-                    onClick={() => {
-                      toast.success("This feature is not available yet")
-                    }}
+                    className={`bg-dark text-white px-4 py-1 rounded-lg mt-3 hover:bg-highlight ${isFollow && "bg-highlight"}`}
+                    onClick={handleFollowUnfollow}
                   >
-                    Follow
+                    {isFollow ? "Unfollow" : "Follow"}
                   </button>
                 </div>
               </div>
