@@ -22,7 +22,6 @@ import DashBoard from "./Pages/DashBoardPage"
 import BlogEditor from "./Pages/BlogEditorPage"
 import Blog from "./Pages/BlogPage"
 import About from "./Pages/AboutPage"
-import ContactUs from "./Pages/ContactUsPage"
 import ErrorPage from "./Pages/ErrorPage"
 import { useAppDispatch, useAppSelector } from "./hooks"
 import { loadUser } from "./features/userSlice"
@@ -31,8 +30,7 @@ import Loader from "./components/Loader"
 import SearchResults from "./Pages/SearchResults"
 import PublicProfilePage from "./Pages/PublicProfile"
 import ProfilePage from "./Pages/ProfilePage"
-import FeaturesPage from "./Pages/Features"
-import PricingTablePage from "./Pages/PricingPage"
+import FeaturesPage from "./components/Features"
 
 const Layout = () => {
   const location = useLocation()
@@ -85,11 +83,11 @@ const router = createBrowserRouter([
             path: "write/:id",
             element: <BlogEditor />,
           },
-          {
-            path: "features",
-            element: <FeaturesPage />,
-          },
         ],
+      },
+      {
+        path: "features",
+        element: <FeaturesPage />,
       },
       { path: "search", element: <SearchResults /> },
       { path: "signin", element: <SignIn /> },
@@ -117,14 +115,6 @@ const router = createBrowserRouter([
       {
         path: "about",
         element: <About />,
-      },
-      {
-        path: "contact-us",
-        element: <ContactUs />,
-      },
-      {
-        path: "pricing",
-        element: <PricingTablePage />,
       },
       {
         path: "user/:id",

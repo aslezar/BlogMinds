@@ -43,7 +43,7 @@ const Footer = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/contact-us" className="hover:underline">
+              <NavLink to="/#contact" className="hover:underline">
                 Contact
               </NavLink>
             </li>
