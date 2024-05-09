@@ -1,10 +1,8 @@
 import React from "react"
 import dragNdrop from "../assets/videos/Features/dragNdrop.mp4"
 import imgGen from "../assets/videos/Features/imgGen.mp4"
-import Footer from "../components/Footer"
 const Features: React.FC = () => {
   return (
-    <>
       <div className="w-5/6 mx-auto mt-6">
         <h1 className="text-7xl font-semibold text-center my-6 ">
           Discover the{" "}
@@ -82,8 +80,6 @@ const Features: React.FC = () => {
           </div>
         </section>
       </div>
-      <Footer />
-    </>
   )
 }
 export default Features
