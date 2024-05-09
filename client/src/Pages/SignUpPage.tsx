@@ -151,7 +151,7 @@ export default function SignUp() {
 
           <ContinueWithGoogleButton />
           <div className="mt-4 text-sm text-gray-600 text-center">
-            <Link to="/signin" className="hover:underline">
+            <Link to="/sign-in" className="hover:underline">
               Already have an account?{" "}
               <span className="text-black hover:underline">Login here</span>
             </Link>

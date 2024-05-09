@@ -14,7 +14,7 @@ const ContinueWithGoogleButton = () => {
     }
     const script = document.createElement("script")
     script.src = "https://accounts.google.com/gsi/client"
-    // script.async = true
+    script.async = true
     script.defer = true
     document.body.appendChild(script)
     ;(window as any).continueWithGoogle = googleDataCallback
@@ -35,7 +35,7 @@ const ContinueWithGoogleButton = () => {
     <>
       <div
         id="g_id_onload"
-        data-client_id={process.env.VITE_GOOGLE_CLIENT_ID}
+        data-client_id={import.meta.env.VITE_GOOGLE_CLIENT_ID}
         data-context="use"
         data-ux_mode="popup"
         data-callback="continueWithGoogle"

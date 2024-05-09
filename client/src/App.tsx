@@ -34,7 +34,7 @@ import FeaturesPage from "./components/Features"
 
 const Layout = () => {
   const location = useLocation()
-  const hideNavbarRoutes = ["/signin", "/signup", "/verify", "/forgot-password"]
+  const hideNavbarRoutes = ["/sign-in", "/sign-up", "/verify", "/forgot-password"]
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname)
   return (
     <div>
@@ -50,7 +50,7 @@ const ProtectedRoute = () => {
   const { loading, isAuthenticated } = useAppSelector((state) => state.user)
 
   if (loading) return <Loader />
-  if (!isAuthenticated) return <Navigate to="/signin" />
+  if (!isAuthenticated) return <Navigate to="/sign-in" />
   return <Outlet />
 }
 
@@ -90,9 +90,9 @@ const router = createBrowserRouter([
         element: <FeaturesPage />,
       },
       { path: "search", element: <SearchResults /> },
-      { path: "signin", element: <SignIn /> },
+      { path: "sign-in", element: <SignIn /> },
       {
-        path: "signup",
+        path: "sign-up",
         element: <SignUp />,
       },
       {

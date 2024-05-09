@@ -110,11 +110,13 @@ export default function SignIn() {
           <div className="mt-4 text-sm text-gray-600 text-center">
             <p>OR</p>
           </div>
-          <ContinueWithGoogleButton />
+          <div className="mt-4 flex items-center justify-center">
+            <ContinueWithGoogleButton />
+          </div>
           <div className="mt-4 text-sm text-gray-600 text-center">
-            <Link to="/signup" className="hover:underline cursor-pointer">
+            <Link to="/sign-up" className="hover:underline cursor-pointer">
               Don't have an account?
-              <span className="text-black hover:underline"> Signup here</span>
+              <span className="text-black hover:underline"> SignUp here</span>
             </Link>
           </div>
           {/* {loading && <Loader />} */}
