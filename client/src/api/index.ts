@@ -234,3 +234,9 @@ export const getAICompletion = (text: string) =>
 
 export const getAImage = (prompt: string) =>
   API.get("/ai/suggest/image", { params: { prompt }, responseType: "blob" })
+
+export const followUnfollowUser = (userId: UserType["userId"]) =>
+  API.post("/user/follow-unfollow", { followId: userId })
+
+export const isFollowing = (userId: UserType["userId"]) =>
+  API.post("/user/is-following", { followId: userId })

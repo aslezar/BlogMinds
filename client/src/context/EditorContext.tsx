@@ -24,6 +24,7 @@ function EditorContextProvider(props: any) {
     data: OutputData | undefined = undefined,
   ) => {
     const editorjs = new EditorJS({
+      minHeight : 50,
       holder: "editorjs",
       placeholder: "Start writing your blog here...",
       onReady: () => {
