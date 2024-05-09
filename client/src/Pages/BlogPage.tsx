@@ -146,7 +146,8 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           <p className="font-[400] text-center text-gray-600 text-[1.4rem] mb-7 ">
             {blog?.description}
           </p>
-
+          {/* blog tags */}
+          
           <div className="flex gap-3 items-center text-lg justify-center">
             <div className="flex items-center ">
               <div className="heart-bg">
@@ -220,16 +221,17 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               </>
             )}
           </div>
+        <div className="flex gap-2 mt-5 justify-center">
+            {blog?.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="text-center bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
-        {/* <div className="text-gray-700  pt-20 px-6">
-          {blog?.content && (
-            <>
-              <pre className="w-[100%] whitespace-pre-line text-xl font-[inter] leading-8">
-                {blog.content}
-              </pre>
-            </>
-          )}
-        </div> */}
         <div id="editorjs" className="text-gray-700 mx-auto"></div>
         <div className="py-10 w-5/6 mx-auto">
           <h3 className="text-2xl font-semibold mb-5">Comments</h3>
