@@ -40,8 +40,8 @@ const ContactUs = () => {
       })
   }
   return (
-    <section className="bg-white" id="contact">
-      <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+    <section className="bg-white w-11/12 mx-auto" id="contact">
+      <div className="pt-24 pb-14 px-4 mx-auto max-w-screen-md">
         <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">
           Contact Us
         </h2>

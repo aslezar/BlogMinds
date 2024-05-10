@@ -1,6 +1,8 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { useAppSelector } from "../hooks"
+import { IoPeople } from "react-icons/io5"
+import { CiEdit } from "react-icons/ci"
 
 type Props = {}
 
@@ -30,33 +32,27 @@ const Hero: React.FC<Props> = () => {
         <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl">
           Unlock Your Creativity with Creativerse Blogs
         </h1>
-        <p className="mb-4 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48">
+        <p className="mb-4 text-lg font-normal text-gray-500 lg:text-xl md:px-16 xl:px-48">
           Explore a world where AI enhances your creativity! Creativerse AI
           empowers you to write blogs effortlessly by providing AI-driven text
           suggestions and images.
         </p>
-        <div className="flex flex-col mb-4 lg:mb-7 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+        <div className="flex mb-4 lg:mb-7 flex-row justify-center space-y-0 space-x-2">
+          {/* try our editor button */}
+          <Link
+            to="/editor"
+            className="inline-flex justify-center items-center py-3.5 px-4  font-medium text-center bg-white text-dark border border-dark rounded-full hover:bg-dark focus:ring-4 focus:ring-blue-300 transition-all duration-200 hover:text-white"
+          >
+            <CiEdit className="inline mr-2 text-xl" />
+            Try Our Editor
+          </Link>
+
           {!isAuthenticated && (
             <Link
               to={`${isAuthenticated ? "/feed" : "/sign-up"}`}
-              className="inline-flex justify-center items-center py-3.5 px-7 text-lg font-medium text-center bg-dark text-white rounded-full bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
+              className="inline-flex justify-center items-center py-3.5 px-7  font-medium text-center bg-dark text-white rounded-full  hover:bg-highlight focus:ring-4 focus:ring-blue-300 transition-all duration-200"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                className="h-5 mr-3 text-white "
-              >
-                <g data-name="75-Write">
-                  <path
-                    fill="white"
-                    d="M30 7v18a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5h9V0H7a7 7 0 0 0-7 7v18a7 7 0 0 0 7 7h18a7 7 0 0 0 7-7V7z"
-                  />
-                  <path
-                    fill="white"
-                    d="M22.38 24H11a3 3 0 0 1 0-6h4v-2h-4a5 5 0 0 0 0 10h13a1 1 0 0 0 .89-.55l2-4A1 1 0 0 0 27 21V1a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v20a1 1 0 0 0 .11.45zM23 2h2v1h-2zm0 3h2v15h-2z"
-                  />
-                </g>
-              </svg>
+              <IoPeople className="inline mr-2 text-xl"/>
               Join the Community
             </Link>
           )}
