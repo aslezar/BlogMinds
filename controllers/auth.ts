@@ -103,7 +103,8 @@ const register = async (req: Request, res: Response) => {
         from: process.env.SMTP_EMAIL_USER,
         to: email,
         subject: "Blogmind: Email Verification",
-        text: `Your OTP is ${otpCode}`,
+        text: `Thank you for registering with Blogmind! Your OTP (One-Time Password) is ${otpCode}. Please use this code to verify your email.`,
+        html: `<h1>Thank you for registering with Blogmind!</h1><p>Your OTP (One-Time Password) is <strong>${otpCode}</strong>. Please use this code to verify your email.</p>`,
     })
 
     res.status(StatusCodes.CREATED).json({
@@ -131,7 +132,8 @@ const forgotPasswordSendOtp = async (req: Request, res: Response) => {
         from: process.env.SMTP_EMAIL_USER,
         to: email,
         subject: "Blogmind: Reset Password",
-        text: `Your OTP is ${otpCode}`,
+        text: `Your OTP (One-Time Password) is ${otpCode}. Please use this code to reset your password.`,
+        html: `<h1>Your OTP (One-Time Password) is <strong>${otpCode}</strong>. Please use this code to reset your password.</h1>`,
     })
     res.status(StatusCodes.CREATED).json({
         success: true,
