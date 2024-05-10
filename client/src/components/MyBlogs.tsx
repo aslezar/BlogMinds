@@ -78,7 +78,7 @@ const MyBlogs = () => {
                     "https://i0.wp.com/www.bishoprook.com/wp-content/uploads/2021/05/placeholder-image-gray-16x9-1.png?ssl=1"
                   }
                   alt="img"
-                  className="aspect-video rounded-md "
+                  className="aspect-video rounded-md object-cover"
                   loading="lazy"
                 />
                 {/* render blogs.myInterests.map in a flex div */}

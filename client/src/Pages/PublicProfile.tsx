@@ -182,7 +182,7 @@ const PublicProfile = () => {
                 <img
                   src={blog.img}
                   alt="img"
-                  className="aspect-video rounded-md "
+                  className="aspect-video rounded-md object-cover"
                   loading="lazy"
                 />
 
