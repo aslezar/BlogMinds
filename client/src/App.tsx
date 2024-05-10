@@ -34,7 +34,12 @@ import FeaturesPage from "./components/Features"
 
 const Layout = () => {
   const location = useLocation()
-  const hideNavbarRoutes = ["/sign-in", "/sign-up", "/verify", "/forgot-password"]
+  const hideNavbarRoutes = [
+    "/sign-in",
+    "/sign-up",
+    "/verify",
+    "/forgot-password",
+  ]
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname)
   return (
     <div>

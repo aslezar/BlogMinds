@@ -22,7 +22,7 @@ export default function SignUp(): JSX.Element {
 
   React.useEffect(() => {
     if (!loading && verificationRequired === false) {
-      navigate("/")
+      navigate("/feed")
     }
   }, [loading, verificationRequired])
 

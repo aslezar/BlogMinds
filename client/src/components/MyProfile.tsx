@@ -301,6 +301,9 @@ const MyProfile = () => {
 
             <div className="flex flex-col flex-wrap gap-3">
               <div className="flex flex-wrap gap-2">
+                {!edit && user.myInterests.length === 0 && (
+                  <span className="text-gray-500">No interests added yet</span>
+                )}
                 {user.myInterests.map((item, index) => {
                   return (
                     <span
