@@ -3,32 +3,30 @@ import dragNdrop from "../assets/videos/Features/dragNdrop.mp4"
 import imgGen from "../assets/videos/Features/imgGen.mp4"
 const Features: React.FC = () => {
   return (
-    <div className="w-5/6 mx-auto mt-6" id="features">
-      <h1 className="text-7xl font-semibold text-center my-6 ">
-        Discover the{" "}
+    <div className="w-11/12 lg:w-5/6 mx-auto lg:mt-20 overflow-hidden pt-20" id="features">
+      <h1 className="text-3xl lg:text-6xl font-semibold text-center my-4 ">
+        Publish{' '}
         <span className="bg-gradient-to-r from-dark from-60% to-highlight text-transparent bg-clip-text">
-          fe
+          Effo
         </span>
         <span className="bg-gradient-to-r from-dark from-70%  to-highlight  text-transparent bg-clip-text">
-          at
+          rtl
         </span>
         <span className="bg-gradient-to-l from-dark from-30% to-highlight text-transparent bg-clip-text">
-          ures
+          eslly
         </span>
       </h1>
       <p className="text-center text-slate-500 text-lg">
-        Blogs are not just about reading, it's about<br></br> many other things
-        like...
+        Write blogs effortlessly with AI-driven text suggestions and images.
       </p>
-      <section className="flex flex-col w-full my-10 item-center md:flex-row items-center gap-10 ">
-        <div className="w-5/6 p-2 max-w-lg">
-          <h1 className="text-center text-lg font-semibold p-2 ">
-            Drag and drop your image.
+      <section className="flex flex-col w-full lg:my-10  md:flex-row items-center lg:gap-10 ">
+        <div className="lg:w-5/6 p-2 max-w-lg mx-auto">
+          <h1 className="font-semibold p-2 text-2xl lg:text-3xl mb-2">
+            Drag and Drop Editor
           </h1>
-          <div className="flex gap-3 mb-3 min-h-40">
+          <div className="flex gap-3 mb-3 min-h-40 ">
             <div className="border p-4 rounded-lg bg-neutral-50">
-              Easily upload images by simply dragging and dropping them on blog
-              editor.
+              Simply Drag n Drop to Images to your blog.
             </div>
             <div className="border p-4 rounded-lg bg-neutral-50">
               Our modern design puts your convenience first, making
@@ -40,22 +38,22 @@ const Features: React.FC = () => {
             effort.
           </div>
         </div>
-        <div className="w-full ">
+        <div className="lg:w-1/2 ">
           <video
             autoPlay
             muted
             loop
-            className="rounded-lg shadow-lg shadow-highlight"
+            className="rounded-lg shadow-lg shadow-highlight w-full"
           >
             <source src={dragNdrop} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
       </section>
-      <section className="flex flex-col w-full my-28 item-center md:flex-row-reverse items-center gap-10">
-        <div className="w-5/6 p-2 max-w-lg">
-          <h1 className="text-center text-lg font-semibold p-2">
-            AI image generation at ease.
+      <section className="flex flex-col w-full my-14 lg:my-28 item-center md:flex-row-reverse items-center lg:gap-10">
+        <div className="lg:w-5/6 p-2 max-w-lg mx-auto">
+          <h1 className="lg:text-right font-semibold p-2 text-2xl lg:text-3xl mb-2">
+            Generative AI to enhance image and text creation
           </h1>
           <div className="flex gap-3 mb-3 min-h-40 ">
             <div className="border p-4 rounded-lg bg-neutral-50">
@@ -67,12 +65,12 @@ const Features: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="w-full">
+        <div className="lg:w-1/2">
           <video
             autoPlay
             muted
             loop
-            className="rounded-lg shadow-lg shadow-highlight"
+            className="rounded-lg shadow-lg shadow-highlight w-full"
           >
             <source src={imgGen} type="video/mp4" />
             Your browser does not support the video tag.
