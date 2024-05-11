@@ -39,6 +39,8 @@ API.interceptors.response.use(
       } else
         toast.error(error.response.data?.msg, { id: error.response.data?.msg })
     } else {
+      console.log("Network Error")
+
       toast.error("Network Error: Please try again later.", {
         id: "Network Error",
       })
@@ -66,7 +68,7 @@ export const forgotPasswordVerifyOtpApi = (
 ) => API.post("/auth/forgot-password/verify-otp", forgotPasswordValues)
 export const verifyOtp = (verifyOtpParams: VerifyOtpParams) =>
   API.post("/auth/verify", verifyOtpParams)
-export const signInToken = () => API.get("/auth/me")
+export const signInToken = () => API.get("/user/me")
 export const signOut = () => API.post("/auth/sign-out")
 
 /*
@@ -127,18 +129,6 @@ export const getUserBlogs = (page: number = 1, limit: number = 10) =>
     },
   })
 
-export const getOtherUserBlogs = (
-  userId: string,
-  page: number = 1,
-  limit: number = 10,
-) =>
-  API.get(`/blog/blogsByUser/${userId}`, {
-    params: {
-      page,
-      limit,
-    },
-  })
-
 export const getUserBlogById = (id: BlogShortType["_id"]) =>
   API.get(`/user/blog/${id}`)
 
@@ -171,7 +161,7 @@ export const getBlogs = (
   pageNo: number = 1,
   limit: number = 10,
 ) =>
-  API.get("/blog/category", {
+  API.get("/public/blog/category", {
     params: {
       tags: category,
       page: pageNo,
@@ -184,7 +174,7 @@ export const getRecommendedBlogs = (
   pageNo: number = 1,
   limit: number = 10,
 ) =>
-  API.get("/blog/recommended", {
+  API.get("/public/blog/recommended", {
     params: {
       userId: userId,
       page: pageNo,
@@ -196,19 +186,33 @@ export const getBlog = (
   id: BlogShortType["_id"],
   userId: BlogShortType["_id"] | null,
 ) =>
-  API.get(`/blog/${id}`, {
+  API.get(`/public/blog/${id}`, {
     params: {
       userId: userId,
     },
   })
 
+export const getOtherUserBlogs = (
+  userId: string,
+  page: number = 1,
+  limit: number = 10,
+) =>
+  API.get(`/blog/blogsByUser/${userId}`, {
+    params: {
+      page,
+      limit,
+    },
+  })
+export const getTrendingBlog = () => API.get("/public/blog/trending")
+
+/*
+ ************************ Blogs Update Requests ************************
+ */
 export const likeBlog = (id: BlogShortType["_id"]) =>
-  API.patch(`/blog/${id}/like`)
+  API.post(`/blog/like/${id}`)
 
 export const commentBlog = (id: BlogShortType["_id"], message: string) =>
-  API.post(`/blog/${id}/comment`, { message })
-
-export const getTrendingBlog = () => API.get("/blog/trending")
+  API.post(`/blog/comment/${id}`, { message })
 
 /*
  ************************ Search Requests ************************
@@ -219,7 +223,7 @@ export const search = (
   page: number,
   limit: number,
 ) =>
-  API.get("/search", {
+  API.get("/public/search", {
     params: {
       query,
       type,

@@ -40,7 +40,7 @@ const Hero: React.FC<Props> = () => {
         <div className="flex mb-4 lg:mb-7 flex-col items-center gap-2 md:flex-row justify-center ">
           {/* try our editor button */}
           <Link
-            to="/editor"
+            to="/write/new_blog"
             className="inline-flex justify-center items-center py-3 w-full md:w-fit md:py-3.5 px-4  font-medium text-center bg-white text-dark border border-dark rounded-full hover:bg-dark focus:ring-4 focus:ring-blue-300 transition-all duration-200 hover:text-white"
           >
             <CiEdit className="inline mr-2 text-xl" />
@@ -52,7 +52,7 @@ const Hero: React.FC<Props> = () => {
               to={`${isAuthenticated ? "/feed" : "/sign-up"}`}
               className="inline-flex justify-center items-center py-3 w-full md:w-fit md:py-3.5 px-7  font-medium text-center bg-dark text-white rounded-full  hover:bg-highlight focus:ring-4 focus:ring-blue-300 transition-all duration-200"
             >
-              <IoPeople className="inline mr-2 text-xl"/>
+              <IoPeople className="inline mr-2 text-xl" />
               Join the Community
             </Link>
           )}

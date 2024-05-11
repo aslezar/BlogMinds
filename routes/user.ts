@@ -1,7 +1,6 @@
 import { Router } from "express"
 import upload from "../utils/imageHandlers/multer"
 import {
-    // getMyProfile,
     updateCompleteProfile,
     updateProfileImage,
     deleteProfileImage,
@@ -12,9 +11,11 @@ import {
     isFollowing,
 } from "../controllers/user"
 import userBlogRouter from "./userBlog"
+import { tokenLogin } from "../controllers/auth"
 
 const router = Router()
 
+router.route("/me").get(tokenLogin)
 router.use("/blog", userBlogRouter)
 router.patch("/update-profile", updateCompleteProfile)
 router

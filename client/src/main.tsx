@@ -13,6 +13,7 @@ import { PostHogProvider } from "posthog-js/react"
 
 const options = {
   api_host: import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_HOST,
+  autocapture: import.meta.env.DEV ? false : true,
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

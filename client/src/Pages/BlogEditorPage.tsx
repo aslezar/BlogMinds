@@ -28,7 +28,6 @@ function BlogEditor() {
         localStorage.getItem("new_blog") || initialBlog
 
       const blogFromStorage = JSON.parse(blogFromStorageString)
-      console.log(blogFromStorage)
 
       setBlog((_prevBlog) => blogFromStorage)
       setLoading(false)

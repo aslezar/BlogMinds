@@ -1,5 +1,4 @@
 import { Router } from "express"
-import authMiddleware from "../middleware/auth"
 import { getTextSuggestion, getImageSuggestionPrompt } from "../controllers/ai"
 
 const router = Router()
