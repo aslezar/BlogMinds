@@ -11,8 +11,8 @@ const PricingTable = () => {
               One time payments, lifetime access. No hidden fees.
             </p>
           </div>
-          <div className="space-y-8 lg:grid lg:grid-cols-2 sm:gap-6 xl:gap-10 lg:space-y-0 w-fit mx-auto">
-            <div className="flex flex-col p-6 mx-auto w-[400px] text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow xl:p-8">
+          <div className="space-y-8 lg:grid lg:grid-cols-2 sm:gap-6 xl:gap-10 lg:space-y-0 mx-auto w-11/12 ">
+            <div className="flex flex-col p-6 mx-auto w-full md:w-[400px] text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow xl:p-8">
               <h3 className="mb-4 text-2xl font-semibold">Free Trial</h3>
               <p className="font-light text-gray-500 sm:text-lg">
                 Free trial, no credit card required.
@@ -103,7 +103,7 @@ const PricingTable = () => {
                 Get started
               </a>
             </div>
-            <div className="flex flex-col p-6 mx-auto w-[400px] text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow xl:p-8">
+            <div className="flex flex-col p-6 mx-auto w-full md:w-[400px] text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow xl:p-8">
               <h3 className="mb-4 text-2xl font-semibold">Premium</h3>
               <p className="font-light text-gray-500 sm:text-lg">
                 Best option for writers and bloggers.
