@@ -222,7 +222,7 @@ export const getOtherUserBlogs = (
   page: number = 1,
   limit: number = 10,
 ) =>
-  API.get(`/blog/blogsByUser/${userId}`, {
+  API.get(`/public/blog/blogsByUser/${userId}`, {
     params: {
       page,
       limit,

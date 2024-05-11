@@ -6,9 +6,11 @@ import {
   getUserProfile,
   isFollowing,
 } from "../api"
-import { Profile, ProfileBlogs, UserType } from "../definitions"
+import { Profile, ProfileBlogs } from "../definitions"
 import { format } from "date-fns/format"
 import Loader from "../components/Loader"
+import { useAppSelector } from "../hooks"
+import toast from "react-hot-toast"
 
 import Pagination from "@mui/material/Pagination"
 
@@ -23,8 +25,18 @@ const PublicProfile = () => {
 
   const limit = 6
 
+  const { isAuthenticated, loading: loginInUserLoading } = useAppSelector(
+    (state) => state.user,
+  )
+  console.log(isAuthenticated, loginInUserLoading)
+
   const handleFollowUnfollow = async () => {
-    await followUnfollowUser(userId as UserType["userId"])
+    if (!userId) return
+    if (!isAuthenticated)
+      return toast.error(`Please login to follow ${user?.name}`, {
+        id: "follow",
+      })
+    await followUnfollowUser(userId)
     setIsFollow(!isFollow)
     setUser((prev) => {
       if (!prev) return prev
@@ -59,12 +71,13 @@ const PublicProfile = () => {
   }, [page])
 
   useEffect(() => {
+    if (loading || !userId) return
     const ifFollowing = async () => {
-      const res = await isFollowing(userId as UserType["userId"])
+      const res = await isFollowing(userId)
       setIsFollow(res.data.isFollowing)
     }
-    ifFollowing()
-  }, [userId])
+    if (isAuthenticated) ifFollowing()
+  }, [userId, isAuthenticated, loading])
 
   if (loading) return <Loader />
   return (
