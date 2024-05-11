@@ -6,7 +6,7 @@ import { useSearchParams } from "react-router-dom"
 
 const Categories = () => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const category = searchParams.get("category") || "all"
+  const category = searchParams.get("category") || Category.All
   const handleChange = (_event: React.SyntheticEvent, newValue: Category) => {
     setSearchParams({ category: newValue })
   }
@@ -27,7 +27,7 @@ const Categories = () => {
         <Tab
           // label={category}
           value={category}
-          label={category === "all" ? "For You" : category}
+          label={category === Category.All ? "For You" : category}
           key={category}
           disableRipple
           className="!text-xs md:!text-[0.9rem] !capitalize"

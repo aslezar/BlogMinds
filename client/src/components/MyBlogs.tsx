@@ -82,14 +82,17 @@ const MyBlogs = () => {
                   loading="lazy"
                 />
                 {/* render blogs.myInterests.map in a flex div */}
-                <div className="flex gap-2 items-center flex-wrap min-h-12">
-                  {blog.tags.map((tag) => (
-                    <span className="text-gray-600 bg-gray-200 px-2 py-1 rounded-full text-xs">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </Link>
+              <div className="flex gap-2 items-center flex-wrap min-h-12">
+                {blog.tags.map((tag) => (
+                  <NavLink
+                    to={`/feed/?category=${tag}`}
+                    className="text-gray-600 bg-gray-200 px-2 py-1 rounded-full text-xs hover:bg-gray-300"
+                  >
+                    {tag}
+                  </NavLink>
+                ))}
+              </div>
               <div className="flex">
                 <NavLink
                   to={`/write/${blog._id}`}

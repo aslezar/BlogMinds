@@ -9,6 +9,7 @@ import { format } from "date-fns/format" // Import date-fns under a namespace
 import { IoBookOutline } from "react-icons/io5"
 import { useEditorContext } from "../context/EditorContext"
 import { NavLink } from "react-router-dom"
+import AuthorTag from "../components/AuthorTag.tsx"
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -75,7 +76,6 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         setComment("")
       })
       .catch((error) => {
-        toast.error("There was an error, please try again later")
         console.log(error)
       })
   }
@@ -118,7 +118,6 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
         })
       })
       .catch((error) => {
-        toast.error("There was an error, please try again later")
         console.log(error)
       })
   }
@@ -158,24 +157,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               <span className=" ">{blog.likesCount} Likes</span>
             </div>
             <span className="text-2xl text-gray-600 font-thin">|</span>
-            {blog.author && (
-              <NavLink
-                className="flex items-end "
-                to={`/user/${blog.author._id}`}
-              >
-                <img
-                  className="object-cover object-center w-7 aspect-square rounded-full"
-                  src={blog.author.profileImage}
-                  alt=""
-                />
-
-                <div className="ml-2">
-                  <h1 className="text-lg text-gray-700 hover:underline hover:cursor-pointer">
-                    {blog.author.name}
-                  </h1>
-                </div>
-              </NavLink>
-            )}
+            {blog.author && <AuthorTag author={blog.author} />}
 
             {blog.author && (
               <span className="text-2xl text-</svg>gray-600 font-thin">|</span>
@@ -222,12 +204,13 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           </div>
           <div className="flex gap-2 mt-5 justify-center">
             {blog?.tags.map((tag, index) => (
-              <span
+              <NavLink
+                to={`/feed/?category=${tag}`}
                 key={index}
-                className="text-center bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs"
+                className="text-center bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-s hover:bg-gray-200 hover:text-gray-900"
               >
                 {tag}
-              </span>
+              </NavLink>
             ))}
           </div>
         </div>

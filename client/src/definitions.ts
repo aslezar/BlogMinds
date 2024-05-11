@@ -16,7 +16,7 @@ export interface ForgotPasswordType {
   password: string
 }
 
-interface Author {
+export interface Author {
   _id: string
   name: string
   profileImage?: string
@@ -87,7 +87,7 @@ export interface UserType extends User {
 }
 
 export enum Category {
-  All = "all",
+  All = "_all",
   Technology = "technology",
   Science = "science",
   Programming = "programming",

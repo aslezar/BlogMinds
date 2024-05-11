@@ -48,7 +48,6 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       editor.blocks.getBlocksCount(),
       true,
     )
-
   }
 
   const handleImageUploadToEditor = (imageUrl: string, prompt: string) => {

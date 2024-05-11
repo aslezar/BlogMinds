@@ -1,12 +1,17 @@
 import { Link } from "react-router-dom"
-import { BlogCardType } from "../definitions"
+import { BlogCardType, Category } from "../definitions"
+import AuthorTag from "./AuthorTag"
 import { format } from "date-fns/format" // Import date-fns under a namespace
+import { NavLink, useSearchParams } from "react-router-dom"
 
 interface BlogCardProps {
   blog: BlogCardType
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
+  const [searchParams] = useSearchParams()
+  const category = searchParams.get("category") || Category.All
+
   const formatDate = (date: string) => {
     return format(new Date(date), "dd MMMM yyyy")
   }
@@ -21,24 +26,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
         />
         <div className="mt-6  lg:mt-0 lg:mx-6">
           <div className="flex  items-end gap-3">
-            {blog.author && (
-              <div className="flex items-end ">
-                <img
-                  className="object-cover object-center w-6 aspect-square rounded-full"
-                  src={blog.author.profileImage}
-                  alt=""
-                />
-
-                <div className="ml-2">
-                  <Link
-                    className="text-[15px] text-gray-700 hover:underline hover:cursor-pointer"
-                    to={`/user/${blog.author._id}`}
-                  >
-                    {blog.author.name}
-                  </Link>
-                </div>
-              </div>
-            )}
+            {blog.author && <AuthorTag author={blog.author} />}
             <div className="flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -113,13 +101,14 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
           </div>
           {blog.tags && (
             <div className="flex gap-1 items-center divide-x-2 divide-gray-300 mt-5">
-              {blog.tags.map((tag, index) => (
-                <p
-                  key={index}
-                  className="text-xs text-gray-500  px-1  capitalize"
+              {blog.tags.map((tag) => (
+                <NavLink
+                  key={tag}
+                  to={`/feed/?category=${tag}`}
+                  className={`text-xs  px-1 capitalize hover:underline ${category === tag ? "font-bold text-dark" : "text-gray-500"}`}
                 >
                   {tag}
-                </p>
+                </NavLink>
               ))}
             </div>
           )}

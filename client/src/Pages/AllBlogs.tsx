@@ -6,6 +6,7 @@ import { getTrendingBlog } from "../api"
 import { Link } from "react-router-dom"
 import Loader from "../components/Loader"
 import TrendingSvg from "../assets/img/Feed/TrendingSvg"
+import AuthorTag from "../components/AuthorTag"
 
 const AllBlogs = () => {
   const [trending, setTrending] = useState<TrendingType[]>([])
@@ -48,12 +49,7 @@ const AllBlogs = () => {
                   </Link>
                   <div className="text-sm flex items-center gap-5 pr-5 text-gray-600">
                     <span>
-                      <Link
-                        to={`/user/${blog.author._id}`}
-                        className="hover:cursor-pointer hover:underline"
-                      >
-                        {blog.author.name}
-                      </Link>
+                      <AuthorTag author={blog.author} />
                     </span>{" "}
                     <span>{blog.totalScore} Interactions</span>
                   </div>
