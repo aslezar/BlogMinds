@@ -16,10 +16,11 @@ router.use("/public/search", SearchRouter)
 router.use("/public/profile", ProfileRouter)
 router.use("/public/blog", BlogPublicRouter)
 
+router.use("/public/ai", AIRouter)
+
 router.use(AuthMiddleware)
 
 router.use("/blog", BlogUpdateRouter)
 router.use("/user", UserRouter)
-router.use("/ai", AIRouter)
 
 export default router
