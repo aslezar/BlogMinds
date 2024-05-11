@@ -16,16 +16,19 @@ const HomePage = () => {
         <img
           src={middle}
           alt="hero"
+          loading="eager"
           className="hidden lg:block absolute w-1/2 m-auto inset-0 top-0 shadow-2xl rounded-xl z-10"
         />
         <img
           src={left}
           alt="hero"
+          loading="eager"
           className="lg:absolute  w-11/12  lg:w-[37.5%] m-auto lg:-left-7 lg:top-[15%] shadow-2xl rounded-xl"
         />
         <img
           src={right}
           alt="hero"
+          loading="eager"
           className="absolute hidden lg:block w-[37.5%] m-auto -right-5 top-[15%] shadow-2xl rounded-xl"
         />
       </div>

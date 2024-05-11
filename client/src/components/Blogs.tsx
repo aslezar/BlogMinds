@@ -14,7 +14,7 @@ const Blogs = () => {
   const [hasMore, setHasMore] = useState(true)
   const limit = 10
   const [searchParams] = useSearchParams()
-  const category = searchParams.get("category") || "all"
+  const category = searchParams.get("category") || Category.All
 
   const {
     loading: userLoading,

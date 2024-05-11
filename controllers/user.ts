@@ -7,7 +7,7 @@ import {
     uploadProfileImage as cloudinaryUploadProfileImage,
     deleteProfileImage as cloudinaryDeleteProfileImage,
     uploadAssetsImages as cloudinaryUploadAssetsImages,
-    deleteAssetImages as cloudinaryDeleteAssestImages,
+    deleteAssetImages as cloudinaryDeleteAssetImages,
 } from "../utils/imageHandlers/cloudinary"
 
 const updateUser = async (
@@ -126,7 +126,7 @@ const deleteAsset = async (req: Request, res: Response) => {
         throw new BadRequestError("You are not authorized to delete this asset")
 
     //delete assets from cloudinary
-    const isDeleted: boolean = await cloudinaryDeleteAssestImages(public_id)
+    const isDeleted: boolean = await cloudinaryDeleteAssetImages(public_id)
     if (!isDeleted) throw new BadRequestError("Failed to delete assets")
     await User.findByIdAndUpdate(userId, {
         $pull: { myAssests: assets },
@@ -145,9 +145,9 @@ const followUnfollowUser = async (req: Request, res: Response) => {
     if (!followId) throw new BadRequestError("FollowId is required")
 
     const user = await User.findById(userId)
-    const followUser = await User.findById(followId)
-
     if (!user) throw new UnauthenticatedError("User Not Found")
+
+    const followUser = await User.findById(followId)
     if (!followUser) throw new BadRequestError("Follow User Not Found")
 
     const isFollowing = user.following.includes(followId)
@@ -160,14 +160,15 @@ const followUnfollowUser = async (req: Request, res: Response) => {
         await User.findByIdAndUpdate(followId, {
             $pull: { followers: userId },
         })
-    }
-    if (!isFollowing && !isFollower) {
+    } else if (!isFollowing && !isFollower) {
         await User.findByIdAndUpdate(userId, {
             $push: { following: followId },
         })
         await User.findByIdAndUpdate(followId, {
             $push: { followers: userId },
         })
+    } else {
+        throw new BadRequestError("Something Went Wrong")
     }
 
     res.status(StatusCodes.OK).json({
@@ -183,9 +184,9 @@ const isFollowing = async (req: Request, res: Response) => {
     if (!followId) throw new BadRequestError("FollowId is required")
 
     const user = await User.findById(userId)
-    const followUser = await User.findById(followId)
-
     if (!user) throw new UnauthenticatedError("User Not Found")
+
+    const followUser = await User.findById(followId)
     if (!followUser) throw new BadRequestError("Follow User Not Found")
 
     const isFollowing = user.following.includes(followId)
