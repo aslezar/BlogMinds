@@ -22,7 +22,7 @@ const SearchButton = () => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="#101356"
-          className="w-6 h-6 "
+          className="w-4 md:w-6 aspect-square "
         >
           <path
             fillRule="evenodd"
@@ -88,7 +88,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
   }
 
   return (
-    <div className="bg-white w-[55%] py-8 rounded-2xl px-8 relative">
+    <div className="bg-white w-11/12 md:w-[55%]  rounded-2xl p-5 md:p-8 relative">
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -103,15 +103,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
           type="text"
           value={inputValue}
           onChange={handleInputChange}
-          className="w-full p-3 px-6 text-lg outline-none text-dark border border-dark rounded-full"
+          className="w-full p-3 px-4 md:px-6 md:text-lg outline-none text-dark border border-dark rounded-full"
           placeholder="Start typing to search"
           autoFocus
         />
       </form>
 
-      <div className="px-5 overflow-y-scroll h-[90%]">
+      <div className="md:px-5 overflow-y-scroll h-[90%]">
         {inputValue.length >= 1 && (
-          <p className="absolute top-12 right-12 text-gray-600 text-sm flex items-center gap-2 italic">
+          <p className="absolute top-12 right-12 text-gray-600 text-sm md:flex items-center gap-2 italic hidden ">
             <span>Press</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -140,14 +140,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
               style: { transition: "none" },
             }}
             textColor="secondary"
-            className="w-[90%] mt-4 mb-6"
+            className="w-[90%] md:mt-4 mb-6"
           >
             {categories.map((category, index) => (
               <Tab
                 label={category + "s"}
                 key={index}
                 disableRipple
-                className="!text-[0.9rem] !capitalize"
+                className="!text-xs md:!text-[0.9rem] !capitalize"
               />
             ))}
           </Tabs>
@@ -168,13 +168,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
                       className="aspect-video object-cover h-20 bg-gray-300 rounded-md"
                     />
                     <div className="flex flex-col gap-1">
-                      <h3 className="text-lg font-semibold text-dark  group-hover:underline">
+                      <h3 className="md:text-lg font-semibold text-dark  group-hover:underline">
                         {item?.title}
                       </h3>
-                      <p className="text-gray-600 text-sm">
+                      <p className="hidden md:block text-gray-600 text-sm">
                         {item.description}
                       </p>
-                      <p className="text-gray-600 text-xs">
+                      <p className="hidden md:block text-gray-600 text-xs">
                         {new Date(item.createdAt).toDateString().slice(3)}
                       </p>
                       <div className="flex items-center gap-2">
@@ -199,17 +199,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
                     to={`/user/${item._id}`}
                     onClick={handleModalClose}
                     key={index}
-                    className="flex gap-4 items-center border-b border-gray-200 py-4 group"
+                    className="flex gap-4 items-center border-b border-gray-200 pb-2 md:py-4 group"
                   >
                     <img
                       src={item.profileImage}
-                      className="w-20 h-20 bg-gray-300 rounded-full"
+                      className="w-10 md:w-20 aspect-square bg-gray-300 rounded-full"
                     />
                     <div className="flex flex-col gap-1">
-                      <h3 className="text-lg font-semibold text-dark  group-hover:underline">
+                      <h3 className="md:text-lg font-semibold text-dark  group-hover:underline">
                         {item.name}
                       </h3>
-                      <p className="text-gray-600 text-sm">{item.email}</p>
+                      <p className="text-gray-600 text-xs md:text-sm">{item.email}</p>
                     </div>
                   </Link>
                 ))}
@@ -240,7 +240,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
           </div>
         )}
         {inputValue.length >= 3 && !isLoading && data.length == 0 && (
-          <p className="text-gray-500 text-base mt-4">
+          <p className="text-sm text-gray-500 md:text-base mt-4">
             No {category}s found for "{inputValue}"
           </p>
         )}
