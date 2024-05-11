@@ -103,7 +103,6 @@ const AICompletion: React.FC<AICompletionProps> = ({
   const saveToAssets = (image: ImageDataType): Promise<void> => {
     return new Promise((resolve, reject) => {
       if (!image.imageBlob || image.isSaved) {
-        toast.success("Saved")
         return reject(new Error("Image already saved"))
       }
 
@@ -128,17 +127,16 @@ const AICompletion: React.FC<AICompletionProps> = ({
               return img
             }),
           )
+          toast.success("Saved", {
+            id: "uploading",
+          })
           resolve()
         })
         .catch((err) => {
           console.log(err)
+          toast.dismiss("uploading")
           reject(err)
         })
-        .finally(() =>
-          toast.success("Saved", {
-            id: "uploading",
-          }),
-        )
     })
   }
   const handleImageDiscard = (index: number) => {
@@ -160,7 +158,6 @@ const AICompletion: React.FC<AICompletionProps> = ({
       handleImageUpload(image.imageUrl, image.prompt)
     } catch (error) {
       console.log(error)
-      // Handle error if saving to assets or uploading to the blog post fails
     }
   }
 

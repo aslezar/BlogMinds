@@ -259,10 +259,13 @@ export const search = (
  */
 
 export const getAICompletion = (text: string) =>
-  API.get("/ai/suggest/text", { params: { text } })
+  API.get("/public/ai/suggest/text", { params: { text } })
 
 export const getAImage = (prompt: string) =>
-  API.get("/ai/suggest/image", { params: { prompt }, responseType: "blob" })
+  API.get("/public/ai/suggest/image", {
+    params: { prompt },
+    responseType: "blob",
+  })
 
 export const followUnfollowUser = (userId: UserType["userId"]) =>
   API.post("/user/follow-unfollow", { followId: userId })
