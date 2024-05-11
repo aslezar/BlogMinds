@@ -28,7 +28,6 @@ export default function SignUp(): JSX.Element {
 
   React.useEffect(() => {
     if (otp.length === 6) {
-      console.log(otp)
       dispatch(verification(otp))
     }
   }, [otp])

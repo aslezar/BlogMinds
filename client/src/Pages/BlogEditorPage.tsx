@@ -81,7 +81,6 @@ function BlogEditor() {
     const data = await (blog._id === "new_blog"
       ? createBlog({ ...blog, content: latestContent })
       : updateBlog({ ...blog, content: latestContent }))
-    console.log(data.data.id)
     return data.data.id
   }
 
@@ -92,7 +91,6 @@ function BlogEditor() {
     setLoadingPublish(true)
     try {
       const latestContent = await editor.save()
-      console.log(latestContent)
       const id = await createOrUpdateBlog(blog, latestContent)
       toast.success(
         blog._id === "new_blog" ? "Blog Published" : "Blog Updated",
@@ -102,8 +100,8 @@ function BlogEditor() {
       )
       localStorage.removeItem("new_blog")
       navigate(`/blog/${id}`)
-    } catch (err) {
-      console.log(err)
+    } catch (error) {
+      console.log(error)
     } finally {
       setLoadingPublish(false)
     }
@@ -118,7 +116,6 @@ function BlogEditor() {
       const blogFromStorageString = initialBlog
 
       const blogFromStorage = JSON.parse(blogFromStorageString)
-      console.log(blogFromStorage)
 
       setBlog((_prevBlog) => blogFromStorage)
     } else {

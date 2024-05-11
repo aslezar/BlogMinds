@@ -15,7 +15,7 @@ const AllBlogs = () => {
     setLoading(true)
     getTrendingBlog()
       .then((res) => setTrending(res.data.blogs))
-      .catch((err) => console.log(err))
+      .catch((error) => console.log(error))
       .finally(() => setLoading(false))
   }, [])
 

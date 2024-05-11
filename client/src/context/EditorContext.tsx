@@ -89,8 +89,8 @@ function EditorContextProvider(props: any) {
                       },
                     }
                   })
-                  .catch((err) => {
-                    console.log(err)
+                  .catch((error) => {
+                    console.log(error)
                     return {
                       success: 0,
                     }
@@ -98,7 +98,6 @@ function EditorContextProvider(props: any) {
               },
 
               uploadByUrl: (_url: string) => {
-                console.log(_url)
                 return new Promise((resolve) => {
                   resolve({
                     success: 1,

@@ -116,7 +116,6 @@ const AICompletion: React.FC<AICompletionProps> = ({
         .then((res) => {
           //update image in state
           const imageUrl = res.data[0]
-          console.log(imageUrl)
 
           setImageSuggestions((prev) =>
             prev.map((img) => {
@@ -174,7 +173,6 @@ const AICompletion: React.FC<AICompletionProps> = ({
             onClick={(e) => {
               e.preventDefault()
               setIsAICompletionOpen(false)
-              console.log("clicked")
             }}
             className="bg-red-500 z-50 text-white p-0.5 text-lg hover:bg-red-700 fit rounded-full flex justify-center text-center"
           >

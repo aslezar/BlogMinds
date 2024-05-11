@@ -136,8 +136,6 @@ export const getUserProfile = (
   })
 
 export const updateImage = (profileImage: File) => {
-  console.log(profileImage)
-
   const formData = new FormData()
   formData.append("profileImage", profileImage)
   return API.post("/user/image", formData)

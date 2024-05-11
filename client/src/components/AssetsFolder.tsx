@@ -36,7 +36,6 @@ const AssetsFolder: React.FC<AssetsFolderProps> = ({
             onClick={(e) => {
               e.preventDefault()
               setIsAssetsOpen(false)
-              console.log("clicked")
             }}
             className="bg-red-500 z-50 text-white p-0.5 h-fit flex hover:bg-red-700 justify-center rounded-full text-center"
           >
@@ -93,7 +92,6 @@ const Dropzone = ({
       "image/*": [".png", ".jpeg", ".jpg", ".webp"],
     },
     onDropRejected: (files) => {
-      console.log(files)
       files.forEach((file) => {
         toast.error(
           `${file.file.name}: ${file.errors.map((err) => (err.code === "file-too-large" ? "File is larger than 4MB" : err.message)).join(", ")}`,

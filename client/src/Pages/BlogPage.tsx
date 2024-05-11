@@ -23,7 +23,6 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
   const { initializeEditor, editor } = useEditorContext()
   const { id } = useParams<{ id: string }>()
   const editorRef = useRef<any>(null)
-  console.log(blog)
   // pass blog content to editor
   useEffect(() => {
     if (blog?.content) {

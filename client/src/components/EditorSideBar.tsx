@@ -49,7 +49,6 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       true,
     )
 
-    console.log(editor.blocks)
   }
 
   const handleImageUploadToEditor = (imageUrl: string, prompt: string) => {

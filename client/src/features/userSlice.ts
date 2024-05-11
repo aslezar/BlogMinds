@@ -76,9 +76,8 @@ export const logout = () => async (dispatch: Dispatch) => {
   toast.loading("Logging out", { id: "logout" })
   dispatch(userSlice.actions.SET_LOADING())
   signOut()
-    .then((res) => {
-      console.log(res)
-
+    .then((_res) => {
+      // console.log(_res)
       dispatch(userSlice.actions.LOGOUT_USER())
       toast.success("Logged out")
     })
@@ -96,8 +95,8 @@ export const login = (loginValues: LoginType) => async (dispatch: any) => {
 
   dispatch(userSlice.actions.SET_LOADING())
   signIn(loginValues)
-    .then((res: any) => {
-      console.log(res)
+    .then((_res: any) => {
+      // console.log(_res)
       dispatch(loadUser())
     })
     .catch((err) => {
@@ -114,10 +113,10 @@ export const register =
     dispatch(userSlice.actions.SET_LOADING())
 
     signUp(signupValues)
-      .then((res) => {
-        console.log(res)
+      .then((_res) => {
+        // console.log(_res)
 
-        const id = res.data.userId
+        const id = _res.data.userId
         dispatch(userSlice.actions.SET_VERIFICATION_REQUIRED(id))
         toast.success("Email Sent", { id: "register" })
       })
@@ -145,8 +144,8 @@ export const forgotPasswordSendOtp =
     dispatch(userSlice.actions.SET_LOADING())
     const { email } = forgotPasswordValues
     forgotPasswordSendOtpApi(email)
-      .then((res) => {
-        console.log(res)
+      .then((_res) => {
+        console.log(_res)
         toast.success("OTP Sent", { id: "forgotPassword" })
         setPage(1)
       })
@@ -164,8 +163,8 @@ export const forgotPasswordVerifyOtp =
     toast.loading("Verifying OTP", { id: "forgotPassword" })
     dispatch(userSlice.actions.SET_LOADING())
     forgotPasswordVerifyOtpApi(forgotPasswordValues)
-      .then((res: any) => {
-        console.log(res)
+      .then((_res: any) => {
+        // console.log(_res)
         toast.success("Password changed successfully", { id: "forgotPassword" })
         dispatch(loadUser())
       })
@@ -189,8 +188,8 @@ export const verification =
     toast.loading("Verifying", { id: "verification" })
     dispatch(userSlice.actions.SET_LOADING())
     verifyOtp({ userId, otp })
-      .then((res: any) => {
-        console.log(res)
+      .then((_res: any) => {
+        // console.log(_res)
 
         dispatch(loadUser())
         toast.success("Registered Successfully", { id: "verification" })
@@ -220,7 +219,7 @@ export const loadUser = () => async (dispatch: Dispatch) => {
       toast.success("Logged in", { id: "loadUser" })
       dispatch(userSlice.actions.SET_USER(user))
     })
-    .catch((err) => console.log(err))
+    .catch((error) => console.log(error))
     .finally(() => dispatch(userSlice.actions.SET_LOADING_FALSE()))
 }
 

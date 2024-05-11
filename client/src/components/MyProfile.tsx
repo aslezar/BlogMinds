@@ -97,7 +97,6 @@ const MyProfile = () => {
       setLoadingProfileImage(true)
       updateImage(e.target.files[0])
         .then((response) => {
-          console.log(response)
           dispatch(
             updateUser({
               ...originalUser,
@@ -139,7 +138,7 @@ const MyProfile = () => {
         }))
         toast.success("Profile image deleted successfully")
       })
-      .catch((e) => console.log(e))
+      .catch((error) => console.log(error))
       .finally(() => setLoadingProfileImage(false))
   }
 

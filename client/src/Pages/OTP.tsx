@@ -6,7 +6,6 @@ import { loadUser } from "../features/userSlice"
 const OTP = () => {
   const [otp, setOtp] = useState<string>("")
   const { user, loading } = useAppSelector((state) => state.user)
-  console.log(user, loading)
   const dispatch = useAppDispatch()
   const handleChange = (newValue: string) => {
     setOtp(newValue)
