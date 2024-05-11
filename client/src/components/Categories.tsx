@@ -1,4 +1,4 @@
-import React from "react"
+  import React from "react"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import { Category } from "../definitions"
@@ -30,7 +30,7 @@ const Categories = () => {
           label={category === "all" ? "For You" : category}
           key={category}
           disableRipple
-          className="!text-[0.9rem] !capitalize"
+          className="!text-xs md:!text-[0.9rem] !capitalize"
           // scroll to top onClick
           onClick={() => {
             setTimeout(() => {

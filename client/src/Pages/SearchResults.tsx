@@ -53,8 +53,8 @@ const SearchResults: React.FC = () => {
   }, [category])
 
   return (
-    <div className="w-3/4  mx-auto pb-7">
-      <div className="flex justify-between items-center my-4 px-6 sticky py-4 top-16 bg-white">
+    <div className="w-11/12 md:w-3/4  mx-auto pb-7">
+      <div className="flex justify-between items-center md:my-4 px-6 sticky md:py-4 top-16 bg-white">
         {query && query.length >= 3 && (
           <Tabs
             value={categories.indexOf(category as string)}

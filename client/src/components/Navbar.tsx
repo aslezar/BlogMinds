@@ -46,14 +46,14 @@ const Navbar = () => {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 32 32"
-              className="h-8 "
+              className="h-6 md:h-8 "
             >
               <g data-name="75-Write">
                 <path d="M30 7v18a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5h9V0H7a7 7 0 0 0-7 7v18a7 7 0 0 0 7 7h18a7 7 0 0 0 7-7V7z" />
                 <path d="M22.38 24H11a3 3 0 0 1 0-6h4v-2h-4a5 5 0 0 0 0 10h13a1 1 0 0 0 .89-.55l2-4A1 1 0 0 0 27 21V1a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v20a1 1 0 0 0 .11.45zM23 2h2v1h-2zm0 3h2v15h-2z" />
               </g>
             </svg>
-            <span className="self-center text-2xl font-semibold whitespace-nowrap uppercase tracking-wide">
+            <span className="self-center text-lg md:text-2xl font-semibold whitespace-nowrap uppercase tracking-wide">
               Creativerse
             </span>
           </NavLink>
@@ -120,61 +120,37 @@ const Navbar = () => {
                   />
                 </svg>
               </NavLink>
-              <button
-                data-collapse-toggle="navbar-sticky"
-                type="button"
-                className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                aria-controls="navbar-sticky"
-                aria-expanded="false"
-              >
-                <span className="sr-only">Open main menu</span>
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 17 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M1 1h15M1 7h15M1 13h15"
-                  />
-                </svg>
-              </button>
             </div>
           ) : (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <SearchBar />
               <NavLink
                 to={"/write/new_blog"}
-                className="bg-dark px-6 hover:bg-highlight transition-all py-3 flex items-end justify-center gap-1 rounded-full text-sm duration-200"
+                className="bg-dark px-2 md:px-6 hover:bg-highlight transition-all py-2  md:py-3 flex items-end justify-center gap-1 rounded-full md:text-sm duration-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="white"
-                  className="w-5 h-5 inline"
+                  className="w-4 md:w-5 aspect-square inline"
                 >
                   <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                   <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
                 </svg>
-                <span className=" text-white font-medium">Write</span>
+                <span className="hidden md:inline text-white font-medium">Write</span>
               </NavLink>
               <button
                 ref={iconRef}
                 onClick={() => {
                   setIsOpen(!isOpen)
                 }}
-                className="p-3 rounded-full bg-dark relative hover:bg-highlight duration-200"
+                className="p-2 md:p-3 rounded-full bg-dark relative hover:bg-highlight duration-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="white"
-                  className="w-5 h-5 "
+                  className="w-4 aspect-square"
                 >
                   <path
                     fillRule="evenodd"
