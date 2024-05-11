@@ -215,7 +215,7 @@ const MyProfile = () => {
                 <span className="flex justify-center gap-2  py-4 flex-col sm:ml-5 sm:py-4">
                   <label
                     htmlFor="file-upload"
-                    className="w-fit flex gap-1 text-sm border rounded-lg py-2 px-5 cursor-pointer hover:border-highlight duration-150 mx-auto sm:ml-0"
+                    className="w-fit flex gap-1 text-sm border rounded-lg py-2 px-5 cursor-pointer hover:border-highlight duration-150 mx-auto md:ml-0"
                   >
                     <TbPhotoPlus className="my-auto text-base" />
                     Upload new photo
@@ -229,7 +229,7 @@ const MyProfile = () => {
                     name="profileImage"
                   />
                   <button
-                    className="flex gap-1 border w-fit p-2 rounded-lg cursor-pointer text-xs text-red-500 hover:border-red-500 duration-150 py-2 px-5 mx-auto sm:ml-0"
+                    className="flex gap-1 border w-fit p-2 rounded-lg cursor-pointer text-xs text-red-500 hover:border-red-500 duration-150 py-2 px-5 mx-auto md:ml-0"
                     disabled={loadingProfileImage || user.profileImage === ""}
                     onClick={handleProfileImageDelete}
                   >
