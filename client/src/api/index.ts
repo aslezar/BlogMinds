@@ -13,7 +13,7 @@ import {
  ********************** Configuring Axios **********************
  */
 
-const URL = import.meta.env.PROD ? "/api/v1" : "http://localhost:8000/api/v1"
+const URL = "/api/v1"
 
 const API = axios.create({ baseURL: URL, withCredentials: true })
 
