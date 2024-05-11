@@ -146,7 +146,7 @@ const Navbar = () => {
                 onClick={() => {
                   setIsOpen(!isOpen)
                 }}
-                className="p-2 md:p-3 rounded-full bg-dark relative hover:bg-highlight duration-200"
+                className={`${isOpen ? "bg-highlight" : "bg-dark"} p-2 md:p-3 rounded-full bg-dark relative hover:bg-highlight duration-200`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -164,14 +164,14 @@ const Navbar = () => {
               {isOpen && (
                 <div
                   ref={dropdownRef}
-                  className="absolute z-10 top-20 right-[5%] mt-1 w-52 font-medium  text-gray-600 flex flex-col bg-white rounded-xl overflow-auto border border-gray-300 shadow-lg "
+                  className="absolute z-10 top-20 right-[5%] mt-0.5 w-40  text-gray-600 flex flex-col bg-white rounded-xl overflow-auto border border-gray-300 shadow-lg text-xs md:text-base md:w-52 "
                 >
                   <NavLink
                     to={"/profile"}
                     onClick={() => {
                       setIsOpen(false)
                     }}
-                    className={`px-6 py-4 cursor-pointer flex items-center gap-1 text-left hover:bg-highlight hover:text-white`}
+                    className={`cursor-pointer flex items-center gap-1 text-left hover:bg-highlight hover:text-white px-4 py-3 md:px-6 md:py-4 duration-150`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -194,7 +194,7 @@ const Navbar = () => {
                       setIsOpen(false)
                     }}
                     to={"/settings"}
-                    className={`px-6 py-4 flex items-center gap-1 cursor-pointer text-left hover:bg-highlight hover:text-white`}
+                    className={`flex items-center gap-1 cursor-pointer text-left hover:bg-highlight hover:text-white px-4 py-3 md:px-6 md:py-4 duration-150`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -219,7 +219,7 @@ const Navbar = () => {
                   </NavLink>
                   <button
                     onClick={handleLogout}
-                    className={`px-6 py-4 cursor-pointer text-left hover:bg-highlight hover:text-white flex items-center gap-1`}
+                    className={`cursor-pointer text-left hover:bg-highlight hover:text-white flex items-center gap-1 px-4 py-3 md:px-6 md:py-4 duration-150`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
