@@ -167,13 +167,13 @@ const MyProfile = () => {
           <button
             onClick={handleEdit}
             type="button"
-            className="w-fit text-dark hover:text-white border border-dark hover:bg-highlight hover:border-highlight font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-purple-900 duration-150 flex items-center justify-center gap-1 xs:mx-auto xs:mt-5 sm:mr-0"
+            className="w-fit text-dark hover:text-white border border-dark hover:bg-highlight hover:border-highlight font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-purple-900 duration-150 flex items-center justify-center gap-1 mx-auto sm:mr-0 mt-3 sm:mt-0"
           >
             <CiEdit className="text-base" />
             Edit profile
           </button>
         ) : (
-          <div className="flex mx-auto xs:mt-5 sm:mr-0">
+          <div className="flex mx-auto sm:mr-0 mt-3 sm:mt-0">
             <button
               onClick={handleUpdate}
               type="button"
@@ -192,27 +192,27 @@ const MyProfile = () => {
         )}
       </nav>
       <hr />
-      <main className="flex xs:flex-wrap">
-        <section className="sm:w-100 xs:w-3/4 lg:w-1/2 p-5 mx-auto">
+      <main className="flex flex-col md:flex-row">
+        <section className="p-5 md:mx-auto">
           <form action="" className="flex flex-col">
-            <label className="text-lg my-2 font-medium text-center sm:text-left">
+            <label className="text-lg my-2 font-medium text-center md:text-left">
               Your profile photo
             </label>
-            <div className="flex flex-col sm:flex-row">
-              <div className="relative flex w-full sm:w-fit">
+            <div className="flex flex-col md:flex-row">
+              <div className="relative flex w-full md:w-fit">
                 {loadingProfileImage && (
                   <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-70 flex items-center justify-center rounded-lg z-50">
                     <Loader />
                   </div>
                 )}
                 <img
-                  className="h-40 w-40 rounded-full border mx-auto sm:ml-0"
+                  className="h-40 w-40 rounded-full border mx-auto md:ml-0"
                   src={user.profileImage}
                   alt={user.name}
                 />
               </div>
               {edit && (
-                <span className="flex justify-center gap-2  py-4 sm:flex-col sm:ml-5 sm:py-4">
+                <span className="flex justify-center gap-2  py-4 flex-col sm:ml-5 sm:py-4">
                   <label
                     htmlFor="file-upload"
                     className="w-fit flex gap-1 text-sm border rounded-lg py-2 px-5 cursor-pointer hover:border-highlight duration-150 mx-auto sm:ml-0"
