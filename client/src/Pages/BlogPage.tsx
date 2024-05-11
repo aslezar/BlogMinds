@@ -9,9 +9,7 @@ import { format } from "date-fns/format" // Import date-fns under a namespace
 import { IoBookOutline } from "react-icons/io5"
 import { useEditorContext } from "../context/EditorContext"
 import { NavLink } from "react-router-dom"
-import { PiDotOutlineFill } from "react-icons/pi";
 import AuthorTag from "../components/AuthorTag.tsx"
-
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -37,34 +35,11 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
     }
   }, [blog?.content, editor, initializeEditor])
 
-  function formatDateGap(pastDateString: string): string {
-    const presentDate: Date = new Date() // Current date and time
-    const pastDate: Date = new Date(pastDateString) // Parse pastDateString into Date object
-
-    const msPerMinute: number = 60 * 1000
-    const msPerHour: number = msPerMinute * 60
-    const msPerDay: number = msPerHour * 24
-    const msPerWeek: number = msPerDay * 7
-
-    const timeDifference: number = presentDate.getTime() - pastDate.getTime()
-
-    if (timeDifference < msPerMinute) {
-      const seconds: number = Math.round(timeDifference / 1000)
-      return seconds + "s ago"
-    } else if (timeDifference < msPerHour) {
-      const minutes: number = Math.round(timeDifference / msPerMinute)
-      return minutes + "m ago"
-    } else if (timeDifference < msPerDay) {
-      const hours: number = Math.round(timeDifference / msPerHour)
-      return hours + "h ago"
-    } else if (timeDifference < msPerWeek) {
-      const days: number = Math.round(timeDifference / msPerDay)
-      return days + "d ago"
-    } else {
-      const weeks: number = Math.round(timeDifference / msPerWeek)
-      return weeks + "w ago"
-    }
-  }
+  // useEffect(() => {
+  //   if (blog?.content && editor) {
+  //     editor?.render({ blocks: JSON.parse(blog?.content) })
+  //   }
+  // }, [blog?.content])
 
   const { loading, isAuthenticated, user } = useAppSelector(
     (state) => state.user,
@@ -271,27 +246,27 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               {/* input field to write comment with post button */}
 
               {blog?.comments?.map((comment, index) => (
-                <li key={index} className="mb-4 gap-4 flex items-center">
+                <li
+                  key={index}
+                  className="mb-4 gap-4 flex items-center text-lg"
+                >
                   <NavLink to={`/user/${comment.author._id}`}>
                     <img
-                      className="object-cover w-12 rounded-full aspect-square border"
+                      className="object-cover w-12 rounded-full aspect-square"
                       src={comment?.author?.profileImage}
                       alt={"img"}
                     />
                   </NavLink>
                   <div>
-                    <NavLink to={`/user/${comment.author._id}`}
-                    className="flex items-center"
-                    >
-                      <span className="text-lg hover:underline hover:cursor-pointer !font-medium">
+                    <NavLink to={`/user/${comment.author._id}`}>
+                      <p className="font-medium hover:underline hover:cursor-pointer">
                         {comment.author.name}
-                      </span>
-                      <PiDotOutlineFill className="text-gray-300"/>
-                      <span className="text-gray-500 text-xs">
-                        {formatDateGap(comment.createdAt)}
-                      </span>
+                      </p>
                     </NavLink>
-                    <p className="text-gray-600">{comment?.message}</p>
+                    <p>{comment?.message}</p>
+                    <p className="text-gray-500 text-sm">
+                      {formatDate(comment.createdAt)}
+                    </p>
                   </div>
                 </li>
               ))}
