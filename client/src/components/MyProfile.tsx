@@ -9,9 +9,8 @@ import { CiEdit } from "react-icons/ci"
 import { IoIosAddCircleOutline } from "react-icons/io"
 import { useAppDispatch, useAppSelector } from "../hooks"
 import { updateUser } from "../features/userSlice"
-import userAltImg from "../assets/img/MyProfilePage/user-alt.jpg"
 import { TbPhotoPlus } from "react-icons/tb"
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md"
 const defUser: UserType = {
   userId: "",
   createdAt: "",
@@ -127,11 +126,11 @@ const MyProfile = () => {
     if (!originalUser) return
     setLoadingProfileImage(true)
     deleteProfileImage()
-      .then((_response) => {
+      .then((response) => {
         dispatch(
           updateUser({
             ...originalUser,
-            profileImage: "",
+            profileImage: response.data.defaultProfileImage,
           }),
         )
         setEditedUser((prevUser) => ({
@@ -209,7 +208,7 @@ const MyProfile = () => {
                 )}
                 <img
                   className="h-40 w-40 rounded-full border mx-auto sm:ml-0"
-                  src={user.profileImage || userAltImg}
+                  src={user.profileImage}
                   alt={user.name}
                 />
               </div>

@@ -30,7 +30,6 @@ async function seeder() {
     await blogSeeder()
 
     mongoose.connection.close()
-    process.exit()
 }
 
 async function blogSeeder() {

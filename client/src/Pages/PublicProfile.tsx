@@ -65,8 +65,6 @@ const PublicProfile = () => {
     }
     ifFollowing()
   }, [userId])
-  console.log(user?.profileImage);
-  
 
   if (loading) return <Loader />
   return (
@@ -78,12 +76,11 @@ const PublicProfile = () => {
               <div className="relative flex mr-5">
                 <div className="flex flex-1">
                   <div>
-                    <div
-                      className="md rounded-full relative avatar w-36 h-36"
-                    >
+                    <div className="md rounded-full relative avatar w-36 h-36">
                       <img
                         className="rounded-full"
                         src={user?.profileImage}
+                        alt={user?.name}
                         loading="lazy"
                       />
                       <div className="absolute"></div>
@@ -181,7 +178,7 @@ const PublicProfile = () => {
 
                 <img
                   src={blog.img}
-                  alt="img"
+                  alt={blog.title}
                   className="aspect-video rounded-md object-cover"
                   loading="lazy"
                 />

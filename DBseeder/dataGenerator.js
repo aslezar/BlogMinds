@@ -75,7 +75,8 @@ const filteredBlogs = blogs
         }
     })
     .filter((blog) => {
-        if (!blog.title || blog.title.length < 3) return false
+        if (!blog.title || blog.title.length < 3 || blog.title.length >= 100)
+            return false
         if (!blog.author || blog.author.length < 3) return false
         if (userIdName.size >= maxUsersToPush) {
             //select random author
