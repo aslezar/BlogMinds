@@ -186,7 +186,7 @@ export const getBlogs = (
 ) =>
   API.get("/public/blog/category", {
     params: {
-      tags: category,
+      tags: category.toLowerCase(),
       page: pageNo,
       limit: limit,
     },

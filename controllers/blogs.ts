@@ -70,11 +70,12 @@ const getRecommendedBlogs = async (req: Request, res: Response) => {
 }
 
 const getBlogByCategory = async (req: Request, res: Response) => {
-    const tags = req.query.tags
-    // tag is array of category field, and category is a string
+    let tags = req.query.tags as string
+
+    tags = tags.toLowerCase()
 
     let query = {}
-    if (tags !== "all") query = { tags: { $in: [tags] } }
+    if (tags !== "_all") query = { tags: { $in: [tags] } }
 
     const blogs = await Blog.find(query)
         .skip(req.pagination.skip)

@@ -10,7 +10,7 @@ const AuthorTag = ({ author }: { author: Author }) => {
         alt=""
       />
       <div className="ml-2">
-        <h1 className="text-lg text-gray-700 hover:underline hover:cursor-pointer">
+        <h1 className="text-base text-gray-700 hover:underline hover:cursor-pointer">
           {author.name}
         </h1>
       </div>
