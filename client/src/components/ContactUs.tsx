@@ -23,7 +23,8 @@ const ContactUs = () => {
         },
       )
       .then(
-        (response) => {
+        (_response) => {
+          console.log(_response)
           toast.success("Message sent successfully")
           if (formRef.current) {
             formRef.current.reset() // Reset form
