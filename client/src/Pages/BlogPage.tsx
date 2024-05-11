@@ -230,9 +230,9 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
           <div className="flex gap-2 mt-5 justify-center">
             {blog?.tags.map((tag, index) => (
               <NavLink
-                to={`/feed/?category=${tag}`}
+                to={`/feed?category=${tag}`}
                 key={index}
-                className="text-center bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-s hover:bg-gray-200 hover:text-gray-900"
+                className="text-center bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-s hover:bg-gray-200 hover:text-gray-900 capitalize"
               >
                 {tag}
               </NavLink>

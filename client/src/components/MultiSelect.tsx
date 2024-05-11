@@ -15,7 +15,7 @@ function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
   // Create a new array of capitalized options
   const options = Object.values(Category)
     .map((option) => option.charAt(0).toUpperCase() + option.slice(1))
-    .filter((option) => option !== "All")
+    .filter((option) => option !== Category.All)
 
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: string[]) => {
     onChange(newValue)
