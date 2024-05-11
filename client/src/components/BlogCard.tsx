@@ -104,7 +104,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
               {blog.tags.map((tag) => (
                 <NavLink
                   key={tag}
-                  to={`/feed/?category=${tag}`}
+                  to={`/feed?category=${tag}`}
                   className={`text-xs  px-1 capitalize hover:underline ${category === tag ? "font-bold text-dark" : "text-gray-500"}`}
                 >
                   {tag}
