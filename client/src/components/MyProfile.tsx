@@ -11,8 +11,7 @@ import { useAppDispatch, useAppSelector } from "../hooks"
 import { updateUser } from "../features/userSlice"
 import userAltImg from "../assets/img/MyProfilePage/user-alt.jpg"
 import { TbPhotoPlus } from "react-icons/tb"
-import { RiDeleteBack2Line } from "react-icons/ri"
-
+import { MdDeleteOutline } from "react-icons/md";
 const defUser: UserType = {
   userId: "",
   createdAt: "",
@@ -157,11 +156,11 @@ const MyProfile = () => {
     )
 
   return (
-    <div className="flex flex-col font-inter mx-6 w-full">
-      <nav className="pb-5 px-5 rounded-xl flex justify-between">
-        <div>
+    <div className="flex flex-col font-inter w-full sm:mx-6">
+      <nav className="pb-5 px-5 rounded-xl flex flex-col justify-between sm:flex-row ">
+        <div className=" text-center sm:text-left">
           <h1 className="text-2xl font-medium">My Profile</h1>
-          <span className="text-sm text-slate-500">
+          <span className="text-sm text-slate-500 ">
             Manage your profile settings
           </span>
         </div>
@@ -170,13 +169,13 @@ const MyProfile = () => {
           <button
             onClick={handleEdit}
             type="button"
-            className="text-dark hover:text-white border border-dark hover:bg-highlight hover:border-highlight font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-purple-900 duration-150 flex items-center justify-center gap-1"
+            className="w-fit text-dark hover:text-white border border-dark hover:bg-highlight hover:border-highlight font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-purple-900 duration-150 flex items-center justify-center gap-1 xs:mx-auto xs:mt-5 sm:mr-0"
           >
             <CiEdit className="text-base" />
             Edit profile
           </button>
         ) : (
-          <div className="flex">
+          <div className="flex mx-auto xs:mt-5 sm:mr-0">
             <button
               onClick={handleUpdate}
               type="button"
@@ -196,29 +195,29 @@ const MyProfile = () => {
       </nav>
       <hr />
       <main className="flex xs:flex-wrap">
-        <section className="sm:w-100 xs:w-3/4 lg:w-1/2 p-5">
+        <section className="sm:w-100 xs:w-3/4 lg:w-1/2 p-5 mx-auto">
           <form action="" className="flex flex-col">
-            <label className="text-lg my-2 font-medium">
+            <label className="text-lg my-2 font-medium text-center sm:text-left">
               Your profile photo
             </label>
-            <div className="flex ">
-              <div className="flex relative">
+            <div className="flex flex-col sm:flex-row">
+              <div className="relative flex w-full sm:w-fit">
                 {loadingProfileImage && (
                   <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-70 flex items-center justify-center rounded-lg z-50">
                     <Loader />
                   </div>
                 )}
                 <img
-                  className="h-40 w-40 rounded-full border"
+                  className="h-40 w-40 rounded-full border mx-auto sm:ml-0"
                   src={user.profileImage || userAltImg}
                   alt={user.name}
                 />
               </div>
               {edit && (
-                <span className="flex flex-col justify-center gap-2 ml-5 p-4">
+                <span className="flex justify-center gap-2  py-4 sm:flex-col sm:ml-5 sm:py-4">
                   <label
                     htmlFor="file-upload"
-                    className="flex gap-1 text-sm border rounded-lg py-2 px-5 cursor-pointer hover:border-highlight duration-150"
+                    className="w-fit flex gap-1 text-sm border rounded-lg py-2 px-5 cursor-pointer hover:border-highlight duration-150 mx-auto sm:ml-0"
                   >
                     <TbPhotoPlus className="my-auto text-base" />
                     Upload new photo
@@ -232,31 +231,30 @@ const MyProfile = () => {
                     name="profileImage"
                   />
                   <button
-                    className="flex gap-1 border w-fit p-2 rounded-lg cursor-pointer text-xs text-red-500 hover:border-red-500 duration-150 py-2 px-5"
+                    className="flex gap-1 border w-fit p-2 rounded-lg cursor-pointer text-xs text-red-500 hover:border-red-500 duration-150 py-2 px-5 mx-auto sm:ml-0"
                     disabled={loadingProfileImage || user.profileImage === ""}
                     onClick={handleProfileImageDelete}
                   >
-                    <RiDeleteBack2Line className="my-auto text-base" />
+                    <MdDeleteOutline className="my-auto text-base" />
                     Delete
                   </button>
                 </span>
               )}
             </div>
 
-            <div className="flex gap-5 my-4 text-sm">
-              <p>
+            <div className="flex gap-5 my-4 text-sm w-fit mx-auto sm:ml-0">
+              <span>
                 <span className="rounded-xl p-1 text-slate-700 px-1 font-bold">
                   {user?.followersCount}
                 </span>
                 <span className="text-slate-500">Followers</span>
-              </p>
-
-              <p>
+              </span>
+              <span>
                 <span className="rounded-xl p-1 text-slate-700 px-1 font-bold">
                   {user?.followingCount}
                 </span>
                 <span className="text-slate-500">Following</span>
-              </p>
+              </span>
             </div>
 
             <label className="mt-2 text-slate-600 font-light">Full name</label>
@@ -295,11 +293,11 @@ const MyProfile = () => {
             ></textarea>
           </form>
         </section>
-        <section className="w-3/6  p-5 ml-0">
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col">
+        <section className="sm:w-100 xs:w-3/4 lg:w-1/2 py-5 mx-auto">
+          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col ">
             <h3 className="text-lg font-medium mb-3">My Interests</h3>
 
-            <div className="flex flex-col flex-wrap gap-3">
+            <div className="flex sm:flex-col flex-wrap gap-3">
               <div className="flex flex-wrap gap-2">
                 {!edit && user.myInterests.length === 0 && (
                   <span className="text-gray-500">No interests added yet</span>
