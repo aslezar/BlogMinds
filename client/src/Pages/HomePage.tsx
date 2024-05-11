@@ -29,7 +29,7 @@ const HomePage = () => {
           className="absolute hidden lg:block w-[37.5%] m-auto -right-5 top-[15%] shadow-2xl rounded-xl"
         />
       </div>
-      <Testimonials/>
+      <Testimonials />
       <Features />
       <PricingTable />
       <ContactUs />

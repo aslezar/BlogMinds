@@ -3,9 +3,12 @@ import dragNdrop from "../assets/videos/Features/dragNdrop.mp4"
 import imgGen from "../assets/videos/Features/imgGen.mp4"
 const Features: React.FC = () => {
   return (
-    <div className="w-11/12 lg:w-5/6 mx-auto lg:mt-20 overflow-hidden pt-20" id="features">
+    <div
+      className="w-11/12 lg:w-5/6 mx-auto lg:mt-20 overflow-hidden pt-20"
+      id="features"
+    >
       <h1 className="text-4xl lg:text-6xl font-semibold text-center  ">
-        Publish{' '}
+        Publish{" "}
         <span className="bg-gradient-to-r from-dark from-60% to-highlight text-transparent bg-clip-text">
           Effo
         </span>

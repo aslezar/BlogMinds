@@ -209,7 +209,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
                       <h3 className="md:text-lg font-semibold text-dark  group-hover:underline">
                         {item.name}
                       </h3>
-                      <p className="text-gray-600 text-xs md:text-sm">{item.email}</p>
+                      <p className="text-gray-600 text-xs md:text-sm">
+                        {item.email}
+                      </p>
                     </div>
                   </Link>
                 ))}

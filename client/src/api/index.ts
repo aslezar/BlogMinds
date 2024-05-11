@@ -16,34 +16,59 @@ import {
 const URL = "/api/v1"
 
 const API = axios.create({ baseURL: URL, withCredentials: true })
+const publicRoutes = ["auth", "public"]
+
+API.interceptors.request.use(function (config) {
+  const isPublicRoute = publicRoutes.some((route) =>
+    config.url?.includes(route),
+  )
+
+  if (!isPublicRoute) {
+    //if there is cookie with named 'userId' then user is logged in
+    const isLoggedIn = document.cookie.split(";").some((cookie) => {
+      const [key, _value] = cookie.split("=")
+      if (key.trim() === "userId") return true
+      return false
+    })
+    if (!isLoggedIn) return Promise.reject(new axios.Cancel("Not Logged In"))
+  }
+
+  return config
+})
 
 API.interceptors.response.use(
   function (response) {
     const isAIImage = response.headers["x-ai-generated-image"] === "true"
     if (isAIImage) return response
 
-    if (response.data.success) {
-      return response.data
-    } else {
+    if (!response.data.success) {
       toast.error(response.data.msg, { id: response.data.msg })
       return Promise.reject(response.data)
     }
+    return response.data
   },
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-    console.log(error)
+    if (import.meta.env.DEV) console.log(error)
 
     if (error.response) {
-      if (error.response.data?.msg === "Token not found") {
-        //do nothing
-      } else
+      if (error.response.status === 401) {
+        toast.error("Please Login to use this feature.", {
+          id: "Not Logged In",
+        })
+      } else {
         toast.error(error.response.data?.msg, { id: error.response.data?.msg })
+      }
     } else {
-      console.log("Network Error")
-
-      toast.error("Network Error: Please try again later.", {
-        id: "Network Error",
-      })
+      if (error.message === "Not Logged In") {
+        toast.error("Please Login to use this feature.", {
+          id: "Not Logged In",
+        })
+      } else {
+        toast.error("Network Error: Please try again later.", {
+          id: "Network Error",
+        })
+      }
     }
     return Promise.reject(error)
   },

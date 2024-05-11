@@ -8,7 +8,7 @@ import { OTP } from "../types/models"
 const { OAuth2Client } = require("google-auth-library")
 const client = new OAuth2Client()
 
-const setTokenCookie = (res: Response, user: IUser) => {
+const setTokenCookies = (res: Response, user: IUser) => {
     const token = user.generateToken()
 
     res.cookie("token", token, {
@@ -24,10 +24,24 @@ const setTokenCookie = (res: Response, user: IUser) => {
                     60,
         ),
     })
+
+    //to indicate frontend that user is logged in
+    res.cookie("userId", user._id, {
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        expires: new Date(
+            Date.now() +
+                parseInt(process.env.JWT_LIFETIME as string) *
+                    1000 *
+                    24 *
+                    60 *
+                    60,
+        ),
+    })
 }
 
 const sendUserData = (user: IUser, res: Response, msg: String) => {
-    const token = user.generateToken()
+    setTokenCookies(res, user)
 
     const sendUser = {
         userId: user._id,
@@ -40,14 +54,8 @@ const sendUserData = (user: IUser, res: Response, msg: String) => {
         followersCount: user.followers.length,
     }
 
-    // const { _id: userId, name, email, bio, profileImage,myInterests } = user
-
-    setTokenCookie(res, user)
-
     res.status(StatusCodes.CREATED).json({
-        data: {
-            ...sendUser,
-        },
+        data: sendUser,
         success: true,
         msg,
     })
@@ -157,7 +165,7 @@ const forgotPasswordVerifyOtp = async (req: Request, res: Response) => {
     user.otp = undefined
     user.password = password
     await user.save()
-    setTokenCookie(res, user)
+    setTokenCookies(res, user)
     res.status(StatusCodes.CREATED).json({
         success: true,
         msg: "Password Changed Successfully",
@@ -190,7 +198,7 @@ const verifyEmail = async (req: Request, res: Response) => {
     user.status = "active"
     user.otp = undefined
     await user.save()
-    setTokenCookie(res, user)
+    setTokenCookies(res, user)
     res.status(StatusCodes.CREATED).json({
         success: true,
         msg: "User Registered Successfully",
@@ -221,7 +229,7 @@ const login = async (req: Request, res: Response) => {
 
     if (!isPasswordCorrect) throw new UnauthenticatedError("Invalid Password.")
 
-    setTokenCookie(res, user)
+    setTokenCookies(res, user)
     res.status(StatusCodes.CREATED).json({
         success: true,
         msg: "User Login Successfully",
@@ -277,7 +285,7 @@ const continueWithGoogle = async (req: Request, res: Response) => {
             status: "active",
         })
     }
-    setTokenCookie(res, user)
+    setTokenCookies(res, user)
     res.status(StatusCodes.CREATED).json({
         success: true,
         msg: "Google Login Successfully",

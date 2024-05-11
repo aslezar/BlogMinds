@@ -84,11 +84,11 @@ const router = createBrowserRouter([
             path: "profile",
             element: <ProfilePage />,
           },
-          {
-            path: "write/:id",
-            element: <BlogEditor />,
-          },
         ],
+      },
+      {
+        path: "write/:id",
+        element: <BlogEditor />,
       },
       {
         path: "features",

@@ -205,6 +205,13 @@ export const verification =
   }
 
 export const loadUser = () => async (dispatch: Dispatch) => {
+  const isLoggedIn = document.cookie.split(";").some((cookie) => {
+    const [key, _value] = cookie.split("=")
+    if (key.trim() === "userId") return true
+    return false
+  })
+  if (!isLoggedIn) return dispatch(userSlice.actions.SET_LOADING_FALSE())
+
   dispatch(userSlice.actions.SET_LOADING())
   signInToken()
     .then((res: any) => {

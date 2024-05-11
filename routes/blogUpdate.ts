@@ -1,8 +1,5 @@
 import { Router } from "express"
-import {
-    likeBlog,
-    commentBlog,
-} from "../controllers/blogs"
+import { likeBlog, commentBlog } from "../controllers/blogs"
 
 const router = Router()
 
