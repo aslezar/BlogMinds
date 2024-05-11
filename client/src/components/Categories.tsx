@@ -6,9 +6,9 @@ import { useSearchParams } from "react-router-dom"
 
 const Categories = () => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const category = searchParams.get("category") || Category.All
+  const category = searchParams.get("category")?.toLowerCase() || Category.All
   const handleChange = (_event: React.SyntheticEvent, newValue: Category) => {
-    setSearchParams({ category: newValue })
+    setSearchParams({ category: newValue.toString().toLowerCase() })
   }
   return (
     <Tabs

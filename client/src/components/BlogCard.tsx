@@ -10,7 +10,7 @@ interface BlogCardProps {
 
 const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
   const [searchParams] = useSearchParams()
-  const category = searchParams.get("category") || Category.All
+  const category = searchParams.get("category")?.toLowerCase() || Category.All
 
   const formatDate = (date: string) => {
     return format(new Date(date), "dd MMMM yyyy")
