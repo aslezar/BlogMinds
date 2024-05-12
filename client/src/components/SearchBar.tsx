@@ -1,5 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react"
-import { Modal, Tab, Tabs } from "@mui/material"
+import Modal from "@mui/material/Modal"
+import Tab from "@mui/material/Tab"
+import Tabs from "@mui/material/Tabs"
 import SearchSvg from "./SearchSvg"
 import { Link, useNavigate } from "react-router-dom"
 import { search } from "../api/index"
