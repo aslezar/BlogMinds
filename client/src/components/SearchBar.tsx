@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import { Modal, Tab, Tabs } from "@mui/material"
 import SearchSvg from "./SearchSvg"
 import { Link, useNavigate } from "react-router-dom"
@@ -35,11 +35,11 @@ const SearchButton = () => {
       <Modal
         open={isModalOpen}
         onClose={handleModalClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="search-modal"
+        aria-describedby="search-modal"
         className="flex justify-center items-start w-full h-5/6 my-auto bg-white bg-opacity-20"
       >
-        <SearchBar handleModalClose={handleModalClose} />
+        <SearchBarWithRef handleModalClose={handleModalClose} />
       </Modal>
     </div>
   )
@@ -47,9 +47,10 @@ const SearchButton = () => {
 
 type SearchBarProps = {
   handleModalClose: () => void
+  ref: React.ForwardedRef<HTMLDivElement>
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose, ref }) => {
   const [category, setCategory] = useState<string>("blog")
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState<{}[]>([])
@@ -88,7 +89,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
   }
 
   return (
-    <div className="bg-white w-11/12 md:w-[55%]  rounded-2xl p-5 md:p-8 relative">
+    <div
+      className="bg-white w-11/12 md:w-[55%]  rounded-2xl p-5 md:p-8 relative"
+      ref={ref}
+    >
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -250,5 +254,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleModalClose }) => {
     </div>
   )
 }
+
+const SearchBarWithRef = React.forwardRef<HTMLDivElement, SearchBarProps>(
+  (props, _ref) => <SearchBar {...props} />,
+)
 
 export default SearchButton

@@ -30,7 +30,10 @@ const Blogs = () => {
           : await getBlogs(category.toString(), page.current, limit)
 
       const newBlogs = response.data.blogs
-      setBlogs((prevBlogs) => [...prevBlogs, ...newBlogs])
+      if (newBlogs.length < limit) {
+        setHasMore(false)
+      }
+      setBlogs((prevBlogs) => Array.from(new Set([...prevBlogs, ...newBlogs])))
       page.current = page.current + 1
     } catch (error: any) {
       console.error(error.response)
@@ -63,6 +66,11 @@ const Blogs = () => {
             <BlogCard key={blog._id} blog={blog} />
           ))}
         </InfiniteScroll>
+        {!hasMore && (
+          <div className="text-center text-gray-500 text-xl mt-4 pb-4">
+            {blogs.length === 0 ? "No Results Found" : "No More Results"}
+          </div>
+        )}
         <style>
           {`
       .contain {

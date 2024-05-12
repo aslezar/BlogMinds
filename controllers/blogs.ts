@@ -63,14 +63,14 @@ const getRecommendedBlogs = async (req: Request, res: Response) => {
         })
         .catch((error) => {
             console.log("Error fetching data from python server")
-            req.query.tags = "all"
+            req.query.tags = "_all"
             getBlogByCategory(req, res)
             return
         })
 }
 
 const getBlogByCategory = async (req: Request, res: Response) => {
-    let tags = req.query.tags as string
+    let tags = (req.query.tags as string) || "_all"
 
     tags = tags.toLowerCase()
 
@@ -89,7 +89,7 @@ const getBlogByCategory = async (req: Request, res: Response) => {
             select: "name profileImage",
         })
 
-    if (blogs.length === 0) throw new BadRequestError("No more blogs found")
+    // if (blogs.length === 0) throw new BadRequestError("No more blogs found")
 
     res.status(StatusCodes.OK).json({
         data: { blogs, page: req.pagination.page, limit: req.pagination.limit },

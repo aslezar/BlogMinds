@@ -46,15 +46,13 @@ const filteredBlogs = blogs
 
         const content = JSON.stringify({
             time: 1550476186479,
-            blocks: [
-                {
-                    id: "zbGZFPM-iI",
-                    type: "paragraph",
-                    data: {
-                        text: text,
-                    },
+            blocks: text.split("\n\n").map((paragraph) => ({
+                id: faker.string.uuid(),
+                type: "paragraph",
+                data: {
+                    text: paragraph.trim(),
                 },
-            ],
+            })),
             version: "2.8.1",
         })
 
