@@ -81,12 +81,8 @@ const ProfilePage = () => {
           value={value}
           onChange={handleChange}
           textColor="secondary"
+          indicatorColor="secondary"
           aria-label="basic tabs example"
-          TabIndicatorProps={{
-            style: {
-              background: "#9674d4",
-            },
-          }}
         >
           {tabMap.map((tab, index) => (
             <Tab
