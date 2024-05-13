@@ -3,7 +3,7 @@ import { commentBlog, getBlog, likeBlog } from "../api/index.ts"
 import Loader from "../components/Loader"
 import toast from "react-hot-toast"
 import { useParams } from "react-router-dom"
-import { BlogFullType, UserType } from "../definitions"
+import { BlogFullType } from "../definitions"
 import { useAppSelector } from "../hooks.tsx"
 import { format } from "date-fns/format" // Import date-fns under a namespace
 import { IoBookOutline } from "react-icons/io5"
@@ -30,16 +30,9 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
       if (editorRef.current === null) {
         initializeEditor(true, JSON.parse(blog.content))
         editorRef.current = true
-        // editor?.render({blocks: JSON.parse(blog.content)})
       }
     }
   }, [blog?.content, editor, initializeEditor])
-
-  // useEffect(() => {
-  //   if (blog?.content && editor) {
-  //     editor?.render({ blocks: JSON.parse(blog?.content) })
-  //   }
-  // }, [blog?.content])
 
   const { loading, isAuthenticated, user } = useAppSelector(
     (state) => state.user,
@@ -80,13 +73,13 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
       })
   }
   useEffect(() => {
-    const fetchBlog = async (userId: UserType["userId"] | null) => {
+    const fetchBlog = async () => {
       if (!id) {
         setError(true)
         return toast.error("No such blog")
       }
       try {
-        const { data } = await getBlog(id, userId)
+        const { data } = await getBlog(id)
         const { blog, isLiked: liked } = data
 
         setBlog(blog)
@@ -97,8 +90,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
       setLoading(false)
     }
 
-    const userId = user && user.userId
-    if (!loading) fetchBlog(userId)
+    if (!loading) fetchBlog()
   }, [loading, isAuthenticated, user])
 
   const handleLikeButton = () => {

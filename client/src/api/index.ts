@@ -199,15 +199,8 @@ export const getRecommendedBlogs = (
     },
   })
 
-export const getBlog = (
-  id: BlogShortType["_id"],
-  userId: BlogShortType["_id"] | null,
-) =>
-  API.get(`/public/blog/${id}`, {
-    params: {
-      userId: userId,
-    },
-  })
+export const getBlog = (id: BlogShortType["_id"]) =>
+  API.get(`/public/blog/${id}`)
 
 export const getOtherUserBlogs = (
   userId: string,

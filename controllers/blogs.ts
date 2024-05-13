@@ -134,7 +134,7 @@ const getBlogById = async (req: Request, res: Response) => {
     if (!blog) throw new BadRequestError("Blog not found")
 
     let isLiked = false
-    if (req.query.userId)
+    if (req.cookies.userId)
         isLiked = blog.likes.some((id) => id.toString() === req.query.userId)
 
     res.status(StatusCodes.OK).json({
