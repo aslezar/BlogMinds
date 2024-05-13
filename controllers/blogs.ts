@@ -34,7 +34,7 @@ const getRecommendedBlogs = async (req: Request, res: Response) => {
 
     if (!userId) {
         console.log("No user id found")
-        req.params.tags = "all"
+        req.params.tags = "_all"
         await getBlogByCategory(req, res)
         return
     }
