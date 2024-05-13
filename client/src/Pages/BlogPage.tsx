@@ -10,6 +10,8 @@ import { IoBookOutline } from "react-icons/io5"
 import { useEditorContext } from "../context/EditorContext"
 import { NavLink } from "react-router-dom"
 import AuthorTag from "../components/AuthorTag.tsx"
+import { PiDotOutlineFill } from "react-icons/pi"
+import { formatDistanceToNow } from "date-fns"
 
 type BlogPageProps = {
   isEmbed?: boolean
@@ -238,27 +240,30 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               {/* input field to write comment with post button */}
 
               {blog?.comments?.map((comment, index) => (
-                <li
-                  key={index}
-                  className="mb-4 gap-4 flex items-center text-lg"
-                >
+                <li key={index} className="mb-4 gap-4 flex items-center">
                   <NavLink to={`/user/${comment.author._id}`}>
                     <img
-                      className="object-cover w-12 rounded-full aspect-square"
+                      className="object-cover w-12 rounded-full aspect-square border"
                       src={comment?.author?.profileImage}
                       alt={"img"}
                     />
                   </NavLink>
                   <div>
-                    <NavLink to={`/user/${comment.author._id}`}>
-                      <p className="font-medium hover:underline hover:cursor-pointer">
+                    <NavLink
+                      to={`/user/${comment.author._id}`}
+                      className="flex items-center"
+                    >
+                      <span className="text-lg hover:underline hover:cursor-pointer !font-medium">
                         {comment.author.name}
-                      </p>
+                      </span>
+                      <PiDotOutlineFill className="text-gray-300" />
+                      <span className="text-gray-500 text-xs">
+                      {formatDistanceToNow(comment.createdAt, {
+                        addSuffix: true,
+                      })}
+                      </span>
                     </NavLink>
                     <p>{comment?.message}</p>
-                    <p className="text-gray-500 text-sm">
-                      {formatDate(comment.createdAt)}
-                    </p>
                   </div>
                 </li>
               ))}
