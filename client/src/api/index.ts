@@ -52,13 +52,7 @@ API.interceptors.response.use(
     if (import.meta.env.DEV) console.log(error)
 
     if (error.response) {
-      if (error.response.status === 401) {
-        toast.error("Please Login to use this feature.", {
-          id: "Not Logged In",
-        })
-      } else {
-        toast.error(error.response.data?.msg, { id: error.response.data?.msg })
-      }
+      toast.error(error.response.data?.msg, { id: error.response.data?.msg })
     } else {
       if (error.message === "Not Logged In") {
         toast.error("Please Login to use this feature.", {
