@@ -8,7 +8,6 @@ import toast from "react-hot-toast"
 
 interface TemplateInlineToolConfig {
   buttonHTML?: string
-  html: string
 }
 
 interface TemplateInlineToolConstructorOptions
@@ -35,7 +34,7 @@ class GenerateWithAiButton implements InlineTool {
 
     // Filter undefined and empty object.
     // See also: https://github.com/codex-team/editor.js/issues/1432
-    if (config && "html" in config) {
+    if (config) {
       this.#config = config
     }
   }
@@ -54,14 +53,7 @@ class GenerateWithAiButton implements InlineTool {
     button.classList.add(this.#api.styles.inlineToolButton)
     button.type = "button"
 
-    button.innerHTML =
-      this.#config.buttonHTML ??
-      `
-        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
-          <path d="M336 64h32a48 48 0 0148 48v320a48 48 0 01-48 48H144a48 48 0 01-48-48V112a48 48 0 0148-48h32" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/>
-          <rect x="176" y="32" width="160" height="64" rx="26.13" ry="26.13" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/>
-        </svg>
-      `
+    button.innerHTML = this.#config.buttonHTML ?? `button-text`
 
     return button
   }
@@ -71,7 +63,10 @@ class GenerateWithAiButton implements InlineTool {
       return
     }
 
-    const selectedText = window.getSelection()?.toString()
+    const selection = window.getSelection()
+    if (!selection || selection.rangeCount === 0) return
+
+    const selectedText = selection.toString()
     if (!selectedText) return
 
     GenerateWithAiButton.isSurroundEnabled = true
@@ -79,7 +74,10 @@ class GenerateWithAiButton implements InlineTool {
     toast.loading("Generating with AI", { id: "generate-with-ai-editor" })
     getAICompletion(selectedText)
       .then((response) => {
-        document.execCommand("insertHTML", false, response.data) // this has been deprecated
+        const range = selection.getRangeAt(0)
+        range.deleteContents()
+        range.insertNode(document.createTextNode(response.data))
+
         toast.success("Generated with AI", { id: "generate-with-ai-editor" })
       })
       .catch(() => {

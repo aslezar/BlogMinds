@@ -149,10 +149,7 @@ function EditorContextProvider(props: any) {
         generateWithAi: {
           class: GenerateWithAiButton,
           config: {
-            buttonHTML: `
-              <p style="font-size:12px; padding: 0px 6px">AI</p>
-              `,
-            html: "template⭐",
+            buttonHTML: `<p style="font-size:12px; padding: 0px 6px">AI</p>`,
           },
         },
       },
