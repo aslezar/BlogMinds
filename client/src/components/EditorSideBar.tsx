@@ -107,7 +107,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
 
   if (blog === null) return <Loader />
   return (
-    <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
+    <div className="hidden lg:flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
       <figure className="aspect-video overflow-hidden rounded-md relative">
         <button
           className="top-1 left-1 absolute  bg-gradient-to-tl from-dark  to-highlight py-2 rounded-lg px-2 p-1 text-xs font-medium text-white hover:bg-highlight opacity-80 hover:scale-105 duration-150"
