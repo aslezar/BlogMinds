@@ -28,7 +28,7 @@ function MultiSelect({ value, onChange, placeholder }: MultiSelectProps) {
   return (
     <div>
       <button
-        className="w-full font-medium text-highlight text-sm border border-highlight rounded-md gap-1 flex items-center justify-center py-2 "
+        className="w-full font-medium text-highlight text-sm border border-highlight rounded-md gap-1 flex items-center justify-center py-2 hover:scale-105 duration-150"
         onClick={() => setIsModalOpen(true)}
       >
         Add Categories Tags
