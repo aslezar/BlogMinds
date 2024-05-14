@@ -12,6 +12,7 @@ import InlineCode from "@editorjs/inline-code"
 import ColorPlugin from "editorjs-text-color-plugin"
 import AlignmentBlockTune from "editorjs-text-alignment-blocktune"
 import { uploadAssets } from "../api"
+import { GenerateWithAiButton } from "../components/GenerateWithAiButton"
 import Title from "title-editorjs"
 import toast from "react-hot-toast"
 const EditorContext = createContext<any>(null)
@@ -144,6 +145,15 @@ function EditorContextProvider(props: any) {
         },
         inlineCode: {
           class: InlineCode,
+        },
+        generateWithAi: {
+          class: GenerateWithAiButton,
+          config: {
+            buttonHTML: `
+              <p style="font-size:12px; padding: 0px 6px">AI</p>
+              `,
+            html: "template⭐",
+          },
         },
       },
     })
