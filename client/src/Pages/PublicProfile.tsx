@@ -85,7 +85,7 @@ const PublicProfile = () => {
       <main className=" w-4/5 mx-auto border-[1.5px] mt-3 rounded-xl p-4">
         <section className="">
           <div>
-            <div className="p-4 flex">
+            <div className="p-4 flex flex-col md:flex-row items-center">
               <div className="relative flex mr-5">
                 <div className="flex flex-1">
                   <div>
@@ -159,7 +159,7 @@ const PublicProfile = () => {
             </div>
           </div>
 
-          <ul className="list-none grid grid-cols-3 gap-7  p-6">
+          <ul className="list-none grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7  p-6">
             {blogs?.map((blog) => (
               <Link
                 key={blog._id}
