@@ -121,26 +121,26 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
 
   return (
     <div
-      className={`mx-auto ${isEmbed ? "" : "pt-20"} pb-5 lg:pt-0 min-h-[75vh] bg-white flex flex-col justify-between`}
+      className={`mx-auto ${isEmbed ? "" : "mt-4 "} pb-5 lg:pt-0 min-h-[75vh] bg-white flex flex-col justify-between`}
     >
       <div className="flex flex-col gap-4 max-w-6xl mx-auto shadow-sm space-y-4 p-5 font-inter">
         <figure>
           <img
             src={blog?.img}
             alt={blog?.title}
-            className=" object-cover w-full aspect-[2]"
+            className=" object-cover w-full aspect-[2] rounded"
           />
         </figure>
-        <h2 className="text-5xl md:text-5xl w-full font-bold text-dark  text-center">
+        <h2 className="text-3xl md:text-5xl w-full font-bold text-dark  text-center">
           {blog?.title}
         </h2>
         <div>
-          <p className="font-[400] text-center text-gray-600 text-[1.4rem] mb-7 ">
+          <p className="font-[400] text-center text-gray-600 text-lg mb-7 ">
             {blog?.description}
           </p>
           {/* blog tags */}
 
-          <div className="flex gap-3 items-center text-lg justify-center">
+          <div className="flex gap-3 items-center text-lg justify-center flex-wrap">
             <div className="flex items-center ">
               <div className="heart-bg">
                 <div
@@ -196,7 +196,7 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
               </>
             )}
           </div>
-          <div className="flex gap-2 mt-5 justify-center">
+          <div className="flex gap-2 mt-5 justify-center  flex-wrap">
             {blog?.tags.map((tag, index) => (
               <NavLink
                 to={`/feed?category=${tag}`}
@@ -251,17 +251,17 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                   <div>
                     <NavLink
                       to={`/user/${comment.author._id}`}
-                      className="flex items-center"
+                      className="items-center sm:flex sm:flex-row"
                     >
-                      <span className="text-lg hover:underline hover:cursor-pointer !font-medium">
+                      <p className="w-fit p-0 text-lg hover:underline hover:cursor-pointer !font-medium">
                         {comment.author.name}
-                      </span>
-                      <PiDotOutlineFill className="text-gray-300" />
-                      <span className="text-gray-500 text-xs">
+                      </p>
+                      <PiDotOutlineFill className="text-gray-300 hidden sm:block" />
+                      <p className="w-fit p-0 text-gray-500 text-xs">
                       {formatDistanceToNow(comment.createdAt, {
                         addSuffix: true,
                       })}
-                      </span>
+                      </p>
                     </NavLink>
                     <p>{comment?.message}</p>
                   </div>
