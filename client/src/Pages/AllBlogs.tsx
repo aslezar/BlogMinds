@@ -28,7 +28,7 @@ const AllBlogs = () => {
           <Blogs />
         </div>
         {trending && (
-          <div className="hidden md:block w-  p-4 border rounded-lg mt-16 h-fit sticky top-20">
+          <div className="hidden md:block lg:w-1/4  p-4 border rounded-lg mt-16 h-fit sticky top-20">
             <h2 className="text-lg font-medium mb-5">
               Trending <TrendingSvg />
             </h2>

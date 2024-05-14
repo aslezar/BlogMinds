@@ -137,7 +137,7 @@ function BlogEditor() {
       </div>
     )
   return (
-    <div className="flex  z-40 mx-auto w-screen  top-0 bg-white pl-[25%]">
+    <div className="flex  z-40 mx-auto w-screen  top-0 bg-white lg:pl-[25%]">
       <EditorSideBar
         blogId={blogId}
         blog={blog}
@@ -147,6 +147,9 @@ function BlogEditor() {
         resetBlog={resetBlog}
       />
       <EditorPage />
+      <div className=" lg:hidden mx-auto  h-[80vh] flex items-center italic  text-gray-600 px-20 text-center text-xl">
+        Our Editor is only supported on desktop view for now. Please use a desktop to write a blog.
+      </div>
     </div>
   )
 }

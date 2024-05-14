@@ -107,7 +107,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
 
   if (blog === null) return <Loader />
   return (
-    <div className="flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
+    <div className="hidden lg:flex flex-col px-3 pt-4 md:w-1/5 bg-white mx-auto gap-3 h-full fixed left-0">
       <figure className="aspect-video overflow-hidden rounded-md relative">
         <button
           className="top-1 left-1 absolute  bg-gradient-to-tl from-dark  to-highlight py-2 rounded-lg px-2 p-1 text-xs font-medium text-white hover:bg-highlight opacity-80 hover:scale-105 duration-150"
@@ -174,11 +174,11 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         placeholder="Select categories"
       />
       <div
-        className=" border border-highlight flex items-center justify-center  font-medium rounded-md focus:outline-none focus:ring resize-none cursor-pointer hover:scale-105 duration-150
+        className=" border border-highlight flex items-center justify-center  font-medium rounded-md focus:outline-none focus:ring resize-none cursor-pointer
       `"
       >
         <span
-          className="text-sm  text-highlight w-full h-full px-3 py-2 flex items-center justify-center "
+          className="text-sm  text-highlight w-full h-full px-3 py-2 flex items-center justify-center"
           onClick={() => setIsAssetsOpen(true)}
         >
           Assets and Images
@@ -209,7 +209,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         )}
       </div>
 
-      <div className=" bg-gradient-to-tl from-dark  to-highlight py-2 rounded-lg font-medium flex items-center cursor-pointer hover:scale-105 duration-150">
+      <div className=" bg-gradient-to-tl from-dark  to-highlight py-2 rounded-lg font-medium flex items-center cursor-pointer">
         <button
           className="text-sm text-white h-full px-3 w-full text-center "
           onClick={() => setIsAICompletionOpen(true)}

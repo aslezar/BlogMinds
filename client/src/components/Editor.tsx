@@ -12,7 +12,7 @@ const EditorPage = () => {
     }
   }, [])
 
-  return <div id="editorjs" className="mx-auto w-full"></div>
+  return <div id="editorjs" className="hidden lg:block mx-auto w-full"></div>
 }
 
 export default EditorPage
