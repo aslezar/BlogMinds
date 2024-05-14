@@ -174,11 +174,11 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         placeholder="Select categories"
       />
       <div
-        className=" border border-highlight flex items-center justify-center  font-medium rounded-md focus:outline-none focus:ring resize-none cursor-pointer hover:scale-105 duration-150
+        className=" border border-highlight flex items-center justify-center  font-medium rounded-md focus:outline-none focus:ring resize-none cursor-pointer
       `"
       >
         <span
-          className="text-sm  text-highlight w-full h-full px-3 py-2 flex items-center justify-center "
+          className="text-sm  text-highlight w-full h-full px-3 py-2 flex items-center justify-center"
           onClick={() => setIsAssetsOpen(true)}
         >
           Assets and Images
@@ -209,7 +209,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
         )}
       </div>
 
-      <div className=" bg-gradient-to-tl from-dark  to-highlight py-2 rounded-lg font-medium flex items-center cursor-pointer hover:scale-105 duration-150">
+      <div className=" bg-gradient-to-tl from-dark  to-highlight py-2 rounded-lg font-medium flex items-center cursor-pointer">
         <button
           className="text-sm text-white h-full px-3 w-full text-center "
           onClick={() => setIsAICompletionOpen(true)}
