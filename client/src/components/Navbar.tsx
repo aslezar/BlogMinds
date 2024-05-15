@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../hooks"
 import SearchBar from "./SearchBar"
 import { useEffect, useRef, useState } from "react"
 import { logout } from "../features/userSlice"
+import confirm from "./ConfirmationComponent"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -20,11 +21,16 @@ const Navbar = () => {
       setIsOpen(false)
     }
   }
-  const handleLogout = () => {
-    const res = window.confirm(
+  const handleLogout = async () => {
+    const confirmLogout = await confirm(
       "Are you sure you want to logout? This will clear all saved blog data.",
+      {
+        title: "Logout",
+        deleteButton: "Logout",
+        cancelButton: "Cancel",
+      },
     )
-    if (!res) return
+    if (confirmLogout === false) return
     dispatch(logout())
     setIsOpen(false)
   }
@@ -146,7 +152,8 @@ const Navbar = () => {
                 onClick={() => {
                   setIsOpen(!isOpen)
                 }}
-                className={`${isOpen ? "bg-highlight" : "bg-dark"} p-2 md:p-3 rounded-full bg-dark relative hover:bg-highlight duration-200`}              >
+                className={`${isOpen ? "bg-highlight" : "bg-dark"} p-2 md:p-3 rounded-full bg-dark relative hover:bg-highlight duration-200`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -163,7 +170,8 @@ const Navbar = () => {
               {isOpen && (
                 <div
                   ref={dropdownRef}
-                  className="absolute z-10 top-20 right-[5%] mt-0.5 w-40 text-gray-600 flex flex-col bg-white rounded-xl overflow-auto border border-gray-300 shadow-lg text-xs md:text-base md:w-52 "                >
+                  className="absolute z-10 top-20 right-[5%] mt-0.5 w-40 text-gray-600 flex flex-col bg-white rounded-xl overflow-auto border border-gray-300 shadow-lg text-xs md:text-base md:w-52 "
+                >
                   <NavLink
                     to={"/profile"}
                     onClick={() => {
@@ -192,7 +200,8 @@ const Navbar = () => {
                       setIsOpen(false)
                     }}
                     to={"/settings"}
-                    className={`flex items-center gap-1 cursor-pointer text-left hover:bg-highlight hover:text-white px-4 py-3 md:px-6 md:py-4 duration-150`}                  >
+                    className={`flex items-center gap-1 cursor-pointer text-left hover:bg-highlight hover:text-white px-4 py-3 md:px-6 md:py-4 duration-150`}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -216,7 +225,8 @@ const Navbar = () => {
                   </NavLink>
                   <button
                     onClick={handleLogout}
-                    className={`cursor-pointer text-left hover:bg-highlight hover:text-white flex items-center gap-1 px-4 py-3 md:px-6 md:py-4 duration-150`}                  >
+                    className={`cursor-pointer text-left hover:bg-highlight hover:text-white flex items-center gap-1 px-4 py-3 md:px-6 md:py-4 duration-150`}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

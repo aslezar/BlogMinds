@@ -258,9 +258,9 @@ const BlogPage = ({ isEmbed }: BlogPageProps) => {
                       </p>
                       <PiDotOutlineFill className="text-gray-300 hidden sm:block" />
                       <p className="w-fit p-0 text-gray-500 text-xs">
-                      {formatDistanceToNow(comment.createdAt, {
-                        addSuffix: true,
-                      })}
+                        {formatDistanceToNow(comment.createdAt, {
+                          addSuffix: true,
+                        })}
                       </p>
                     </NavLink>
                     <p>{comment?.message}</p>

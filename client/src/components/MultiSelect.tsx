@@ -1,7 +1,7 @@
 import React from "react"
 import { Category } from "../definitions"
 import { BiSolidCategoryAlt } from "react-icons/bi"
-import Autocomplete  from "@mui/material/Autocomplete"
+import Autocomplete from "@mui/material/Autocomplete"
 import Box from "@mui/material/Box"
 import Chip from "@mui/material/Chip"
 import Modal from "@mui/material/Modal"

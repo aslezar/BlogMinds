@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import Loader from "./Loader"
 import { LuImagePlus } from "react-icons/lu"
 import { IoClose } from "react-icons/io5"
+import confirm from "./ConfirmationComponent"
 
 interface AssetsFolderProps {
   setIsAssetsOpen?: React.Dispatch<React.SetStateAction<boolean>>
@@ -129,7 +130,15 @@ const Assets = ({
 }) => {
   const [loading, setLoading] = React.useState(false)
   const handleDeleteButton = async (assetUrl: string) => {
-    if (!window.confirm("Are you sure you want to delete this asset?")) return
+    const confirmDeletion = await confirm(
+      "Are you sure you want to delete this asset?",
+      {
+        title: "Delete Asset",
+        deleteButton: "Delete",
+        cancelButton: "Cancel",
+      },
+    )
+    if (confirmDeletion === false) return
     setLoading(true)
     deleteAsset(assetUrl)
       .then(() => {

@@ -8,6 +8,7 @@ import { BsTrash } from "react-icons/bs"
 import { Link, NavLink } from "react-router-dom"
 import { CiEdit } from "react-icons/ci"
 import toast from "react-hot-toast"
+import confirm from "./ConfirmationComponent"
 
 const MyBlogs = () => {
   const [page, setPage] = useState<number>(1)
@@ -18,13 +19,19 @@ const MyBlogs = () => {
 
   const limit = 6
 
-  const handleDeleteBlog = (id: BlogShortType["_id"]) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete this blog?\nThis Action is irreversible.",
-      )
+  const handleDeleteBlog = async (blog: BlogShortType) => {
+    const id = blog._id
+
+    const confirmDeletion = await confirm(
+      "Are you sure you want to delete this blog?\nThis Action is irreversible.",
+      {
+        title: `Delete Blog - ${blog.title}`,
+        deleteButton: "Delete",
+        cancelButton: "Cancel",
+      },
     )
-      return
+    if (confirmDeletion === false) return
+
     setDeleteLoading(true)
     deleteBlog(id)
       .then((_res) => {
@@ -104,7 +111,7 @@ const MyBlogs = () => {
                 </NavLink>
                 <button
                   title="Edit blog"
-                  onClick={() => handleDeleteBlog(blog._id)}
+                  onClick={() => handleDeleteBlog(blog)}
                   disabled={deleteLoading}
                   type="button"
                   className="flex items-center gap-1 text-red-500 hover:text-white border border-[#ED5E68] hover:bg-[#ED5E68] focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2  duration-150 w-full justify-center"

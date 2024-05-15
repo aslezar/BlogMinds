@@ -7,6 +7,8 @@ import { getUserBlogById, createBlog, updateBlog } from "../api"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEditorContext } from "../context/EditorContext"
 import Loader from "../components/Loader"
+import confirm from "../components/ConfirmationComponent"
+
 const initialBlog = `{"_id":"new_blog","title":"","description":"","img":"https://source.unsplash.com/random","content":{"time":${Date.now()},"blocks":[],"version":"2.29.1"},"tags":[]}`
 
 function BlogEditor() {
@@ -107,11 +109,18 @@ function BlogEditor() {
     }
   }
 
-  const resetBlog = () => {
+  const resetBlog = async () => {
     if (!blogId) return
 
-    if (!window.confirm("Are you sure you want to reset the blog?")) return
-
+    const confirmReset = await confirm(
+      "Are you sure you want to reset the blog?\nThis action is irreversible.",
+      {
+        title: "Reset Blog",
+        deleteButton: "Reset",
+        cancelButton: "Cancel",
+      },
+    )
+    if (confirmReset === false) return
     if (blogId === "new_blog") {
       const blogFromStorageString = initialBlog
 
@@ -148,7 +157,8 @@ function BlogEditor() {
       />
       <EditorPage />
       <div className=" lg:hidden mx-auto  h-[80vh] flex items-center italic  text-gray-600 px-20 text-center text-xl">
-        Our Editor is only supported on desktop view for now. Please use a desktop to write a blog.
+        Our Editor is only supported on desktop view for now. Please use a
+        desktop to write a blog.
       </div>
     </div>
   )
