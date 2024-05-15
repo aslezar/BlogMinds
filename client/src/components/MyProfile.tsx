@@ -212,10 +212,10 @@ const MyProfile = () => {
                 />
               </div>
               {edit && (
-                <span className="flex justify-center gap-2 py-4 flex-col sm:ml-5 sm:py-4">
+                <span className="flex justify-center items-center gap-2 py-4 flex-col sm:ml-5 sm:py-4">
                   <label
                     htmlFor="file-upload"
-                    className="w-fit flex gap-1 text-sm border rounded-lg py-2 px-5 cursor-pointer hover:border-highlight duration-150 mx-auto sm:ml-0"
+                    className="w-fit flex gap-1 text-sm border rounded-lg py-2 px-5 cursor-pointer hover:border-highlight duration-150 mx-auto md:ml-0"
                   >
                     <TbPhotoPlus className="my-auto text-base" />
                     Upload new photo
@@ -229,7 +229,7 @@ const MyProfile = () => {
                     name="profileImage"
                   />
                   <button
-                    className="flex gap-1 border w-fit p-2 rounded-lg cursor-pointer text-xs text-red-500 hover:border-red-500 duration-150 py-2 px-5 mx-auto sm:ml-0"
+                    className="flex gap-1 border w-fit p-2 rounded-lg cursor-pointer text-xs text-red-500 hover:border-red-500 duration-150 py-2 px-5 mx-auto md:ml-0"
                     disabled={loadingProfileImage || user.profileImage === ""}
                     onClick={handleProfileImageDelete}
                   >
@@ -240,7 +240,7 @@ const MyProfile = () => {
               )}
             </div>
 
-            <div className="flex gap-5 my-4 text-sm w-fit mx-auto sm:ml-0">
+            <div className="flex gap-5 my-4 text-sm w-fit mx-auto md:ml-0">
               <span>
                 <span className="rounded-xl p-1 text-slate-700 px-1 font-bold">
                   {user?.followersCount}
@@ -324,7 +324,7 @@ const MyProfile = () => {
                 </button>
               </div>
               {addInterest && (
-                <div className="flex gap-2">
+                <div className="flex flex-col gap-2 xs:flex-row mx-auto xs:mx-0">
                   <input
                     type="text"
                     placeholder="Type to add interest"
@@ -335,7 +335,7 @@ const MyProfile = () => {
                     className="rounded-lg p-2 border"
                   />
                   <button
-                    className="flex gap-0.5 border hover:border-highlight p-2 rounded-xl px-5 text-gray-700 hover:bg-gray-50  duration-150 hover:scale-105"
+                    className="flex justify-center gap-0.5 border hover:border-highlight py-2 rounded-xl px-5 text-gray-700 hover:bg-gray-50  duration-150 hover:scale-105"
                     onClick={handleAddInterest}
                   >
                     <IoIosAddCircleOutline className="my-auto" />
