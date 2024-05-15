@@ -1,4 +1,8 @@
-import { confirmable, createConfirmation } from "react-confirm"
+import {
+  confirmable,
+  createConfirmation,
+  ConfirmDialogProps,
+} from "react-confirm"
 
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
@@ -8,23 +12,16 @@ import DialogContentText from "@mui/material/DialogContentText"
 import DialogTitle from "@mui/material/DialogTitle"
 
 interface ConfirmationBoxProps {
-  show: boolean
-  proceed: (value: boolean) => void
   confirmation: string
-  options: {
-    title: string
-    deleteButton?: string
-    cancelButton?: string
-  }
+  title?: string
+  deleteButton?: string
+  cancelButton?: string
 }
 
-const ConfirmationBox = ({
-  show,
-  proceed,
-  confirmation,
-  options,
-}: ConfirmationBoxProps) => {
-  console.log("ConfirmationBox", show, proceed, confirmation, options)
+const ConfirmationBox: React.FC<
+  ConfirmDialogProps<ConfirmationBoxProps, boolean>
+> = ({ show, proceed, confirmation, title, deleteButton, cancelButton }) => {
+  console.log(confirmation, title, deleteButton, cancelButton)
 
   const handleProceed = () => {
     proceed(true)
@@ -38,7 +35,7 @@ const ConfirmationBox = ({
     <Dialog
       open={show}
       onClose={handleClose}
-      aria-labelledby={options.title}
+      aria-labelledby={title || "alert-dialog-title"}
       aria-describedby={confirmation}
       sx={{
         "& .MuiDialog-paper": {
@@ -53,7 +50,7 @@ const ConfirmationBox = ({
         id="alert-dialog-title"
         sx={{ fontSize: "1.5rem", fontWeight: "bold", color: "#333" }}
       >
-        {options.title}
+        {title || "Confirmation"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText
@@ -64,22 +61,29 @@ const ConfirmationBox = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>
-          {options.cancelButton || "Disagree"}
-        </Button>
+        <Button onClick={handleClose}>{cancelButton || "Disagree"}</Button>
         <Button onClick={handleProceed} autoFocus>
-          {options.deleteButton || "Agree"}
+          {deleteButton || "Agree"}
         </Button>
       </DialogActions>
     </Dialog>
   )
 }
 
-const confirmMain = createConfirmation(confirmable(ConfirmationBox))
+const confirmableConfirmationBox = confirmable(ConfirmationBox)
+
+const confirmMain = createConfirmation(confirmableConfirmationBox)
 
 export default function confirm(
   confirmation: string,
-  options: ConfirmationBoxProps["options"] = {},
+  options: {
+    title?: string
+    deleteButton?: string
+    cancelButton?: string
+  },
 ) {
-  return confirmMain({ confirmation, options })
+  return confirmMain({
+    confirmation,
+    ...options,
+  })
 }
