@@ -333,6 +333,12 @@ const MyProfile = () => {
                     maxLength={20}
                     onChange={(e) => setNewInterest(e.target.value)}
                     className="rounded-lg p-2 border"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault()
+                        handleAddInterest()
+                      }
+                    }}
                   />
                   <button
                     className="flex justify-center gap-0.5 border hover:border-highlight py-2 rounded-xl px-5 text-gray-700 hover:bg-gray-50  duration-150 hover:scale-105"
