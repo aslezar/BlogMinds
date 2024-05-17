@@ -12,6 +12,10 @@
   box-sizing: border-box;
 }
 
+html{
+  scroll-behavior: smooth;
+}
+
 .MuiButtonBase-root {
   padding: 0.75rem !important;
   min-width: 0 !important;
