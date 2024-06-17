@@ -33,7 +33,7 @@ const server: http.Server = http.createServer(app)
 //Setting Environment
 const PORT: string | number = process.env.PORT || 5000
 app.set("trust proxy", 1)
-const allowedOrigins = [
+const allowedOrigins = [ "https://blogminds-3hu1.onrender.com",
     process.env.NODE_ENV === "production"
         ? (process.env.RENDER_EXTERNAL_URL as string)
         : "http://localhost:5173",
