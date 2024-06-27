@@ -8,9 +8,11 @@ COPY package*.json ./
 COPY client/package*.json ./client/
 RUN npm install
 
-# Copy db seeder
-COPY ./DBseeder ./DBseeder
-RUN npm run seeder
+WORKDIR /app/client
+RUN npm install
+
+WORKDIR /app
+COPY . .
 
 WORKDIR /app/client
 RUN npm run build
