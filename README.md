@@ -7,24 +7,29 @@ for future, we are thinking of a chatbot also that chat with user to give inform
 ## Features
 
 ### AI-Powered Content Creation
-- **AI Image Generation**: Generate stunning AI images directly within the editor by providing prompts.
-- **Text Completion**: As you type, AI suggests content to help you craft your blog posts efficiently.
-- **Sentence Completion**: Select any text and use AI to complete the sentence seamlessly.
+
+-   **AI Image Generation**: Generate stunning AI images directly within the editor by providing prompts.
+-   **Text Completion**: As you type, AI suggests content to help you craft your blog posts efficiently.
+-   **Sentence Completion**: Select any text and use AI to complete the sentence seamlessly.
 
 ### Enhanced Editing and Management
-- **Drag and Drop Images**: Easily drag and drop images into your articles for a smooth editing experience.
-- **Asset Folder**: Keep all your images safe and organized in the cloud with full Create, Read, Update, and Delete (CRUD) functionality.
+
+-   **Drag and Drop Images**: Easily drag and drop images into your articles for a smooth editing experience.
+-   **Asset Folder**: Keep all your images safe and organized in the cloud with full Create, Read, Update, and Delete (CRUD) functionality.
 
 ### User Engagement and Interaction
-- **Trending Section**: Discover the most interacted blogs in the trending section on the blog page.
-- **Interactive Blog Page**: Each blog page supports comments and likes to foster community interaction.
+
+-   **Trending Section**: Discover the most interacted blogs in the trending section on the blog page.
+-   **Interactive Blog Page**: Each blog page supports comments and likes to foster community interaction.
 
 ### Advanced Search and Navigation
-- **Search Functionality**: Effortlessly search for blogs and users to find the content you're interested in.
-- **Infinite Scroll**: Enjoy a seamless browsing experience with infinite scroll on the blog page.
+
+-   **Search Functionality**: Effortlessly search for blogs and users to find the content you're interested in.
+-   **Infinite Scroll**: Enjoy a seamless browsing experience with infinite scroll on the blog page.
 
 ### Performance
-- **Fast Performance**: Experience a really fast and responsive website, ensuring smooth navigation and interaction.
+
+-   **Fast Performance**: Experience a really fast and responsive website, ensuring smooth navigation and interaction.
 
 ## Installation
 
