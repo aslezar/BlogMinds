@@ -339,11 +339,19 @@ const getTrendingBlogs = async (req: Request, res: Response) => {
         })
     } else {
         //use one week ago date
-        const oneWeekAgo = new Date()
-        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+        // const oneWeekAgo = new Date()
+        // oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
 
         const trendingBlogs = await Blog.aggregate([
-            { $match: { createdAt: { $gte: oneWeekAgo } } },
+            // { $match: { createdAt: { $gte: oneWeekAgo } } },
+            {
+                $sort: {
+                    createdAt: -1,
+                },
+            },
+            {
+                $limit: 100,
+            },
             {
                 $lookup: {
                     from: "users",
